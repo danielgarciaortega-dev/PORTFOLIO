@@ -27,9 +27,7 @@ const profileSource = path.join(input, 'profile', 'profile-main.jpg');
 // byte-identical before the source-asset cleanup.
 const momentNumbers = ['01', '02', '03', '04', '05', '06'];
 const momentSource = (n) =>
-  n === '03'
-    ? profileSource
-    : path.join(input, 'moments', `moment-${n}.jpg`);
+  n === '03' ? profileSource : path.join(input, 'moments', `moment-${n}.jpg`);
 
 await Promise.all([
   ...momentNumbers.map((n) =>
