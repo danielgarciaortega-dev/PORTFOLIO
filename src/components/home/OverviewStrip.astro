@@ -55,7 +55,6 @@ import { withBase } from '../../utils/paths';
               <span class="overview-organization__logo">
                 {item.logo && (
                   <img
-                    class="overview-organization__logo-image"
                     src={withBase(item.logo)}
                     alt={item.logoAlt}
                     width="30"
@@ -83,7 +82,6 @@ import { withBase } from '../../utils/paths';
               <span class="overview-organization__logo">
                 {item.logo && (
                   <img
-                    class="overview-organization__logo-image"
                     src={withBase(item.logo)}
                     alt=""
                     width="30"
@@ -107,10 +105,3 @@ import { withBase } from '../../utils/paths';
     </article>
   </div>
 </section>
-
-<style>
-  .overview-organization__logo-image {
-    width: 30px;
-    height: 30px;
-  }
-</style>
