@@ -8,13 +8,14 @@ Mantener un portfolio personal profesional, rápido, accesible y mantenible para
 
 Antes de modificar código, usa como referencia principal:
 
-1. `README.md` para arquitectura, comandos y flujo general del proyecto.
-2. `package.json` para scripts y dependencias reales.
-3. `src/data/` para perfil, proyectos, tecnologías, formación y experiencia.
-4. `src/` para comportamiento y estructura de la aplicación.
-5. `tests/` y `playwright.config.ts` para requisitos funcionales, accesibilidad y rutas base.
-6. `.github/workflows/deploy.yml` para CI y despliegue.
-7. `input/` y `scripts/` para activos fuente y generación del CV/recursos.
+1. `README.md` para la presentación profesional y los enlaces públicos del portfolio.
+2. `package.json` para scripts, dependencias y requisitos de ejecución reales.
+3. `astro.config.mjs` para la configuración de Astro, salida estática y ruta base.
+4. `src/data/` para perfil, proyectos, tecnologías, formación y experiencia.
+5. `src/` para comportamiento y estructura de la aplicación.
+6. `tests/` y `playwright.config.ts` para requisitos funcionales, accesibilidad y rutas base.
+7. `.github/workflows/` para CI, despliegue y automatizaciones del repositorio.
+8. `input/` y `scripts/` para activos fuente y generación del CV/recursos.
 
 No dependas de paquetes de contexto, prompts históricos o documentación duplicada para tomar decisiones sobre el estado actual del proyecto.
 
