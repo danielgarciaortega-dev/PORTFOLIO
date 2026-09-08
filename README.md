@@ -10,7 +10,43 @@ Estudiante de 2º curso de Desarrollo de Aplicaciones Web en el Instituto FOC. E
 
 Vengo de casi diez años de experiencia en atención al cliente y ventas antes de dar el salto al desarrollo web. Actualmente combino la formación en DAW con proyectos propios, hackathons y experiencia práctica en desarrollo de software.
 
-El portfolio muestra tres proyectos principales: **AL-LÍO**, **SIDN Cost Control** y **Feedback2Action**, además de mi experiencia, stack y formación.
+## Proyectos destacados
+
+### AL-LÍO
+
+Proyecto propio desarrollado en el contexto de **Aircury Summer of Code 2026** para centralizar tareas, calendario, formación y oportunidades profesionales. Mi rol abarca diseño de producto, arquitectura y desarrollo full-stack.
+
+`Next.js` · `TypeScript` · `Tailwind CSS` · `PostgreSQL` · `Supabase` · `Google OAuth` · `Docker`
+
+[Repositorio](https://github.com/danielgarciaortega-dev/al-lio)
+
+### SIDN Cost Control
+
+Aplicación desarrollada en equipo para controlar y comparar el gasto de campañas publicitarias. **Ganador de la I Edición GEN AI ARENA**.
+
+`Python` · `FastAPI` · `BigQuery` · `React` · `Vite`
+
+### Feedback2Action
+
+Análisis de feedback para convertir grandes volúmenes de reseñas en problemas agrupados y acciones priorizadas.
+
+**22.376 reseñas analizadas** · **409 grupos de problemas** · **108 acciones priorizadas**
+
+`Python` · `FastAPI` · `BigQuery` · `Vertex AI`
+
+## Experiencia técnica
+
+**Salunox — Desarrollador web en prácticas (2026)**  
+Plataforma SaaS sanitaria. Corrección de incidencias y validación de funcionalidades web y móviles relacionadas con pacientes, citas y notificaciones.
+
+`Angular` · `TypeScript` · `Laravel/PHP` · `Flutter/Dart` · `Firebase` · `REST APIs`
+
+## Stack
+
+- **Frontend:** HTML5, CSS3, JavaScript, TypeScript, React, Next.js, Astro, Tailwind CSS, Vite.
+- **Backend:** Java, Python, FastAPI, Node.js, APIs REST.
+- **Datos:** SQL, PostgreSQL, MySQL/MariaDB, BigQuery.
+- **Herramientas:** Git, GitHub, Docker, Supabase.
 
 ## Sobre este portfolio
 
