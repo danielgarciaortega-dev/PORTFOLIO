@@ -33,6 +33,9 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      - name: Validar generación de activos
+        run: npm run optimize:assets
+
       - name: Instalar Chromium
         run: npx playwright install --with-deps chromium
 
