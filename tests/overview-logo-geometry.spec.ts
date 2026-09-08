@@ -1,10 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-test('formación y experiencia comparten la geometría visual de los logos de proyectos', async ({
+test('proyectos usan artwork ligeramente mayor sin alterar la caja compartida', async ({
   page,
 }) => {
-  // Compare the same shared mark class in both UI contexts so a future CSS
-  // change cannot silently make Formación/Experiencia smaller again.
   const projectMark = page
     .locator('.hero__projects .project-preview__mark')
     .first();
@@ -19,8 +17,8 @@ test('formación y experiencia comparten la geometría visual de los logos de pr
 
   await expect(projectMark).toHaveCSS('width', '64px');
   await expect(projectMark).toHaveCSS('height', '64px');
-  await expect(projectLogo).toHaveCSS('width', '46px');
-  await expect(projectLogo).toHaveCSS('height', '46px');
+  await expect(projectLogo).toHaveCSS('width', '52px');
+  await expect(projectLogo).toHaveCSS('height', '52px');
   await expect(overviewMark).toHaveCSS('width', '64px');
   await expect(overviewMark).toHaveCSS('height', '64px');
   await expect(overviewLogo).toHaveCSS('width', '46px');
@@ -31,8 +29,8 @@ test('formación y experiencia comparten la geometría visual de los logos de pr
 
   await expect(projectMark).toHaveCSS('width', '44px');
   await expect(projectMark).toHaveCSS('height', '44px');
-  await expect(projectLogo).toHaveCSS('width', '30px');
-  await expect(projectLogo).toHaveCSS('height', '30px');
+  await expect(projectLogo).toHaveCSS('width', '34px');
+  await expect(projectLogo).toHaveCSS('height', '34px');
   await expect(overviewMark).toHaveCSS('width', '44px');
   await expect(overviewMark).toHaveCSS('height', '44px');
   await expect(overviewLogo).toHaveCSS('width', '30px');
