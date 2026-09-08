@@ -50,65 +50,53 @@ Plataforma SaaS sanitaria. Corrección de incidencias y validación de funcional
 
 ## Sobre este portfolio
 
-Sitio estático multipágina construido con **Astro 7**, **TypeScript** en modo estricto y **Tailwind CSS 4**, sin framework de cliente. El contenido editable se mantiene tipado en `src/data/` para separar datos y presentación.
+Portfolio estático multipágina construido con **Astro 7**, **TypeScript** en modo estricto y **Tailwind CSS 4**, sin framework de cliente. El contenido de perfil, proyectos, formación, experiencia y tecnologías se mantiene tipado en `src/data/`.
 
-Incluye:
+Rutas principales: `/`, `/proyectos/`, `/cv/` y una página 404 propia. Las rutas y assets respetan `import.meta.env.BASE_URL` para funcionar tanto en local como bajo `/PORTFOLIO/` en GitHub Pages.
 
-- portada con perfil, proyectos, tecnologías, formación y experiencia;
-- `/proyectos/`, con detalle de los proyectos;
-- `/cv/`, con currículum HTML y descarga en PDF;
-- navegación responsive, diálogos accesibles y página 404 propia.
+## Desarrollo y verificación
 
-## Desarrollo local
-
-Requisitos: **Node.js 22.12+** y **npm 11**.
+Requisitos: **Node.js 22.12+** y **npm 11**. CI utiliza Node 24.
 
 ```bash
 npm ci
 npm run dev
 ```
 
-La aplicación se sirve por defecto en `http://localhost:4321/`.
-
-### Comandos útiles
+Comandos principales:
 
 ```bash
-npm run dev              # servidor de desarrollo
-npm run optimize:assets  # regenerar imágenes optimizadas desde input/
-npm run export:cv        # regenerar el PDF del CV desde su HTML
-npm run format:check     # comprobar formato con Prettier
-npm run check            # validar Astro y TypeScript
-npm run build            # compilar a dist/
-npm run test:e2e         # Playwright + axe + capturas responsive
-npm test                 # formato + tipos + build + E2E
+npm run build            # build estático en dist/
+npm run check            # Astro + TypeScript
+npm run format:check     # Prettier
+npm run test:e2e         # Playwright + axe + QA visual
+npm test                 # formato + check + build + E2E
+npm run optimize:assets  # genera assets web desde input/
+npm run export:cv        # regenera el PDF desde el CV HTML
 ```
+
+Playwright cubre navegación, rutas, comportamiento responsive y accesibilidad automatizada con axe. Las capturas de QA se conservan en `docs/screenshots/`.
 
 ## Estructura
 
 ```text
-src/
-  components/     UI reutilizable
-  data/           perfil, proyectos, tecnologías, formación y experiencia
-  layouts/        layout común
-  pages/          inicio, /proyectos/ y 404
-  scripts/        interacciones progresivas
-  styles/         estilos globales
-public/
-  cv/             CV en HTML/CSS/PDF
-  images/         activos optimizados
-input/            fuentes originales de assets y CV
-scripts/          optimización, exportación y soporte E2E
-tests/            funcional, accesibilidad y visual
-docs/             evidencia visual de QA
+.github/workflows/  CI y despliegue de GitHub Pages
+docs/               documentación y evidencia visual de QA
+input/              fuentes originales de assets y CV
+public/             assets públicos y CV HTML/CSS/PDF
+scripts/            optimización, exportación y soporte E2E
+src/                componentes, datos, layouts, páginas, scripts, estilos y utilidades
+tests/              pruebas funcionales, accesibilidad y visuales
 ```
 
-Las rutas internas respetan `import.meta.env.BASE_URL`, por lo que funcionan tanto en local como bajo `/PORTFOLIO/` en GitHub Pages.
+## CI/CD
 
-## Calidad y despliegue
+El workflow `.github/workflows/deploy.yml` mantiene una única cadena de validación:
 
-Las imágenes de `public/images/` se generan desde `input/` con `npm run optimize:assets`. El PDF del CV se regenera con `npm run export:cv`.
+- **Pull requests a `main`:** ejecuta `npm test` y compila el artefacto de Pages; el deploy se omite.
+- **Push a `main` o ejecución manual:** repite validación y build; publica en GitHub Pages solo cuando `PUBLICATION_APPROVED == 'true'`.
 
-GitHub Actions valida formato, tipos, build y E2E antes de publicar el sitio en GitHub Pages desde `main`.
+`astro.config.mjs` genera salida estática e infiere automáticamente `site` y `base` desde GitHub Actions, con soporte para `SITE_URL` y `BASE_PATH` cuando se necesiten overrides explícitos.
 
 ## Licencia
 
