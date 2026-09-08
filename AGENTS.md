@@ -2,52 +2,82 @@
 
 ## Objetivo
 
-Construir un portfolio personal profesional, rápido, accesible y mantenible para Daniel García Ortega usando exclusivamente el alcance definido en este repositorio.
+Mantener un portfolio personal profesional, rápido, accesible y mantenible para Daniel García Ortega usando exclusivamente el alcance y los datos actuales de este repositorio.
+
+## Fuentes de verdad
+
+Antes de modificar código, usa como referencia principal:
+
+1. `README.md` para arquitectura, comandos y flujo general del proyecto.
+2. `package.json` para scripts y dependencias reales.
+3. `src/data/` para perfil, proyectos, tecnologías, formación y experiencia.
+4. `src/` para comportamiento y estructura de la aplicación.
+5. `tests/` y `playwright.config.ts` para requisitos funcionales, accesibilidad y rutas base.
+6. `.github/workflows/deploy.yml` para CI y despliegue.
+7. `input/` y `scripts/` para activos fuente y generación del CV/recursos.
+
+No dependas de paquetes de contexto, prompts históricos o documentación duplicada para tomar decisiones sobre el estado actual del proyecto.
 
 ## Reglas no negociables
 
-1. Lee todos los documentos indicados en `README.md` antes de modificar código.
-2. No inventes datos personales, textos, enlaces, métricas, proyectos, clientes, logros ni tecnologías.
-3. No publiques datos marcados como privados o excluidos.
-4. No añadas React, Vue, Svelte, Next.js ni otro framework de interfaz. Usa componentes `.astro` y TypeScript/JavaScript nativo.
-5. No añadas backend, base de datos, CMS, analítica, cookies, modo oscuro ni formulario de envío.
-6. No uses `@astrojs/tailwind`. Para Tailwind CSS 4 usa el método oficial actual de Astro/Tailwind mediante el plugin de Vite.
-7. No conviertas el portfolio en una SPA. La primera versión debe mantener navegación multipágina estática y rápida.
-8. No uses enlaces `href="#"`, contenido lorem ipsum ni botones sin función.
-9. No copies literalmente la referencia visual. Reproduce su composición, jerarquía y limpieza, adaptadas a la marca definida en `docs/brand.md`.
-10. No reescribas el CV desde una captura o desde el PDF. Reutiliza el código fuente original que aportará el usuario.
-11. Centraliza el contenido editable. Los componentes no deben contener datos de proyectos o experiencia repetidos.
-12. Respeta GitHub Pages y su ruta base. Los enlaces internos y activos deben funcionar tanto en desarrollo como bajo `/<repo>/`.
-13. Toda interacción debe funcionar con teclado, ratón y pantalla táctil.
-14. Usa HTML semántico. Para modales usa `<dialog>` nativo con `showModal()`.
-15. Mantén el JavaScript del cliente al mínimo.
-16. No agregues dependencias salvo que aporten una necesidad concreta y documentada.
-17. Usa versiones estables y genera/commitea el lockfile. No fijes versiones basándote en memoria si la documentación oficial indica otra cosa.
-18. Antes de terminar ejecuta todos los comandos de validación definidos en `docs/tests.md`.
-19. Corrige los errores encontrados. No declares la tarea completada con errores de build, tipos, rutas, accesibilidad automatizada o pruebas funcionales.
-20. Entrega un resumen final con: archivos creados/modificados, decisiones aplicadas, comandos ejecutados, resultados y pendientes reales.
+1. No inventes datos personales, textos, enlaces, métricas, proyectos, clientes, logros ni tecnologías.
+2. No publiques datos marcados como privados o excluidos.
+3. Mantén Astro, TypeScript estricto y Tailwind CSS 4 salvo cambio explícitamente solicitado.
+4. No añadas React, Vue, Svelte, Next.js u otro framework de cliente a este portfolio sin una necesidad aprobada.
+5. No conviertas el portfolio en una SPA.
+6. No añadas backend, base de datos, CMS, analítica, cookies, modo oscuro o formularios de envío salvo cambio de alcance explícito.
+7. No uses enlaces `href="#"`, contenido de relleno ni botones sin función.
+8. Centraliza el contenido editable en `src/data/`; evita duplicar datos de proyectos o experiencia dentro de componentes.
+9. Respeta GitHub Pages y su ruta base. Las rutas internas y activos deben funcionar tanto en local como bajo `/PORTFOLIO/`.
+10. Toda interacción debe funcionar con teclado, ratón y pantalla táctil.
+11. Usa HTML semántico y conserva los patrones de accesibilidad existentes.
+12. Mantén el JavaScript del cliente al mínimo.
+13. No agregues dependencias salvo que cubran una necesidad concreta y documentada.
+14. Conserva el código fuente del CV y su flujo de exportación; no lo reconstruyas desde capturas o desde el PDF.
+15. No edites manualmente los activos generados en `public/images/` cuando exista una fuente correspondiente en `input/`; usa `npm run optimize:assets`.
+16. Mantén cambios pequeños, coherentes y reversibles.
+17. No alteres el alcance para “mejorarlo” dentro de una issue no relacionada.
 
-## Decisiones técnicas fijadas
+## Decisiones técnicas actuales
 
-- Astro, salida estática y TypeScript `strict`.
-- Tailwind CSS 4.
+- Astro con salida estática.
+- TypeScript en modo estricto.
+- Tailwind CSS 4 mediante plugin de Vite.
 - Componentes Astro sin framework cliente.
-- Datos en módulos TypeScript centralizados.
-- Primera versión solo en español, preparada para añadir inglés después.
+- Datos de contenido centralizados en módulos TypeScript.
+- Sitio en español.
 - Página principal `/`.
 - Página de proyectos `/proyectos/`.
-- CV en `/cv/`, preservando su implementación original.
-- La navegación `Sobre mí` abre un modal.
-- Las tarjetas de proyecto abren un modal breve, tanto en inicio como en `/proyectos/`.
-- No habrá páginas individuales de detalle de proyecto en la primera versión.
-- Contacto mediante correo visible, botón de copia y enlace `mailto:`.
-- Despliegue con GitHub Actions y GitHub Pages.
+- CV servido desde `/cv/`.
+- Página `404` propia.
+- Diálogos nativos para “Sobre mí”, contacto y proyectos.
+- Despliegue mediante GitHub Actions y GitHub Pages.
+
+## Validación obligatoria
+
+Antes de dar una tarea de código por terminada, ejecuta cuando el entorno lo permita:
+
+```bash
+npm run format:check
+npm run check
+npm run build
+npm run test:e2e
+```
+
+El comando agregado equivalente es:
+
+```bash
+npm test
+```
+
+La suite Playwright debe conservar las comprobaciones de accesibilidad automatizada, rutas base, CV, navegación, comportamiento responsive y capturas en los viewports definidos en `tests/visual.spec.ts`.
+
+Si el entorno impide ejecutar algún comando, indícalo explícitamente y usa el CI del mismo commit como evidencia antes de considerar el cambio listo para merge.
 
 ## Forma de trabajo
 
-- Realiza primero una auditoría de archivos de entrada.
-- Si falta un activo bloqueante, enumera todos los faltantes de una vez; no preguntes uno a uno.
-- Trabaja por fases siguiendo `portfolio-codex-pack-v1/docs/tasks.md`.
-- Mantén cambios pequeños y coherentes.
-- Después de cada fase importante ejecuta al menos `npm run check` y `npm run build`.
-- No alteres el alcance para “mejorarlo”. Cualquier idea fuera de alcance se documenta en una sección final, pero no se implementa.
+- Trabaja desde una rama específica por issue.
+- No modifiques `main` directamente.
+- Evita mezclar limpieza, contenido, rediseño y funcionalidad en una misma PR.
+- Después de cada cambio estructural relevante comprueba referencias y rutas.
+- Entrega un resumen final con archivos modificados, decisiones, validaciones ejecutadas, resultados y pendientes reales.
