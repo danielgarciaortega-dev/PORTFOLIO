@@ -3,6 +3,8 @@ import { expect, test } from '@playwright/test';
 test('formación y experiencia comparten la geometría visual de los logos de proyectos', async ({
   page,
 }) => {
+  // Compare the same shared mark class in both UI contexts so a future CSS
+  // change cannot silently make Formación/Experiencia smaller again.
   const projectMark = page
     .locator('.hero__projects .project-preview__mark')
     .first();
