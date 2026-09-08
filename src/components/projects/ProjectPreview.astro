@@ -46,3 +46,17 @@ const { project } = Astro.props;
     </span>
   </button>
 </article>
+
+<style>
+  .project-preview__mark img {
+    width: 52px;
+    height: 52px;
+  }
+
+  @media (max-width: 900px) {
+    .project-preview__mark img {
+      width: 34px;
+      height: 34px;
+    }
+  }
+</style>
