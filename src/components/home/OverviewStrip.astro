@@ -52,13 +52,13 @@ import { withBase } from '../../utils/paths';
         {
           education.map((item) => (
             <div class="overview-organization">
-              <span class="overview-organization__logo">
+              <span class="project-preview__mark">
                 {item.logo && (
                   <img
                     src={withBase(item.logo)}
                     alt={item.logoAlt}
-                    width="30"
-                    height="30"
+                    width="46"
+                    height="46"
                   />
                 )}
               </span>
@@ -79,13 +79,13 @@ import { withBase } from '../../utils/paths';
         {
           experience.map((item) => (
             <div class="overview-organization">
-              <span class="overview-organization__logo">
+              <span class="project-preview__mark">
                 {item.logo && (
                   <img
                     src={withBase(item.logo)}
                     alt=""
-                    width="30"
-                    height="30"
+                    width="46"
+                    height="46"
                     aria-hidden="true"
                   />
                 )}
@@ -105,3 +105,15 @@ import { withBase } from '../../utils/paths';
     </article>
   </div>
 </section>
+
+<style>
+  .overview-organization {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+
+  @media (max-width: 900px) {
+    .overview-organization {
+      grid-template-columns: 44px minmax(0, 1fr);
+    }
+  }
+</style>
