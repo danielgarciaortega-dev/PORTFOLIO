@@ -3,6 +3,8 @@ name: Validar y desplegar en GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -53,7 +55,7 @@ jobs:
   deploy:
     name: Publicar en GitHub Pages
     needs: build
-    if: ${{ vars.PUBLICATION_APPROVED == 'true' }}
+    if: ${{ github.event_name != 'pull_request' && vars.PUBLICATION_APPROVED == 'true' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
