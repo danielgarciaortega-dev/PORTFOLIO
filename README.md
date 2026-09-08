@@ -1,103 +1,101 @@
 # Daniel García Ortega — Portfolio
 
-**Desarrollador web full-stack · Granada, España**
+**Full-stack web developer · Granada, Spain**
 
-Estudiante de 2º curso de Desarrollo de Aplicaciones Web en el Instituto FOC. Este portfolio reúne mis proyectos, experiencia, formación y trabajo técnico mientras busco una empresa donde realizar las prácticas de 2º curso y seguir creciendo como desarrollador.
+Second-year student in Web Application Development (DAW) at Instituto FOC. This portfolio brings together my projects, experience, education, and technical work while I look for a company where I can complete my second-year internship and continue growing as a developer.
 
-[Ver portfolio](https://danielgarciaortega-dev.github.io/PORTFOLIO/) · [Ver CV](https://danielgarciaortega-dev.github.io/PORTFOLIO/cv/)
+[View portfolio](https://danielgarciaortega-dev.github.io/PORTFOLIO/) · [View CV](https://danielgarciaortega-dev.github.io/PORTFOLIO/cv/)
 
-## Perfil
+## Profile
 
-Vengo de casi diez años de experiencia en atención al cliente y ventas antes de dar el salto al desarrollo web. Actualmente combino la formación en DAW con proyectos propios, hackathons y experiencia práctica en desarrollo de software.
+I spent nearly ten years in customer service and sales before moving into web development. I currently combine my DAW studies with personal projects, hackathons, and hands-on software development experience.
 
-## Proyectos destacados
+## Featured projects
 
-### AL-LÍO
+### AL-LÍO · [Repository](https://github.com/danielgarciaortega-dev/al-lio)
 
-Proyecto propio desarrollado en el contexto de **Aircury Summer of Code 2026** para centralizar tareas, calendario, formación y oportunidades profesionales. Mi rol abarca diseño de producto, arquitectura y desarrollo full-stack.
+Personal project developed as part of **Aircury Summer of Code 2026** to centralize tasks, calendar, learning, and professional opportunities. My role covers product design, architecture, and full-stack development.
 
 `Next.js` · `TypeScript` · `Tailwind CSS` · `PostgreSQL` · `Supabase` · `Google OAuth` · `Docker`
 
-[Repositorio](https://github.com/danielgarciaortega-dev/al-lio)
-
 ### SIDN Cost Control
 
-Aplicación desarrollada en equipo para controlar y comparar el gasto de campañas publicitarias. **Ganador de la I Edición GEN AI ARENA**.
+Team-built application for monitoring and comparing advertising campaign spend. **Winner of the 1st GEN AI ARENA**.
 
 `Python` · `FastAPI` · `BigQuery` · `React` · `Vite`
 
 ### Feedback2Action
 
-Análisis de feedback para convertir grandes volúmenes de reseñas en problemas agrupados y acciones priorizadas.
+Feedback analysis system that turns large volumes of reviews into grouped problems and prioritized actions.
 
-**22.376 reseñas analizadas** · **409 grupos de problemas** · **108 acciones priorizadas**
+**22,376 reviews analyzed** · **409 problem groups** · **108 prioritized actions**
 
 `Python` · `FastAPI` · `BigQuery` · `Vertex AI`
 
-## Experiencia técnica
+## Technical experience
 
-**Salunox — Desarrollador web en prácticas (2026)**  
-Plataforma SaaS sanitaria. Corrección de incidencias y validación de funcionalidades web y móviles relacionadas con pacientes, citas y notificaciones.
+**Salunox — Web Development Intern (2026)**  
+Healthcare SaaS platform. Bug fixing and validation of web and mobile functionality related to patients, appointments, and notifications.
 
 `Angular` · `TypeScript` · `Laravel/PHP` · `Flutter/Dart` · `Firebase` · `REST APIs`
 
 ## Stack
 
 - **Frontend:** HTML5, CSS3, JavaScript, TypeScript, React, Next.js, Astro, Tailwind CSS, Vite.
-- **Backend:** Java, Python, FastAPI, Node.js, APIs REST.
-- **Datos:** SQL, PostgreSQL, MySQL/MariaDB, BigQuery.
-- **Herramientas:** Git, GitHub, Docker, Supabase.
+- **Backend:** Java, Python, FastAPI, Node.js, REST APIs.
+- **Data:** SQL, PostgreSQL, MySQL/MariaDB, BigQuery.
+- **Tools:** Git, GitHub, Docker, Supabase.
 
-## Sobre este portfolio
+## About this portfolio
 
-Portfolio estático multipágina construido con **Astro 7**, **TypeScript** en modo estricto y **Tailwind CSS 4**, sin framework de cliente. El contenido de perfil, proyectos, formación, experiencia y tecnologías se mantiene tipado en `src/data/`.
+Static multi-page portfolio built with **Astro 7**, **TypeScript** in strict mode, and **Tailwind CSS 4**, with no client-side framework. Profile, project, education, experience, and technology content is kept typed in `src/data/`.
 
-Rutas principales: `/`, `/proyectos/`, `/cv/` y una página 404 propia. Las rutas y assets respetan `import.meta.env.BASE_URL` para funcionar tanto en local como bajo `/PORTFOLIO/` en GitHub Pages.
+Main routes: `/`, `/proyectos/`, `/cv/`, plus a custom 404 page. Routes and assets respect `import.meta.env.BASE_URL`, so the site works both locally and under `/PORTFOLIO/` on GitHub Pages.
 
-## Desarrollo y verificación
+## Development and verification
 
-Requisitos: **Node.js 22.12+** y **npm 11**. CI utiliza Node 24.
+Requirements: **Node.js 22.12+** and **npm 11**. CI uses Node 24.
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Comandos principales:
+Main commands:
 
 ```bash
-npm run build            # build estático en dist/
+npm run build            # static build to dist/
 npm run check            # Astro + TypeScript
 npm run format:check     # Prettier
-npm run test:e2e         # Playwright + axe + QA visual
-npm test                 # formato + check + build + E2E
-npm run optimize:assets  # genera assets web desde input/
-npm run export:cv        # regenera el PDF desde el CV HTML
+npm run test:e2e         # Playwright + axe + visual QA
+npm test                 # format + check + build + E2E
+npm run optimize:assets  # generate web assets from input/
+npm run export:cv        # regenerate the PDF from the HTML CV
 ```
 
-Playwright cubre navegación, rutas, comportamiento responsive y accesibilidad automatizada con axe. Las capturas de QA se conservan en `docs/screenshots/`.
+Playwright covers navigation, routes, responsive behavior, and automated accessibility checks with axe. QA screenshots are kept in `docs/screenshots/`.
 
-## Estructura
+## Structure
 
 ```text
-.github/workflows/  CI y despliegue de GitHub Pages
-docs/               documentación y evidencia visual de QA
-input/              fuentes originales de assets y CV
-public/             assets públicos y CV HTML/CSS/PDF
-scripts/            optimización, exportación y soporte E2E
-src/                componentes, datos, layouts, páginas, scripts, estilos y utilidades
-tests/              pruebas funcionales, accesibilidad y visuales
+.github/workflows/  CI and GitHub Pages deployment
+docs/               documentation and visual QA evidence
+input/              original asset and CV sources
+public/             public assets and HTML/CSS/PDF CV
+scripts/            optimization, export, and E2E support
+src/                components, data, layouts, pages, scripts, styles, and utilities
+tests/              functional, accessibility, and visual tests
 ```
 
 ## CI/CD
 
-El workflow `.github/workflows/deploy.yml` mantiene una única cadena de validación:
+The `.github/workflows/deploy.yml` workflow uses a single validation pipeline:
 
-- **Pull requests a `main`:** ejecuta `npm test` y compila el artefacto de Pages; el deploy se omite.
-- **Push a `main` o ejecución manual:** repite validación y build; publica en GitHub Pages solo cuando `PUBLICATION_APPROVED == 'true'`.
+- **Pull requests to `main`:** runs `npm test` and builds the Pages artifact; deployment is skipped.
+- **Pushes to `main` or manual runs:** repeats validation and build; publishes to GitHub Pages only when `PUBLICATION_APPROVED == 'true'`.
 
-`astro.config.mjs` genera salida estática e infiere automáticamente `site` y `base` desde GitHub Actions, con soporte para `SITE_URL` y `BASE_PATH` cuando se necesiten overrides explícitos.
+`astro.config.mjs` generates static output and automatically infers `site` and `base` from GitHub Actions, with support for `SITE_URL` and `BASE_PATH` when explicit overrides are needed.
 
-## Licencia
+## License
 
-Uso personal — código y contenido de Daniel García Ortega.
+Personal use — code and content by Daniel García Ortega.
