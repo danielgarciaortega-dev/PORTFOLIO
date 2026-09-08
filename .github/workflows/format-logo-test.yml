@@ -1,0 +1,30 @@
+name: Inspect logo test formatting
+
+on:
+  push:
+    branches:
+      - style/issue-46-enlarge-project-logo-artwork
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Show exact Prettier diff
+        run: |
+          npx prettier tests/overview-logo-geometry.spec.ts --write
+          git diff -- tests/overview-logo-geometry.spec.ts
