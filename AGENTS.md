@@ -78,6 +78,7 @@ Si el entorno impide ejecutar algún comando, indícalo explícitamente y usa el
 
 - Trabaja desde una rama específica por issue.
 - No modifiques `main` directamente.
+- Exige CI verde para el commit actual de la PR antes de mergear.
 - Evita mezclar limpieza, contenido, rediseño y funcionalidad en una misma PR.
 - Después de cada cambio estructural relevante comprueba referencias y rutas.
 - Entrega un resumen final con archivos modificados, decisiones, validaciones ejecutadas, resultados y pendientes reales.
