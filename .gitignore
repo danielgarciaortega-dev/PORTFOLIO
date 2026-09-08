@@ -5,6 +5,7 @@ playwright-report/
 test-results/
 output/
 .playwright-cli/
+.playwright-mcp/
 .DS_Store
 *.log
 /Seleccionadas personal/
