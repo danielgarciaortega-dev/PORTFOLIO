@@ -33,11 +33,17 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      - name: Auditar dependencias
+        run: npm audit --audit-level=high
+
       - name: Validar generación de activos
         run: npm run optimize:assets
 
       - name: Instalar Chromium
         run: npx playwright install --with-deps chromium
+
+      - name: Validar exportación del CV
+        run: npm run export:cv
 
       - name: Ejecutar validaciones
         run: npm test
