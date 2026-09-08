@@ -23,7 +23,7 @@ jobs:
       - name: Refresh lock metadata and approve esbuild
         run: |
           set -euo pipefail
-          npm install --package-lock-only
+          npm install --ignore-scripts
           npm approve-scripts esbuild
           echo '--- git diff --stat ---'
           git diff --stat
