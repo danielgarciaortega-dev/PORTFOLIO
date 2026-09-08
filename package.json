@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "private": true,
   "packageManager": "npm@11.6.2",
+  "allowScripts": {
+    "esbuild": true
+  },
   "engines": {
     "node": ">=22.12.0"
   },
