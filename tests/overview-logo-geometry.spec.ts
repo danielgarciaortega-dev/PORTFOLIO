@@ -44,23 +44,21 @@ async function expectHomeLogoGeometry(page: Page, geometry: LogoGeometry) {
 }
 
 test.describe('geometría de logos de la home', () => {
-  test(
-    'desktop mantiene la caja compartida y aumenta solo el artwork de proyectos',
-    async ({ page }) => {
-      await page.setViewportSize({ width: 1440, height: 900 });
-      await page.goto('./');
+  test('desktop mantiene la caja compartida y aumenta solo el artwork de proyectos', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('./');
 
-      await expectHomeLogoGeometry(page, desktopGeometry);
-    },
-  );
+    await expectHomeLogoGeometry(page, desktopGeometry);
+  });
 
-  test(
-    'compact mantiene la caja compartida y la diferencia óptica prevista',
-    async ({ page }) => {
-      await page.setViewportSize({ width: 768, height: 1024 });
-      await page.goto('./');
+  test('compact mantiene la caja compartida y la diferencia óptica prevista', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await page.goto('./');
 
-      await expectHomeLogoGeometry(page, compactGeometry);
-    },
-  );
+    await expectHomeLogoGeometry(page, compactGeometry);
+  });
 });
