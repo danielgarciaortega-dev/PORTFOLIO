@@ -3,8 +3,6 @@ name: Clean merged branches
 on:
   pull_request:
     types: [closed]
-  push:
-    branches: [main]
 
 permissions:
   contents: write
@@ -12,7 +10,6 @@ permissions:
 jobs:
   delete-merged-branch:
     if: >
-      github.event_name == 'pull_request' &&
       github.event.pull_request.merged == true &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.event.pull_request.head.ref != github.event.repository.default_branch
@@ -35,59 +32,3 @@ jobs:
           else
             echo "Branch already absent: ${BRANCH}"
           fi
-
-  cleanup-verified-legacy-branches:
-    if: >
-      github.event_name == 'push' &&
-      contains(github.event.head_commit.message, '[legacy-branch-cleanup]')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout main
-        uses: actions/checkout@v7
-        with:
-          ref: main
-          fetch-depth: 1
-
-      - name: Delete verified obsolete branches
-        env:
-          BRANCHES: |
-            backup/map-scroll-granada-20260620-203654
-            backup/pre-header-20251216-2105
-            backup/pre-projects-20251216-2109
-            chore/issue-6-repository-hygiene
-            chore/issue-7-docs-history-cleanup
-            chore/issue-14-pr-ci
-            chore/issue-27-cv-workspace-cleanup
-            chore/issue-28-consolidate-source-assets
-            chore/issue-29-branch-cleanup
-            cv-redesign
-            docs/issue-8-readme-hierarchy
-            docs/issue-9-projects-experience
-            docs/issue-10-readme-technical
-            docs/issue-20-readme-english
-            docs/issue-33-portfolio-readme
-            feat/header-pro
-            feat/portfolio-unified
-            feat/projects-marquee
-            feature/map-scroll-granada
-            fix/issue-24-overview-logo-specificity
-            gh-pages
-            style/issue-22-align-logo-sizes
-        run: |
-          set -euo pipefail
-
-          while IFS= read -r branch; do
-            [ -z "${branch}" ] && continue
-
-            if [ "${branch}" = "main" ]; then
-              echo "Refusing to delete the default branch."
-              exit 1
-            fi
-
-            if git ls-remote --exit-code --heads origin "refs/heads/${branch}" >/dev/null 2>&1; then
-              echo "Deleting ${branch}"
-              git push origin --delete "${branch}"
-            else
-              echo "Already absent: ${branch}"
-            fi
-          done <<< "${BRANCHES}"

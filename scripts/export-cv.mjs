@@ -1,4 +1,3 @@
-import { copyFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from '@playwright/test';
@@ -11,16 +10,6 @@ const publicPdf = path.join(
   'cv',
   'CV-Daniel-Garcia-Ortega.pdf',
 );
-const sourcePdf = path.join(
-  root,
-  'input',
-  'cv',
-  'output',
-  'pdf',
-  'cv-daniel-garcia-ortega-portfolio.pdf',
-);
-
-await mkdir(path.dirname(sourcePdf), { recursive: true });
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
@@ -33,9 +22,7 @@ try {
     printBackground: true,
     preferCSSPageSize: true,
   });
-  await copyFile(publicPdf, sourcePdf);
   console.log(`CV exportado en ${publicPdf}`);
-  console.log(`Copia de trabajo en ${sourcePdf}`);
 } finally {
   await browser.close();
 }
