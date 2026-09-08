@@ -3,7 +3,7 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 const root = process.cwd();
-const input = path.join(root, 'input');
+const input = path.join(root, 'input', 'assets');
 const publicDir = path.join(root, 'public');
 
 const directories = {
@@ -20,11 +20,16 @@ await Promise.all(
   ),
 );
 
-const profileSource = path.join(input, 'png', 'profile-main.jpg');
+const profileSource = path.join(input, 'profile', 'profile-main.jpg');
 
 // Event photos used as a soft, blurred backdrop on /proyectos/.
+// Moment 03 intentionally reuses the profile source because both files were
+// byte-identical before the source-asset cleanup.
 const momentNumbers = ['01', '02', '03', '04', '05', '06'];
-const momentSource = (n) => path.join(input, 'png', 'hero', `hero-${n}.jpg`);
+const momentSource = (n) =>
+  n === '03'
+    ? profileSource
+    : path.join(input, 'moments', `moment-${n}.jpg`);
 
 await Promise.all([
   ...momentNumbers.map((n) =>
@@ -44,12 +49,12 @@ await Promise.all([
     .resize({ width: 900, withoutEnlargement: true })
     .webp({ quality: 82 })
     .toFile(path.join(directories.profile, 'profile-main-mobile.webp')),
-  sharp(path.join(input, 'png', 'FOTO CARNET.jpg'))
+  sharp(path.join(input, 'profile', 'profile-about.jpg'))
     .rotate()
     .resize({ width: 480, height: 480, fit: 'cover', position: 'top' })
     .webp({ quality: 86 })
     .toFile(path.join(directories.profile, 'profile-about.webp')),
-  sharp(path.join(input, 'png', 'al_lio_favicon_transparent_512.png'))
+  sharp(path.join(input, 'projects', 'al-lio.png'))
     .resize({
       width: 512,
       height: 512,
@@ -58,11 +63,11 @@ await Promise.all([
     })
     .webp({ quality: 90, alphaQuality: 100 })
     .toFile(path.join(directories.projects, 'al-lio.webp')),
-  sharp(path.join(input, 'png', 'feedback2action-logo.png'))
+  sharp(path.join(input, 'projects', 'feedback2action.png'))
     .resize({ width: 480, fit: 'inside', withoutEnlargement: false })
     .webp({ quality: 90, alphaQuality: 100 })
     .toFile(path.join(directories.projects, 'feedback2action.webp')),
-  sharp(path.join(input, 'png', 'gen-ai-arena-winner.png'))
+  sharp(path.join(input, 'projects', 'sidn-cost-control.png'))
     .resize({
       width: 640,
       height: 640,
@@ -71,7 +76,7 @@ await Promise.all([
     })
     .webp({ quality: 88, alphaQuality: 100 })
     .toFile(path.join(directories.projects, 'sidn-cost-control.webp')),
-  sharp(path.join(input, 'png', 'images.jpg'))
+  sharp(path.join(input, 'companies', 'konecta.jpg'))
     .resize({
       width: 300,
       height: 300,
@@ -80,7 +85,7 @@ await Promise.all([
     })
     .webp({ quality: 88 })
     .toFile(path.join(directories.companies, 'konecta.webp')),
-  sharp(path.join(input, 'png', '500x500.jpg'))
+  sharp(path.join(input, 'companies', 'alcampo.jpg'))
     .resize({
       width: 400,
       height: 400,
@@ -90,10 +95,10 @@ await Promise.all([
     .webp({ quality: 88 })
     .toFile(path.join(directories.companies, 'alcampo.webp')),
   copyFile(
-    path.join(input, 'cv', 'salunox-logo.svg'),
+    path.join(input, 'companies', 'salunox.svg'),
     path.join(directories.companies, 'salunox.svg'),
   ),
-  sharp(path.join(input, 'png', 'foc-logo.png'))
+  sharp(path.join(input, 'education', 'foc.png'))
     .resize({
       width: 320,
       height: 320,
@@ -103,7 +108,7 @@ await Promise.all([
     })
     .png()
     .toFile(path.join(directories.education, 'foc.png')),
-  sharp(path.join(input, 'png', 'adoratrices-logo.png'))
+  sharp(path.join(input, 'education', 'adoratrices.png'))
     .resize({
       width: 320,
       height: 320,
