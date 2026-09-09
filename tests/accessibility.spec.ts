@@ -43,7 +43,7 @@ test('modal de proyecto abierto sin violaciones automatizadas de axe', async ({
   page,
 }) => {
   await page.goto('./');
-  await page.getByRole('button', { name: 'Ver proyecto AL-LÍO' }).click();
+  await page.getByRole('button', { name: 'View project AL-LÍO' }).click();
   await expectNoAxeViolations(page);
 });
 
