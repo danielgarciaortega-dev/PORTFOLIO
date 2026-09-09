@@ -36,7 +36,9 @@ export function parseValidatedPreviewUrl(value) {
     url.hostname === 'vercel.app' ||
     !url.hostname.endsWith('.vercel.app')
   ) {
-    throw new Error('PREVIEW_URL must be an HTTPS *.vercel.app deployment URL.');
+    throw new Error(
+      'PREVIEW_URL must be an HTTPS *.vercel.app deployment URL.',
+    );
   }
 
   if (url.username || url.password) {
@@ -97,7 +99,9 @@ export function buildPreviewRequestHeaders(
 export function validateHeadSha(headSha) {
   const normalized = headSha.trim().toLowerCase();
   if (!/^[0-9a-f]{40}$/.test(normalized)) {
-    throw new Error('EXPECTED_HEAD_SHA must be a full 40-character commit SHA.');
+    throw new Error(
+      'EXPECTED_HEAD_SHA must be a full 40-character commit SHA.',
+    );
   }
   return normalized;
 }
@@ -105,7 +109,11 @@ export function validateHeadSha(headSha) {
 /**
  * @param {{ headSha: string, previewUrl: string | URL, captures: Array<object> }} input
  */
-export function createVisualEvidenceManifest({ headSha, previewUrl, captures }) {
+export function createVisualEvidenceManifest({
+  headSha,
+  previewUrl,
+  captures,
+}) {
   return {
     schemaVersion: 1,
     headSha: validateHeadSha(headSha),
