@@ -6,6 +6,7 @@ import {
   loadGitHubPreviewEvidence,
   runPreviewReadiness,
 } from './lib/preview-readiness.mjs';
+import { createVercelPreviewFetch } from './lib/vercel-preview-fetch.mjs';
 
 /** @param {string} name */
 function requireEnvironment(name) {
@@ -35,6 +36,10 @@ async function main() {
   const token = requireEnvironment('GITHUB_TOKEN');
   const timeoutMs = readPositiveInteger('PREVIEW_WAIT_TIMEOUT_MS', 600_000);
   const pollIntervalMs = readPositiveInteger('PREVIEW_POLL_INTERVAL_MS', 5_000);
+  const previewFetch = createVercelPreviewFetch(
+    fetch,
+    process.env.VERCEL_AUTOMATION_BYPASS_SECRET,
+  );
 
   const loadEvidence = () =>
     loadGitHubPreviewEvidence({
@@ -47,6 +52,7 @@ async function main() {
   const result = await runPreviewReadiness({
     expectedHeadSha,
     loadEvidence,
+    fetchImpl: previewFetch,
     timeoutMs,
     pollIntervalMs,
     onRetry(error) {

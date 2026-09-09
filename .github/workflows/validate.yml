@@ -80,6 +80,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
           PREVIEW_WAIT_TIMEOUT_MS: '600000'
           PREVIEW_POLL_INTERVAL_MS: '5000'
         run: node scripts/preview-readiness.mjs

@@ -45,6 +45,16 @@ test('binds preview readiness to the exact current pull-request head', () => {
   assert.match(workflow, /timeout-minutes: 12/);
 });
 
+test('passes only the approved Vercel automation bypass secret to preview smoke', () => {
+  assert.match(
+    workflow,
+    /VERCEL_AUTOMATION_BYPASS_SECRET: \$\{\{ secrets\.VERCEL_AUTOMATION_BYPASS_SECRET \}\}/,
+  );
+  assert.doesNotMatch(workflow, /VERCEL_TOKEN:/);
+  assert.doesNotMatch(workflow, /VERCEL_PROJECT_ID:/);
+  assert.doesNotMatch(workflow, /VERCEL_ORG_ID:/);
+});
+
 test('runs the repository readiness helper without Vercel deployment commands', () => {
   assert.match(workflow, /run: node scripts\/preview-readiness\.mjs/);
   assert.doesNotMatch(workflow, /vercel\s+(?:deploy|--prod)/i);
