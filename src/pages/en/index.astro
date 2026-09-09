@@ -4,8 +4,11 @@ import ContactDialog from '../../components/dialogs/ContactDialog.astro';
 import Hero from '../../components/home/Hero.astro';
 import OverviewStrip from '../../components/home/OverviewStrip.astro';
 import ProjectDialog from '../../components/projects/ProjectDialog.astro';
-import { projects } from '../../data/es/projects';
+import { getProjects } from '../../data/projects-localized';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const locale = 'en';
+const projects = getProjects(locale);
 ---
 
 <BaseLayout
@@ -14,11 +17,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   currentPage="home"
 >
   <main id="contenido" class="home-page">
-    <Hero
-      projects={projects.filter((project) => project.featured)}
-      locale="en"
-    />
-    <OverviewStrip locale="en" />
+    <Hero projects={projects.filter((project) => project.featured)} {locale} />
+    <OverviewStrip {locale} />
   </main>
   <AboutDialog />
   <ContactDialog />
@@ -27,6 +27,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <ProjectDialog
         {project}
         nextProject={projects[(index + 1) % projects.length]}
+        {locale}
       />
     ))
   }
