@@ -32,7 +32,7 @@ for (const viewport of viewports) {
       fullPage: true,
     });
 
-    await page.getByRole('button', { name: 'Ver proyecto AL-LÍO' }).click();
+    await page.getByRole('button', { name: 'View project AL-LÍO' }).click();
     await page.screenshot({ path: path.join(output, 'inicio-modal.png') });
     await page.keyboard.press('Escape');
 
