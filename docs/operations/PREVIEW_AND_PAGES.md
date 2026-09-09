@@ -16,11 +16,11 @@ This separation lets a PR be tested as a real deployed site without giving the P
 
 `scripts/lib/hosting-config.mjs` is the source of truth for host-aware Astro configuration.
 
-| Environment | Site/origin | Base path |
-| --- | --- | --- |
-| Local development | `http://localhost:4321` unless explicitly overridden | `/` |
-| GitHub Pages project site | inferred from `GITHUB_REPOSITORY` | `/PORTFOLIO` |
-| Vercel Preview | inferred from `VERCEL_URL` | `/` |
+| Environment               | Site/origin                                          | Base path    |
+| ------------------------- | ---------------------------------------------------- | ------------ |
+| Local development         | `http://localhost:4321` unless explicitly overridden | `/`          |
+| GitHub Pages project site | inferred from `GITHUB_REPOSITORY`                    | `/PORTFOLIO` |
+| Vercel Preview            | inferred from `VERCEL_URL`                           | `/`          |
 
 Explicit `SITE_URL` and `BASE_PATH` values take precedence when intentionally supplied. Normal Vercel Preview operation relies on Vercel-provided `VERCEL=1` and `VERCEL_URL`; normal Pages operation relies on GitHub metadata. Do not manually force `/PORTFOLIO` into a Vercel Preview.
 
@@ -214,21 +214,21 @@ Closing a PR without merge must not change `main`. Its Vercel Preview is non-pro
 
 ## 12. Troubleshooting matrix
 
-| Symptom | Likely cause | Safe diagnostic | Corrective action |
-| --- | --- | --- | --- |
-| No Vercel evidence for current head | Git Integration missing, delayed, or wrong SHA | Compare live PR head with commit statuses and official `vercel[bot]` inspector evidence | Restore integration or wait within the bounded window; never reuse an older Preview |
-| `Preview readiness` reports stale head | New commit pushed after workflow started | Compare workflow expected SHA with live PR head | Let the new head's workflow run; do not rerun/approve the old head as evidence |
-| Vercel status is green but readiness fails | Status alone is insufficient, smoke/evidence mismatch may exist | Read `Preview readiness` summary/log for inspector and smoke failure | Fix the deployment/evidence/smoke problem on a new commit |
-| Preview redirects to Vercel auth | Deployment Protection requires automation bypass | Confirm the repository secret name exists; never print its value | Configure/rotate `VERCEL_AUTOMATION_BYPASS_SECRET` using Vercel Protection Bypass for Automation |
-| Preview returns fallback `200` for missing route | Provider/app fallback masks a 404 | Run the readiness smoke and inspect missing-route result | Fix routing/fallback configuration; do not weaken the negative smoke check |
-| Preview links/assets contain `/PORTFOLIO/` | Pages base leaked into Vercel build | Check `VERCEL`, `VERCEL_URL`, `SITE_URL`, `BASE_PATH` and built markup | Restore Vercel base `/`; keep `/PORTFOLIO` only for Pages |
-| `Repository validation` fails before Preview | Code/test/format/dependency failure | Inspect the failing named step/job | Fix repository validation first; Preview readiness must remain blocked |
-| Chromium install fails on unrelated Google Chrome APT metadata | Hosted runner's unrelated Chrome feed is unhealthy | Inspect `Install Chromium` logs | Keep the PR workflow's source-isolation guard and `playwright install --with-deps chromium`; do not skip E2E |
-| Preview wait times out | Provider never reached usable exact-head state within bound | Check current-head Vercel status/comment and workflow timestamps | Fix provider integration/build or rerun on the same unchanged head only after cause is understood |
-| PR stays blocked after checks | Branch not up to date, unresolved conversation, or current-head checks missing | Read ruleset/check state for the current PR head | Update branch, resolve conversation, then obtain fresh required checks |
-| Pages validation/build fails after merge | Production build regression or transient infrastructure problem | Inspect `Deploy to GitHub Pages` jobs on the merge SHA | Fix through a new protected PR; do not promote the Vercel Preview as production |
-| Pages deploy job is skipped | `PUBLICATION_APPROVED` is not exactly `true` | Inspect repository variable state without exposing secrets | Set the approved publication variable only when production publication is intended |
-| Merged branch remains | Cleanup workflow failed or branch is outside its safe conditions | Inspect `Clean merged branches` workflow and PR head ownership | Retry/fix cleanup; handle unmerged/abandoned refs through audited maintenance |
+| Symptom                                                        | Likely cause                                                                   | Safe diagnostic                                                                         | Corrective action                                                                                            |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| No Vercel evidence for current head                            | Git Integration missing, delayed, or wrong SHA                                 | Compare live PR head with commit statuses and official `vercel[bot]` inspector evidence | Restore integration or wait within the bounded window; never reuse an older Preview                          |
+| `Preview readiness` reports stale head                         | New commit pushed after workflow started                                       | Compare workflow expected SHA with live PR head                                         | Let the new head's workflow run; do not rerun/approve the old head as evidence                               |
+| Vercel status is green but readiness fails                     | Status alone is insufficient, smoke/evidence mismatch may exist                | Read `Preview readiness` summary/log for inspector and smoke failure                    | Fix the deployment/evidence/smoke problem on a new commit                                                    |
+| Preview redirects to Vercel auth                               | Deployment Protection requires automation bypass                               | Confirm the repository secret name exists; never print its value                        | Configure/rotate `VERCEL_AUTOMATION_BYPASS_SECRET` using Vercel Protection Bypass for Automation             |
+| Preview returns fallback `200` for missing route               | Provider/app fallback masks a 404                                              | Run the readiness smoke and inspect missing-route result                                | Fix routing/fallback configuration; do not weaken the negative smoke check                                   |
+| Preview links/assets contain `/PORTFOLIO/`                     | Pages base leaked into Vercel build                                            | Check `VERCEL`, `VERCEL_URL`, `SITE_URL`, `BASE_PATH` and built markup                  | Restore Vercel base `/`; keep `/PORTFOLIO` only for Pages                                                    |
+| `Repository validation` fails before Preview                   | Code/test/format/dependency failure                                            | Inspect the failing named step/job                                                      | Fix repository validation first; Preview readiness must remain blocked                                       |
+| Chromium install fails on unrelated Google Chrome APT metadata | Hosted runner's unrelated Chrome feed is unhealthy                             | Inspect `Install Chromium` logs                                                         | Keep the PR workflow's source-isolation guard and `playwright install --with-deps chromium`; do not skip E2E |
+| Preview wait times out                                         | Provider never reached usable exact-head state within bound                    | Check current-head Vercel status/comment and workflow timestamps                        | Fix provider integration/build or rerun on the same unchanged head only after cause is understood            |
+| PR stays blocked after checks                                  | Branch not up to date, unresolved conversation, or current-head checks missing | Read ruleset/check state for the current PR head                                        | Update branch, resolve conversation, then obtain fresh required checks                                       |
+| Pages validation/build fails after merge                       | Production build regression or transient infrastructure problem                | Inspect `Deploy to GitHub Pages` jobs on the merge SHA                                  | Fix through a new protected PR; do not promote the Vercel Preview as production                              |
+| Pages deploy job is skipped                                    | `PUBLICATION_APPROVED` is not exactly `true`                                   | Inspect repository variable state without exposing secrets                              | Set the approved publication variable only when production publication is intended                           |
+| Merged branch remains                                          | Cleanup workflow failed or branch is outside its safe conditions               | Inspect `Clean merged branches` workflow and PR head ownership                          | Retry/fix cleanup; handle unmerged/abandoned refs through audited maintenance                                |
 
 ## 13. Safe reuse in another repository
 
