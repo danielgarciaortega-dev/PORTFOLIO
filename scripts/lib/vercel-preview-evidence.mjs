@@ -38,12 +38,7 @@ function normalizeUrl(value) {
 /** @param {string} value */
 export function isVercelInspectorUrl(value) {
   const url = parseHttpsUrl(value);
-  if (
-    !url ||
-    url.hostname !== 'vercel.com' ||
-    url.search ||
-    url.hash
-  ) {
+  if (!url || url.hostname !== 'vercel.com' || url.search || url.hash) {
     return false;
   }
 
@@ -62,9 +57,9 @@ export function isVercelInspectorUrl(value) {
 
   return Boolean(
     scope &&
-      project &&
-      !reservedTopLevel.has(scope.toLowerCase()) &&
-      /^[A-Za-z0-9]{20,64}$/.test(deploymentId),
+    project &&
+    !reservedTopLevel.has(scope.toLowerCase()) &&
+    /^[A-Za-z0-9]{20,64}$/.test(deploymentId),
   );
 }
 
@@ -73,10 +68,10 @@ export function isVercelPreviewUrl(value) {
   const url = parseHttpsUrl(value);
   return Boolean(
     url &&
-      !url.search &&
-      !url.hash &&
-      url.hostname !== 'vercel.app' &&
-      url.hostname.endsWith('.vercel.app'),
+    !url.search &&
+    !url.hash &&
+    url.hostname !== 'vercel.app' &&
+    url.hostname.endsWith('.vercel.app'),
   );
 }
 
@@ -87,18 +82,12 @@ export function extractVercelUrls(body) {
   return {
     inspectorUrls: [
       ...new Set(
-        rawUrls
-          .filter(isVercelInspectorUrl)
-          .map(normalizeUrl)
-          .filter(Boolean),
+        rawUrls.filter(isVercelInspectorUrl).map(normalizeUrl).filter(Boolean),
       ),
     ],
     previewUrls: [
       ...new Set(
-        rawUrls
-          .filter(isVercelPreviewUrl)
-          .map(normalizeUrl)
-          .filter(Boolean),
+        rawUrls.filter(isVercelPreviewUrl).map(normalizeUrl).filter(Boolean),
       ),
     ],
   };

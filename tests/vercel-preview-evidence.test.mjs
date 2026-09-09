@@ -67,10 +67,7 @@ test('resolves exact-head Vercel status and official bot evidence', () => {
 });
 
 test('fails closed when the live pull-request head changed after workflow start', () => {
-  expectEvidenceError(
-    () => resolve({ liveHeadSha: OLD_HEAD }),
-    'STALE_HEAD',
-  );
+  expectEvidenceError(() => resolve({ liveHeadSha: OLD_HEAD }), 'STALE_HEAD');
 });
 
 test('treats a missing current-head Vercel status as retryable instead of trusting old evidence', () => {
