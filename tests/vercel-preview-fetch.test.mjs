@@ -54,13 +54,14 @@ test('never sends the bypass secret outside HTTPS *.vercel.app preview hosts', a
   for (const url of [
     'https://api.github.com/repos/owner/repo',
     'https://vercel.com/example/project/deployment',
+    'https://vercel.app/',
     'https://portfolio.vercel.app.example.com/',
     'http://portfolio-git-example.vercel.app/',
   ]) {
     await previewFetch(url);
   }
 
-  assert.equal(captured.length, 4);
+  assert.equal(captured.length, 5);
   for (const request of captured) {
     assert.equal(request.bypass, null, request.url);
   }
