@@ -98,10 +98,11 @@ test('language switcher lives beside the CV action and persists explicit choice'
   });
 
   await englishLink.hover();
-  const hoverUnderlineTransform = await englishLink.evaluate(
-    (link) => getComputedStyle(link, '::after').transform,
-  );
-  expect(hoverUnderlineTransform).not.toBe('matrix(0, 0, 0, 1, 0, 0)');
+  await expect
+    .poll(() =>
+      englishLink.evaluate((link) => getComputedStyle(link, '::after').transform),
+    )
+    .not.toBe('matrix(0, 0, 0, 1, 0, 0)');
 
   await expect(cvLink).toHaveCSS('border-top-width', '1px');
 
