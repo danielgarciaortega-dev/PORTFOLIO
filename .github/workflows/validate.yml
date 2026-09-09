@@ -85,6 +85,7 @@ jobs:
           node-version: 24
 
       - name: Validate exact-head Vercel Preview
+        id: preview_readiness
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -94,3 +95,36 @@ jobs:
           PREVIEW_WAIT_TIMEOUT_MS: '600000'
           PREVIEW_POLL_INTERVAL_MS: '5000'
         run: node scripts/preview-readiness.mjs
+
+      - name: Install visual evidence dependencies
+        if: ${{ contains(github.event.pull_request.body, '- [x] Visual') }}
+        run: npm ci
+
+      - name: Install Chromium for visual evidence
+        if: ${{ contains(github.event.pull_request.body, '- [x] Visual') }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          sudo rm -f \
+            /etc/apt/sources.list.d/google-chrome.list \
+            /etc/apt/sources.list.d/google-chrome.sources
+
+          npx playwright install --with-deps chromium
+
+      - name: Capture exact-head Preview visual evidence
+        if: ${{ contains(github.event.pull_request.body, '- [x] Visual') }}
+        env:
+          PREVIEW_URL: ${{ steps.preview_readiness.outputs.preview_url }}
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: node scripts/capture-preview-visual-evidence.mjs
+
+      - name: Upload exact-head Preview visual evidence
+        if: ${{ always() && contains(github.event.pull_request.body, '- [x] Visual') }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: preview-visual-evidence-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+          path: artifacts/preview-visual-evidence/
+          if-no-files-found: warn
+          retention-days: 7
