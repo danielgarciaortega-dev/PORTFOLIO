@@ -11,15 +11,15 @@ import { withBase } from '../../utils/paths';
 >
   <div class="dialog-panel" data-dialog-panel>
     <header class="dialog-header">
-      <p class="eyebrow">SOBRE MÍ</p>
+      <p class="eyebrow">ABOUT</p>
       <div class="dialog-header__actions">
         <a
           href={links.githubProfile}
           target="_blank"
           rel="noopener noreferrer"
           class="dialog-header__icon-link"
-          aria-label="Ver GitHub"
-          title="Ver GitHub"
+          aria-label="View GitHub"
+          title="View GitHub"
         >
           <svg
             class="icon-brand"
@@ -39,8 +39,8 @@ import { withBase } from '../../utils/paths';
               target="_blank"
               rel="noopener noreferrer"
               class="dialog-header__icon-link"
-              aria-label="Ver LinkedIn"
-              title="Ver LinkedIn"
+              aria-label="View LinkedIn"
+              title="View LinkedIn"
             >
               <svg
                 class="icon-brand"
@@ -55,7 +55,7 @@ import { withBase } from '../../utils/paths';
         }
         <button
           type="button"
-          aria-label="Cerrar Sobre mí"
+          aria-label="Close About"
           data-dialog-close
           autofocus
         >
@@ -82,7 +82,7 @@ import { withBase } from '../../utils/paths';
     </div>
     <div class="about-dialog__details">
       <div>
-        <h3>Formación y proyectos</h3>
+        <h3>Education and projects</h3>
         <ul class="about-dialog__milestones">
           {
             profile.milestones.map((milestone) => (
@@ -95,7 +95,7 @@ import { withBase } from '../../utils/paths';
         </ul>
       </div>
       <div>
-        <h3>Qué busco</h3>
+        <h3>What I'm looking for</h3>
         <p>{profile.seeking}</p>
       </div>
     </div>

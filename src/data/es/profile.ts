@@ -7,27 +7,27 @@ export const profile = {
   heroDescription:
     "I'm in my second year of Web Application Development and currently looking for a company where I can complete my internship.",
   aboutIntro:
-    'Pasé casi diez años en atención al cliente y ventas, en Alcampo y Konecta, hasta que decidí, hace 1 año, dar el salto a la programación estudiando Desarrollo de Aplicaciones Web.',
+    'After nearly ten years in customer service and sales at Alcampo and Konecta, I switched to software development a year ago and started studying Web Application Development.',
   milestones: [
     {
-      label: 'Formación',
-      text: 'Grado Superior en Desarrollo de Aplicaciones Web, Instituto FOC — actualmente en 2º curso.',
+      label: 'Education',
+      text: 'Higher Technician in Web Application Development, Instituto FOC — currently in my second year.',
     },
     {
-      label: 'Prácticas',
-      text: 'Salunox, plataforma SaaS del sector sanitario.',
+      label: 'Internship',
+      text: 'Salunox, a SaaS platform for the healthcare sector.',
     },
     {
       label: 'Hackathon',
-      text: 'I Edición de GEN AI ARENA: gané con SIDN Cost Control y desarrollé Feedback2Action.',
+      text: 'First GEN AI ARENA: won with SIDN Cost Control and developed Feedback2Action.',
     },
     {
-      label: 'Proyecto propio',
-      text: 'AL-LÍO, con el que conseguí la beca Aircury Summer of Code 2026.',
+      label: 'Personal project',
+      text: 'AL-LÍO, the project that earned me the Aircury Summer of Code 2026 scholarship.',
     },
   ],
   seeking:
-    'Una empresa donde hacer las prácticas de 2º curso y aportar desde el primer día: ganas de aprender y capacidad de resolver problemas.',
+    'A company where I can complete my second-year internship, keep learning and contribute by solving real problems from day one.',
   profileImage: 'images/profile/profile-main.webp',
   profileImageMobile: 'images/profile/profile-main-mobile.webp',
   profileImageAlt: 'Daniel García Ortega presenting a project',
