@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-test('project cards and dialogs use approved English copy', async ({ page }) => {
+test('project cards and dialogs use approved English copy', async ({
+  page,
+}) => {
   await page.goto('./');
 
   await expect(
