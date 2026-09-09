@@ -100,7 +100,9 @@ test('language switcher lives beside the CV action and persists explicit choice'
   await englishLink.hover();
   await expect
     .poll(() =>
-      englishLink.evaluate((link) => getComputedStyle(link, '::after').transform),
+      englishLink.evaluate(
+        (link) => getComputedStyle(link, '::after').transform,
+      ),
     )
     .not.toBe('matrix(0, 0, 0, 1, 0, 0)');
 
