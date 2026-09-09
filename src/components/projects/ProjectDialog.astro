@@ -17,7 +17,7 @@ const { project, nextProject } = Astro.props;
 >
   <div class="dialog-panel" data-dialog-panel>
     <header class="dialog-header">
-      <p class="eyebrow">PROYECTO</p>
+      <p class="eyebrow">PROJECT</p>
       <div class="dialog-header__actions">
         {
           project.liveUrl && (
@@ -26,8 +26,8 @@ const { project, nextProject } = Astro.props;
               target="_blank"
               rel="noopener noreferrer"
               class="dialog-header__icon-link"
-              aria-label={`Abrir demo de ${project.title}`}
-              title="Abrir demo"
+              aria-label={`Open ${project.title} demo`}
+              title="Open demo"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -52,8 +52,8 @@ const { project, nextProject } = Astro.props;
               target="_blank"
               rel="noopener noreferrer"
               class="dialog-header__icon-link"
-              aria-label={`Ver código de ${project.title}`}
-              title="Ver código"
+              aria-label={`View ${project.title} code`}
+              title="View code"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
                 <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
@@ -68,8 +68,8 @@ const { project, nextProject } = Astro.props;
               target="_blank"
               rel="noopener noreferrer"
               class="dialog-header__icon-link"
-              aria-label={`Ver evento de ${project.title}`}
-              title="Ver evento"
+              aria-label={`View ${project.title} event`}
+              title="View event"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -89,7 +89,7 @@ const { project, nextProject } = Astro.props;
         }
         <button
           type="button"
-          aria-label={`Cerrar ${project.title}`}
+          aria-label={`Close ${project.title}`}
           data-dialog-close
           autofocus
         >
@@ -121,17 +121,17 @@ const { project, nextProject } = Astro.props;
     </div>
     <div class="project-dialog__details">
       <div>
-        <h3>Objetivo</h3>
+        <h3>Objective</h3>
         <p>{project.objective}</p>
       </div>
       <div>
-        <h3>Solución</h3>
+        <h3>Solution</h3>
         <p>{project.solution}</p>
       </div>
     </div>
     {
       project.metrics.length > 0 && (
-        <ul class="metric-list" aria-label={`Resultados de ${project.title}`}>
+        <ul class="metric-list" aria-label={`Results for ${project.title}`}>
           {project.metrics.map((metric) => (
             <li>{metric}</li>
           ))}
@@ -141,12 +141,12 @@ const { project, nextProject } = Astro.props;
     {
       project.role && (
         <div class="project-dialog__role">
-          <span>Rol</span>
+          <span>Role</span>
           <p>{project.role}</p>
         </div>
       )
     }
-    <ul class="tag-list" aria-label={`Tecnologías de ${project.title}`}>
+    <ul class="tag-list" aria-label={`Technologies for ${project.title}`}>
       {project.technologies.map((technology) => <li>{technology}</li>)}
     </ul>
     <button
@@ -154,7 +154,7 @@ const { project, nextProject } = Astro.props;
       class="project-dialog__next"
       data-dialog-open={`project-${nextProject.id}`}
     >
-      <span class="project-dialog__next-label">Siguiente proyecto</span>
+      <span class="project-dialog__next-label">Next project</span>
       <span class="project-dialog__next-title">
         {
           nextProject.image && (
