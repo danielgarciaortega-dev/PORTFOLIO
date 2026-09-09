@@ -16,6 +16,16 @@ Actualmente estas capturas son **artefactos de revisión**, no assertions de reg
 
 No deben editarse manualmente para ocultar regresiones visuales. Si cambia la interfaz de forma intencionada, las capturas deben regenerarse mediante la suite correspondiente y revisarse como parte del cambio. #88 podrá evolucionar esta estrategia a snapshots deterministas, artefactos de revisión o un modelo híbrido; hasta entonces no debe describirse como un sistema de pixel-diff automático.
 
+## Evidencia visual del Preview protegido
+
+Las PR marcadas como **Visual** generan además un artifact efímero de GitHub Actions llamado `preview-visual-evidence-<PR>-<SHA>` después de que `Preview readiness` haya validado el Vercel Preview del head exacto.
+
+El job separado `Preview visual evidence` captura directamente ese Preview protegido en 390×844, 768×1024, 1440×900 y 1920×1080. Incluye las superficies `/` y `/en/`, y en los dos viewports de hasta 900 px también captura el menú móvil abierto. El artifact contiene únicamente imágenes y un `manifest.json` con el SHA, la URL validada y el inventario de capturas.
+
+El bypass de Deployment Protection se inyecta solo en peticiones HTTPS al origen exacto `*.vercel.app` ya validado. El secreto no se imprime, no se escribe en el manifest y no se sube al artifact. La evidencia tiene retención corta y existe para que un revisor pueda inspeccionar el mismo Preview exact-head aunque su navegador no tenga acceso interactivo al scope de Vercel.
+
+Este artifact **no es un tercer gate requerido, no hace pixel-diff y no aprueba visualmente la PR**. `Repository validation` y `Preview readiness` siguen siendo los dos gates automatizados protegidos; la evidencia complementa la revisión manual definida por #93.
+
 ## Contrato de revisión visual en PR
 
 La plantilla `.github/pull_request_template.md` separa cambios **Visual** y **Non-visual**.
@@ -33,8 +43,8 @@ Para una PR visual, la revisión manual debe registrar:
 
 Cualquier push posterior invalida esa revisión manual hasta que el nuevo head obtenga un nuevo `Preview readiness` y sea revisado de nuevo.
 
-Los checks obligatorios `Repository validation` y `Preview readiness` son automatizados y permanecen separados de la aprobación visual manual. Una PR visual no debe darse por buena solo porque esos checks estén verdes si el Preview muestra un problema de layout o despliegue.
+Los checks obligatorios `Repository validation` y `Preview readiness` son automatizados y permanecen separados de la aprobación visual manual. Una PR visual no debe darse por buena solo porque esos checks estén verdes si el Preview o su evidencia exact-head muestran un problema de layout o despliegue.
 
-Para cambios no visuales no se deben regenerar capturas ni introducir churn de evidencias solo para completar la plantilla.
+Para cambios no visuales no se deben regenerar capturas ni introducir churn de evidencias solo para completar la plantilla. El job `Preview visual evidence` se omite para esas PR.
 
 Los informes históricos de la implementación inicial no forman parte de la documentación activa del proyecto. El estado actual del repositorio se documenta en `README.md`, `AGENTS.md`, `package.json`, `src/`, `tests/`, `docs/` y `.github/workflows/`.
