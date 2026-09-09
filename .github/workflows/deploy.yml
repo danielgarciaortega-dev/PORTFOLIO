@@ -1,75 +1,74 @@
-name: Validar y desplegar en GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: pages-production
   cancel-in-progress: false
 
 jobs:
   quality:
-    name: Formato, tipos, build y E2E
+    name: Production validation
     runs-on: ubuntu-latest
     steps:
-      - name: Descargar repositorio
+      - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Configurar Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 24
           cache: npm
 
-      - name: Instalar dependencias
+      - name: Install dependencies
         run: npm ci
 
-      - name: Auditar dependencias
+      - name: Audit dependencies
         run: npm audit --audit-level=high
 
-      - name: Validar generación de activos
+      - name: Validate generated assets
         run: npm run optimize:assets
 
-      - name: Instalar Chromium
+      - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Validar exportación del CV
+      - name: Validate CV export
         run: npm run export:cv
 
-      - name: Ejecutar validaciones
+      - name: Run repository validation
         run: npm test
 
   build:
-    name: Compilar y subir artefacto
+    name: Build Pages artifact
     needs: quality
     runs-on: ubuntu-latest
     steps:
-      - name: Descargar repositorio
+      - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Compilar Astro para Pages
+      - name: Build Astro for Pages
         uses: withastro/action@e84f40bd8d2caa9e768ec82ad30dd81f0b280853 # v6
         with:
           node-version: 24
 
   deploy:
-    name: Publicar en GitHub Pages
+    name: Deploy GitHub Pages
     needs: build
-    if: ${{ github.event_name != 'pull_request' && vars.PUBLICATION_APPROVED == 'true' }}
+    if: ${{ vars.PUBLICATION_APPROVED == 'true' }}
+    permissions:
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Desplegar
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
