@@ -6,14 +6,16 @@ import { technologyIcons } from '../../data/technology-icons';
 import { withBase } from '../../utils/paths';
 ---
 
-<section class="home-overview" aria-label="Resumen profesional">
+<section class="home-overview" aria-label="Professional overview">
   <div class="home-overview__inner">
     <section
       class="home-overview__technologies"
       id="tecnologias"
       aria-labelledby="overview-technologies-title"
     >
-      <p class="overview-label" id="overview-technologies-title">Tecnologías</p>
+      <p class="overview-label" id="overview-technologies-title">
+        Technologies
+      </p>
       <div class="technology-groups">
         {
           technologyGroups.map((group) => (
@@ -47,7 +49,7 @@ import { withBase } from '../../utils/paths';
     </section>
 
     <article class="home-overview__fact">
-      <p class="overview-label">Formación</p>
+      <p class="overview-label">Education</p>
       <div class="home-overview__fact-list">
         {
           education.map((item) => (
@@ -74,7 +76,7 @@ import { withBase } from '../../utils/paths';
     </article>
 
     <article class="home-overview__fact">
-      <p class="overview-label">Experiencia</p>
+      <p class="overview-label">Experience</p>
       <div class="home-overview__fact-list">
         {
           experience.map((item) => (

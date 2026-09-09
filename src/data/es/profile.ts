@@ -1,11 +1,11 @@
 export const profile = {
   fullName: 'Daniel García Ortega',
   shortBrand: 'DGO.',
-  role: 'Desarrollador web full-stack',
-  location: 'Granada, España',
+  role: 'Full-stack web developer',
+  location: 'Granada, Spain',
   availability: null,
   heroDescription:
-    'Estudiante de 2º curso de Desarrollo de Aplicaciones Web, en búsqueda activa de una empresa donde realizar las prácticas de este curso.',
+    "I'm in my second year of Web Application Development and currently looking for a company where I can complete my internship.",
   aboutIntro:
     'Pasé casi diez años en atención al cliente y ventas, en Alcampo y Konecta, hasta que decidí, hace 1 año, dar el salto a la programación estudiando Desarrollo de Aplicaciones Web.',
   milestones: [
@@ -30,7 +30,7 @@ export const profile = {
     'Una empresa donde hacer las prácticas de 2º curso y aportar desde el primer día: ganas de aprender y capacidad de resolver problemas.',
   profileImage: 'images/profile/profile-main.webp',
   profileImageMobile: 'images/profile/profile-main-mobile.webp',
-  profileImageAlt: 'Daniel García Ortega presentando un proyecto',
+  profileImageAlt: 'Daniel García Ortega presenting a project',
   aboutImage: 'images/profile/profile-about.webp',
   aboutImageAlt: 'Daniel García Ortega',
 } as const;

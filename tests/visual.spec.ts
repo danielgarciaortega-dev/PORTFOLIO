@@ -50,7 +50,7 @@ for (const viewport of viewports) {
 
     if (viewport.width <= 900) {
       await page.goto('./');
-      await page.getByRole('button', { name: 'Abrir menú' }).click();
+      await page.getByRole('button', { name: 'Open menu' }).click();
       await page.screenshot({ path: path.join(output, 'menu-movil.png') });
     }
   });

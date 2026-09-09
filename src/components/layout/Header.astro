@@ -13,30 +13,30 @@ const cvUrl = withBase('cv/');
 
 <header class="site-header" data-site-header>
   <div class="site-header__inner">
-    <a class="brand" href={homeUrl} aria-label="DGO., ir al inicio">
+    <a class="brand" href={homeUrl} aria-label="DGO., home">
       <span>DGO</span><span aria-hidden="true">.</span>
     </a>
 
-    <nav class="desktop-navigation" aria-label="Navegación principal">
+    <nav class="desktop-navigation" aria-label="Main navigation">
       <a
         href={homeUrl}
-        aria-current={currentPage === 'home' ? 'page' : undefined}>Inicio</a
+        aria-current={currentPage === 'home' ? 'page' : undefined}>Home</a
       >
-      <button type="button" data-dialog-open="about-dialog">Sobre mí</button>
+      <button type="button" data-dialog-open="about-dialog">About</button>
       <a
         href={projectsUrl}
         aria-current={currentPage === 'projects' ? 'page' : undefined}
       >
-        Proyectos
+        Projects
       </a>
     </nav>
 
-    <a class="header-cv-link" href={cvUrl}>Ver CV</a>
+    <a class="header-cv-link" href={cvUrl}>View CV</a>
 
     <button
       class="menu-trigger"
       type="button"
-      aria-label="Abrir menú"
+      aria-label="Open menu"
       aria-expanded="false"
       aria-controls="mobile-navigation"
       data-menu-open
@@ -56,20 +56,20 @@ const cvUrl = withBase('cv/');
 >
   <div class="mobile-menu__panel">
     <div class="mobile-menu__head">
-      <p id="mobile-menu-title">Navegación</p>
-      <button type="button" aria-label="Cerrar menú" data-menu-close autofocus>
+      <p id="mobile-menu-title">Navigation</p>
+      <button type="button" aria-label="Close menu" data-menu-close autofocus>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="m6 6 12 12M18 6 6 18"></path>
         </svg>
       </button>
     </div>
-    <nav aria-label="Navegación móvil">
-      <a href={homeUrl} data-menu-link>Inicio <span>01</span></a>
+    <nav aria-label="Mobile navigation">
+      <a href={homeUrl} data-menu-link>Home <span>01</span></a>
       <button type="button" data-dialog-open="about-dialog" data-menu-action>
-        Sobre mí <span>02</span>
+        About <span>02</span>
       </button>
-      <a href={projectsUrl} data-menu-link>Proyectos <span>03</span></a>
+      <a href={projectsUrl} data-menu-link>Projects <span>03</span></a>
     </nav>
-    <a class="mobile-menu__cv" href={cvUrl} data-menu-link>Consultar CV</a>
+    <a class="mobile-menu__cv" href={cvUrl} data-menu-link>View CV</a>
   </div>
 </dialog>
