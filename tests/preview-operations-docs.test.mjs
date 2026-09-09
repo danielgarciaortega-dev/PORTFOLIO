@@ -57,7 +57,7 @@ test('contains an actionable troubleshooting matrix', () => {
   assert.match(runbook, /## 12\. Troubleshooting matrix/);
   assert.match(
     runbook,
-    /Symptom \| Likely cause \| Safe diagnostic \| Corrective action/,
+    /Symptom\s+\|\s+Likely cause\s+\|\s+Safe diagnostic\s+\|\s+Corrective action/,
   );
   assert.match(runbook, /stale head/i);
   assert.match(runbook, /Preview redirects to Vercel auth/);
