@@ -32,6 +32,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Probe exact Prettier output
+        run: |
+          npx prettier tests/visual-review-contract.test.mjs --write
+          git diff -- tests/visual-review-contract.test.mjs
+          exit 1
+
       - name: Audit dependencies
         run: npm audit --audit-level=high
 
