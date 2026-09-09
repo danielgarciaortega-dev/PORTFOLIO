@@ -17,7 +17,7 @@
     "preview:e2e": "node scripts/serve-e2e.mjs",
     "check": "astro check",
     "format": "prettier . --write",
-    "format:check": "prettier src/i18n/copy.ts",
+    "format:check": "prettier . --check",
     "test:locale": "node --experimental-strip-types --test tests/locale-primitives.test.mjs tests/technology-icons.test.mjs",
     "test:e2e": "playwright test",
     "test": "npm run format:check && npm run check && npm run test:locale && npm run build && npm run test:e2e",
