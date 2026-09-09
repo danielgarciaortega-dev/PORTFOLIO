@@ -31,7 +31,6 @@ function parseHttpsUrl(value) {
 function normalizeUrl(value) {
   const url = parseHttpsUrl(value);
   if (!url) return null;
-  url.hash = '';
   if (url.pathname !== '/') url.pathname = url.pathname.replace(/\/+$/, '');
   return url.toString();
 }
@@ -39,10 +38,34 @@ function normalizeUrl(value) {
 /** @param {string} value */
 export function isVercelInspectorUrl(value) {
   const url = parseHttpsUrl(value);
-  if (!url || url.hostname !== 'vercel.com') return false;
+  if (
+    !url ||
+    url.hostname !== 'vercel.com' ||
+    url.search ||
+    url.hash
+  ) {
+    return false;
+  }
 
   const segments = url.pathname.split('/').filter(Boolean);
-  return segments.length >= 3;
+  if (segments.length !== 3) return false;
+
+  const [scope, project, deploymentId] = segments;
+  const reservedTopLevel = new Set([
+    'api',
+    'dashboard',
+    'docs',
+    'github',
+    'new',
+    'static',
+  ]);
+
+  return Boolean(
+    scope &&
+      project &&
+      !reservedTopLevel.has(scope.toLowerCase()) &&
+      /^[A-Za-z0-9]{20,64}$/.test(deploymentId),
+  );
 }
 
 /** @param {string} value */
@@ -50,6 +73,8 @@ export function isVercelPreviewUrl(value) {
   const url = parseHttpsUrl(value);
   return Boolean(
     url &&
+      !url.search &&
+      !url.hash &&
       url.hostname !== 'vercel.app' &&
       url.hostname.endsWith('.vercel.app'),
   );
@@ -58,11 +83,24 @@ export function isVercelPreviewUrl(value) {
 /** @param {string} body */
 export function extractVercelUrls(body) {
   const rawUrls = body.match(/https:\/\/[^\s<>"')]+/g) ?? [];
-  const normalized = [...new Set(rawUrls.map(normalizeUrl).filter(Boolean))];
 
   return {
-    inspectorUrls: normalized.filter(isVercelInspectorUrl),
-    previewUrls: normalized.filter(isVercelPreviewUrl),
+    inspectorUrls: [
+      ...new Set(
+        rawUrls
+          .filter(isVercelInspectorUrl)
+          .map(normalizeUrl)
+          .filter(Boolean),
+      ),
+    ],
+    previewUrls: [
+      ...new Set(
+        rawUrls
+          .filter(isVercelPreviewUrl)
+          .map(normalizeUrl)
+          .filter(Boolean),
+      ),
+    ],
   };
 }
 
@@ -145,13 +183,13 @@ export function resolveVercelPreviewEvidence(input) {
   }
 
   const rawInspectorUrl = status.target_url ?? status.targetUrl ?? '';
-  const inspectorUrl = normalizeUrl(rawInspectorUrl);
-  if (!inspectorUrl || !isVercelInspectorUrl(inspectorUrl)) {
+  if (!isVercelInspectorUrl(rawInspectorUrl)) {
     throw new PreviewEvidenceError(
       'VERCEL_INSPECTOR_INVALID',
       'Successful Vercel status does not contain a valid HTTPS Vercel inspector deployment URL.',
     );
   }
+  const inspectorUrl = normalizeUrl(rawInspectorUrl);
 
   const officialComments = comments.filter(
     (comment) =>
@@ -169,7 +207,7 @@ export function resolveVercelPreviewEvidence(input) {
   const matchingEvidence = [];
   for (const comment of officialComments) {
     const urls = extractVercelUrls(comment.body ?? '');
-    if (!urls.inspectorUrls.includes(inspectorUrl)) continue;
+    if (!inspectorUrl || !urls.inspectorUrls.includes(inspectorUrl)) continue;
 
     if (urls.previewUrls.length !== 1) {
       throw new PreviewEvidenceError(

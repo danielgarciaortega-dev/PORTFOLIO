@@ -111,11 +111,15 @@ test('rejects conflicting Vercel statuses for the same current head', () => {
   );
 });
 
-test('rejects a malformed or non-Vercel status target URL', () => {
+test('rejects malformed, auxiliary or decorated Vercel status target URLs', () => {
   for (const target_url of [
-    'http://vercel.com/scope/project/deployment',
-    'https://example.com/scope/project/deployment',
-    'https://vercel.com/scope/project',
+    'http://vercel.com/danieelgrcs-projects/portfolio/2YrDDs9PSXRY9yQQ3HVjGbAdgjJj',
+    'https://example.com/danieelgrcs-projects/portfolio/2YrDDs9PSXRY9yQQ3HVjGbAdgjJj',
+    'https://vercel.com/danieelgrcs-projects/portfolio',
+    'https://vercel.com/api/www/avatar',
+    'https://vercel.com/static/status/ready.svg',
+    `${INSPECTOR}?from=spoofed`,
+    `${INSPECTOR}#fragment`,
   ]) {
     expectEvidenceError(
       () => resolve({ statuses: [vercelStatus({ target_url })] }),
@@ -200,22 +204,30 @@ test('rejects multiple official comments that both claim the current inspector d
   );
 });
 
-test('extracts only HTTPS Vercel inspector and Preview URLs', () => {
+test('extracts only the deployment inspector and Preview URL from realistic Vercel bot links', () => {
   const urls = extractVercelUrls(
-    `https://vercel.com/scope/project/deployment https://scope-project.vercel.app https://example.com/nope http://bad.vercel.app`,
+    `${INSPECTOR} ${PREVIEW} https://vercel.com/api/www/avatar?projectId=prj_example https://vercel.com/static/status/ready.svg https://vercel.live/open-feedback/example?via=pr-comment-feedback-link https://example.com/nope http://bad.vercel.app`,
   );
 
-  assert.deepEqual(urls.inspectorUrls, [
-    'https://vercel.com/scope/project/deployment',
-  ]);
-  assert.deepEqual(urls.previewUrls, ['https://scope-project.vercel.app/']);
-  assert.equal(isVercelInspectorUrl('https://vercel.com/scope/project'), false);
+  assert.deepEqual(urls.inspectorUrls, [INSPECTOR]);
+  assert.deepEqual(urls.previewUrls, [PREVIEW]);
   assert.equal(
-    isVercelInspectorUrl('https://vercel.com/scope/project/deployment'),
-    true,
+    isVercelInspectorUrl('https://vercel.com/danieelgrcs-projects/portfolio'),
+    false,
   );
+  assert.equal(isVercelInspectorUrl(INSPECTOR), true);
+  assert.equal(
+    isVercelInspectorUrl('https://vercel.com/api/www/avatar'),
+    false,
+  );
+  assert.equal(
+    isVercelInspectorUrl('https://vercel.com/static/status/ready.svg'),
+    false,
+  );
+  assert.equal(isVercelInspectorUrl(`${INSPECTOR}?query=1`), false);
   assert.equal(isVercelPreviewUrl('https://vercel.app'), false);
   assert.equal(isVercelPreviewUrl('http://preview.vercel.app'), false);
+  assert.equal(isVercelPreviewUrl('https://preview.vercel.app?query=1'), false);
   assert.equal(isVercelPreviewUrl('https://preview.vercel.app'), true);
 });
 
