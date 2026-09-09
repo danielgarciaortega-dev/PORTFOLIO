@@ -1,5 +1,13 @@
 ---
 import { links } from '../../data/links';
+import { dialogCopy } from '../../i18n/copy';
+import { resolveLocaleFromPathname } from '../../i18n/locale';
+
+const locale = resolveLocaleFromPathname(
+  Astro.url.pathname,
+  import.meta.env.BASE_URL,
+);
+const copy = dialogCopy[locale];
 ---
 
 <dialog
@@ -9,7 +17,7 @@ import { links } from '../../data/links';
 >
   <div class="dialog-panel" data-dialog-panel>
     <header class="dialog-header">
-      <p class="eyebrow">CONTACT</p>
+      <p class="eyebrow">{copy.contactEyebrow}</p>
       <div class="dialog-header__actions">
         {
           links.linkedin && (
@@ -18,8 +26,8 @@ import { links } from '../../data/links';
               target="_blank"
               rel="noopener noreferrer"
               class="dialog-header__icon-link"
-              aria-label="View LinkedIn"
-              title="View LinkedIn"
+              aria-label={copy.viewLinkedIn}
+              title={copy.viewLinkedIn}
             >
               <svg
                 class="icon-brand"
@@ -37,8 +45,8 @@ import { links } from '../../data/links';
           target="_blank"
           rel="noopener noreferrer"
           class="dialog-header__icon-link"
-          aria-label="View GitHub"
-          title="View GitHub"
+          aria-label={copy.viewGitHub}
+          title={copy.viewGitHub}
         >
           <svg
             class="icon-brand"
@@ -53,7 +61,7 @@ import { links } from '../../data/links';
         </a>
         <button
           type="button"
-          aria-label="Close Contact"
+          aria-label={copy.closeContact}
           data-dialog-close
           autofocus
         >
@@ -63,15 +71,19 @@ import { links } from '../../data/links';
         </button>
       </div>
     </header>
-    <h2 id="contact-dialog-title">Get in touch.</h2>
-    <p class="contact-dialog__intro">
-      Email me or find me on LinkedIn and GitHub.
-    </p>
+    <h2 id="contact-dialog-title">{copy.contactTitle}</h2>
+    <p class="contact-dialog__intro">{copy.contactIntro}</p>
     <div class="contact-dialog__email">
       <span data-email-value>{links.email}</span>
-      <button type="button" data-copy-email>Copy email</button>
+      <button type="button" data-copy-email>{copy.copyEmail}</button>
     </div>
-    <p class="contact-dialog__copy-status" aria-live="polite" data-copy-status>
+    <p
+      class="contact-dialog__copy-status"
+      aria-live="polite"
+      data-copy-status
+      data-copy-success={copy.copySuccess}
+      data-copy-fallback={copy.copyFallback}
+    >
     </p>
   </div>
 </dialog>
