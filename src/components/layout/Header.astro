@@ -36,10 +36,12 @@ const cvUrl = withBase('cv/');
       >
         {copy.projects}
       </a>
-      <LanguageSwitcher {locale} variant="desktop" />
     </nav>
 
-    <a class="header-cv-link" href={cvUrl}>{copy.viewCv}</a>
+    <div class="site-header__actions">
+      <LanguageSwitcher {locale} variant="desktop" />
+      <a class="header-cv-link" href={cvUrl}>{copy.viewCv}</a>
+    </div>
 
     <button
       class="menu-trigger"
@@ -90,3 +92,18 @@ const cvUrl = withBase('cv/');
     >
   </div>
 </dialog>
+
+<style>
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
+  }
+
+  @media (max-width: 900px) {
+    .site-header__actions {
+      display: none;
+    }
+  }
+</style>
