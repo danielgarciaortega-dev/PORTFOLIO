@@ -120,8 +120,7 @@ test('la página de proyectos muestra tres proyectos y no contiene enlaces falso
   await expect(page.locator('text=PENDING_')).toHaveCount(0);
 
   await page
-    .getByRole('button', { name: 'View project', exact: true })
-    .nth(2)
+    .getByRole('button', { name: 'View project Feedback2Action' })
     .click();
   await expect(
     page.getByRole('dialog', { name: 'Feedback2Action' }),
