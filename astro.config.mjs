@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
+import { resolveHostingConfig } from './scripts/lib/hosting-config.mjs';
 
 // Astro's dev server does not fall back to `public/<dir>/index.html` for a
 // directory-style request (only the exact `/<dir>/index.html` URL works);
@@ -35,21 +36,11 @@ function publicDirectoryIndexFallback() {
   };
 }
 
-/** @param {string | undefined} value */
-function normalizeBase(value) {
-  if (!value || value === '/') return '/';
-  return `/${value.replace(/^\/+|\/+$/g, '')}`;
-}
-
-const [owner, repository] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
-const userSiteRepository =
-  owner && repository?.toLowerCase() === `${owner.toLowerCase()}.github.io`;
-const inferredSite = owner ? `https://${owner}.github.io` : undefined;
-const inferredBase = repository && !userSiteRepository ? `/${repository}` : '/';
+const hosting = resolveHostingConfig(process.env);
 
 export default defineConfig({
-  site: process.env.SITE_URL || inferredSite || 'http://localhost:4321',
-  base: normalizeBase(process.env.BASE_PATH || inferredBase),
+  site: hosting.site,
+  base: hosting.base,
   output: 'static',
   trailingSlash: 'always',
   prefetch: true,
