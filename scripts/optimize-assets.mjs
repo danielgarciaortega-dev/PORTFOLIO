@@ -96,16 +96,10 @@ await Promise.all([
     path.join(input, 'companies', 'salunox.svg'),
     path.join(directories.companies, 'salunox.svg'),
   ),
-  sharp(path.join(input, 'education', 'foc.png'))
-    .resize({
-      width: 320,
-      height: 320,
-      fit: 'contain',
-      background: { r: 0, g: 0, b: 0, alpha: 0 },
-      withoutEnlargement: true,
-    })
-    .png()
-    .toFile(path.join(directories.education, 'foc.png')),
+  copyFile(
+    path.join(input, 'education', 'foc.svg'),
+    path.join(directories.education, 'foc.svg'),
+  ),
   sharp(path.join(input, 'education', 'adoratrices.png'))
     .resize({
       width: 320,
