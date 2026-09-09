@@ -11,8 +11,7 @@ type DocumentRoot = Pick<HTMLElement, 'lang'>;
 
 export function isLocale(value: unknown): value is Locale {
   return (
-    typeof value === 'string' &&
-    SUPPORTED_LOCALES.includes(value as Locale)
+    typeof value === 'string' && SUPPORTED_LOCALES.includes(value as Locale)
   );
 }
 
