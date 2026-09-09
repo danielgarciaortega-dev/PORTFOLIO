@@ -42,7 +42,7 @@ test('los proyectos abren el diálogo correcto y derivan sus CTAs de los datos',
   await page.goto('./');
 
   for (const title of ['AL-LÍO', 'SIDN Cost Control', 'Feedback2Action']) {
-    await page.getByRole('button', { name: `Ver proyecto ${title}` }).click();
+    await page.getByRole('button', { name: `View project ${title}` }).click();
     const dialog = page.getByRole('dialog', { name: title });
     await expect(dialog).toBeVisible();
     await expect(dialog.locator('.project-dialog__visual img')).toHaveAttribute(
@@ -76,21 +76,21 @@ test('los proyectos abren el diálogo correcto y derivan sus CTAs de los datos',
 
     if (title === 'AL-LÍO') {
       await expect(
-        dialog.getByRole('link', { name: 'Abrir demo' }),
+        dialog.getByRole('link', { name: 'Open AL-LÍO demo' }),
       ).toBeVisible();
       await expect(
-        dialog.getByRole('link', { name: 'Ver código' }),
+        dialog.getByRole('link', { name: 'View AL-LÍO code' }),
       ).toBeVisible();
     } else {
       await expect(
-        dialog.getByRole('link', { name: 'Abrir demo' }),
+        dialog.getByRole('link', { name: `Open ${title} demo` }),
       ).toHaveCount(0);
       await expect(
-        dialog.getByRole('link', { name: 'Ver código' }),
+        dialog.getByRole('link', { name: `View ${title} code` }),
       ).toHaveCount(0);
     }
 
-    await dialog.getByRole('button', { name: `Cerrar ${title}` }).click();
+    await dialog.getByRole('button', { name: `Close ${title}` }).click();
     await expect(dialog).toBeHidden();
   }
 });
@@ -120,7 +120,7 @@ test('la página de proyectos muestra tres proyectos y no contiene enlaces falso
   await expect(page.locator('text=PENDING_')).toHaveCount(0);
 
   await page
-    .getByRole('button', { name: 'Ver proyecto', exact: true })
+    .getByRole('button', { name: 'View project', exact: true })
     .nth(2)
     .click();
   await expect(
