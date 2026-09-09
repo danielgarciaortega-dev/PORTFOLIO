@@ -15,7 +15,7 @@ const INSPECTOR =
 const OLD_INSPECTOR =
   'https://vercel.com/danieelgrcs-projects/portfolio/6zWzUkBimgXX4PDmKZbcZoMRns4e';
 const PREVIEW =
-  'https://portfolio-git-chore-vercel-preview-proof-danieelgrcs-projects.vercel.app';
+  'https://portfolio-git-chore-vercel-preview-proof-danieelgrcs-projects.vercel.app/';
 
 function vercelStatus(overrides = {}) {
   return {
