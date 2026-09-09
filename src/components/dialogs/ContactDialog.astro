@@ -9,7 +9,7 @@ import { links } from '../../data/links';
 >
   <div class="dialog-panel" data-dialog-panel>
     <header class="dialog-header">
-      <p class="eyebrow">CONTACTO</p>
+      <p class="eyebrow">CONTACT</p>
       <div class="dialog-header__actions">
         {
           links.linkedin && (
@@ -18,8 +18,8 @@ import { links } from '../../data/links';
               target="_blank"
               rel="noopener noreferrer"
               class="dialog-header__icon-link"
-              aria-label="Ver LinkedIn"
-              title="Ver LinkedIn"
+              aria-label="View LinkedIn"
+              title="View LinkedIn"
             >
               <svg
                 class="icon-brand"
@@ -37,8 +37,8 @@ import { links } from '../../data/links';
           target="_blank"
           rel="noopener noreferrer"
           class="dialog-header__icon-link"
-          aria-label="Ver GitHub"
-          title="Ver GitHub"
+          aria-label="View GitHub"
+          title="View GitHub"
         >
           <svg
             class="icon-brand"
@@ -53,7 +53,7 @@ import { links } from '../../data/links';
         </a>
         <button
           type="button"
-          aria-label="Cerrar Contacto"
+          aria-label="Close Contact"
           data-dialog-close
           autofocus
         >
@@ -63,13 +63,13 @@ import { links } from '../../data/links';
         </button>
       </div>
     </header>
-    <h2 id="contact-dialog-title">Hablemos.</h2>
+    <h2 id="contact-dialog-title">Get in touch.</h2>
     <p class="contact-dialog__intro">
-      Escríbeme por correo o encuéntrame en mis perfiles.
+      Email me or find me on LinkedIn and GitHub.
     </p>
     <div class="contact-dialog__email">
       <span data-email-value>{links.email}</span>
-      <button type="button" data-copy-email>Copiar correo</button>
+      <button type="button" data-copy-email>Copy email</button>
     </div>
     <p class="contact-dialog__copy-status" aria-live="polite" data-copy-status>
     </p>
