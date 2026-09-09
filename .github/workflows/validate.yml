@@ -7,6 +7,9 @@ on:
 
 permissions:
   contents: read
+  issues: read
+  pull-requests: read
+  statuses: read
 
 concurrency:
   group: pr-validation-${{ github.event.pull_request.number || github.ref }}
@@ -36,10 +39,58 @@ jobs:
         run: npm run optimize:assets
 
       - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Playwright manages its own Chromium. The runner's unrelated Google
+          # Chrome APT feed must not make CI depend on third-party metadata sync.
+          sudo rm -f \
+            /etc/apt/sources.list.d/google-chrome.list \
+            /etc/apt/sources.list.d/google-chrome.sources
+
+          npx playwright install --with-deps chromium
 
       - name: Validate CV export
         run: npm run export:cv
 
       - name: Run repository validation
         run: npm test
+
+  preview:
+    name: Preview readiness
+    needs: quality
+    if: ${{ always() && github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Require repository validation
+        env:
+          REPOSITORY_VALIDATION_RESULT: ${{ needs.quality.result }}
+        run: |
+          if [ "$REPOSITORY_VALIDATION_RESULT" != "success" ]; then
+            echo "Repository validation did not succeed for this pull-request run."
+            exit 1
+          fi
+
+      - name: Checkout exact pull-request head
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+
+      - name: Validate exact-head Vercel Preview
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          PREVIEW_WAIT_TIMEOUT_MS: '600000'
+          PREVIEW_POLL_INTERVAL_MS: '5000'
+        run: node scripts/preview-readiness.mjs
