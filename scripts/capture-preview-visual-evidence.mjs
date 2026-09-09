@@ -95,7 +95,9 @@ async function captureSurface(
 }
 
 async function main() {
-  const previewUrl = parseValidatedPreviewUrl(requireEnvironment('PREVIEW_URL'));
+  const previewUrl = parseValidatedPreviewUrl(
+    requireEnvironment('PREVIEW_URL'),
+  );
   const headSha = validateHeadSha(requireEnvironment('EXPECTED_HEAD_SHA'));
   const protectionBypassSecret = requireEnvironment(
     'VERCEL_AUTOMATION_BYPASS_SECRET',
