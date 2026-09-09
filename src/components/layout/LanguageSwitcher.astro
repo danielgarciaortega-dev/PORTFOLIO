@@ -68,46 +68,72 @@ const englishUrl = withBase('en/');
   .language-switcher {
     display: inline-flex;
     align-items: center;
-    gap: 0.2rem;
-    padding: 0.2rem;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    background: var(--color-surface);
+    gap: 0.9rem;
   }
 
-  .language-switcher a,
-  .language-switcher span {
-    min-width: 34px;
-    min-height: 32px;
-    display: grid;
-    place-items: center;
-    padding: 0.25rem 0.45rem;
-    border-radius: 999px;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    line-height: 1;
-  }
-
-  .language-switcher a {
-    color: var(--color-text-muted);
-    transition:
-      background 180ms ease,
-      color 180ms ease;
-  }
-
-  .language-switcher a:hover {
-    background: var(--color-brand-soft);
+  .language-switcher--desktop span {
+    position: relative;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.68rem 0;
     color: var(--color-text);
+    font-size: 0.91rem;
+    font-weight: 650;
   }
 
-  .language-switcher span[aria-current='true'] {
-    background: var(--color-text);
-    color: white;
+  .language-switcher--desktop span::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0.45rem;
+    left: 0;
+    height: 2px;
+    background: var(--color-accent);
   }
 
   .language-switcher--mobile {
     width: fit-content;
     margin-top: 1.5rem;
+    gap: 1rem;
+  }
+
+  .language-switcher--mobile a,
+  .language-switcher--mobile span {
+    position: relative;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0;
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    font-weight: 750;
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+
+  .language-switcher--mobile a::after,
+  .language-switcher--mobile span::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0.35rem;
+    left: 0;
+    height: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 200ms ease;
+  }
+
+  .language-switcher--mobile a:hover,
+  .language-switcher--mobile span[aria-current='true'] {
+    color: var(--color-text);
+  }
+
+  .language-switcher--mobile a:hover::after,
+  .language-switcher--mobile span[aria-current='true']::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 </style>
