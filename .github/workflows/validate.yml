@@ -32,6 +32,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Show issue 108 Prettier patch
+        run: |
+          npx prettier scripts/lib/preview-readiness.mjs scripts/preview-readiness.mjs tests/preview-readiness.test.mjs --write
+          git diff -- scripts/lib/preview-readiness.mjs scripts/preview-readiness.mjs tests/preview-readiness.test.mjs
+          exit 1
+
       - name: Audit dependencies
         run: npm audit --audit-level=high
 
