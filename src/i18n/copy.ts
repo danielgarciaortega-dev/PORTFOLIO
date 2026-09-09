@@ -131,7 +131,8 @@ export const dialogCopy: Record<Locale, DialogCopy> = {
     contactIntro: 'Escríbeme por correo o encuéntrame en mis perfiles.',
     copyEmail: 'Copiar correo',
     copySuccess: 'Correo copiado',
-    copyFallback: 'Correo seleccionado. Pulsa Ctrl+C o Comando+C para copiarlo.',
+    copyFallback:
+      'Correo seleccionado. Pulsa Ctrl+C o Comando+C para copiarlo.',
   },
   en: {
     aboutEyebrow: 'ABOUT',
@@ -146,6 +147,7 @@ export const dialogCopy: Record<Locale, DialogCopy> = {
     contactIntro: 'Email me or find me on LinkedIn and GitHub.',
     copyEmail: 'Copy email',
     copySuccess: 'Email copied',
-    copyFallback: 'Email selected. Press Ctrl+C or Command+C to copy it.',
+    copyFallback:
+      'Email selected. Press Ctrl+C or Command+C to copy it.',
   },
 };
