@@ -9,19 +9,19 @@ test('inicio, navegación y Sobre mí funcionan con ruta base', async ({
     page.getByRole('heading', { level: 1, name: 'Daniel García Ortega' }),
   ).toBeVisible();
   await expect(
-    page.getByRole('link', { name: 'View all projects' }),
+    page.getByRole('link', { name: 'Ver todos los proyectos' }),
   ).toHaveAttribute('href', '/PORTFOLIO/proyectos/');
   await expect(
-    page.getByRole('button', { name: 'View profile' }),
+    page.getByRole('button', { name: 'Conocer mi perfil' }),
   ).toBeVisible();
   await expect(
     page
-      .getByRole('navigation', { name: 'Main navigation' })
-      .getByRole('link', { name: 'Technologies' }),
+      .getByRole('navigation', { name: 'Navegación principal' })
+      .getByRole('link', { name: 'Tecnologías' }),
   ).toHaveCount(0);
 
   const aboutTrigger = page
-    .getByRole('button', { name: 'About', exact: true })
+    .getByRole('button', { name: 'Sobre mí', exact: true })
     .first();
   await aboutTrigger.click();
   const aboutDialog = page.getByRole('dialog', {
@@ -32,7 +32,7 @@ test('inicio, navegación y Sobre mí funcionan con ruta base', async ({
   await expect(aboutDialog).toBeHidden();
   await expect(aboutTrigger).toBeFocused();
 
-  await page.getByRole('link', { name: 'View all projects' }).click();
+  await page.getByRole('link', { name: 'Ver todos los proyectos' }).click();
   await expect(page).toHaveURL(/\/PORTFOLIO\/proyectos\/$/);
 });
 
@@ -131,7 +131,7 @@ test('la página de proyectos muestra tres proyectos y no contiene enlaces falso
 test('el modal de contacto permite copiar el correo y enlaza a LinkedIn y GitHub', async ({
   page,
 }) => {
-  await page.goto('./');
+  await page.goto('./en/');
 
   await expect(
     page.getByRole('navigation', { name: 'Main navigation' }),
@@ -166,7 +166,7 @@ test('copiar correo en el modal de contacto muestra confirmación visible', asyn
   context,
 }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-  await page.goto('./');
+  await page.goto('./en/');
   await page.getByRole('button', { name: 'Contact' }).first().click();
   const status = page.locator('[data-copy-status]');
   await expect(status).toBeEmpty();
@@ -182,7 +182,7 @@ test('copiar correo en el modal de contacto muestra confirmación visible', asyn
 test('el footer muestra enlaces con icono (GitHub, LinkedIn, CV, contacto) sin texto visible', async ({
   page,
 }) => {
-  await page.goto('./');
+  await page.goto('./en/');
   const footer = page.locator('.site-footer');
   await footer.scrollIntoViewIfNeeded();
 
@@ -233,7 +233,7 @@ test('el menú móvil abre, cierra con Escape y restaura el foco', async ({
   const trigger = page.locator('[data-menu-open]');
   await trigger.click();
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.getByRole('dialog', { name: 'Navigation' })).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Navegación' })).toBeVisible();
 
   await page.keyboard.press('Escape');
   await expect(trigger).toHaveAttribute('aria-expanded', 'false');
@@ -319,12 +319,6 @@ test('no hay desbordamiento horizontal en los breakpoints definidos', async ({
 test('la portada cabe en una pantalla de ~900px de alto o más', async ({
   page,
 }) => {
-  // .home-page has a natural (auto) height with a one-screen min-height —
-  // it never clips or overlaps content. On viewports around 900px tall or
-  // taller, the hero+overview content fits without scrolling; the only
-  // extra scroll comes from the site footer below it, which is expected.
-  // Shorter windows (e.g. 1024x768, 1280x800 laptops) scroll a bit more,
-  // which is normal, expected behavior rather than a layout bug.
   for (const viewport of [
     { width: 1440, height: 900 },
     { width: 1920, height: 1080 },
@@ -356,6 +350,7 @@ test('las rutas principales y activos locales responden sin 404', async ({
   });
 
   await page.goto('./');
+  await page.goto('./en/');
   await page.goto('./proyectos/');
   await page.goto('./cv/');
   expect(failures).toEqual([]);

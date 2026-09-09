@@ -1,0 +1,30 @@
+---
+import AboutDialog from '../../components/dialogs/AboutDialog.astro';
+import ContactDialog from '../../components/dialogs/ContactDialog.astro';
+import Hero from '../../components/home/Hero.astro';
+import OverviewStrip from '../../components/home/OverviewStrip.astro';
+import ProjectDialog from '../../components/projects/ProjectDialog.astro';
+import { projects } from '../../data/es/projects';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Daniel García Ortega · Desarrollador web full-stack"
+  description="Portfolio de Daniel García Ortega, desarrollador web full-stack en Granada: proyectos, tecnologías, experiencia, formación y CV."
+  currentPage="home"
+>
+  <main id="contenido" class="home-page">
+    <Hero projects={projects.filter((project) => project.featured)} locale="en" />
+    <OverviewStrip locale="en" />
+  </main>
+  <AboutDialog />
+  <ContactDialog />
+  {
+    projects.map((project, index) => (
+      <ProjectDialog
+        {project}
+        nextProject={projects[(index + 1) % projects.length]}
+      />
+    ))
+  }
+</BaseLayout>

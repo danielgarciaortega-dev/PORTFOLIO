@@ -1,14 +1,19 @@
 ---
-import { profile } from '../../data/en/profile';
+import { getProfessionalData } from '../../data/localized';
 import type { Project } from '../../data/types';
+import { homeCopy } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locale';
 import { withBase } from '../../utils/paths';
 import ProjectPreview from '../projects/ProjectPreview.astro';
 
 interface Props {
   projects: Project[];
+  locale: Locale;
 }
 
-const { projects } = Astro.props;
+const { projects, locale } = Astro.props;
+const { profile } = getProfessionalData(locale);
+const copy = homeCopy[locale];
 const [firstName, ...lastNames] = profile.fullName.split(' ');
 ---
 
@@ -50,7 +55,7 @@ const [firstName, ...lastNames] = profile.fullName.split(' ');
           class="button-link button-link--primary"
           data-dialog-open="about-dialog"
         >
-          View profile
+          {copy.viewProfile}
           <svg viewBox="0 0 20 20" aria-hidden="true"
             ><path d="M4 10h11m-4-4 4 4-4 4"></path></svg
           >
@@ -60,7 +65,7 @@ const [firstName, ...lastNames] = profile.fullName.split(' ');
           class="button-link button-link--secondary"
           data-dialog-open="contact-dialog"
         >
-          Contact
+          {copy.contact}
           <svg viewBox="0 0 20 20" aria-hidden="true"
             ><path d="M4 10h11m-4-4 4 4-4 4"></path></svg
           >
@@ -70,9 +75,9 @@ const [firstName, ...lastNames] = profile.fullName.split(' ');
 
     <div class="hero__projects" aria-labelledby="featured-projects-title">
       <div class="hero__projects-head">
-        <h2 id="featured-projects-title">Projects</h2>
-        <a href={withBase('proyectos/')} aria-label="View all projects"
-          >View all <span aria-hidden="true">→</span></a
+        <h2 id="featured-projects-title">{copy.projects}</h2>
+        <a href={withBase('proyectos/')} aria-label={copy.viewAllProjects}
+          >{copy.viewAll} <span aria-hidden="true">→</span></a
         >
       </div>
       <div class="project-preview-list">
