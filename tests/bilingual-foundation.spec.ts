@@ -32,7 +32,7 @@ test('bilingual foundation stays coherent across switching, reload and dialogs',
   await page.keyboard.press('Escape');
 
   const spanishSwitcher = page.locator(
-    '.desktop-navigation [data-language-switcher]',
+    '.site-header__actions [data-language-switcher]',
   );
   await spanishSwitcher.getByRole('link', { name: 'English' }).click();
 
@@ -80,7 +80,7 @@ test('bilingual foundation stays coherent across switching, reload and dialogs',
   await page.keyboard.press('Escape');
 
   const englishSwitcher = page.locator(
-    '.desktop-navigation [data-language-switcher]',
+    '.site-header__actions [data-language-switcher]',
   );
   await englishSwitcher.getByRole('link', { name: 'Spanish' }).click();
 

@@ -19,6 +19,9 @@ test('Spanish root renders the restored shell, hero and professional overview', 
   await expect(
     mainNavigation.getByRole('link', { name: 'Proyectos' }),
   ).toBeVisible();
+  await expect(mainNavigation.locator('[data-language-switcher]')).toHaveCount(
+    0,
+  );
 
   await expect(
     page.getByRole('button', { name: 'Conocer mi perfil' }),
@@ -53,20 +56,24 @@ test('Spanish root renders the restored shell, hero and professional overview', 
   );
 });
 
-test('language switcher navigates between locale routes and persists explicit choice', async ({
+test('language switcher lives beside the CV action and persists explicit choice', async ({
   page,
 }) => {
   await page.goto('./');
 
-  const spanishSwitcher = page.locator(
-    '.desktop-navigation [data-language-switcher]',
-  );
+  const headerActions = page.locator('.site-header__actions');
+  const spanishSwitcher = headerActions.locator('[data-language-switcher]');
+  const cvLink = headerActions.locator('.header-cv-link');
+
+  await expect(headerActions).toBeVisible();
+  await expect(spanishSwitcher).toBeVisible();
+  await expect(cvLink).toBeVisible();
   await expect(spanishSwitcher.locator('[aria-current="true"]')).toHaveText(
     'ES',
   );
-  await expect(
-    spanishSwitcher.getByRole('link', { name: 'English' }),
-  ).toHaveAttribute('href', '/PORTFOLIO/en/');
+
+  const englishLink = spanishSwitcher.getByRole('link', { name: 'English' });
+  await expect(englishLink).toHaveAttribute('href', '/PORTFOLIO/en/');
 
   const desktopAppearance = await spanishSwitcher.evaluate((switcher) => {
     const switcherStyles = getComputedStyle(switcher);
@@ -79,6 +86,7 @@ test('language switcher navigates between locale routes and persists explicit ch
       borderTopWidth: switcherStyles.borderTopWidth,
       backgroundColor: switcherStyles.backgroundColor,
       currentBackgroundColor: currentStyles?.backgroundColor ?? null,
+      currentColor: currentStyles?.color ?? null,
     };
   });
 
@@ -86,14 +94,21 @@ test('language switcher navigates between locale routes and persists explicit ch
     borderTopWidth: '0px',
     backgroundColor: 'rgba(0, 0, 0, 0)',
     currentBackgroundColor: 'rgba(0, 0, 0, 0)',
+    currentColor: 'rgb(14, 23, 42)',
   });
 
-  await expect(page.locator('.header-cv-link')).toHaveCSS(
-    'border-top-width',
-    '1px',
-  );
+  await englishLink.hover();
+  await expect
+    .poll(() =>
+      englishLink.evaluate(
+        (link) => getComputedStyle(link, '::after').transform,
+      ),
+    )
+    .not.toBe('matrix(0, 0, 0, 1, 0, 0)');
 
-  await spanishSwitcher.getByRole('link', { name: 'English' }).click();
+  await expect(cvLink).toHaveCSS('border-top-width', '1px');
+
+  await englishLink.click();
   await expect(page).toHaveURL(/\/PORTFOLIO\/en\/$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect
@@ -103,7 +118,7 @@ test('language switcher navigates between locale routes and persists explicit ch
     .toBe('en');
 
   const englishSwitcher = page.locator(
-    '.desktop-navigation [data-language-switcher]',
+    '.site-header__actions [data-language-switcher]',
   );
   await expect(englishSwitcher.locator('[aria-current="true"]')).toHaveText(
     'EN',
@@ -117,16 +132,37 @@ test('language switcher navigates between locale routes and persists explicit ch
     .toBe('es');
 });
 
-test('Spanish mobile menu exposes the locale control', async ({ page }) => {
+test('desktop header utility cluster does not overflow compact desktop', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1024, height: 900 });
+  await page.goto('./');
+
+  await expect(page.locator('.site-header__actions')).toBeVisible();
+
+  const viewport = await page.evaluate(() => ({
+    clientWidth: document.documentElement.clientWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+  }));
+
+  expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.clientWidth);
+});
+
+test('Spanish mobile menu keeps the locale control outside primary navigation', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('./');
 
   await page.getByRole('button', { name: 'Abrir menú' }).click();
   const menu = page.getByRole('dialog', { name: 'Navegación' });
+  const switcher = menu.locator('[data-language-switcher]');
+
   await expect(menu).toBeVisible();
-  await expect(menu.locator('[data-language-switcher]')).toBeVisible();
+  await expect(menu.locator('nav [data-language-switcher]')).toHaveCount(0);
+  await expect(switcher).toBeVisible();
   await expect(
-    menu.locator('[data-language-switcher]').getByRole('link', {
+    switcher.getByRole('link', {
       name: 'English',
     }),
   ).toHaveAttribute('href', '/PORTFOLIO/en/');
