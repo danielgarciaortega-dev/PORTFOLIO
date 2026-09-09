@@ -39,7 +39,17 @@ jobs:
         run: npm run optimize:assets
 
       - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Playwright manages its own Chromium. The runner's unrelated Google
+          # Chrome APT feed must not make CI depend on third-party metadata sync.
+          sudo rm -f \
+            /etc/apt/sources.list.d/google-chrome.list \
+            /etc/apt/sources.list.d/google-chrome.sources
+
+          npx playwright install --with-deps chromium
 
       - name: Validate CV export
         run: npm run export:cv
