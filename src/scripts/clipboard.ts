@@ -19,11 +19,10 @@ if (copyButton && emailValue && copyStatus) {
     try {
       if (!navigator.clipboard) throw new Error('Clipboard API unavailable');
       await navigator.clipboard.writeText(email);
-      copyStatus.textContent = 'Email copied';
+      copyStatus.textContent = copyStatus.dataset.copySuccess ?? '';
     } catch {
       selectEmail(emailValue);
-      copyStatus.textContent =
-        'Email selected. Press Ctrl+C or Command+C to copy it.';
+      copyStatus.textContent = copyStatus.dataset.copyFallback ?? '';
     }
   });
 }
