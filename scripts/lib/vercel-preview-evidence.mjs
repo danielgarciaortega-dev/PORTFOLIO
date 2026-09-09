@@ -117,6 +117,20 @@ export function extractVercelUrls(body) {
  * }} ResolvePreviewEvidenceInput
  */
 
+/** @param {PullRequestComment} comment */
+function isOfficialVercelBotComment(comment) {
+  return comment.user?.login === 'vercel[bot]' && comment.user?.type === 'Bot';
+}
+
+/** @param {PullRequestComment[]} comments */
+function hasOfficialDeploymentQuotaFailure(comments) {
+  return comments.some(
+    (comment) =>
+      isOfficialVercelBotComment(comment) &&
+      /api-deployments-free-per-day/i.test(comment.body ?? ''),
+  );
+}
+
 /** @param {ResolvePreviewEvidenceInput} input */
 export function resolveVercelPreviewEvidence(input) {
   const { expectedHeadSha, liveHeadSha, statuses, comments } = input;
@@ -164,7 +178,16 @@ export function resolveVercelPreviewEvidence(input) {
     );
   }
 
+  const officialComments = comments.filter(isOfficialVercelBotComment);
+
   if (state !== 'success') {
+    if (hasOfficialDeploymentQuotaFailure(officialComments)) {
+      throw new PreviewEvidenceError(
+        'VERCEL_DEPLOYMENT_QUOTA_EXHAUSTED',
+        `Vercel refused to create the Preview for current head ${expectedHeadSha} because its deployment quota is exhausted (api-deployments-free-per-day). Do not reuse Preview evidence from another SHA.`,
+      );
+    }
+
     throw new PreviewEvidenceError(
       'VERCEL_STATUS_FAILED',
       `Vercel deployment is in terminal state ${state || '<missing>'} for current head ${expectedHeadSha}.`,
@@ -179,11 +202,6 @@ export function resolveVercelPreviewEvidence(input) {
     );
   }
   const inspectorUrl = normalizeUrl(rawInspectorUrl);
-
-  const officialComments = comments.filter(
-    (comment) =>
-      comment.user?.login === 'vercel[bot]' && comment.user?.type === 'Bot',
-  );
 
   if (officialComments.length === 0) {
     throw new PreviewEvidenceError(
