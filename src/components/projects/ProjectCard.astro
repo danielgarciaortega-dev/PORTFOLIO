@@ -37,6 +37,7 @@ const { project } = Astro.props;
     <button
       type="button"
       class="text-action"
+      aria-label={`View project ${project.title}`}
       data-dialog-open={`project-${project.id}`}
     >
       View project
