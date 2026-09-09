@@ -25,8 +25,7 @@ const cvUrl = withBase('cv/');
     <nav class="desktop-navigation" aria-label={copy.mainNavigation}>
       <a
         href={homeUrl}
-        aria-current={currentPage === 'home' ? 'page' : undefined}
-        >{copy.home}</a
+        aria-current={currentPage === 'home' ? 'page' : undefined}>{copy.home}</a
       >
       <button type="button" data-dialog-open="about-dialog">{copy.about}</button>
       <a
@@ -83,8 +82,6 @@ const cvUrl = withBase('cv/');
       <a href={projectsUrl} data-menu-link>{copy.projects} <span>03</span></a>
     </nav>
     <LanguageSwitcher {locale} variant="mobile" />
-    <a class="mobile-menu__cv" href={cvUrl} data-menu-link>
-      {copy.mobileViewCv}
-    </a>
+    <a class="mobile-menu__cv" href={cvUrl} data-menu-link>{copy.mobileViewCv}</a>
   </div>
 </dialog>
