@@ -29,12 +29,7 @@ test('requires exact-head automated gates and visual review metadata', () => {
 });
 
 test('keeps desktop and mobile viewport review explicit', () => {
-  for (const viewport of [
-    '390×844',
-    '768×1024',
-    '1440×900',
-    '1920×1080',
-  ]) {
+  for (const viewport of ['390×844', '768×1024', '1440×900', '1920×1080']) {
     assert.match(template, new RegExp(viewport));
   }
 
@@ -48,7 +43,10 @@ test('invalidates manual visual review after a new push', () => {
 });
 
 test('does not burden non-visual changes with screenshot churn', () => {
-  assert.match(template, /do not regenerate screenshots solely to fill this section/i);
+  assert.match(
+    template,
+    /do not regenerate screenshots solely to fill this section/i,
+  );
   assert.match(template, /No rendered UI change is intended/);
   assert.match(qaDocs, /cambios no visuales no se deben regenerar capturas/i);
 });
@@ -61,6 +59,9 @@ test('documents current screenshots truthfully as review artifacts', () => {
 });
 
 test('keeps automated gates distinct from manual visual review', () => {
-  assert.match(template, /automated gates do not replace manual visual review/i);
+  assert.match(
+    template,
+    /automated gates do not replace manual visual review/i,
+  );
   assert.match(qaDocs, /permanecen separados de la aprobación visual manual/);
 });
