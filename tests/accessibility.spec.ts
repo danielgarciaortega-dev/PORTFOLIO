@@ -24,10 +24,7 @@ test('Sobre mí abierto sin violaciones automatizadas de axe', async ({
   page,
 }) => {
   await page.goto('./');
-  await page
-    .getByRole('button', { name: 'Sobre mí', exact: true })
-    .first()
-    .click();
+  await page.getByRole('button', { name: 'About', exact: true }).first().click();
   await expectNoAxeViolations(page);
 });
 
@@ -35,7 +32,7 @@ test('Contacto abierto sin violaciones automatizadas de axe', async ({
   page,
 }) => {
   await page.goto('./');
-  await page.getByRole('button', { name: 'Contactar' }).first().click();
+  await page.getByRole('button', { name: 'Contact' }).first().click();
   await expectNoAxeViolations(page);
 });
 
@@ -52,6 +49,6 @@ test('menú móvil abierto sin violaciones automatizadas de axe', async ({
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('./');
-  await page.getByRole('button', { name: 'Abrir menú' }).click();
+  await page.getByRole('button', { name: 'Open menu' }).click();
   await expectNoAxeViolations(page);
 });
