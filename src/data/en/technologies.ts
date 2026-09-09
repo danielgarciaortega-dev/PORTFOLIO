@@ -20,14 +20,14 @@ export const technologyGroups: TechnologyGroup[] = [
   },
   {
     label: 'Backend',
-    technologies: ['Java', 'Python', 'FastAPI', 'Node.js', 'APIs REST'],
+    technologies: ['Java', 'Python', 'FastAPI', 'Node.js', 'REST APIs'],
   },
   {
-    label: 'Datos',
+    label: 'Data',
     technologies: ['SQL', 'PostgreSQL', 'MySQL/MariaDB', 'BigQuery'],
   },
   {
-    label: 'Herramientas',
+    label: 'Tools',
     technologies: ['Git', 'GitHub', 'Docker', 'Supabase'],
   },
 ];
