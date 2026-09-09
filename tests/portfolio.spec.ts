@@ -9,19 +9,19 @@ test('inicio, navegación y Sobre mí funcionan con ruta base', async ({
     page.getByRole('heading', { level: 1, name: 'Daniel García Ortega' }),
   ).toBeVisible();
   await expect(
-    page.getByRole('link', { name: 'Ver todos los proyectos' }),
+    page.getByRole('link', { name: 'View all projects' }),
   ).toHaveAttribute('href', '/PORTFOLIO/proyectos/');
   await expect(
-    page.getByRole('button', { name: 'Conocer mi perfil' }),
+    page.getByRole('button', { name: 'View profile' }),
   ).toBeVisible();
   await expect(
     page
-      .getByRole('navigation', { name: 'Navegación principal' })
-      .getByRole('link', { name: 'Tecnologías' }),
+      .getByRole('navigation', { name: 'Main navigation' })
+      .getByRole('link', { name: 'Technologies' }),
   ).toHaveCount(0);
 
   const aboutTrigger = page
-    .getByRole('button', { name: 'Sobre mí', exact: true })
+    .getByRole('button', { name: 'About', exact: true })
     .first();
   await aboutTrigger.click();
   const aboutDialog = page.getByRole('dialog', {
@@ -32,7 +32,7 @@ test('inicio, navegación y Sobre mí funcionan con ruta base', async ({
   await expect(aboutDialog).toBeHidden();
   await expect(aboutTrigger).toBeFocused();
 
-  await page.getByRole('link', { name: 'Ver todos los proyectos' }).click();
+  await page.getByRole('link', { name: 'View all projects' }).click();
   await expect(page).toHaveURL(/\/PORTFOLIO\/proyectos\/$/);
 });
 
@@ -134,11 +134,11 @@ test('el modal de contacto permite copiar el correo y enlaza a LinkedIn y GitHub
   await page.goto('./');
 
   await expect(
-    page.getByRole('navigation', { name: 'Navegación principal' }),
-  ).not.toContainText('Contacto');
+    page.getByRole('navigation', { name: 'Main navigation' }),
+  ).not.toContainText('Contact');
 
   const contactTrigger = page
-    .getByRole('button', { name: 'Contactar' })
+    .getByRole('button', { name: 'Contact' })
     .first();
   await contactTrigger.click();
   const contactDialog = page.getByRole('dialog', { name: 'Hablemos.' });
@@ -169,7 +169,7 @@ test('copiar correo en el modal de contacto muestra confirmación visible', asyn
 }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto('./');
-  await page.getByRole('button', { name: 'Contactar' }).first().click();
+  await page.getByRole('button', { name: 'Contact' }).first().click();
   const status = page.locator('[data-copy-status]');
   await expect(status).toBeEmpty();
   await page.getByRole('button', { name: 'Copiar correo' }).click();
@@ -199,12 +199,12 @@ test('el footer muestra enlaces con icono (GitHub, LinkedIn, CV, contacto) sin t
     'href',
     'https://linkedin.com/in/daniel-garcía-ortega-404754385/',
   );
-  await expect(footer.getByRole('link', { name: 'Ver CV' })).toHaveAttribute(
+  await expect(footer.getByRole('link', { name: 'View CV' })).toHaveAttribute(
     'href',
     /\/cv\/$/,
   );
 
-  await footer.getByRole('button', { name: 'Contactar' }).click();
+  await footer.getByRole('button', { name: 'Contact' }).click();
   await expect(page.getByRole('dialog', { name: 'Hablemos.' })).toBeVisible();
 });
 
@@ -233,7 +233,7 @@ test('el menú móvil abre, cierra con Escape y restaura el foco', async ({
   const trigger = page.locator('[data-menu-open]');
   await trigger.click();
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.getByRole('dialog', { name: 'Navegación' })).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Navigation' })).toBeVisible();
 
   await page.keyboard.press('Escape');
   await expect(trigger).toHaveAttribute('aria-expanded', 'false');
