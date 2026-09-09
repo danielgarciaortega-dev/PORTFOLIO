@@ -12,7 +12,7 @@ export const technologyIcons = {
   Python: 'images/technologies/python.svg',
   FastAPI: 'images/technologies/fastapi.svg',
   'Node.js': 'images/technologies/nodejs.svg',
-  'APIs REST': 'images/technologies/rest-api.svg',
+  'REST APIs': 'images/technologies/rest-api.svg',
   SQL: 'images/technologies/sql.svg',
   PostgreSQL: 'images/technologies/postgresql.svg',
   'MySQL/MariaDB': 'images/technologies/mysql.svg',
