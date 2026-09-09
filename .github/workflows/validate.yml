@@ -29,6 +29,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Show issue 107 Prettier patch
+        run: |
+          npx prettier scripts/lib/vercel-preview-evidence.mjs tests/vercel-preview-evidence.test.mjs --write
+          git diff -- scripts/lib/vercel-preview-evidence.mjs tests/vercel-preview-evidence.test.mjs
+          exit 1
+
       - name: Audit dependencies
         run: npm audit --audit-level=high
 
