@@ -3,6 +3,11 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const workflow = readFileSync('.github/workflows/validate.yml', 'utf8');
+const readinessEntry = readFileSync('scripts/preview-readiness.mjs', 'utf8');
+const captureEntry = readFileSync(
+  'scripts/capture-preview-visual-evidence.mjs',
+  'utf8',
+);
 
 test('keeps stable repository and preview readiness check names', () => {
   assert.match(workflow, /name: Repository validation/);
@@ -66,4 +71,39 @@ test('runs the repository readiness helper without Vercel deployment commands', 
   assert.match(workflow, /run: node scripts\/preview-readiness\.mjs/);
   assert.doesNotMatch(workflow, /vercel\s+(?:deploy|--prod)/i);
   assert.doesNotMatch(workflow, /--prod\b/i);
+});
+
+test('exports only the validated exact-head Preview URL to later CI steps', () => {
+  assert.match(workflow, /id: preview_readiness/);
+  assert.match(readinessEntry, /process\.env\.GITHUB_OUTPUT/);
+  assert.match(readinessEntry, /preview_url=\$\{result\.evidence\.previewUrl\}/);
+  assert.match(
+    workflow,
+    /PREVIEW_URL: \$\{\{ steps\.preview_readiness\.outputs\.preview_url \}\}/,
+  );
+});
+
+test('captures protected Preview evidence only for explicitly Visual PRs', () => {
+  const visualCondition =
+    /contains\(github\.event\.pull_request\.body, '- \[x\] Visual'\)/g;
+  assert.ok((workflow.match(visualCondition) ?? []).length >= 4);
+  assert.match(
+    workflow,
+    /run: node scripts\/capture-preview-visual-evidence\.mjs/,
+  );
+  assert.match(captureEntry, /buildPreviewRequestHeaders/);
+  assert.match(captureEntry, /EXPECTED_HEAD_SHA/);
+});
+
+test('uploads exact-head evidence with a pinned artifact action and short retention', () => {
+  assert.match(
+    workflow,
+    /actions\/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7\.0\.1/,
+  );
+  assert.match(
+    workflow,
+    /name: preview-visual-evidence-\$\{\{ github\.event\.pull_request\.number \}\}-\$\{\{ github\.event\.pull_request\.head\.sha \}\}/,
+  );
+  assert.match(workflow, /path: artifacts\/preview-visual-evidence\//);
+  assert.match(workflow, /retention-days: 7/);
 });
