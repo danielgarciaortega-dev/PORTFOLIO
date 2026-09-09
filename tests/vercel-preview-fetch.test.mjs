@@ -27,6 +27,19 @@ test('injects the official Vercel automation bypass header on HTTPS preview requ
   assert.equal(capturedHeaders.get('x-vercel-protection-bypass'), SECRET);
 });
 
+test('supports Request inputs for exact Vercel Preview URLs', async () => {
+  let capturedHeaders;
+  const fetchImpl = async (_input, init) => {
+    capturedHeaders = new Headers(init?.headers);
+    return new Response('ok');
+  };
+  const previewFetch = createVercelPreviewFetch(fetchImpl, SECRET);
+
+  await previewFetch(new Request(PREVIEW));
+
+  assert.equal(capturedHeaders.get('x-vercel-protection-bypass'), SECRET);
+});
+
 test('never sends the bypass secret outside HTTPS *.vercel.app preview hosts', async () => {
   const captured = [];
   const fetchImpl = async (input, init) => {
