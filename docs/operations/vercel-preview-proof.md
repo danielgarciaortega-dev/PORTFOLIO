@@ -7,4 +7,4 @@ Disposable verification file for issue #103.
 - GitHub Pages remains the canonical production deployment.
 - Vercel is used only for pull-request preview/review validation.
 
-Proof stage: A
+Proof stage: B
