@@ -57,7 +57,7 @@ test('isolates unrelated Google Chrome APT metadata without weakening Playwright
   assert.doesNotMatch(workflow, /continue-on-error:\s*true/);
 });
 
-test('passes only the approved Vercel automation bypass secret to preview smoke', () => {
+test('passes only the approved Vercel automation bypass secret to preview automation', () => {
   assert.match(
     workflow,
     /VERCEL_AUTOMATION_BYPASS_SECRET: \$\{\{ secrets\.VERCEL_AUTOMATION_BYPASS_SECRET \}\}/,
@@ -67,32 +67,47 @@ test('passes only the approved Vercel automation bypass secret to preview smoke'
   assert.doesNotMatch(workflow, /VERCEL_ORG_ID:/);
 });
 
-test('runs the repository readiness helper without Vercel deployment commands', () => {
+test('runs readiness without Vercel deployment commands', () => {
   assert.match(workflow, /run: node scripts\/preview-readiness\.mjs/);
   assert.doesNotMatch(workflow, /vercel\s+(?:deploy|--prod)/i);
   assert.doesNotMatch(workflow, /--prod\b/i);
 });
 
-test('exports only the validated exact-head Preview URL to later CI steps', () => {
+test('exports only the validated exact-head Preview URL to a downstream job', () => {
   assert.match(workflow, /id: preview_readiness/);
   assert.match(readinessEntry, /process\.env\.GITHUB_OUTPUT/);
   assert.match(readinessEntry, /preview_url=\$\{result\.evidence\.previewUrl\}/);
   assert.match(
     workflow,
-    /PREVIEW_URL: \$\{\{ steps\.preview_readiness\.outputs\.preview_url \}\}/,
+    /outputs:\s*\n\s*preview_url: \$\{\{ steps\.preview_readiness\.outputs\.preview_url \}\}/,
+  );
+  assert.match(
+    workflow,
+    /PREVIEW_URL: \$\{\{ needs\.preview\.outputs\.preview_url \}\}/,
+  );
+});
+
+test('keeps visual evidence separate from the two required gates', () => {
+  assert.match(workflow, /visual_evidence:\s*\n\s*name: Preview visual evidence/);
+  assert.match(workflow, /visual_evidence:[\s\S]*?needs: preview/);
+  assert.match(
+    workflow,
+    /visual_evidence:[\s\S]*?if: \$\{\{ github\.event_name == 'pull_request' && contains\(github\.event\.pull_request\.body, '- \[x\] Visual'\) \}\}/,
+  );
+  assert.doesNotMatch(
+    workflow,
+    /preview:[\s\S]*?run: node scripts\/capture-preview-visual-evidence\.mjs[\s\S]*?visual_evidence:/,
   );
 });
 
 test('captures protected Preview evidence only for explicitly Visual PRs', () => {
-  const visualCondition =
-    /contains\(github\.event\.pull_request\.body, '- \[x\] Visual'\)/g;
-  assert.ok((workflow.match(visualCondition) ?? []).length >= 4);
   assert.match(
     workflow,
     /run: node scripts\/capture-preview-visual-evidence\.mjs/,
   );
   assert.match(captureEntry, /buildPreviewRequestHeaders/);
   assert.match(captureEntry, /EXPECTED_HEAD_SHA/);
+  assert.match(captureEntry, /PREVIEW_URL/);
 });
 
 test('uploads exact-head evidence with a pinned artifact action and short retention', () => {
