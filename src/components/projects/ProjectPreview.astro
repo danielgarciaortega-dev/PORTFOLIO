@@ -1,19 +1,23 @@
 ---
 import type { Project } from '../../data/types';
+import type { Locale } from '../../i18n/locale';
+import { projectCopy } from '../../i18n/project-copy';
 import { withBase } from '../../utils/paths';
 
 interface Props {
   project: Project;
+  locale: Locale;
 }
 
-const { project } = Astro.props;
+const { project, locale } = Astro.props;
+const copy = projectCopy[locale];
 ---
 
 <article class="project-preview" data-reveal>
   <button
     type="button"
     class="project-preview__button"
-    aria-label={`Ver proyecto ${project.title}`}
+    aria-label={copy.viewProjectAria(project.title)}
     data-dialog-open={`project-${project.id}`}
   >
     {
