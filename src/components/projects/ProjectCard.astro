@@ -1,12 +1,16 @@
 ---
 import type { Project } from '../../data/types';
+import type { Locale } from '../../i18n/locale';
+import { projectCopy } from '../../i18n/project-copy';
 import { withBase } from '../../utils/paths';
 
 interface Props {
   project: Project;
+  locale: Locale;
 }
 
-const { project } = Astro.props;
+const { project, locale } = Astro.props;
+const copy = projectCopy[locale];
 ---
 
 <article class="project-row" data-reveal>
@@ -31,15 +35,16 @@ const { project } = Astro.props;
     </div>
     <h2>{project.title}</h2>
     <p class="project-row__description">{project.shortDescription}</p>
-    <ul class="tag-list" aria-label={`Tecnologías de ${project.title}`}>
+    <ul class="tag-list" aria-label={copy.technologiesFor(project.title)}>
       {project.technologies.map((technology) => <li>{technology}</li>)}
     </ul>
     <button
       type="button"
       class="text-action"
+      aria-label={copy.viewProjectAria(project.title)}
       data-dialog-open={`project-${project.id}`}
     >
-      Ver proyecto
+      {copy.viewProject}
       <svg viewBox="0 0 20 20" aria-hidden="true"
         ><path d="M4 10h11m-4-4 4 4-4 4"></path></svg
       >

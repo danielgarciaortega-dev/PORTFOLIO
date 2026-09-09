@@ -81,7 +81,7 @@ const [firstName, ...lastNames] = profile.fullName.split(' ');
         >
       </div>
       <div class="project-preview-list">
-        {projects.map((project) => <ProjectPreview {project} />)}
+        {projects.map((project) => <ProjectPreview {project} {locale} />)}
       </div>
     </div>
   </div>

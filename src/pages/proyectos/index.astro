@@ -3,10 +3,12 @@ import AboutDialog from '../../components/dialogs/AboutDialog.astro';
 import ContactDialog from '../../components/dialogs/ContactDialog.astro';
 import ProjectDialog from '../../components/projects/ProjectDialog.astro';
 import ProjectGrid from '../../components/projects/ProjectGrid.astro';
-import { projects } from '../../data/es/projects';
+import { getProjects } from '../../data/projects-localized';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { withBase } from '../../utils/paths';
 
+const locale = 'es';
+const projects = getProjects(locale);
 const momentNumbers = ['01', '02', '03', '04', '05', '06'];
 // La 06 es un retrato alto (edificio UGR AI de fondo); el encuadre por
 // defecto dejaba solo las cabezas visibles, así que baja el foco para
@@ -39,7 +41,7 @@ const momentObjectPosition: Record<string, string> = {
       aria-label="Listado de proyectos"
     >
       <h1 class="sr-only">Proyectos</h1>
-      <ProjectGrid {projects} />
+      <ProjectGrid {projects} {locale} />
     </section>
   </main>
   <AboutDialog />
@@ -49,6 +51,7 @@ const momentObjectPosition: Record<string, string> = {
       <ProjectDialog
         {project}
         nextProject={projects[(index + 1) % projects.length]}
+        {locale}
       />
     ))
   }
