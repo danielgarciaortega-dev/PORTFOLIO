@@ -68,6 +68,31 @@ test('language switcher navigates between locale routes and persists explicit ch
     spanishSwitcher.getByRole('link', { name: 'English' }),
   ).toHaveAttribute('href', '/PORTFOLIO/en/');
 
+  const desktopAppearance = await spanishSwitcher.evaluate((switcher) => {
+    const switcherStyles = getComputedStyle(switcher);
+    const current = switcher.querySelector<HTMLElement>(
+      '[aria-current="true"]',
+    );
+    const currentStyles = current ? getComputedStyle(current) : null;
+
+    return {
+      borderTopWidth: switcherStyles.borderTopWidth,
+      backgroundColor: switcherStyles.backgroundColor,
+      currentBackgroundColor: currentStyles?.backgroundColor ?? null,
+    };
+  });
+
+  expect(desktopAppearance).toEqual({
+    borderTopWidth: '0px',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    currentBackgroundColor: 'rgba(0, 0, 0, 0)',
+  });
+
+  await expect(page.locator('.header-cv-link')).toHaveCSS(
+    'border-top-width',
+    '1px',
+  );
+
   await spanishSwitcher.getByRole('link', { name: 'English' }).click();
   await expect(page).toHaveURL(/\/PORTFOLIO\/en\/$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
