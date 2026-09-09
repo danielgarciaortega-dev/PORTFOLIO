@@ -346,6 +346,13 @@ export async function waitForPreviewEvidence(input) {
  */
 export async function runPreviewReadiness(input) {
   const evidence = await waitForPreviewEvidence(input);
+  if (!evidence.previewUrl) {
+    throw new PreviewReadinessError(
+      'VERCEL_PREVIEW_MISSING',
+      'Resolved exact-head Vercel evidence did not contain a Preview URL.',
+    );
+  }
+
   const smoke = await smokePreview({
     fetchImpl: input.fetchImpl,
     previewUrl: evidence.previewUrl,
