@@ -203,7 +203,9 @@ test('el footer muestra enlaces con icono (GitHub, LinkedIn, CV, contacto) sin t
   );
 
   await footer.getByRole('button', { name: 'Contact' }).click();
-  await expect(page.getByRole('dialog', { name: 'Get in touch.' })).toBeVisible();
+  await expect(
+    page.getByRole('dialog', { name: 'Get in touch.' }),
+  ).toBeVisible();
 });
 
 test('la franja profesional muestra logos junto a tecnologías, formación y experiencia', async ({
