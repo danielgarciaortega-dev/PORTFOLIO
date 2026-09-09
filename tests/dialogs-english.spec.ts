@@ -5,8 +5,13 @@ test('About and Contact dialogs use the approved English copy', async ({
 }) => {
   await page.goto('./');
 
-  await page.getByRole('button', { name: 'About', exact: true }).first().click();
-  const aboutDialog = page.getByRole('dialog', { name: 'Daniel García Ortega' });
+  await page
+    .getByRole('button', { name: 'About', exact: true })
+    .first()
+    .click();
+  const aboutDialog = page.getByRole('dialog', {
+    name: 'Daniel García Ortega',
+  });
   await expect(aboutDialog).toBeVisible();
   await expect(aboutDialog).toContainText('ABOUT');
   await expect(aboutDialog).toContainText(
