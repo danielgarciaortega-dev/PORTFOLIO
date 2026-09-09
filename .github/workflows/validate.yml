@@ -32,6 +32,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Probe exact Prettier output for issue 94
+        run: |
+          npx prettier docs/operations/PREVIEW_AND_PAGES.md tests/preview-operations-docs.test.mjs --write
+          git diff -- docs/operations/PREVIEW_AND_PAGES.md tests/preview-operations-docs.test.mjs
+          exit 1
+
       - name: Audit dependencies
         run: npm audit --audit-level=high
 
