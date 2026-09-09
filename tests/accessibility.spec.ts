@@ -24,7 +24,10 @@ test('Sobre mí abierto sin violaciones automatizadas de axe', async ({
   page,
 }) => {
   await page.goto('./');
-  await page.getByRole('button', { name: 'About', exact: true }).first().click();
+  await page
+    .getByRole('button', { name: 'About', exact: true })
+    .first()
+    .click();
   await expectNoAxeViolations(page);
 });
 
