@@ -20,8 +20,12 @@ test('project cards and dialogs use approved English copy', async ({ page }) => 
   await expect(alLio).toContainText('Solution');
   await expect(alLio).toContainText('Role');
   await expect(alLio).toContainText('Next project');
-  await expect(alLio.getByRole('link', { name: 'Open AL-LÍO demo' })).toBeVisible();
-  await expect(alLio.getByRole('link', { name: 'View AL-LÍO code' })).toBeVisible();
+  await expect(
+    alLio.getByRole('link', { name: 'Open AL-LÍO demo' }),
+  ).toBeVisible();
+  await expect(
+    alLio.getByRole('link', { name: 'View AL-LÍO code' }),
+  ).toBeVisible();
   await page.keyboard.press('Escape');
 
   await page
