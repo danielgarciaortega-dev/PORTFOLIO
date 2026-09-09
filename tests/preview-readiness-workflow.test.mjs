@@ -45,6 +45,13 @@ test('binds preview readiness to the exact current pull-request head', () => {
   assert.match(workflow, /timeout-minutes: 12/);
 });
 
+test('isolates unrelated Google Chrome APT metadata without weakening Playwright setup', () => {
+  assert.match(workflow, /google-chrome\.list/);
+  assert.match(workflow, /google-chrome\.sources/);
+  assert.match(workflow, /npx playwright install --with-deps chromium/);
+  assert.doesNotMatch(workflow, /continue-on-error:\s*true/);
+});
+
 test('passes only the approved Vercel automation bypass secret to preview smoke', () => {
   assert.match(
     workflow,
