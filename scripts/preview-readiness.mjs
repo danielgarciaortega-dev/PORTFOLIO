@@ -3,6 +3,10 @@
 
 import { appendFile } from 'node:fs/promises';
 import {
+  assertStableRepositoryOnlyRequirement,
+  loadGitHubPreviewRequirement,
+} from './lib/preview-requirement.mjs';
+import {
   loadGitHubPreviewEvidence,
   runPreviewReadiness,
 } from './lib/preview-readiness.mjs';
@@ -29,11 +33,63 @@ function readPositiveInteger(name, fallback) {
   return parsed;
 }
 
+/** @param {string} content */
+async function appendStepSummary(content) {
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    await appendFile(process.env.GITHUB_STEP_SUMMARY, content, 'utf8');
+  }
+}
+
+/** @param {string[]} lines */
+async function appendOutputs(lines) {
+  if (process.env.GITHUB_OUTPUT) {
+    await appendFile(process.env.GITHUB_OUTPUT, `${lines.join('\n')}\n`, 'utf8');
+  }
+}
+
 async function main() {
   const repository = requireEnvironment('GITHUB_REPOSITORY');
   const prNumber = requireEnvironment('PR_NUMBER');
   const expectedHeadSha = requireEnvironment('EXPECTED_HEAD_SHA');
   const token = requireEnvironment('GITHUB_TOKEN');
+  const shortSha = expectedHeadSha.slice(0, 12);
+
+  const requirementInput = {
+    repository,
+    prNumber,
+    expectedHeadSha,
+    token,
+  };
+  const initialRequirement =
+    await loadGitHubPreviewRequirement(requirementInput);
+
+  if (!initialRequirement.previewRequired) {
+    const finalRequirement = await loadGitHubPreviewRequirement(requirementInput);
+    const requirement = assertStableRepositoryOnlyRequirement({
+      initial: initialRequirement,
+      final: finalRequirement,
+      expectedHeadSha,
+    });
+    const summary = [
+      '## Preview readiness',
+      '',
+      `- Head: \`${shortSha}\``,
+      '- Mode: strict repository-only diff',
+      '- Native Vercel Preview: not required',
+      `- Changed file entries: ${requirement.changedFileCount}`,
+      '- Production contract: GitHub Pages remains canonical production; Vercel is Preview/review only.',
+      '',
+    ].join('\n');
+
+    await appendStepSummary(summary);
+    await appendOutputs(['preview_required=false', 'preview_url=']);
+
+    console.log(
+      `Preview readiness passed for ${shortSha}: strict repository-only diff does not require a native Vercel Preview.`,
+    );
+    return;
+  }
+
   const timeoutMs = readPositiveInteger('PREVIEW_WAIT_TIMEOUT_MS', 600_000);
   const pollIntervalMs = readPositiveInteger('PREVIEW_POLL_INTERVAL_MS', 5_000);
   const previewFetch = createVercelPreviewFetch(
@@ -62,7 +118,6 @@ async function main() {
     },
   });
 
-  const shortSha = expectedHeadSha.slice(0, 12);
   const smokePaths = result.smoke.checkedPaths
     .map((path) => `\`${path}\``)
     .join(', ');
@@ -70,6 +125,7 @@ async function main() {
     '## Preview readiness',
     '',
     `- Head: \`${shortSha}\``,
+    '- Mode: deployed Preview required',
     `- Preview: ${result.evidence.previewUrl}`,
     `- Vercel inspector: ${result.evidence.inspectorUrl}`,
     `- Smoke: ${smokePaths}`,
@@ -77,17 +133,11 @@ async function main() {
     '',
   ].join('\n');
 
-  if (process.env.GITHUB_STEP_SUMMARY) {
-    await appendFile(process.env.GITHUB_STEP_SUMMARY, summary, 'utf8');
-  }
-
-  if (process.env.GITHUB_OUTPUT) {
-    await appendFile(
-      process.env.GITHUB_OUTPUT,
-      `preview_url=${result.evidence.previewUrl}\n`,
-      'utf8',
-    );
-  }
+  await appendStepSummary(summary);
+  await appendOutputs([
+    'preview_required=true',
+    `preview_url=${result.evidence.previewUrl}`,
+  ]);
 
   console.log(`Preview readiness passed for ${shortSha}.`);
   console.log(`Validated Preview: ${result.evidence.previewUrl}`);
