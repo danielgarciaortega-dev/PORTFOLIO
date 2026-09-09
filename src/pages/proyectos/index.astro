@@ -1,5 +1,6 @@
 ---
 import AboutDialog from '../../components/dialogs/AboutDialog.astro';
+import ContactDialog from '../../components/dialogs/ContactDialog.astro';
 import ProjectDialog from '../../components/projects/ProjectDialog.astro';
 import ProjectGrid from '../../components/projects/ProjectGrid.astro';
 import { projects } from '../../data/es/projects';
@@ -42,6 +43,7 @@ const momentObjectPosition: Record<string, string> = {
     </section>
   </main>
   <AboutDialog />
+  <ContactDialog />
   {
     projects.map((project, index) => (
       <ProjectDialog
