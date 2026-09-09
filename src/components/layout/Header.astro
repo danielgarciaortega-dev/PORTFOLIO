@@ -25,9 +25,11 @@ const cvUrl = withBase('cv/');
     <nav class="desktop-navigation" aria-label={copy.mainNavigation}>
       <a
         href={homeUrl}
-        aria-current={currentPage === 'home' ? 'page' : undefined}>{copy.home}</a
+        aria-current={currentPage === 'home' ? 'page' : undefined}
+        >{copy.home}</a
       >
-      <button type="button" data-dialog-open="about-dialog">{copy.about}</button>
+      <button type="button" data-dialog-open="about-dialog">{copy.about}</button
+      >
       <a
         href={projectsUrl}
         aria-current={currentPage === 'projects' ? 'page' : undefined}
@@ -77,11 +79,14 @@ const cvUrl = withBase('cv/');
     <nav aria-label={copy.mobileNavigation}>
       <a href={homeUrl} data-menu-link>{copy.home} <span>01</span></a>
       <button type="button" data-dialog-open="about-dialog" data-menu-action>
-        {copy.about} <span>02</span>
+        {copy.about}
+        <span>02</span>
       </button>
       <a href={projectsUrl} data-menu-link>{copy.projects} <span>03</span></a>
     </nav>
     <LanguageSwitcher {locale} variant="mobile" />
-    <a class="mobile-menu__cv" href={cvUrl} data-menu-link>{copy.mobileViewCv}</a>
+    <a class="mobile-menu__cv" href={cvUrl} data-menu-link
+      >{copy.mobileViewCv}</a
+    >
   </div>
 </dialog>
