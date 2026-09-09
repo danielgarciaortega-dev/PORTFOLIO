@@ -36,9 +36,10 @@ function file(filename, overrides = {}) {
   return { filename, status: 'modified', ...overrides };
 }
 
-function createGitHubFetch(
-  { pull = pullRequest(), pages = [[file('tests/a.test.mjs')]] } = {},
-) {
+function createGitHubFetch({
+  pull = pullRequest(),
+  pages = [[file('tests/a.test.mjs')]],
+} = {}) {
   const requests = [];
   const fetchImpl = async (url, options) => {
     requests.push({ url, options });

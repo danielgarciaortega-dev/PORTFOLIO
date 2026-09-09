@@ -43,7 +43,11 @@ async function appendStepSummary(content) {
 /** @param {string[]} lines */
 async function appendOutputs(lines) {
   if (process.env.GITHUB_OUTPUT) {
-    await appendFile(process.env.GITHUB_OUTPUT, `${lines.join('\n')}\n`, 'utf8');
+    await appendFile(
+      process.env.GITHUB_OUTPUT,
+      `${lines.join('\n')}\n`,
+      'utf8',
+    );
   }
 }
 

@@ -45,8 +45,7 @@ export function isRepositoryOnlyPreviewPath(path) {
 /** @param {unknown} body */
 export function isVisualPullRequest(body) {
   return (
-    typeof body === 'string' &&
-    /(?:^|\n)\s*-\s*\[x\]\s*Visual\b/im.test(body)
+    typeof body === 'string' && /(?:^|\n)\s*-\s*\[x\]\s*Visual\b/im.test(body)
   );
 }
 
@@ -294,7 +293,7 @@ export function assertStableRepositoryOnlyRequirement(input) {
     input.initial.isVisual !== input.final.isVisual ||
     input.initial.changedFileCount !== input.final.changedFileCount ||
     JSON.stringify(input.initial.changedPaths) !==
-    JSON.stringify(input.final.changedPaths)
+      JSON.stringify(input.final.changedPaths)
   ) {
     throw new PreviewRequirementError(
       'PREVIEW_REQUIREMENT_CHANGED',
