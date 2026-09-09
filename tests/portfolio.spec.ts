@@ -217,7 +217,7 @@ test('la franja profesional muestra logos junto a tecnologías, formación y exp
   await expect(technologyItems).toHaveCount(22);
   await expect(technologyItems.locator('img')).toHaveCount(22);
   await expect(
-    page.locator('img[src$="/images/education/foc.png"]'),
+    page.locator('img[src$="/images/education/foc.svg"]'),
   ).toBeVisible();
   await expect(
     page.locator('img[src$="/images/companies/salunox.svg"]'),

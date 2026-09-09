@@ -6,7 +6,7 @@ export const education: Education[] = [
     shortTitle: 'Grado Superior en DAW',
     institution: 'Instituto Fomento Ocupacional FOC',
     period: '2025 — Actualidad',
-    logo: 'images/education/foc.png',
+    logo: 'images/education/foc.svg',
     logoAlt: 'Logotipo del Instituto Fomento Ocupacional FOC',
   },
   {
