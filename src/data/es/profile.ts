@@ -1,36 +1,36 @@
 export const profile = {
   fullName: 'Daniel García Ortega',
   shortBrand: 'DGO.',
-  role: 'Full-stack web developer',
-  location: 'Granada, Spain',
+  role: 'Desarrollador web full-stack',
+  location: 'Granada, España',
   availability: null,
   heroDescription:
-    "I'm in my second year of Web Application Development and currently looking for a company where I can complete my internship.",
+    'Estudiante de 2º curso de Desarrollo de Aplicaciones Web, en búsqueda activa de una empresa donde realizar las prácticas de este curso.',
   aboutIntro:
-    'After nearly ten years in customer service and sales at Alcampo and Konecta, I switched to software development a year ago and started studying Web Application Development.',
+    'Pasé casi diez años en atención al cliente y ventas, en Alcampo y Konecta, hasta que decidí, hace 1 año, dar el salto a la programación estudiando Desarrollo de Aplicaciones Web.',
   milestones: [
     {
-      label: 'Education',
-      text: 'Higher Technician in Web Application Development, Instituto FOC — currently in my second year.',
+      label: 'Formación',
+      text: 'Grado Superior en Desarrollo de Aplicaciones Web, Instituto FOC — actualmente en 2º curso.',
     },
     {
-      label: 'Internship',
-      text: 'Salunox, a SaaS platform for the healthcare sector.',
+      label: 'Prácticas',
+      text: 'Salunox, plataforma SaaS del sector sanitario.',
     },
     {
       label: 'Hackathon',
-      text: 'First GEN AI ARENA: won with SIDN Cost Control and developed Feedback2Action.',
+      text: 'I Edición de GEN AI ARENA: gané con SIDN Cost Control y desarrollé Feedback2Action.',
     },
     {
-      label: 'Personal project',
-      text: 'AL-LÍO, the project that earned me the Aircury Summer of Code 2026 scholarship.',
+      label: 'Proyecto propio',
+      text: 'AL-LÍO, con el que conseguí la beca Aircury Summer of Code 2026.',
     },
   ],
   seeking:
-    'A company where I can complete my second-year internship, keep learning and contribute by solving real problems from day one.',
+    'Una empresa donde hacer las prácticas de 2º curso y aportar desde el primer día: ganas de aprender y capacidad de resolver problemas.',
   profileImage: 'images/profile/profile-main.webp',
   profileImageMobile: 'images/profile/profile-main-mobile.webp',
-  profileImageAlt: 'Daniel García Ortega presenting a project',
+  profileImageAlt: 'Daniel García Ortega presentando un proyecto',
   aboutImage: 'images/profile/profile-about.webp',
   aboutImageAlt: 'Daniel García Ortega',
 } as const;
