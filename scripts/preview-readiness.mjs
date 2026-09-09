@@ -81,6 +81,14 @@ async function main() {
     await appendFile(process.env.GITHUB_STEP_SUMMARY, summary, 'utf8');
   }
 
+  if (process.env.GITHUB_OUTPUT) {
+    await appendFile(
+      process.env.GITHUB_OUTPUT,
+      `preview_url=${result.evidence.previewUrl}\n`,
+      'utf8',
+    );
+  }
+
   console.log(`Preview readiness passed for ${shortSha}.`);
   console.log(`Validated Preview: ${result.evidence.previewUrl}`);
 }
