@@ -21,7 +21,10 @@ const requiredSourcePaths = [
 test('documents the production and preview responsibility split', () => {
   assert.match(runbook, /GitHub Pages is canonical production/);
   assert.match(runbook, /Vercel is preview\/review infrastructure only/);
-  assert.match(runbook, /`main` is excluded from Vercel Git-triggered deployments|disables Vercel Git deployments for `main`/);
+  assert.match(
+    runbook,
+    /`main` is excluded from Vercel Git-triggered deployments|disables Vercel Git deployments for `main`/,
+  );
 });
 
 test('documents exact-head gates, protected Preview access and production gate names', () => {
@@ -34,19 +37,28 @@ test('documents exact-head gates, protected Preview access and production gate n
     '`id-token: write`',
     '`/PORTFOLIO`',
   ]) {
-    assert.match(runbook, new RegExp(requiredText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.match(
+      runbook,
+      new RegExp(requiredText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+    );
   }
 });
 
 test('references the maintained implementation sources', () => {
   for (const sourcePath of requiredSourcePaths) {
-    assert.match(runbook, new RegExp(sourcePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.match(
+      runbook,
+      new RegExp(sourcePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+    );
   }
 });
 
 test('contains an actionable troubleshooting matrix', () => {
   assert.match(runbook, /## 12\. Troubleshooting matrix/);
-  assert.match(runbook, /Symptom \| Likely cause \| Safe diagnostic \| Corrective action/);
+  assert.match(
+    runbook,
+    /Symptom \| Likely cause \| Safe diagnostic \| Corrective action/,
+  );
   assert.match(runbook, /stale head/i);
   assert.match(runbook, /Preview redirects to Vercel auth/);
   assert.match(runbook, /Pages deploy job is skipped/);
