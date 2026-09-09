@@ -1,12 +1,20 @@
 ---
-import { education } from '../../data/en/education';
-import { experience } from '../../data/en/experience';
-import { technologyGroups } from '../../data/en/technologies';
+import { getProfessionalData } from '../../data/localized';
 import { technologyIcons } from '../../data/technology-icons';
+import { homeCopy } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locale';
 import { withBase } from '../../utils/paths';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { education, experience, technologyGroups } = getProfessionalData(locale);
+const copy = homeCopy[locale];
 ---
 
-<section class="home-overview" aria-label="Professional overview">
+<section class="home-overview" aria-label={copy.professionalOverview}>
   <div class="home-overview__inner">
     <section
       class="home-overview__technologies"
@@ -14,7 +22,7 @@ import { withBase } from '../../utils/paths';
       aria-labelledby="overview-technologies-title"
     >
       <p class="overview-label" id="overview-technologies-title">
-        Technologies
+        {copy.technologies}
       </p>
       <div class="technology-groups">
         {
@@ -49,7 +57,7 @@ import { withBase } from '../../utils/paths';
     </section>
 
     <article class="home-overview__fact">
-      <p class="overview-label">Education</p>
+      <p class="overview-label">{copy.education}</p>
       <div class="home-overview__fact-list">
         {
           education.map((item) => (
@@ -76,7 +84,7 @@ import { withBase } from '../../utils/paths';
     </article>
 
     <article class="home-overview__fact">
-      <p class="overview-label">Experience</p>
+      <p class="overview-label">{copy.experience}</p>
       <div class="home-overview__fact-list">
         {
           experience.map((item) => (

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('professional overview uses approved English copy', async ({ page }) => {
-  await page.goto('./');
+  await page.goto('./en/');
 
   const overview = page.locator('.home-overview');
   await expect(overview).toBeVisible();

@@ -1,42 +1,50 @@
 ---
+import { shellCopy } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locale';
 import { withBase } from '../../utils/paths';
+import LanguageSwitcher from './LanguageSwitcher.astro';
 
 interface Props {
   currentPage: 'home' | 'projects' | '404';
+  locale: Locale;
 }
 
-const { currentPage } = Astro.props;
-const homeUrl = withBase();
+const { currentPage, locale } = Astro.props;
+const copy = shellCopy[locale];
+const homeUrl = locale === 'en' ? withBase('en/') : withBase();
 const projectsUrl = withBase('proyectos/');
 const cvUrl = withBase('cv/');
 ---
 
 <header class="site-header" data-site-header>
   <div class="site-header__inner">
-    <a class="brand" href={homeUrl} aria-label="DGO., home">
+    <a class="brand" href={homeUrl} aria-label={copy.brandHomeLabel}>
       <span>DGO</span><span aria-hidden="true">.</span>
     </a>
 
-    <nav class="desktop-navigation" aria-label="Main navigation">
+    <nav class="desktop-navigation" aria-label={copy.mainNavigation}>
       <a
         href={homeUrl}
-        aria-current={currentPage === 'home' ? 'page' : undefined}>Home</a
+        aria-current={currentPage === 'home' ? 'page' : undefined}
+        >{copy.home}</a
       >
-      <button type="button" data-dialog-open="about-dialog">About</button>
+      <button type="button" data-dialog-open="about-dialog">{copy.about}</button
+      >
       <a
         href={projectsUrl}
         aria-current={currentPage === 'projects' ? 'page' : undefined}
       >
-        Projects
+        {copy.projects}
       </a>
+      <LanguageSwitcher {locale} variant="desktop" />
     </nav>
 
-    <a class="header-cv-link" href={cvUrl}>View CV</a>
+    <a class="header-cv-link" href={cvUrl}>{copy.viewCv}</a>
 
     <button
       class="menu-trigger"
       type="button"
-      aria-label="Open menu"
+      aria-label={copy.openMenu}
       aria-expanded="false"
       aria-controls="mobile-navigation"
       data-menu-open
@@ -56,20 +64,29 @@ const cvUrl = withBase('cv/');
 >
   <div class="mobile-menu__panel">
     <div class="mobile-menu__head">
-      <p id="mobile-menu-title">Navigation</p>
-      <button type="button" aria-label="Close menu" data-menu-close autofocus>
+      <p id="mobile-menu-title">{copy.navigation}</p>
+      <button
+        type="button"
+        aria-label={copy.closeMenu}
+        data-menu-close
+        autofocus
+      >
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="m6 6 12 12M18 6 6 18"></path>
         </svg>
       </button>
     </div>
-    <nav aria-label="Mobile navigation">
-      <a href={homeUrl} data-menu-link>Home <span>01</span></a>
+    <nav aria-label={copy.mobileNavigation}>
+      <a href={homeUrl} data-menu-link>{copy.home} <span>01</span></a>
       <button type="button" data-dialog-open="about-dialog" data-menu-action>
-        About <span>02</span>
+        {copy.about}
+        <span>02</span>
       </button>
-      <a href={projectsUrl} data-menu-link>Projects <span>03</span></a>
+      <a href={projectsUrl} data-menu-link>{copy.projects} <span>03</span></a>
     </nav>
-    <a class="mobile-menu__cv" href={cvUrl} data-menu-link>View CV</a>
+    <LanguageSwitcher {locale} variant="mobile" />
+    <a class="mobile-menu__cv" href={cvUrl} data-menu-link
+      >{copy.mobileViewCv}</a
+    >
   </div>
 </dialog>

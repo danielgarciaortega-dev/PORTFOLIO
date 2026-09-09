@@ -1,12 +1,27 @@
 ---
-import { profile } from '../../data/en/profile';
+import { getProfessionalData } from '../../data/localized';
 import { links } from '../../data/links';
+import { shellCopy } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locale';
 import { withBase } from '../../utils/paths';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { profile } = getProfessionalData(locale);
+const copy = shellCopy[locale];
+const homeUrl = locale === 'en' ? withBase('en/') : withBase();
 ---
 
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <a class="brand brand--footer" href={withBase()} aria-label="DGO., home">
+    <a
+      class="brand brand--footer"
+      href={homeUrl}
+      aria-label={copy.brandHomeLabel}
+    >
       <span>DGO</span><span aria-hidden="true">.</span>
     </a>
     <p>{profile.role} · {profile.location}</p>
@@ -37,7 +52,7 @@ import { withBase } from '../../utils/paths';
           </a>
         )
       }
-      <a href={withBase('cv/')} aria-label="View CV">
+      <a href={withBase('cv/')} aria-label={copy.viewCvAria}>
         <svg
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -56,7 +71,7 @@ import { withBase } from '../../utils/paths';
       <button
         type="button"
         data-dialog-open="contact-dialog"
-        aria-label="Contact"
+        aria-label={copy.contactAria}
       >
         <svg
           viewBox="0 0 24 24"

@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('About and Contact dialogs use the approved English copy', async ({
   page,
 }) => {
-  await page.goto('./');
+  await page.goto('./en/');
 
   await page
     .getByRole('button', { name: 'About', exact: true })
@@ -58,7 +58,7 @@ test('clipboard fallback is English and selects the email address', async ({
       value: undefined,
     });
   });
-  await page.goto('./');
+  await page.goto('./en/');
   await page.getByRole('button', { name: 'Contact' }).first().click();
   await page.getByRole('button', { name: 'Copy email' }).click();
 

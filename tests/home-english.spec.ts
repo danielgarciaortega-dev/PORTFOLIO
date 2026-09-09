@@ -1,9 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-test('homepage shell and hero use the approved English copy', async ({
+test('English homepage shell and hero use the approved copy', async ({
   page,
 }) => {
-  await page.goto('./');
+  await page.goto('./en/');
+
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
 
   const mainNavigation = page.getByRole('navigation', {
     name: 'Main navigation',
@@ -46,9 +48,11 @@ test('homepage shell and hero use the approved English copy', async ({
   );
 });
 
-test('mobile navigation exposes English accessible names', async ({ page }) => {
+test('English mobile navigation exposes accessible names and locale control', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('./');
+  await page.goto('./en/');
 
   await page.getByRole('button', { name: 'Open menu' }).click();
   const menu = page.getByRole('dialog', { name: 'Navigation' });
@@ -57,4 +61,5 @@ test('mobile navigation exposes English accessible names', async ({ page }) => {
     menu.getByRole('navigation', { name: 'Mobile navigation' }),
   ).toContainText('Home');
   await expect(menu.getByRole('button', { name: 'Close menu' })).toBeVisible();
+  await expect(menu.locator('[data-language-switcher]')).toBeVisible();
 });

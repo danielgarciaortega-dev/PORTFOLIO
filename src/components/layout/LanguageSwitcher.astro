@@ -1,0 +1,113 @@
+---
+import { shellCopy } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locale';
+import { withBase } from '../../utils/paths';
+
+interface Props {
+  locale: Locale;
+  variant?: 'desktop' | 'mobile';
+}
+
+const { locale, variant = 'desktop' } = Astro.props;
+const copy = shellCopy[locale];
+const spanishUrl = withBase();
+const englishUrl = withBase('en/');
+---
+
+<div
+  class:list={['language-switcher', `language-switcher--${variant}`]}
+  role="group"
+  aria-label={copy.languageSwitcher}
+  data-language-switcher
+>
+  {
+    locale === 'es' ? (
+      <span
+        lang="es"
+        aria-current="true"
+        aria-label={`${copy.spanish}, ${copy.currentLanguage}`}
+      >
+        ES
+      </span>
+    ) : (
+      <a
+        href={spanishUrl}
+        lang="es"
+        hreflang="es"
+        aria-label={copy.spanish}
+        data-locale-link="es"
+      >
+        ES
+      </a>
+    )
+  }
+  {
+    locale === 'en' ? (
+      <span
+        lang="en"
+        aria-current="true"
+        aria-label={`${copy.english}, ${copy.currentLanguage}`}
+      >
+        EN
+      </span>
+    ) : (
+      <a
+        href={englishUrl}
+        lang="en"
+        hreflang="en"
+        aria-label={copy.english}
+        data-locale-link="en"
+      >
+        EN
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .language-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.2rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+  }
+
+  .language-switcher a,
+  .language-switcher span {
+    min-width: 34px;
+    min-height: 32px;
+    display: grid;
+    place-items: center;
+    padding: 0.25rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  .language-switcher a {
+    color: var(--color-text-muted);
+    transition:
+      background 180ms ease,
+      color 180ms ease;
+  }
+
+  .language-switcher a:hover {
+    background: var(--color-brand-soft);
+    color: var(--color-text);
+  }
+
+  .language-switcher span[aria-current='true'] {
+    background: var(--color-text);
+    color: white;
+  }
+
+  .language-switcher--mobile {
+    width: fit-content;
+    margin-top: 1.5rem;
+  }
+</style>

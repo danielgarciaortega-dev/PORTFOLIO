@@ -1,11 +1,11 @@
 ---
-import AboutDialog from '../components/dialogs/AboutDialog.astro';
-import ContactDialog from '../components/dialogs/ContactDialog.astro';
-import Hero from '../components/home/Hero.astro';
-import OverviewStrip from '../components/home/OverviewStrip.astro';
-import ProjectDialog from '../components/projects/ProjectDialog.astro';
-import { projects } from '../data/es/projects';
-import BaseLayout from '../layouts/BaseLayout.astro';
+import AboutDialog from '../../components/dialogs/AboutDialog.astro';
+import ContactDialog from '../../components/dialogs/ContactDialog.astro';
+import Hero from '../../components/home/Hero.astro';
+import OverviewStrip from '../../components/home/OverviewStrip.astro';
+import ProjectDialog from '../../components/projects/ProjectDialog.astro';
+import { projects } from '../../data/es/projects';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
@@ -16,9 +16,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <main id="contenido" class="home-page">
     <Hero
       projects={projects.filter((project) => project.featured)}
-      locale="es"
+      locale="en"
     />
-    <OverviewStrip locale="es" />
+    <OverviewStrip locale="en" />
   </main>
   <AboutDialog />
   <ContactDialog />
