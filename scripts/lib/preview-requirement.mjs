@@ -294,7 +294,7 @@ export function assertStableRepositoryOnlyRequirement(input) {
     input.initial.isVisual !== input.final.isVisual ||
     input.initial.changedFileCount !== input.final.changedFileCount ||
     JSON.stringify(input.initial.changedPaths) !==
-      JSON.stringify(input.final.changedPaths)
+    JSON.stringify(input.final.changedPaths)
   ) {
     throw new PreviewRequirementError(
       'PREVIEW_REQUIREMENT_CHANGED',

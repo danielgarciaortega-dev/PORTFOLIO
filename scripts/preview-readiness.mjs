@@ -64,7 +64,8 @@ async function main() {
     await loadGitHubPreviewRequirement(requirementInput);
 
   if (!initialRequirement.previewRequired) {
-    const finalRequirement = await loadGitHubPreviewRequirement(requirementInput);
+    const finalRequirement =
+      await loadGitHubPreviewRequirement(requirementInput);
     const requirement = assertStableRepositoryOnlyRequirement({
       initial: initialRequirement,
       final: finalRequirement,

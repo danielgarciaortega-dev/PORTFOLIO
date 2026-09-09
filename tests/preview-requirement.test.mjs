@@ -139,8 +139,9 @@ test('loads all changed-file pages and binds to the live head', async () => {
   assert.equal(result.changedFileCount, 101);
   assert.equal(result.changedPaths.length, 101);
   assert.equal(
-    requests.filter((request) => new URL(request.url).pathname.endsWith('/files'))
-      .length,
+    requests.filter((request) =>
+      new URL(request.url).pathname.endsWith('/files'),
+    ).length,
     2,
   );
   for (const request of requests) {
@@ -192,11 +193,12 @@ test('fails closed on incomplete changed-file pagination', async () => {
   );
 });
 
-
 test('fails closed on duplicate changed-file entries', async () => {
   const { fetchImpl } = createGitHubFetch({
     pull: pullRequest({ changed_files: 2 }),
-    pages: [[file('tests/duplicate.test.mjs'), file('tests/duplicate.test.mjs')]],
+    pages: [
+      [file('tests/duplicate.test.mjs'), file('tests/duplicate.test.mjs')],
+    ],
   });
 
   await assert.rejects(
