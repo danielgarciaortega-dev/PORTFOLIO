@@ -16,6 +16,9 @@ const requiredSourcePaths = [
   'scripts/lib/vercel-preview-evidence.mjs',
   'scripts/lib/preview-readiness.mjs',
   'scripts/lib/vercel-preview-fetch.mjs',
+  'scripts/capture-preview-visual-evidence.mjs',
+  'scripts/lib/preview-visual-evidence.mjs',
+  'tests/preview-visual-evidence.test.mjs',
 ];
 
 test('documents the production and preview responsibility split', () => {
@@ -53,6 +56,26 @@ test('references the maintained implementation sources', () => {
   }
 });
 
+test('documents exact-head visual evidence without promoting it to a required gate', () => {
+  assert.match(runbook, /Preview visual evidence/);
+  assert.match(runbook, /preview-visual-evidence-<PR>-<SHA>/);
+  assert.match(runbook, /390×844/);
+  assert.match(runbook, /768×1024/);
+  assert.match(runbook, /1440×900/);
+  assert.match(runbook, /1920×1080/);
+  assert.match(runbook, /not a branch-protection gate/i);
+  assert.match(runbook, /does not approve a PR/i);
+  assert.match(docsIndex, /artifact efímero/i);
+  assert.match(docsIndex, /no es un tercer gate requerido/i);
+});
+
+test('documents visual-evidence secret isolation', () => {
+  assert.match(runbook, /exact validated Preview origin/i);
+  assert.match(runbook, /never contain the secret/i);
+  assert.match(docsIndex, /El secreto no se imprime/i);
+  assert.match(docsIndex, /no se sube al artifact/i);
+});
+
 test('contains an actionable troubleshooting matrix', () => {
   assert.match(runbook, /## 12\. Troubleshooting matrix/);
   assert.match(
@@ -61,6 +84,7 @@ test('contains an actionable troubleshooting matrix', () => {
   );
   assert.match(runbook, /stale head/i);
   assert.match(runbook, /Preview redirects to Vercel auth/);
+  assert.match(runbook, /Preview visual evidence` fails/);
   assert.match(runbook, /Pages deploy job is skipped/);
 });
 

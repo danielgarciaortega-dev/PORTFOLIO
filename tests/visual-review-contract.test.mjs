@@ -31,6 +31,7 @@ test('requires exact-head automated gates and visual review metadata', () => {
 test('keeps desktop and mobile viewport review explicit', () => {
   for (const viewport of ['390×844', '768×1024', '1440×900', '1920×1080']) {
     assert.match(template, new RegExp(viewport));
+    assert.match(qaDocs, new RegExp(viewport));
   }
 
   assert.match(template, /Mobile behavior reviewed/);
@@ -49,6 +50,7 @@ test('does not burden non-visual changes with screenshot churn', () => {
   );
   assert.match(template, /No rendered UI change is intended/);
   assert.match(qaDocs, /cambios no visuales no se deben regenerar capturas/i);
+  assert.match(qaDocs, /Preview visual evidence` se omite/);
 });
 
 test('documents current screenshots truthfully as review artifacts', () => {
@@ -56,6 +58,14 @@ test('documents current screenshots truthfully as review artifacts', () => {
   assert.doesNotMatch(visualSpec, /toHaveScreenshot\(/);
   assert.match(qaDocs, /artefactos de revisión/);
   assert.match(qaDocs, /no assertions de regresión visual por píxel/);
+});
+
+test('documents protected Preview artifacts as evidence rather than approval', () => {
+  assert.match(qaDocs, /preview-visual-evidence-<PR>-<SHA>/);
+  assert.match(qaDocs, /Preview protegido/i);
+  assert.match(qaDocs, /no es un tercer gate requerido/i);
+  assert.match(qaDocs, /no hace pixel-diff/i);
+  assert.match(qaDocs, /no aprueba visualmente la PR/i);
 });
 
 test('keeps automated gates distinct from manual visual review', () => {

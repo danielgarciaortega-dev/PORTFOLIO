@@ -58,14 +58,22 @@ The sequence is:
 
 A stable `*.vercel.app` branch alias is discovery-only. It is not a deployment identity and must never be treated as sufficient proof for the current commit.
 
+### `Preview visual evidence`
+
+Visual PRs run a separate, non-required evidence job after `Preview readiness` succeeds. The readiness job exposes only its already validated Preview URL as a job output; the evidence job checks out the same exact PR head, captures the protected Preview and uploads review artifacts.
+
+This job is deliberately separate from the two protected required checks. A capture failure must not redefine what `Preview readiness` means, and a successful capture must not be interpreted as automatic visual approval.
+
 ## 4. Exact-head evidence implementation
 
 The relevant implementation is intentionally split by responsibility:
 
 - `scripts/lib/vercel-preview-evidence.mjs` — parses and validates provider/GitHub evidence for the exact head;
 - `scripts/lib/preview-readiness.mjs` — bounded waiting, live-head checks, smoke orchestration, diagnostics and final revalidation;
-- `scripts/preview-readiness.mjs` — GitHub Actions entry point;
-- `scripts/lib/vercel-preview-fetch.mjs` — protected-Preview HTTP wrapper and bypass-header isolation;
+- `scripts/preview-readiness.mjs` — GitHub Actions entry point and validated Preview URL output;
+- `scripts/lib/vercel-preview-fetch.mjs` — protected-Preview HTTP wrapper and bypass-header isolation for smoke;
+- `scripts/lib/preview-visual-evidence.mjs` — exact-origin validation, viewport contract, secret-isolated browser headers and manifest creation;
+- `scripts/capture-preview-visual-evidence.mjs` — Playwright capture entry point for exact-head protected Preview evidence;
 - `.github/workflows/validate.yml` — job sequencing and least-privilege workflow wiring.
 
 Regression coverage lives in:
@@ -73,11 +81,12 @@ Regression coverage lives in:
 - `tests/vercel-preview-evidence.test.mjs`;
 - `tests/preview-readiness.test.mjs`;
 - `tests/preview-readiness-workflow.test.mjs`;
+- `tests/preview-visual-evidence.test.mjs`;
 - `tests/vercel-preview-fetch.test.mjs`;
 - `tests/astro-hosting-config.test.mjs`;
 - `tests/vercel-git-policy.test.mjs`.
 
-A previous-head success never satisfies a new push. Each new PR head must obtain fresh `Repository validation`, Vercel evidence, and `Preview readiness`.
+A previous-head success never satisfies a new push. Each new PR head must obtain fresh `Repository validation`, Vercel evidence, and `Preview readiness`. Visual evidence is likewise tied to that immutable head SHA.
 
 ## 5. Preview smoke scope
 
@@ -111,15 +120,16 @@ Deployment Protection remains enabled. Automation uses Vercel's official Protect
 
 Required GitHub Actions repository secret:
 
-- `VERCEL_AUTOMATION_BYPASS_SECRET` — allows deployed HTTP smoke against protected Vercel Preview hosts.
+- `VERCEL_AUTOMATION_BYPASS_SECRET` — allows automated validation and evidence capture against protected Vercel Preview hosts.
 
 Security properties:
 
 - the value is never committed or documented;
-- the workflow passes it only to the Preview readiness job;
-- `scripts/lib/vercel-preview-fetch.mjs` sends it only as `x-vercel-protection-bypass` to HTTPS `*.vercel.app` Preview hosts;
-- GitHub API calls, `vercel.com`, the `vercel.app` apex, lookalike domains and HTTP never receive the secret;
-- no `VERCEL_TOKEN`, `VERCEL_PROJECT_ID`, or `VERCEL_ORG_ID` is required for this gate.
+- the workflow passes it only to the exact-head Preview smoke and visual-evidence capture steps that require protected Preview access;
+- `scripts/lib/vercel-preview-fetch.mjs` sends it only as `x-vercel-protection-bypass` to HTTPS `*.vercel.app` Preview hosts during HTTP smoke;
+- `scripts/lib/preview-visual-evidence.mjs` narrows browser injection further to the exact validated Preview origin, so cross-origin assets, `vercel.com`, the `vercel.app` apex, lookalike domains and HTTP never receive the secret;
+- screenshots and `manifest.json` never contain the secret as workflow metadata;
+- no `VERCEL_TOKEN`, `VERCEL_PROJECT_ID`, or `VERCEL_ORG_ID` is required for these gates or artifacts.
 
 `GITHUB_TOKEN` is the normal GitHub Actions token supplied by GitHub and is used with the read permissions declared in the workflow.
 
@@ -168,7 +178,7 @@ The effective policy is:
 - force/non-fast-forward pushes blocked;
 - repository-admin bypass is limited to pull requests only.
 
-Do not add the raw `Vercel` status as a third required check. `Preview readiness` already validates Vercel deployment identity and deployed smoke for the current head.
+Do not add the raw `Vercel` status or `Preview visual evidence` as another required check. `Preview readiness` already validates Vercel deployment identity and deployed smoke for the current head. Visual evidence supports the separate manual review contract.
 
 The admin bypass is an emergency recovery mechanism, not the normal merge path.
 
@@ -187,13 +197,17 @@ For a **Visual** PR, record and review:
 - intentional visual-evidence updates;
 - expected differences.
 
-Any new push invalidates the prior manual visual review until the new exact-head Preview is ready and reviewed again.
+After `Preview readiness` succeeds, `Preview visual evidence` captures the actual protected Vercel Preview for `/` and `/en/` at all four required viewports. At 390×844 and 768×1024 it also records the opened mobile-menu state. The job uploads `preview-visual-evidence-<PR>-<SHA>` with screenshots plus a `manifest.json` that records the exact head and validated Preview URL.
+
+The artifact is review evidence only. It does not use pixel-diff assertions, it does not approve a PR, and it is not a branch-protection gate. Its purpose is to make the exact protected Preview inspectable even when the reviewer's browser has no interactive Vercel-team session.
+
+Any new push invalidates the prior manual visual review until the new exact-head Preview is ready and reviewed again. The new head also receives a distinct evidence artifact when the PR remains marked Visual.
 
 `Repository validation` and `Preview readiness` are automated gates. They do not replace manual inspection when rendered UI changes.
 
-For **Non-visual** PRs, do not regenerate screenshots solely to create review churn.
+For **Non-visual** PRs, the evidence job is skipped and screenshots must not be regenerated solely to create review churn.
 
-`docs/README.md` documents the current screenshot semantics: `tests/visual.spec.ts` creates review artifacts with `page.screenshot(...)`; it does not currently use `toHaveScreenshot(...)` pixel-diff assertions.
+`docs/README.md` documents both screenshot modes. `tests/visual.spec.ts` creates repository review artifacts with `page.screenshot(...)`; it does not currently use `toHaveScreenshot(...)` pixel-diff assertions. The CI Preview evidence is also screenshot-based manual evidence rather than an automatic visual-regression assertion.
 
 ## 11. Branch and PR lifecycle
 
@@ -202,33 +216,36 @@ Normal lifecycle:
 1. create an isolated issue-owned branch from current `main`;
 2. open a PR targeting `main`;
 3. wait for exact-head `Repository validation` and `Preview readiness`;
-4. perform manual visual review when the change is visual;
-5. update the branch if `main` advanced; the new head must obtain fresh checks;
-6. merge through the protected `main` ruleset;
-7. verify the post-merge GitHub Pages run;
-8. merged same-repository branches are removed by `.github/workflows/branch-cleanup.yml`.
+4. for Visual PRs, wait for `Preview visual evidence` and inspect its exact-head artifact against current production;
+5. perform and record manual visual review when the change is visual;
+6. update the branch if `main` advanced; the new head must obtain fresh checks and fresh visual evidence;
+7. merge through the protected `main` ruleset;
+8. verify the post-merge GitHub Pages run;
+9. merged same-repository branches are removed by `.github/workflows/branch-cleanup.yml`.
 
 `branch-cleanup.yml` intentionally handles merged PR branches only. Abandoned, no-PR, or deliberately unmerged proof branches require explicit audited cleanup; do not broaden automation to delete arbitrary refs without a separate safe lifecycle policy.
 
-Closing a PR without merge must not change `main`. Its Vercel Preview is non-production evidence and may remain provider-visible until Vercel lifecycle/retention removes it.
+Closing a PR without merge must not change `main`. Its Vercel Preview and visual artifact are non-production evidence and may remain available only for their normal provider/artifact retention windows.
 
 ## 12. Troubleshooting matrix
 
-| Symptom                                                        | Likely cause                                                                   | Safe diagnostic                                                                         | Corrective action                                                                                            |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| No Vercel evidence for current head                            | Git Integration missing, delayed, or wrong SHA                                 | Compare live PR head with commit statuses and official `vercel[bot]` inspector evidence | Restore integration or wait within the bounded window; never reuse an older Preview                          |
-| `Preview readiness` reports stale head                         | New commit pushed after workflow started                                       | Compare workflow expected SHA with live PR head                                         | Let the new head's workflow run; do not rerun/approve the old head as evidence                               |
-| Vercel status is green but readiness fails                     | Status alone is insufficient, smoke/evidence mismatch may exist                | Read `Preview readiness` summary/log for inspector and smoke failure                    | Fix the deployment/evidence/smoke problem on a new commit                                                    |
-| Preview redirects to Vercel auth                               | Deployment Protection requires automation bypass                               | Confirm the repository secret name exists; never print its value                        | Configure/rotate `VERCEL_AUTOMATION_BYPASS_SECRET` using Vercel Protection Bypass for Automation             |
-| Preview returns fallback `200` for missing route               | Provider/app fallback masks a 404                                              | Run the readiness smoke and inspect missing-route result                                | Fix routing/fallback configuration; do not weaken the negative smoke check                                   |
-| Preview links/assets contain `/PORTFOLIO/`                     | Pages base leaked into Vercel build                                            | Check `VERCEL`, `VERCEL_URL`, `SITE_URL`, `BASE_PATH` and built markup                  | Restore Vercel base `/`; keep `/PORTFOLIO` only for Pages                                                    |
-| `Repository validation` fails before Preview                   | Code/test/format/dependency failure                                            | Inspect the failing named step/job                                                      | Fix repository validation first; Preview readiness must remain blocked                                       |
-| Chromium install fails on unrelated Google Chrome APT metadata | Hosted runner's unrelated Chrome feed is unhealthy                             | Inspect `Install Chromium` logs                                                         | Keep the PR workflow's source-isolation guard and `playwright install --with-deps chromium`; do not skip E2E |
-| Preview wait times out                                         | Provider never reached usable exact-head state within bound                    | Check current-head Vercel status/comment and workflow timestamps                        | Fix provider integration/build or rerun on the same unchanged head only after cause is understood            |
-| PR stays blocked after checks                                  | Branch not up to date, unresolved conversation, or current-head checks missing | Read ruleset/check state for the current PR head                                        | Update branch, resolve conversation, then obtain fresh required checks                                       |
-| Pages validation/build fails after merge                       | Production build regression or transient infrastructure problem                | Inspect `Deploy to GitHub Pages` jobs on the merge SHA                                  | Fix through a new protected PR; do not promote the Vercel Preview as production                              |
-| Pages deploy job is skipped                                    | `PUBLICATION_APPROVED` is not exactly `true`                                   | Inspect repository variable state without exposing secrets                              | Set the approved publication variable only when production publication is intended                           |
-| Merged branch remains                                          | Cleanup workflow failed or branch is outside its safe conditions               | Inspect `Clean merged branches` workflow and PR head ownership                          | Retry/fix cleanup; handle unmerged/abandoned refs through audited maintenance                                |
+| Symptom                                                        | Likely cause                                                                          | Safe diagnostic                                                                         | Corrective action                                                                                                      |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| No Vercel evidence for current head                            | Git Integration missing, delayed, or wrong SHA                                        | Compare live PR head with commit statuses and official `vercel[bot]` inspector evidence | Restore integration or wait within the bounded window; never reuse an older Preview                                    |
+| `Preview readiness` reports stale head                         | New commit pushed after workflow started                                              | Compare workflow expected SHA with live PR head                                         | Let the new head's workflow run; do not rerun/approve the old head as evidence                                         |
+| Vercel status is green but readiness fails                     | Status alone is insufficient, smoke/evidence mismatch may exist                       | Read `Preview readiness` summary/log for inspector and smoke failure                    | Fix the deployment/evidence/smoke problem on a new commit                                                              |
+| Preview redirects to Vercel auth                               | Deployment Protection requires automation bypass                                      | Confirm the repository secret name exists; never print its value                        | Configure/rotate `VERCEL_AUTOMATION_BYPASS_SECRET` using Vercel Protection Bypass for Automation                       |
+| `Preview visual evidence` fails after readiness succeeds       | Browser capture, localized selector, or protected-origin access regressed             | Inspect the separate evidence job; never expose the secret in diagnostics               | Fix the capture/helper contract without weakening `Preview readiness`; rerun through a new validated head as needed    |
+| Visual artifact is missing on a visual change                  | PR body is not marked `- [x] Visual`, evidence job failed, or files were not produced | Check PR change-type checkbox and the `Preview visual evidence` job                     | Correct the PR classification or capture defect; do not mark manual review complete without exact-head evidence        |
+| Preview returns fallback `200` for missing route               | Provider/app fallback masks a 404                                                     | Run the readiness smoke and inspect missing-route result                                | Fix routing/fallback configuration; do not weaken the negative smoke check                                             |
+| Preview links/assets contain `/PORTFOLIO/`                     | Pages base leaked into Vercel build                                                   | Check `VERCEL`, `VERCEL_URL`, `SITE_URL`, `BASE_PATH` and built markup                  | Restore Vercel base `/`; keep `/PORTFOLIO` only for Pages                                                              |
+| `Repository validation` fails before Preview                   | Code/test/format/dependency failure                                                   | Inspect the failing named step/job                                                      | Fix repository validation first; Preview readiness must remain blocked                                                 |
+| Chromium install fails on unrelated Google Chrome APT metadata | Hosted runner's unrelated Chrome feed is unhealthy                                    | Inspect the failing Chromium install job                                                | Keep the workflow source-isolation guard and `playwright install --with-deps chromium`; do not skip browser validation |
+| Preview wait times out                                         | Provider never reached usable exact-head state within bound                           | Check current-head Vercel status/comment and workflow timestamps                        | Fix provider integration/build or rerun on the same unchanged head only after cause is understood                      |
+| PR stays blocked after checks                                  | Branch not up to date, unresolved conversation, or current-head checks missing        | Read ruleset/check state for the current PR head                                        | Update branch, resolve conversation, then obtain fresh required checks                                                 |
+| Pages validation/build fails after merge                       | Production build regression or transient infrastructure problem                       | Inspect `Deploy to GitHub Pages` jobs on the merge SHA                                  | Fix through a new protected PR; do not promote the Vercel Preview as production                                        |
+| Pages deploy job is skipped                                    | `PUBLICATION_APPROVED` is not exactly `true`                                          | Inspect repository variable state without exposing secrets                              | Set the approved publication variable only when production publication is intended                                     |
+| Merged branch remains                                          | Cleanup workflow failed or branch is outside its safe conditions                      | Inspect `Clean merged branches` workflow and PR head ownership                          | Retry/fix cleanup; handle unmerged/abandoned refs through audited maintenance                                          |
 
 ## 13. Safe reuse in another repository
 
@@ -239,30 +256,27 @@ The reusable design concepts are:
 - bounded provider waiting;
 - deployed smoke before review-ready;
 - least-privilege PR permissions;
-- protected-preview automation access isolated to Preview HTTP requests;
+- protected-preview automation access isolated to validated Preview requests;
+- optional exact-head screenshot artifacts kept separate from required gates;
 - stable required check names;
 - a protected production branch requiring current-head gates;
 - manual visual review tied to the exact validated head.
 
 This repository adapted concepts previously used in AlmaEnBoca, but there is **no runtime dependency** between repositories. The implementation was deliberately evolved instead of copied literally: it does not trust a `Vercel` status context by itself, does not deploy Vercel from GitHub Actions, and cross-checks current GitHub/Vercel evidence before smoke and again after smoke.
 
-When reusing the pattern, re-audit provider behavior, route/base-path requirements, secrets, check names, and repository rules rather than copying identifiers blindly.
+When reusing the pattern, re-audit provider behavior, route/base-path requirements, secrets, check names, artifact retention and repository rules rather than copying identifiers blindly.
 
 ## 14. Source-of-truth map
 
 Use these maintained files when debugging or changing the system:
 
-- `.github/workflows/validate.yml` — PR validation and Preview readiness orchestration;
+- `.github/workflows/validate.yml` — PR validation, Preview readiness and optional visual-evidence orchestration;
 - `.github/workflows/deploy.yml` — GitHub Pages production validation/build/deploy;
 - `.github/workflows/branch-cleanup.yml` — merged branch cleanup;
 - `.github/pull_request_template.md` — manual visual-review contract;
 - `vercel.json` — blocks Vercel Git deployments from `main`;
 - `astro.config.mjs` and `scripts/lib/hosting-config.mjs` — environment-aware site/base behavior;
-- `scripts/preview-readiness.mjs` — Actions entry point;
-- `scripts/lib/vercel-preview-evidence.mjs` — exact-head provider evidence;
-- `scripts/lib/preview-readiness.mjs` — readiness orchestration and smoke;
-- `scripts/lib/vercel-preview-fetch.mjs` — protected Preview HTTP access;
-- `tests/*preview*.test.mjs`, `tests/astro-hosting-config.test.mjs`, `tests/vercel-git-policy.test.mjs` — automated regression coverage;
-- `docs/README.md` — visual evidence semantics.
-
-If these files and this document disagree, fix the inconsistency in the same PR rather than relying on issue history.
+- `scripts/preview-readiness.mjs` and `scripts/lib/preview-readiness.mjs` — exact-head readiness entry/orchestration;
+- `scripts/lib/vercel-preview-evidence.mjs` and `scripts/lib/vercel-preview-fetch.mjs` — provider evidence and protected smoke isolation;
+- `scripts/capture-preview-visual-evidence.mjs` and `scripts/lib/preview-visual-evidence.mjs` — exact-head protected Preview screenshot evidence;
+- `tests/preview-readiness-workflow.test.mjs` and `tests/preview-visual-evidence.test.mjs` — workflow/evidence security contracts.

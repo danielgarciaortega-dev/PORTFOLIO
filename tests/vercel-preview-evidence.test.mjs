@@ -36,6 +36,16 @@ function vercelComment(overrides = {}) {
   };
 }
 
+function vercelQuotaComment(overrides = {}) {
+  return {
+    id: 5609328531,
+    body: 'Deployment failed for project portfolio with the following error:\nResource is limited - try again in 24 hours (more than 100, code: "api-deployments-free-per-day").',
+    updated_at: '2026-09-09T22:00:18Z',
+    user: { login: 'vercel[bot]', type: 'Bot' },
+    ...overrides,
+  };
+}
+
 function resolve(overrides = {}) {
   return resolveVercelPreviewEvidence({
     expectedHeadSha: HEAD,
@@ -83,6 +93,30 @@ test('treats a pending current-head Vercel deployment as retryable', () => {
     () => resolve({ statuses: [vercelStatus({ state: 'pending' })] }),
     'VERCEL_STATUS_PENDING',
     true,
+  );
+});
+
+test('reports official Vercel deployment quota exhaustion distinctly', () => {
+  expectEvidenceError(
+    () =>
+      resolve({
+        statuses: [vercelStatus({ state: 'error' })],
+        comments: [vercelQuotaComment()],
+      }),
+    'VERCEL_DEPLOYMENT_QUOTA_EXHAUSTED',
+  );
+});
+
+test('does not trust spoofed deployment quota text from a non-bot author', () => {
+  expectEvidenceError(
+    () =>
+      resolve({
+        statuses: [vercelStatus({ state: 'error' })],
+        comments: [
+          vercelQuotaComment({ user: { login: 'attacker', type: 'User' } }),
+        ],
+      }),
+    'VERCEL_STATUS_FAILED',
   );
 });
 
