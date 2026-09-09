@@ -147,7 +147,6 @@ export const dialogCopy: Record<Locale, DialogCopy> = {
     contactIntro: 'Email me or find me on LinkedIn and GitHub.',
     copyEmail: 'Copy email',
     copySuccess: 'Email copied',
-    copyFallback:
-      'Email selected. Press Ctrl+C or Command+C to copy it.',
+    copyFallback: 'Email selected. Press Ctrl+C or Command+C to copy it.',
   },
 };
