@@ -1,14 +1,16 @@
 ---
 import type { Project } from '../../data/types';
+import type { Locale } from '../../i18n/locale';
 import ProjectCard from './ProjectCard.astro';
 
 interface Props {
   projects: Project[];
+  locale: Locale;
 }
 
-const { projects } = Astro.props;
+const { projects, locale } = Astro.props;
 ---
 
 <div class="project-list">
-  {projects.map((project) => <ProjectCard {project} />)}
+  {projects.map((project) => <ProjectCard {project} {locale} />)}
 </div>
