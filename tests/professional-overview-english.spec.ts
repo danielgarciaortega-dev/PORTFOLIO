@@ -1,15 +1,15 @@
 import { expect, test } from '@playwright/test';
 
-test('professional overview uses the approved English education, experience and technology copy', async ({
-  page,
-}) => {
+test('professional overview uses approved English copy', async ({ page }) => {
   await page.goto('./');
 
   const overview = page.locator('.home-overview');
   await expect(overview).toBeVisible();
   await expect(overview).toHaveAttribute('aria-label', 'Professional overview');
 
-  await expect(overview.getByText('Technologies', { exact: true })).toBeVisible();
+  await expect(
+    overview.getByText('Technologies', { exact: true }),
+  ).toBeVisible();
   await expect(overview.getByText('Education', { exact: true })).toBeVisible();
   await expect(overview.getByText('Experience', { exact: true })).toBeVisible();
 
@@ -42,7 +42,9 @@ test('professional overview uses the approved English education, experience and 
   await expect(overview.getByText('Tools', { exact: true })).toBeVisible();
   await expect(overview.getByText('REST APIs', { exact: true })).toBeVisible();
 
-  await expect(overview.locator('.home-overview__technologies li')).toHaveCount(22);
+  await expect(
+    overview.locator('.home-overview__technologies li'),
+  ).toHaveCount(22);
   await expect(overview.locator('.home-overview__technologies li img')).toHaveCount(
     22,
   );
