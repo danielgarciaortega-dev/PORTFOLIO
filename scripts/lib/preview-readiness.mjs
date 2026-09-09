@@ -50,7 +50,11 @@ export async function fetchPreviewResource(fetchImpl, url, options = {}) {
   const originalHostname = new URL(url).hostname;
   let currentUrl = url;
 
-  for (let redirectCount = 0; redirectCount <= maxRedirects; redirectCount += 1) {
+  for (
+    let redirectCount = 0;
+    redirectCount <= maxRedirects;
+    redirectCount += 1
+  ) {
     const response = await fetchImpl(currentUrl, {
       method: 'GET',
       redirect: 'manual',
@@ -254,7 +258,9 @@ export async function loadGitHubPreviewEvidence(input) {
     .map((part) => encodeURIComponent(part))
     .join('/');
   const [pullRequest, combinedStatus, comments] = await Promise.all([
-    getJson(`/repos/${encodedRepository}/pulls/${encodeURIComponent(prNumber)}`),
+    getJson(
+      `/repos/${encodedRepository}/pulls/${encodeURIComponent(prNumber)}`,
+    ),
     getJson(
       `/repos/${encodedRepository}/commits/${encodeURIComponent(expectedHeadSha)}/status`,
     ),

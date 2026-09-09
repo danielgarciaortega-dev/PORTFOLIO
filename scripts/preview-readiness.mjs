@@ -50,7 +50,9 @@ async function main() {
     timeoutMs,
     pollIntervalMs,
     onRetry(error) {
-      console.log(`Waiting for Vercel evidence [${error.code}]: ${error.message}`);
+      console.log(
+        `Waiting for Vercel evidence [${error.code}]: ${error.message}`,
+      );
     },
   });
 
@@ -78,7 +80,8 @@ async function main() {
 }
 
 main().catch((error) => {
-  const code = typeof error?.code === 'string' ? error.code : 'UNEXPECTED_ERROR';
+  const code =
+    typeof error?.code === 'string' ? error.code : 'UNEXPECTED_ERROR';
   const message = error instanceof Error ? error.message : String(error);
   console.error(`Preview readiness failed [${code}]: ${message}`);
   process.exitCode = 1;

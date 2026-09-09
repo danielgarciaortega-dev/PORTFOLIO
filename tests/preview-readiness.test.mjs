@@ -113,7 +113,9 @@ test('fails immediately when the live PR head becomes stale', async () => {
       waitForPreviewEvidence({
         expectedHeadSha: HEAD,
         loadEvidence: async () =>
-          evidenceInput({ liveHeadSha: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' }),
+          evidenceInput({
+            liveHeadSha: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+          }),
       }),
     (error) => {
       assert.equal(error.code, 'STALE_HEAD');
@@ -329,19 +331,16 @@ test('detects deployment protection redirects to Vercel control infrastructure',
 
 test('allows bounded same-host redirects', async () => {
   let calls = 0;
-  const response = await fetchPreviewResource(
-    async () => {
-      calls += 1;
-      if (calls === 1) {
-        return new Response(null, {
-          status: 308,
-          headers: { location: '/en/' },
-        });
-      }
-      return htmlResponse();
-    },
-    `${PREVIEW}en`,
-  );
+  const response = await fetchPreviewResource(async () => {
+    calls += 1;
+    if (calls === 1) {
+      return new Response(null, {
+        status: 308,
+        headers: { location: '/en/' },
+      });
+    }
+    return htmlResponse();
+  }, `${PREVIEW}en`);
 
   assert.equal(response.status, 200);
   assert.equal(calls, 2);
