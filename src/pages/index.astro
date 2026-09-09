@@ -14,7 +14,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   currentPage="home"
 >
   <main id="contenido" class="home-page">
-    <Hero projects={projects.filter((project) => project.featured)} locale="es" />
+    <Hero
+      projects={projects.filter((project) => project.featured)}
+      locale="es"
+    />
     <OverviewStrip locale="es" />
   </main>
   <AboutDialog />

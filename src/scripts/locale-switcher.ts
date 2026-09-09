@@ -1,7 +1,4 @@
-import {
-  isLocale,
-  persistLocalePreference,
-} from '../i18n/locale';
+import { isLocale, persistLocalePreference } from '../i18n/locale';
 
 for (const link of document.querySelectorAll<HTMLElement>('[data-locale-link]')) {
   link.addEventListener('click', () => {

@@ -42,9 +42,9 @@ test('Spanish root renders the restored shell, hero and professional overview', 
   await expect(overview).toContainText('Datos');
   await expect(overview).toContainText('Herramientas');
   await expect(overview).toContainText('APIs REST');
-  await expect(overview.locator('.home-overview__technologies li img')).toHaveCount(
-    22,
-  );
+  await expect(
+    overview.locator('.home-overview__technologies li img'),
+  ).toHaveCount(22);
 
   const footer = page.locator('.site-footer');
   await footer.scrollIntoViewIfNeeded();
