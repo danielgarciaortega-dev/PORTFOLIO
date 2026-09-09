@@ -137,9 +137,7 @@ test('el modal de contacto permite copiar el correo y enlaza a LinkedIn y GitHub
     page.getByRole('navigation', { name: 'Main navigation' }),
   ).not.toContainText('Contact');
 
-  const contactTrigger = page
-    .getByRole('button', { name: 'Contact' })
-    .first();
+  const contactTrigger = page.getByRole('button', { name: 'Contact' }).first();
   await contactTrigger.click();
   const contactDialog = page.getByRole('dialog', { name: 'Hablemos.' });
   await expect(contactDialog).toBeVisible();
