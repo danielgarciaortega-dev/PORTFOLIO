@@ -3,12 +3,12 @@ import type { Experience } from '../types';
 export const experience: Experience[] = [
   {
     company: 'Salunox',
-    role: 'Desarrollador web en prácticas',
+    role: 'Web Development Intern',
     period: '2026 — 2026',
-    mode: 'Prácticas',
-    context: 'Plataforma SaaS sanitaria',
+    mode: 'Internship',
+    context: 'Healthcare SaaS platform',
     description:
-      'Corrección de incidencias y validación de funcionalidades web y móviles relacionadas con pacientes, citas y notificaciones.',
+      'Fixed issues and validated web and mobile features related to patients, appointments and notifications.',
     technologies: [
       'Angular',
       'TypeScript',
@@ -21,21 +21,21 @@ export const experience: Experience[] = [
   },
   {
     company: 'Konecta',
-    role: 'Venta telefónica y atención al cliente',
+    role: 'Telesales and Customer Service',
     period: '2023 — 2026',
-    mode: 'Teletrabajo',
+    mode: 'Remote',
     description:
-      'Venta telefónica de servicios de energía, gestión de objeciones, resolución de consultas y seguimiento diario de objetivos comerciales.',
+      'Sold energy services by phone, handled objections, resolved customer queries and tracked daily sales targets.',
     technologies: [],
     logo: 'images/companies/konecta.webp',
   },
   {
     company: 'Alcampo',
-    role: 'Atención al cliente',
+    role: 'Customer Service',
     period: '2017 — 2023',
-    mode: 'Presencial',
+    mode: 'On-site',
     description:
-      'Atención al cliente en tienda, resolución de incidencias y apoyo en la operativa diaria junto al resto del equipo.',
+      'Provided in-store customer service, resolved issues and supported day-to-day operations with the wider team.',
     technologies: [],
     logo: 'images/companies/alcampo.webp',
   },
