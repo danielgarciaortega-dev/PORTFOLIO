@@ -139,12 +139,12 @@ test('el modal de contacto permite copiar el correo y enlaza a LinkedIn y GitHub
 
   const contactTrigger = page.getByRole('button', { name: 'Contact' }).first();
   await contactTrigger.click();
-  const contactDialog = page.getByRole('dialog', { name: 'Hablemos.' });
+  const contactDialog = page.getByRole('dialog', { name: 'Get in touch.' });
   await expect(contactDialog).toBeVisible();
 
   await expect(contactDialog).toContainText('dangarort123@gmail.com');
   await expect(
-    contactDialog.getByRole('button', { name: 'Copiar correo' }),
+    contactDialog.getByRole('button', { name: 'Copy email' }),
   ).toBeVisible();
   await expect(
     contactDialog.getByRole('link', { name: 'LinkedIn' }),
@@ -170,8 +170,8 @@ test('copiar correo en el modal de contacto muestra confirmación visible', asyn
   await page.getByRole('button', { name: 'Contact' }).first().click();
   const status = page.locator('[data-copy-status]');
   await expect(status).toBeEmpty();
-  await page.getByRole('button', { name: 'Copiar correo' }).click();
-  await expect(status).toHaveText(/copiado/i);
+  await page.getByRole('button', { name: 'Copy email' }).click();
+  await expect(status).toHaveText(/copied/i);
   await expect(status).toBeVisible();
   const clipboardText = await page.evaluate(() =>
     navigator.clipboard.readText(),
@@ -203,7 +203,7 @@ test('el footer muestra enlaces con icono (GitHub, LinkedIn, CV, contacto) sin t
   );
 
   await footer.getByRole('button', { name: 'Contact' }).click();
-  await expect(page.getByRole('dialog', { name: 'Hablemos.' })).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Get in touch.' })).toBeVisible();
 });
 
 test('la franja profesional muestra logos junto a tecnologías, formación y experiencia', async ({
