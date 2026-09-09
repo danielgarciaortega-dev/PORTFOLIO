@@ -76,7 +76,10 @@ test('runs readiness without Vercel deployment commands', () => {
 test('exports only the validated exact-head Preview URL to a downstream job', () => {
   assert.match(workflow, /id: preview_readiness/);
   assert.match(readinessEntry, /process\.env\.GITHUB_OUTPUT/);
-  assert.match(readinessEntry, /preview_url=\$\{result\.evidence\.previewUrl\}/);
+  assert.match(
+    readinessEntry,
+    /preview_url=\$\{result\.evidence\.previewUrl\}/,
+  );
   assert.match(
     workflow,
     /outputs:\s*\n\s*preview_url: \$\{\{ steps\.preview_readiness\.outputs\.preview_url \}\}/,
@@ -88,7 +91,10 @@ test('exports only the validated exact-head Preview URL to a downstream job', ()
 });
 
 test('keeps visual evidence separate from the two required gates', () => {
-  assert.match(workflow, /visual_evidence:\s*\n\s*name: Preview visual evidence/);
+  assert.match(
+    workflow,
+    /visual_evidence:\s*\n\s*name: Preview visual evidence/,
+  );
   assert.match(workflow, /visual_evidence:[\s\S]*?needs: preview/);
   assert.match(
     workflow,
