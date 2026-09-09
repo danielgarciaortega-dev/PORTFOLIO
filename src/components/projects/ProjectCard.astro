@@ -31,7 +31,7 @@ const { project } = Astro.props;
     </div>
     <h2>{project.title}</h2>
     <p class="project-row__description">{project.shortDescription}</p>
-    <ul class="tag-list" aria-label={`Tecnologías de ${project.title}`}>
+    <ul class="tag-list" aria-label={`Technologies for ${project.title}`}>
       {project.technologies.map((technology) => <li>{technology}</li>)}
     </ul>
     <button
@@ -39,7 +39,7 @@ const { project } = Astro.props;
       class="text-action"
       data-dialog-open={`project-${project.id}`}
     >
-      Ver proyecto
+      View project
       <svg viewBox="0 0 20 20" aria-hidden="true"
         ><path d="M4 10h11m-4-4 4 4-4 4"></path></svg
       >
