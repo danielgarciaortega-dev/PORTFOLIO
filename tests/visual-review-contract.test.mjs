@@ -16,7 +16,10 @@ test('requires exact-head automated gates and visual review metadata', () => {
     'Intentionally changed surfaces',
     'Expected visual differences',
   ]) {
-    assert.match(template, new RegExp(requiredText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.match(
+      template,
+      new RegExp(requiredText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+    );
   }
 
   assert.match(
@@ -26,7 +29,12 @@ test('requires exact-head automated gates and visual review metadata', () => {
 });
 
 test('keeps desktop and mobile viewport review explicit', () => {
-  for (const viewport of ['390×844', '768×1024', '1440×900', '1920×1080']) {
+  for (const viewport of [
+    '390×844',
+    '768×1024',
+    '1440×900',
+    '1920×1080',
+  ]) {
     assert.match(template, new RegExp(viewport));
   }
 
@@ -53,12 +61,6 @@ test('documents current screenshots truthfully as review artifacts', () => {
 });
 
 test('keeps automated gates distinct from manual visual review', () => {
-  assert.match(
-    template,
-    /automated gates do not replace manual visual review/i,
-  );
-  assert.match(
-    qaDocs,
-    /permanecen separados de la aprobación visual manual/,
-  );
+  assert.match(template, /automated gates do not replace manual visual review/i);
+  assert.match(qaDocs, /permanecen separados de la aprobación visual manual/);
 });
