@@ -9,10 +9,7 @@
  * @param {string | undefined} protectionBypassSecret
  * @returns {typeof fetch}
  */
-export function createVercelPreviewFetch(
-  fetchImpl,
-  protectionBypassSecret,
-) {
+export function createVercelPreviewFetch(fetchImpl, protectionBypassSecret) {
   const secret = protectionBypassSecret?.trim();
   if (!secret) return fetchImpl;
 
