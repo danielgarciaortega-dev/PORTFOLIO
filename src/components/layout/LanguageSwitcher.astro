@@ -71,17 +71,19 @@ const englishUrl = withBase('en/');
     gap: 0.9rem;
   }
 
+  .language-switcher--desktop a,
   .language-switcher--desktop span {
     position: relative;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
     padding: 0.68rem 0;
-    color: var(--color-text);
+    color: var(--color-text-muted);
     font-size: 0.91rem;
     font-weight: 650;
   }
 
+  .language-switcher--desktop a::after,
   .language-switcher--desktop span::after {
     content: '';
     position: absolute;
@@ -90,6 +92,20 @@ const englishUrl = withBase('en/');
     left: 0;
     height: 2px;
     background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 200ms ease;
+  }
+
+  .language-switcher--desktop a:hover,
+  .language-switcher--desktop span[aria-current='true'] {
+    color: var(--color-text);
+  }
+
+  .language-switcher--desktop a:hover::after,
+  .language-switcher--desktop span[aria-current='true']::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
   .language-switcher--mobile {
