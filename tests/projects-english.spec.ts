@@ -35,7 +35,7 @@ test('project cards and dialogs use approved English copy', async ({
     .click();
   const sidn = page.getByRole('dialog', { name: 'SIDN Cost Control' });
   await expect(sidn).toContainText(
-    'Team-built application for tracking and comparing advertising campaign spend.',
+    'SIDN Cost Control provides a management dashboard for viewing and comparing advertising campaign spend.',
   );
   await expect(sidn).toContainText('Winner of I Edición GEN AI ARENA');
   await page.keyboard.press('Escape');
