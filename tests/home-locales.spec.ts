@@ -70,7 +70,9 @@ test('language switcher navigates between locale routes and persists explicit ch
 
   const desktopAppearance = await spanishSwitcher.evaluate((switcher) => {
     const switcherStyles = getComputedStyle(switcher);
-    const current = switcher.querySelector<HTMLElement>('[aria-current="true"]');
+    const current = switcher.querySelector<HTMLElement>(
+      '[aria-current="true"]',
+    );
     const currentStyles = current ? getComputedStyle(current) : null;
 
     return {
