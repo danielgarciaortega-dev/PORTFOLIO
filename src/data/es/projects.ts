@@ -5,15 +5,15 @@ export const projects: Project[] = [
     id: 'al-lio',
     title: 'AL-LÍO',
     shortDescription:
-      'AL-LÍO centraliza tareas, calendario, formación y oportunidades profesionales para reducir la fragmentación entre distintas herramientas.',
+      'AL-LÍO brings tasks, calendar, learning and professional opportunities into one place to reduce switching between separate tools.',
     modalDescription:
-      'AL-LÍO centraliza tareas, calendario, formación y oportunidades profesionales para reducir la fragmentación entre distintas herramientas.',
+      'AL-LÍO brings tasks, calendar, learning and professional opportunities into one place to reduce switching between separate tools.',
     objective:
-      'Reducir la fragmentación entre gestores de tareas, calendarios y portales de oportunidades profesionales.',
+      'Reduce fragmentation across task managers, calendars and professional opportunity portals.',
     solution:
-      'Una única interfaz para organizar tareas, calendario, formación y seguimiento de oportunidades.',
+      'A single interface for managing tasks, calendar, learning and opportunity tracking.',
     context: 'Aircury Summer of Code 2026',
-    role: 'Diseño de producto, arquitectura y desarrollo full-stack.',
+    role: 'Product design, architecture and full-stack development.',
     status: 'en-desarrollo',
     featured: true,
     technologies: [
@@ -26,7 +26,7 @@ export const projects: Project[] = [
       'Docker',
     ],
     image: 'images/projects/al-lio.webp',
-    imageAlt: 'Símbolo de identidad de AL-LÍO',
+    imageAlt: 'AL-LÍO brand symbol',
     repositoryUrl: 'https://github.com/danielgarciaortega-dev/al-lio',
     liveUrl: 'https://al-lio.danielcode.dev',
     eventUrl: null,
@@ -37,52 +37,52 @@ export const projects: Project[] = [
     id: 'sidn-cost-control',
     title: 'SIDN Cost Control',
     shortDescription:
-      'Aplicación desarrollada en equipo para controlar y comparar el gasto de campañas publicitarias.',
+      'Team-built application for tracking and comparing advertising campaign spend.',
     modalDescription:
-      'SIDN Cost Control permite consultar y comparar el gasto de campañas publicitarias desde un panel de gestión.',
+      'SIDN Cost Control provides a management dashboard for viewing and comparing advertising campaign spend.',
     objective:
-      'Facilitar el control y la comparación del gasto de campañas publicitarias.',
+      'Make it easier to track and compare advertising campaign spend.',
     solution:
-      'Aplicación en equipo con backend FastAPI y BigQuery y un panel de gestión construido con React y Vite.',
+      'Team-built application with a FastAPI and BigQuery backend and a management dashboard built with React and Vite.',
     context: 'I Edición GEN AI ARENA',
     role: null,
     status: 'premiado',
     featured: true,
     technologies: ['Python', 'FastAPI', 'BigQuery', 'React', 'Vite'],
     image: 'images/projects/sidn-cost-control.webp',
-    imageAlt: 'Insignia de ganador de Gen AI Arena',
+    imageAlt: 'GEN AI ARENA winner badge',
     repositoryUrl: null,
     liveUrl: null,
     eventUrl: 'https://www.arenasidn.com/edicion-1',
-    award: 'Ganador de la I Edición GEN AI ARENA',
+    award: 'Winner of I Edición GEN AI ARENA',
     metrics: [],
   },
   {
     id: 'feedback2action',
     title: 'Feedback2Action',
     shortDescription:
-      'Análisis de reseñas para agrupar problemas y priorizar acciones mediante datos e inteligencia artificial.',
+      'Review analysis that groups recurring problems and prioritizes actions using data and AI.',
     modalDescription:
-      'Feedback2Action transforma grandes volúmenes de reseñas en grupos de problemas y acciones priorizadas.',
+      'Feedback2Action turns large volumes of reviews into grouped problems and prioritized actions.',
     objective:
-      'Convertir feedback masivo y disperso en problemas agrupados y decisiones accionables.',
+      'Turn large, scattered feedback into grouped problems and actionable decisions.',
     solution:
-      'Análisis de 22.376 reseñas con Python y BigQuery, obteniendo 409 grupos de problemas y 108 acciones priorizadas con Vertex AI.',
+      'Analyzed 22,376 reviews with Python and BigQuery, producing 409 problem groups and 108 prioritized actions with Vertex AI.',
     context: 'I Edición GEN AI ARENA',
     role: null,
     status: 'finalizado',
     featured: true,
     technologies: ['Python', 'FastAPI', 'BigQuery', 'Vertex AI'],
     image: 'images/projects/feedback2action.webp',
-    imageAlt: 'Identidad visual de Feedback2Action',
+    imageAlt: 'Feedback2Action visual identity',
     repositoryUrl: null,
     liveUrl: null,
     eventUrl: 'https://www.arenasidn.com/edicion-1',
     award: null,
     metrics: [
-      '22.376 reseñas analizadas',
-      '409 grupos de problemas',
-      '108 acciones priorizadas',
+      '22,376 reviews analyzed',
+      '409 problem groups',
+      '108 prioritized actions',
     ],
   },
 ];
