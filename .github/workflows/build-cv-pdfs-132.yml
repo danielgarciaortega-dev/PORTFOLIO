@@ -29,7 +29,7 @@ jobs:
       - name: Integrate dual export boundary
         run: |
           node scripts/prepare-cv-132.mjs
-          npx prettier scripts/export-cv.mjs scripts/lib/cv-export.mjs tests/cv-export-contract.test.mjs tests/cv-pdf-locales.spec.ts tests/cv-baseline.spec.ts public/en/cv/index.html package.json --write
+          npx prettier scripts/prepare-cv-132.mjs scripts/export-cv.mjs scripts/lib/cv-export.mjs tests/cv-export-contract.test.mjs tests/cv-pdf-locales.spec.ts tests/cv-baseline.spec.ts public/en/cv/index.html package.json --write
 
       - name: Prove fail-closed contract with deterministic fixtures
         run: node --test tests/cv-export-contract.test.mjs
