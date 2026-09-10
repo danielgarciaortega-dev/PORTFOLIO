@@ -1,0 +1,61 @@
+name: Cleanup obsolete overview logo CSS once
+
+on:
+  push:
+    branches: [maint/42-remove-obsolete-overview-logo-css]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout maintenance branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: maint/42-remove-obsolete-overview-logo-css
+
+      - name: Remove obsolete selectors exactly once
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/styles/global.css')
+          source = path.read_text()
+          block = '''.overview-organization__logo {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            border-radius: 0.55rem;
+            background: var(--color-surface);
+          }
+
+          .overview-organization__logo img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+          }
+
+          '''
+          if source.count(block) != 1:
+              raise SystemExit(f'expected obsolete block exactly once, found {source.count(block)}')
+          updated = source.replace(block, '', 1)
+          if 'overview-organization__logo' in updated:
+              raise SystemExit('obsolete selector still present after cleanup')
+          path.write_text(updated)
+          PY
+
+      - name: Commit cleanup and remove one-shot
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/cleanup-overview-logo-css-42.yml
+          git add src/styles/global.css tests/overview-logo-dead-css.spec.ts
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'style: remove obsolete overview logo CSS'
+          git push origin HEAD:maint/42-remove-obsolete-overview-logo-css
