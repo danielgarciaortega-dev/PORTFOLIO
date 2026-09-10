@@ -158,33 +158,57 @@ test('documents the final bilingual shell and its ownership boundaries', () => {
   assert.match(docsIndex, /operations\/FINAL_SHELL\.md/);
 });
 
-test('top-level agent instructions match the current bilingual architecture', () => {
-  assert.doesNotMatch(agents, /Sitio en español\./);
-  assert.match(agents, /Spanish and English are first-class public locales/);
-  assert.match(agents, /Spanish default\/root home at `\/`/);
-  assert.match(agents, /English home at `\/en\/`/);
-  assert.match(agents, /Exactly one target-locale action/);
-  assert.match(agents, /Current projects route: `\/proyectos\/`/);
-  assert.match(agents, /#53 owns the future English counterpart `\/en\/projects\/`/);
-  assert.match(agents, /Current CV route: `\/cv\/`/);
-  assert.match(agents, /#55 owns the future English counterpart `\/en\/cv\/`/);
-  assert.match(agents, /GitHub Pages is canonical production/);
-  assert.match(agents, /Repository validation` is the authoritative code\/test gate/);
-  assert.match(agents, /must never be used to conceal a failing `Repository validation`/);
-  assert.match(agents, /Never revive, merge, rebase forward or cherry-pick/);
-});
+test(
+  'top-level agent instructions match the current bilingual architecture',
+  () => {
+    assert.doesNotMatch(agents, /Sitio en español\./);
+    assert.match(agents, /Spanish and English are first-class public locales/);
+    assert.match(agents, /Spanish default\/root home at `\/`/);
+    assert.match(agents, /English home at `\/en\/`/);
+    assert.match(agents, /Exactly one target-locale action/);
+    assert.match(agents, /Current projects route: `\/proyectos\/`/);
+    assert.match(
+      agents,
+      /#53 owns the future English counterpart `\/en\/projects\/`/,
+    );
+    assert.match(agents, /Current CV route: `\/cv\/`/);
+    assert.match(agents, /#55 owns the future English counterpart `\/en\/cv\/`/);
+    assert.match(agents, /GitHub Pages is canonical production/);
+    assert.match(
+      agents,
+      /Repository validation` is the authoritative code\/test gate/,
+    );
+    assert.match(
+      agents,
+      /must never be used to conceal a failing `Repository validation`/,
+    );
+    assert.match(agents, /Never revive, merge, rebase forward or cherry-pick/);
+  },
+);
 
-test('README distinguishes deployed routes from planned bilingual counterparts', () => {
-  assert.match(rootReadme, /## Bilingual architecture/);
-  assert.match(rootReadme, /Spanish:\s+`\/`/);
-  assert.match(rootReadme, /English:\s+`\/en\/`/);
-  assert.match(rootReadme, /current projects and CV entry points remain `\/proyectos\/` and `\/cv\/`/);
-  assert.match(rootReadme, /must not present planned `\/en\/projects\/` or `\/en\/cv\/` counterparts as already deployed/);
-  assert.match(rootReadme, /GitHub Pages is canonical production/);
-  assert.match(rootReadme, /Vercel remains configured only as PR Preview\/review infrastructure/);
-  assert.match(rootReadme, /docs\/operations\/FINAL_SHELL\.md/);
-  assert.match(rootReadme, /docs\/operations\/PREVIEW_AND_PAGES\.md/);
-});
+test(
+  'README distinguishes deployed routes from planned bilingual counterparts',
+  () => {
+    assert.match(rootReadme, /## Bilingual architecture/);
+    assert.match(rootReadme, /Spanish:\s+`\/`/);
+    assert.match(rootReadme, /English:\s+`\/en\/`/);
+    assert.match(
+      rootReadme,
+      /current projects and CV entry points remain `\/proyectos\/` and `\/cv\/`/,
+    );
+    assert.match(
+      rootReadme,
+      /must not present planned `\/en\/projects\/` or `\/en\/cv\/` counterparts as already deployed/,
+    );
+    assert.match(rootReadme, /GitHub Pages is canonical production/);
+    assert.match(
+      rootReadme,
+      /Vercel remains configured only as PR Preview\/review infrastructure/,
+    );
+    assert.match(rootReadme, /docs\/operations\/FINAL_SHELL\.md/);
+    assert.match(rootReadme, /docs\/operations\/PREVIEW_AND_PAGES\.md/);
+  },
+);
 
 test('docs index limits owner recovery to external Preview failures', () => {
   assert.match(docsIndex, /bypass de recuperación limitada a pull requests/i);
