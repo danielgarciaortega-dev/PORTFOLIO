@@ -103,11 +103,20 @@ test('links the runbook from the docs index', () => {
 });
 
 test('documents safe stale-branch retirement without broad automatic deletion', () => {
-  assert.match(branchLifecycle, /branch-cleanup\.yml` is intentionally merge-driven/i);
+  assert.match(
+    branchLifecycle,
+    /branch-cleanup\.yml` is intentionally merge-driven/i,
+  );
   assert.match(branchLifecycle, /does \*\*not\*\* delete/i);
   assert.match(branchLifecycle, /abandoned branches with no pull request/i);
   assert.match(branchLifecycle, /delete only the exact audited ref/i);
-  assert.match(branchLifecycle, /Do not add glob-based, age-only or ownership-blind deletion/i);
+  assert.match(
+    branchLifecycle,
+    /Do not add glob-based, age-only or ownership-blind deletion/i,
+  );
   assert.match(branchLifecycle, /#53 must start from a fresh branch/i);
-  assert.match(branchLifecycle, /#54 must start only after the new #53 is merged/i);
+  assert.match(
+    branchLifecycle,
+    /#54 must start only after the new #53 is merged/i,
+  );
 });
