@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const pageSource = await readFile(new URL('../src/pages/404.astro', import.meta.url), 'utf8');
+const pageSource = await readFile(
+  new URL('../src/pages/404.astro', import.meta.url),
+  'utf8',
+);
 const runtimeSource = await readFile(
   new URL('../src/scripts/not-found-locale.ts', import.meta.url),
   'utf8',
