@@ -8,10 +8,7 @@ const branchLifecycle = readFileSync(
   'docs/operations/BRANCH_LIFECYCLE.md',
   'utf8',
 );
-const shellContract = readFileSync(
-  'docs/operations/FINAL_SHELL.md',
-  'utf8',
-);
+const shellContract = readFileSync('docs/operations/FINAL_SHELL.md', 'utf8');
 
 const requiredSourcePaths = [
   '.github/workflows/validate.yml',
@@ -148,7 +145,13 @@ test('documents the final bilingual shell and its ownership boundaries', () => {
   assert.match(shellContract, /desktop widths above 900 px/i);
   assert.match(shellContract, /At 900 px and below/i);
   assert.match(shellContract, /numbered primary navigation/i);
-  assert.match(shellContract, /CV-specific professional-footer|professional-footer/i);
-  assert.match(shellContract, /evidence from another SHA must never be reused/i);
+  assert.match(
+    shellContract,
+    /CV-specific professional-footer|professional-footer/i,
+  );
+  assert.match(
+    shellContract,
+    /evidence from another SHA must never be reused/i,
+  );
   assert.match(docsIndex, /operations\/FINAL_SHELL\.md/);
 });
