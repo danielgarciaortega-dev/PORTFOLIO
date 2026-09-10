@@ -8,6 +8,7 @@ const branchLifecycle = readFileSync(
   'docs/operations/BRANCH_LIFECYCLE.md',
   'utf8',
 );
+const shellContract = readFileSync('docs/operations/FINAL_SHELL.md', 'utf8');
 
 const requiredSourcePaths = [
   '.github/workflows/validate.yml',
@@ -119,4 +120,38 @@ test('documents safe stale-branch retirement without broad automatic deletion', 
     branchLifecycle,
     /#54 must start only after the new #53 is merged/i,
   );
+});
+
+test('documents the final bilingual shell and its ownership boundaries', () => {
+  for (const requiredText of [
+    'Spanish is the default locale at `/`',
+    'English is published under `/en/`',
+    'GitHub and LinkedIn are the only retained former-footer social actions',
+    'The public site shell has no full `.site-footer` surface',
+    '`Header.astro` still targets `/proyectos/`',
+    '`Header.astro` still targets `/cv/`',
+    '#53 owns `/proyectos/` ↔ `/en/projects/` navigation semantics',
+    '#54 owns canonical/hreflang/Open Graph and locale-aware 404 semantics',
+    '#55 owns `/cv/` ↔ `/en/cv/`',
+    'tests/shell-regressions.spec.ts',
+  ]) {
+    assert.match(
+      shellContract,
+      new RegExp(requiredText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+    );
+  }
+
+  assert.match(shellContract, /exactly one target-locale action/i);
+  assert.match(shellContract, /desktop widths above 900 px/i);
+  assert.match(shellContract, /At 900 px and below/i);
+  assert.match(shellContract, /numbered primary navigation/i);
+  assert.match(
+    shellContract,
+    /CV-specific professional-footer|professional-footer/i,
+  );
+  assert.match(
+    shellContract,
+    /evidence from another SHA must never be reused/i,
+  );
+  assert.match(docsIndex, /operations\/FINAL_SHELL\.md/);
 });
