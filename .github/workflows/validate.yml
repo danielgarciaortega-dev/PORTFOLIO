@@ -100,5 +100,6 @@ jobs:
           test -f dist/index.html
           test -f dist/en/index.html
           test -f dist/proyectos/index.html
+          test -f dist/en/projects/index.html
           test -f dist/cv/index.html
           test -f dist/404.html
