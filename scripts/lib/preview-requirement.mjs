@@ -1,6 +1,13 @@
 // @ts-check
 
+export const REPOSITORY_ONLY_PREVIEW_PREFIXES = Object.freeze([
+  'tests/',
+  'docs/',
+]);
+
 export const REPOSITORY_ONLY_PREVIEW_EXACT_PATHS = new Set([
+  'README.md',
+  'AGENTS.md',
   'scripts/capture-preview-visual-evidence.mjs',
 ]);
 
@@ -37,8 +44,9 @@ function isSafeRepositoryPath(value) {
 export function isRepositoryOnlyPreviewPath(path) {
   if (!isSafeRepositoryPath(path)) return false;
   return (
-    (path.startsWith('tests/') && path.length > 'tests/'.length) ||
-    REPOSITORY_ONLY_PREVIEW_EXACT_PATHS.has(path)
+    REPOSITORY_ONLY_PREVIEW_PREFIXES.some(
+      (prefix) => path.startsWith(prefix) && path.length > prefix.length,
+    ) || REPOSITORY_ONLY_PREVIEW_EXACT_PATHS.has(path)
   );
 }
 
