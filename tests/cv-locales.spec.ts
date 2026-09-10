@@ -122,7 +122,7 @@ test('counterpart link remains normal navigation when JavaScript is disabled', a
   await context.close();
 });
 
-test('English CV reuses shared local assets and has no false Spanish PDF control', async ({
+test('English CV reuses shared local assets and downloads only its English PDF', async ({
   page,
 }) => {
   const failedLocal: string[] = [];
@@ -137,7 +137,12 @@ test('English CV reuses shared local assets and has no false Spanish PDF control
   expect(response?.ok()).toBe(true);
   await page.waitForLoadState('networkidle');
   expect(failedLocal).toEqual([]);
-  await expect(page.locator('.download-btn')).toHaveCount(0);
+  const download = page.locator('.download-btn');
+  await expect(download).toHaveCount(1);
+  await expect(download).toHaveAttribute(
+    'href',
+    'CV-Daniel-Garcia-Ortega-EN.pdf',
+  );
   await expect(
     page.locator('a[href*="CV-Daniel-Garcia-Ortega.pdf"]'),
   ).toHaveCount(0);
@@ -147,7 +152,8 @@ test('English CV reuses shared local assets and has no false Spanish PDF control
   expect(source).toContain('href="../../cv/locale-controls.css"');
   expect(source).toContain('src="../../cv/locale.js"');
   expect(source).toContain('src="../../cv/FOTO CARNET.jpg"');
-  expect(source).not.toContain('CV-Daniel-Garcia-Ortega.pdf');
+  expect(source).toContain('href="CV-Daniel-Garcia-Ortega-EN.pdf"');
+  expect(source).not.toContain('href="CV-Daniel-Garcia-Ortega.pdf"');
 });
 
 test('English CV preserves A4, mobile and accessibility geometry', async ({
