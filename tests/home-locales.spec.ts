@@ -47,7 +47,7 @@ test('Spanish root renders the restored shell, hero and professional overview', 
   await expect(overview).toContainText('APIs REST');
   await expect(
     overview.locator('.home-overview__technologies li img'),
-  ).toHaveCount(22);
+  ).toHaveCount(19);
 
   await expect(page.locator('.site-footer')).toHaveCount(0);
 });

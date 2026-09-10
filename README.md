@@ -57,10 +57,12 @@ Worked on a healthcare SaaS platform, fixing bugs and validating web and mobile 
 
 ## Stack
 
-- **Frontend:** HTML5, CSS3, JavaScript, TypeScript, React, Next.js, Astro, Tailwind CSS, Vite
-- **Backend:** Java, Python, FastAPI, Node.js, REST APIs
+- **Frontend:** HTML5, CSS3, JavaScript, TypeScript, React, Angular, Next.js
+- **Backend:** Java, Python, FastAPI, Node.js, Laravel/PHP, REST APIs
 - **Data:** SQL, PostgreSQL, MySQL/MariaDB, BigQuery
-- **Tools:** Git, GitHub, Docker, Supabase
+- **Tools:** Git, Docker
+
+The compact stack above is intentionally recruiter-facing. Project-specific technologies remain documented in their project or experience context instead of being duplicated as headline skills.
 
 ## Bilingual architecture
 
