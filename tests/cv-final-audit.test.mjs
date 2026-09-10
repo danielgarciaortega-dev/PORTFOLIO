@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readdir, readFile } from 'node:fs/promises';
 import test from 'node:test';
 
+// Hostile variants stay in memory: the audit proves failures without altering canonical CV files.
 const root = new URL('../', import.meta.url);
 
 async function readRepositoryFile(path) {
