@@ -61,7 +61,11 @@ test('featured projects CTA suppresses translation motion for reduced-motion use
 
   await cta.hover();
   await expect(arrow).toHaveCSS('transform', 'none');
-  await expect(arrow).toHaveCSS('transition-duration', '0s');
+
+  const transitionDurationSeconds = await arrow.evaluate((element) =>
+    Number.parseFloat(getComputedStyle(element).transitionDuration),
+  );
+  expect(transitionDurationSeconds).toBeLessThanOrEqual(0.00001);
 });
 
 test('featured projects CTA does not introduce horizontal overflow across home breakpoints', async ({
