@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
+// Cross-surface final gate for #56.
 interface RouteSide {
   route: string;
   locale: 'es' | 'en';
