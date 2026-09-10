@@ -44,7 +44,6 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 18. Never broaden an issue merely to “improve” unrelated code, copy, infrastructure or design.
 19. Never revive, merge, rebase forward or cherry-pick the retired pre-shell #53/#54 implementation branches. New route work must start from current `main`.
 20. Distinguish current behavior from approved future routes. Do not document a planned counterpart as already deployed before its owning issue merges.
-21. Never use a repository-role bypass as the ordinary way to merge with `Repository validation` or `Preview readiness` red.
 
 ## Current technical decisions
 
@@ -65,7 +64,7 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 - GitHub Pages is canonical production and is published from `main` through GitHub Actions.
 - Vercel, while configured, is Preview/review infrastructure only and must never be promoted as production.
 - Vercel Git deployments for `main` remain disabled by repository configuration.
-- The active repository ruleset requires pull requests, resolved review conversations, `Repository validation` and `Preview readiness`. Issue #142 owns removal of the current repository-role PR bypass before downstream product merges.
+- The active repository ruleset currently names `Repository validation` and `Preview readiness`; #142 tracks retiring Vercel from required merge governance without blocking product work.
 
 ## Route ownership and execution order
 
@@ -74,13 +73,13 @@ Do not collapse the remaining bilingual work into one branch.
 The maintained sequence after the completed final-shell Epic is:
 
 1. #98 — repository source-of-truth synchronization.
-2. #97 / #136 — complete the audited stale-branch retirement; never use the old #53/#54 refs as implementation bases.
-3. #142 — remove the ordinary pull-request bypass of required `main` gates before downstream product merges.
-4. #53 — fresh bilingual project-index routes/navigation from the resulting `main`.
-5. #54 — locale metadata, alternate links, residual accessibility copy and 404 semantics after #53.
-6. #138 — approved CV-specific removal of Vercel from the visible CV technology set and CV-local JSON-LD.
-7. #130 → #131 → #132 → #133 — CV preservation baseline, English HTML, dual PDF export and final CV audit.
-8. #56 — final bilingual residue/routes/regression audit.
+2. #53 — fresh bilingual project-index routes/navigation from the resulting `main`.
+3. #54 — locale metadata, alternate links, residual accessibility copy and 404 semantics after #53.
+4. #138 — approved CV-specific removal of Vercel from the visible CV technology set and CV-local JSON-LD.
+5. #130 → #131 → #132 → #133 — CV preservation baseline, English HTML, dual PDF export and final CV audit.
+6. #56 — final bilingual residue/routes/regression audit.
+
+#136 remains a non-blocking physical cleanup task for already retired remote refs. #142 remains a non-blocking governance cleanup task for retiring Vercel as a required merge gate.
 
 The stale pre-shell #53/#54 refs are retired even if their remote names still physically exist. Their valid intent lives in the maintained issues and documentation, not in their code history.
 
@@ -108,9 +107,9 @@ npm run export:cv
 
 `Repository validation` is the authoritative code/test gate and must be green for the final PR head. Do not bypass a formatting, type, build, asset, CV-export, Playwright or other repository-validation failure.
 
-`Preview readiness` validates exact-head Vercel Preview evidence. If Vercel is unavailable, quota-limited or otherwise unable to validate the current head, leave the PR unmerged until that exact-head check is green. Never reuse Preview evidence from another SHA and never use a permission bypass as the ordinary recovery path.
+`Preview readiness` validates exact-head Vercel Preview evidence when the provider is available. The repository owner has explicitly authorized continuing when Vercel/provider infrastructure is unavailable or quota-limited, provided current-head `Repository validation` is green and the diff/scope are audited. Until #142 removes Vercel from required merge governance, owner PR bypass may be used only for that provider-only Preview blocker. It must never conceal a failing `Repository validation`, reuse Preview evidence from another SHA, or promote Vercel as production.
 
-For visual work, preserve the exact-head review semantics in `docs/operations/PREVIEW_AND_PAGES.md`. Screenshots are review evidence, not automatic pixel-diff approval.
+For visual work, preserve the exact-head review semantics in `docs/operations/PREVIEW_AND_PAGES.md` whenever Preview evidence is available. Screenshots are review evidence, not automatic pixel-diff approval.
 
 If the local environment cannot execute a required command, use CI for the exact same commit as evidence and state the limitation explicitly.
 
@@ -120,8 +119,8 @@ If the local environment cannot execute a required command, use CI for the exact
 - Use one isolated branch and PR per issue/scope where practical.
 - Never modify `main` directly for normal work.
 - Keep PR descriptions and repository documentation in English.
-- Require green current-head `Repository validation` and `Preview readiness` before merge.
-- Treat external Preview/provider failures as blockers rather than converting permissions into a routine bypass.
+- Require green current-head `Repository validation` before merge.
+- Treat external Preview/provider recovery separately from code/test correctness.
 - Do not mix cleanup, content, redesign, routes, metadata, CV work and infrastructure unless the owning issue explicitly couples them.
 - Re-check routes, base paths and references after structural changes.
 - After merge, verify the expected GitHub Pages production lifecycle when the change affects deployable output.
