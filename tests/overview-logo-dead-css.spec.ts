@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 
+// #42 keeps the retired wrapper from returning after #41 moved overview logos to the shared mark.
 const obsoleteSelector = 'overview-organization__logo';
 
 async function collectFiles(directory: string): Promise<string[]> {
