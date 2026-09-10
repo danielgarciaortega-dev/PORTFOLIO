@@ -95,6 +95,7 @@ jobs:
       - name: Verify scope and retire proof workflow
         run: |
           set -euo pipefail
+          git restore docs/screenshots
           git diff --check
           git rm .github/workflows/prove-171-technology-inventory.yml
           git config user.name 'github-actions[bot]'
