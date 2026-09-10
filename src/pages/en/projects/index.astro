@@ -1,0 +1,55 @@
+---
+import AboutDialog from '../../../components/dialogs/AboutDialog.astro';
+import ProjectDialog from '../../../components/projects/ProjectDialog.astro';
+import ProjectGrid from '../../../components/projects/ProjectGrid.astro';
+import { getProjects } from '../../../data/projects-localized';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { withBase } from '../../../utils/paths';
+
+const locale = 'en';
+const projects = getProjects(locale);
+const momentNumbers = ['01', '02', '03', '04', '05', '06'];
+// Moment 06 is a tall portrait with the UGR AI building in the background.
+// Shift the focus down slightly so the group remains visible.
+const momentObjectPosition: Record<string, string> = {
+  '06': 'center 55%',
+};
+---
+
+<BaseLayout
+  title="Projects · Daniel García Ortega"
+  description="Selected projects by Daniel García Ortega: AL-LÍO, SIDN Cost Control and Feedback2Action."
+  currentPage="projects"
+>
+  <main id="contenido" class="projects-page">
+    <div class="projects-page__backdrop" aria-hidden="true">
+      {
+        momentNumbers.map((n, index) => (
+          <img
+            src={withBase(`images/moments/moment-${n}.webp`)}
+            alt=""
+            style={`animation-delay: ${index * 7}s;${momentObjectPosition[n] ? ` object-position: ${momentObjectPosition[n]};` : ''}`}
+            loading={index === 0 ? 'eager' : 'lazy'}
+          />
+        ))
+      }
+    </div>
+    <section
+      class="section-shell projects-page-list projects-page-list--solo"
+      aria-label="Project list"
+    >
+      <h1 class="sr-only">Projects</h1>
+      <ProjectGrid {projects} {locale} />
+    </section>
+  </main>
+  <AboutDialog />
+  {
+    projects.map((project, index) => (
+      <ProjectDialog
+        {project}
+        nextProject={projects[(index + 1) % projects.length]}
+        {locale}
+      />
+    ))
+  }
+</BaseLayout>
