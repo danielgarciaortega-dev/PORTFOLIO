@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 const origin = 'http://127.0.0.1:4321';
+const socialImage = `${origin}/PORTFOLIO/og-image.webp`;
 
 const metadataCases = [
   {
@@ -104,6 +105,10 @@ for (const metadataCase of metadataCases) {
     await expect(
       page.locator('meta[property="og:description"]'),
     ).toHaveAttribute('content', metadataCase.description);
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+      'content',
+      socialImage,
+    );
     await expect(
       page.locator('meta[property="og:image:alt"]'),
     ).toHaveAttribute('content', metadataCase.imageAlt);
@@ -115,19 +120,16 @@ for (const metadataCase of metadataCases) {
     await expect(
       page.locator('meta[name="twitter:description"]'),
     ).toHaveAttribute('content', metadataCase.description);
+    await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
+      'content',
+      socialImage,
+    );
     await expect(
       page.locator('meta[name="twitter:image:alt"]'),
     ).toHaveAttribute('content', metadataCase.imageAlt);
-    await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
-      'content',
-      `${origin}/PORTFOLIO/og-image.webp`,
-    );
 
     const alternateLinks = page.locator('link[rel="alternate"][hreflang]');
     await expect(alternateLinks).toHaveCount(2);
-    await expect(
-      alternateLinks.filter({ has: page.locator(':scope') }).first(),
-    ).toBeAttached();
     await expect(
       page.locator('link[rel="alternate"][hreflang="es"]'),
     ).toHaveAttribute('href', metadataCase.alternates.es);
