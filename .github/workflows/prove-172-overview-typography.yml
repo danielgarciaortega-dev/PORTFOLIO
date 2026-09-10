@@ -1,0 +1,171 @@
+name: Prove issue 172 overview typography
+
+on:
+  push:
+    branches:
+      - fix/172-align-overview-typography
+
+permissions:
+  contents: write
+
+jobs:
+  prove:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: fix/172-align-overview-typography
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply scoped overview typography change
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/styles/global.css')
+          source = path.read_text()
+
+          replacements = [
+              (
+                  """.technology-groups {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.3rem 1.75rem;
+          }""",
+                  """.technology-groups {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.1rem 1.75rem;
+          }""",
+              ),
+              (
+                  """.technology-group__label {
+            margin: 0 0 0.55rem;
+            color: var(--color-text);
+            font-size: 0.64rem;
+            font-weight: 780;
+            letter-spacing: 0.06em;
+          }""",
+                  """.technology-group__label {
+            margin: 0 0 0.6rem;
+            color: var(--color-text);
+            font-size: 0.75rem;
+            font-weight: 760;
+            letter-spacing: 0.035em;
+            line-height: 1.25;
+          }""",
+              ),
+              (
+                  """.home-overview__technologies li {
+            min-height: 20px;
+            display: inline-flex;
+            gap: 0.42rem;
+            align-items: center;
+            color: var(--color-text-muted);
+            font-size: 0.72rem;
+            font-weight: 680;
+          }""",
+                  """.home-overview__technologies li {
+            min-height: 20px;
+            display: inline-flex;
+            gap: 0.42rem;
+            align-items: center;
+            color: var(--color-text-muted);
+            font-size: 0.74rem;
+            font-weight: 680;
+            line-height: 1.35;
+          }""",
+              ),
+              (
+                  """.home-overview__fact h2 {
+            margin: 0 0 0.35rem;
+            font-size: 0.86rem;
+            line-height: 1.25;
+          }""",
+                  """.home-overview__fact h2 {
+            margin: 0 0 0.35rem;
+            font-size: 0.86rem;
+            font-weight: 740;
+            line-height: 1.25;
+          }""",
+              ),
+          ]
+
+          for old, new in replacements:
+              if source.count(old) != 1:
+                  raise SystemExit(f'Expected exactly one CSS contract before replacement: {old.splitlines()[0]}')
+              source = source.replace(old, new, 1)
+
+          path.write_text(source)
+          PY
+
+      - name: Format maintained files
+        run: npx prettier src/styles/global.css tests/overview-typography-rhythm.spec.ts --write
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run focused overview regression set
+        run: >-
+          npx playwright test
+          tests/overview-typography-rhythm.spec.ts
+          tests/overview-logo-geometry.spec.ts
+          tests/professional-overview-english.spec.ts
+          tests/home-locales.spec.ts
+          tests/accessibility.spec.ts
+
+      - name: Prove typography guard catches the old undersized label
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp src/styles/global.css /tmp/global.css.issue172
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('src/styles/global.css')
+          source = path.read_text()
+          old = 'font-size: 0.75rem;\n  font-weight: 760;\n  letter-spacing: 0.035em;\n  line-height: 1.25;'
+          new = 'font-size: 0.64rem;\n  font-weight: 760;\n  letter-spacing: 0.035em;\n  line-height: 1.25;'
+          if source.count(old) != 1:
+              raise SystemExit('Could not locate finalized subgroup typography for adversarial proof')
+          path.write_text(source.replace(old, new, 1))
+          PY
+
+          if npx playwright test tests/overview-typography-rhythm.spec.ts --grep 'one deliberate typography hierarchy'; then
+            echo 'Expected the typography regression test to fail after restoring the undersized label'
+            exit 1
+          fi
+          mv /tmp/global.css.issue172 src/styles/global.css
+
+      - name: Run full repository test suite
+        run: npm test
+
+      - name: Verify scope and retire proof workflow
+        run: |
+          set -euo pipefail
+          git restore docs/screenshots
+          git diff --check
+          git rm .github/workflows/prove-172-overview-typography.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/styles/global.css tests/overview-typography-rhythm.spec.ts
+
+          allowed='^(.github/workflows/prove-172-overview-typography.yml|src/styles/global.css|tests/overview-typography-rhythm.spec.ts)$'
+          unexpected="$(git status --short | awk '{print $2}' | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected" ]; then
+            echo 'Unexpected issue #172 worktree paths:'
+            echo "$unexpected"
+            exit 1
+          fi
+
+          git commit -m 'fix: align professional overview typography'
+          git push origin HEAD:fix/172-align-overview-typography
