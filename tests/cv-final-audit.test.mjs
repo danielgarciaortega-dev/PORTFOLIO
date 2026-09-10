@@ -179,7 +179,7 @@ const adversarialCases = [
       ...contract,
       styles: mutateRequired(
         contract.styles,
-        'height: 297mm;',
+        /height:\s*297mm;/g,
         'height: 296mm;',
       ),
     }),
