@@ -1,26 +1,94 @@
 ---
 import AboutDialog from '../components/dialogs/AboutDialog.astro';
-import BaseLayout from '../layouts/BaseLayout.astro';
 import ButtonLink from '../components/ui/ButtonLink.astro';
+import { getProfessionalData } from '../data/localized';
+import { dialogCopy, notFoundCopy, shellCopy } from '../i18n/copy';
+import {
+  SUPPORTED_LOCALES,
+  getLocaleCounterpartPath,
+  getLocalizedRoutePath,
+} from '../i18n/locale';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { withBase } from '../utils/paths';
+
+const fallbackLocale = 'es';
+const fallbackCopy = notFoundCopy[fallbackLocale];
+const localePayload = Object.fromEntries(
+  SUPPORTED_LOCALES.map((locale) => {
+    const { profile } = getProfessionalData(locale);
+    const { targetLocale, path: targetPath } = getLocaleCounterpartPath(
+      locale,
+      'home',
+    );
+    const copy = shellCopy[locale];
+
+    return [
+      locale,
+      {
+        shell: copy,
+        dialog: dialogCopy[locale],
+        notFound: notFoundCopy[locale],
+        profile: {
+          aboutImageAlt: profile.aboutImageAlt,
+          location: profile.location,
+          aboutIntro: profile.aboutIntro,
+          milestones: profile.milestones,
+          seeking: profile.seeking,
+        },
+        routes: {
+          home: withBase(getLocalizedRoutePath(locale, 'home')),
+          projects: withBase(getLocalizedRoutePath(locale, 'projects')),
+          cv: withBase('cv/'),
+          localeTarget: {
+            locale: targetLocale,
+            href: withBase(targetPath),
+            label:
+              targetLocale === 'en'
+                ? copy.switchToEnglish
+                : copy.switchToSpanish,
+          },
+        },
+      },
+    ];
+  }),
+);
+const serializedLocalePayload = JSON.stringify(localePayload).replace(
+  /</g,
+  '\\u003c',
+);
 ---
 
 <BaseLayout
-  title="Página no encontrada · Daniel García Ortega"
-  description="La página solicitada no existe."
+  title={fallbackCopy.title}
+  description={fallbackCopy.description}
   currentPage="404"
   robots="noindex, follow"
 >
-  <main id="contenido" class="not-found">
-    <p class="eyebrow">ERROR 404</p>
-    <h1>Esta ruta no forma parte del proyecto.</h1>
-    <p>Vuelve al inicio o consulta los proyectos seleccionados.</p>
-    <div>
-      <ButtonLink href={withBase()}>Volver al inicio</ButtonLink>
-      <ButtonLink href={withBase('proyectos/')} variant="secondary"
-        >Ver proyectos</ButtonLink
+  <main id="contenido" class="not-found" data-not-found>
+    <p class="eyebrow" data-not-found-eyebrow>{fallbackCopy.eyebrow}</p>
+    <h1 data-not-found-heading>{fallbackCopy.heading}</h1>
+    <p data-not-found-body>{fallbackCopy.body}</p>
+    <div data-not-found-actions>
+      <ButtonLink href={withBase()} class="not-found__home">
+        <span data-not-found-home-label>{fallbackCopy.homeAction}</span>
+      </ButtonLink>
+      <ButtonLink
+        href={withBase('proyectos/')}
+        variant="secondary"
+        class="not-found__projects"
       >
+        <span data-not-found-projects-label>{fallbackCopy.projectsAction}</span>
+      </ButtonLink>
     </div>
   </main>
   <AboutDialog />
+  <script
+    is:inline
+    id="not-found-locale-data"
+    type="application/json"
+    set:html={serializedLocalePayload}
+  ></script>
+  <script>
+    import '../scripts/not-found-locale';
+  </script>
 </BaseLayout>
