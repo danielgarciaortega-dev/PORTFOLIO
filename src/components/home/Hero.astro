@@ -2,7 +2,7 @@
 import { getProfessionalData } from '../../data/localized';
 import type { Project } from '../../data/types';
 import { homeCopy } from '../../i18n/copy';
-import type { Locale } from '../../i18n/locale';
+import { getLocalizedRoutePath, type Locale } from '../../i18n/locale';
 import { withBase } from '../../utils/paths';
 import ProjectPreview from '../projects/ProjectPreview.astro';
 
@@ -14,6 +14,7 @@ interface Props {
 const { projects, locale } = Astro.props;
 const { profile } = getProfessionalData(locale);
 const copy = homeCopy[locale];
+const projectsUrl = withBase(getLocalizedRoutePath(locale, 'projects'));
 const [firstName, ...lastNames] = profile.fullName.split(' ');
 ---
 
@@ -76,9 +77,14 @@ const [firstName, ...lastNames] = profile.fullName.split(' ');
     <div class="hero__projects" aria-labelledby="featured-projects-title">
       <div class="hero__projects-head">
         <h2 id="featured-projects-title">{copy.projects}</h2>
-        <a href={withBase('proyectos/')} aria-label={copy.viewAllProjects}
-          >{copy.viewAll} <span aria-hidden="true">→</span></a
+        <a
+          class="hero__projects-link"
+          href={projectsUrl}
+          aria-label={copy.viewAllProjects}
         >
+          {copy.viewAll}
+          <span aria-hidden="true">→</span>
+        </a>
       </div>
       <div class="project-preview-list">
         {projects.map((project) => <ProjectPreview {project} {locale} />)}
@@ -86,3 +92,26 @@ const [firstName, ...lastNames] = profile.fullName.split(' ');
     </div>
   </div>
 </section>
+
+<style>
+  .hero__projects-link > span {
+    display: inline-block;
+    transition: transform 180ms ease;
+  }
+
+  .hero__projects-link:hover > span,
+  .hero__projects-link:focus-visible > span {
+    transform: translateX(3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__projects-link > span {
+      transition: none;
+    }
+
+    .hero__projects-link:hover > span,
+    .hero__projects-link:focus-visible > span {
+      transform: none;
+    }
+  }
+</style>
