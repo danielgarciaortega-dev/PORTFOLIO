@@ -13,10 +13,34 @@ function count(source, pattern) {
   return source.match(pattern)?.length ?? 0;
 }
 
-function numericFacts(source) {
-  return (source.match(/\d[\d.,]*(?:%|€)?/g) ?? [])
+function visibleNumericFacts(source) {
+  const visibleText = source
+    .replace(/<script\b[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ');
+
+  return (visibleText.match(/\d[\d.,]*(?:%|€)?/g) ?? [])
     .map((value) => value.replace(/[.,]/g, ''))
     .sort();
+}
+
+function structuredFacts(source) {
+  const json = source.match(
+    /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/,
+  )?.[1];
+  assert.ok(json, 'Expected CV-local JSON-LD');
+  const data = JSON.parse(json);
+
+  return {
+    name: data.name,
+    email: data.email,
+    telephone: data.telephone,
+    url: data.url,
+    sameAs: [...(data.sameAs ?? [])].sort(),
+    knowsAbout: [...(data.knowsAbout ?? [])].sort(),
+    addressLocality: data.address?.addressLocality,
+    addressCountry: data.address?.addressCountry,
+  };
 }
 
 function majorSectionOrder(source) {
@@ -82,7 +106,8 @@ function assertFinalCvContract({
   assert.deepEqual(majorSectionOrder(es), expectedOrder);
   assert.deepEqual(majorSectionOrder(en), expectedOrder);
 
-  assert.deepEqual(numericFacts(en), numericFacts(es));
+  assert.deepEqual(visibleNumericFacts(en), visibleNumericFacts(es));
+  assert.deepEqual(structuredFacts(en), structuredFacts(es));
   for (const source of [es, en]) {
     assert.doesNotMatch(source, /Vercel/i);
     assert.match(source, /Prisma/);
