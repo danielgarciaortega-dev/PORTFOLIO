@@ -109,9 +109,10 @@ for (const metadataCase of metadataCases) {
       'content',
       socialImage,
     );
-    await expect(
-      page.locator('meta[property="og:image:alt"]'),
-    ).toHaveAttribute('content', metadataCase.imageAlt);
+    await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+      'content',
+      metadataCase.imageAlt,
+    );
 
     await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute(
       'content',
@@ -158,16 +159,12 @@ for (const metadataCase of metadataCases) {
 test('CV has no fictional English alternate', async ({ page }) => {
   const response = await page.goto('./cv/');
   expect(response?.ok()).toBe(true);
-  await expect(
-    page.locator('link[rel="alternate"][hreflang]'),
-  ).toHaveCount(0);
+  await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(0);
   await expect(page.locator('link[href*="/en/cv/"]')).toHaveCount(0);
 });
 
 test('404 has no fictional localized alternates', async ({ page }) => {
   const response = await page.goto('./missing-metadata-route/');
   expect(response?.status()).toBe(404);
-  await expect(
-    page.locator('link[rel="alternate"][hreflang]'),
-  ).toHaveCount(0);
+  await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(0);
 });
