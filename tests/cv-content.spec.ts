@@ -6,9 +6,9 @@ test('CV Tools and structured data keep the corrected technology baseline', asyn
   const response = await page.goto('./cv/');
   expect(response?.ok()).toBe(true);
 
-  const toolsGroup = page
-    .locator('.stack-group')
-    .filter({ has: page.getByRole('heading', { level: 3, name: 'Herramientas' }) });
+  const toolsGroup = page.locator('.stack-group').filter({
+    has: page.getByRole('heading', { level: 3, name: 'Herramientas' }),
+  });
   const visibleTools = await toolsGroup.locator('.chips span').allTextContents();
 
   expect(visibleTools).toEqual(['Git/GitHub', 'Docker', 'Prisma']);
