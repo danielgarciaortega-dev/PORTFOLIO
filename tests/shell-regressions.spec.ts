@@ -79,9 +79,9 @@ test('final desktop shell contract stays deterministic across supported widths a
       await expect(navigation.locator('[data-language-switcher]')).toHaveCount(
         0,
       );
-      await expect(navigation.getByRole('link', { name: 'GitHub' })).toHaveCount(
-        0,
-      );
+      await expect(
+        navigation.getByRole('link', { name: 'GitHub' }),
+      ).toHaveCount(0);
       await expect(
         navigation.getByRole('link', { name: 'LinkedIn' }),
       ).toHaveCount(0);
@@ -91,12 +91,12 @@ test('final desktop shell contract stays deterministic across supported widths a
       });
       await expect(localeLink).toHaveCount(1);
       await expect(localeLink).toHaveAttribute('href', localeCase.localeHref);
-      await expect(actions.getByRole('link', { name: localeCase.cv })).toHaveCount(
-        1,
-      );
-      await expect(page.locator('[data-language-switcher]:visible')).toHaveCount(
-        1,
-      );
+      await expect(
+        actions.getByRole('link', { name: localeCase.cv }),
+      ).toHaveCount(1);
+      await expect(
+        page.locator('[data-language-switcher]:visible'),
+      ).toHaveCount(1);
 
       await expectNoHorizontalOverflow(
         page,
@@ -138,9 +138,9 @@ test('final mobile shell keeps navigation and utilities separate without overflo
       await expect(navigation.locator('[data-language-switcher]')).toHaveCount(
         0,
       );
-      await expect(navigation.getByRole('link', { name: 'GitHub' })).toHaveCount(
-        0,
-      );
+      await expect(
+        navigation.getByRole('link', { name: 'GitHub' }),
+      ).toHaveCount(0);
       await expect(
         navigation.getByRole('link', { name: 'LinkedIn' }),
       ).toHaveCount(0);
@@ -158,9 +158,9 @@ test('final mobile shell keeps navigation and utilities separate without overflo
       await expect(
         utilities.getByRole('link', { name: localeCase.mobileCv }),
       ).toHaveCount(1);
-      await expect(page.locator('[data-language-switcher]:visible')).toHaveCount(
-        1,
-      );
+      await expect(
+        page.locator('[data-language-switcher]:visible'),
+      ).toHaveCount(1);
 
       await expectNoHorizontalOverflow(
         page,
@@ -213,7 +213,9 @@ test('remaining About and Contact triggers match mounted dialogs after footer re
     .getByRole('navigation', { name: 'Navegación principal' })
     .getByRole('button', { name: 'Sobre mí' });
   await aboutTrigger.click();
-  const aboutDialog = page.getByRole('dialog', { name: 'Daniel García Ortega' });
+  const aboutDialog = page.getByRole('dialog', {
+    name: 'Daniel García Ortega',
+  });
   await expect(aboutDialog).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(aboutDialog).toBeHidden();
