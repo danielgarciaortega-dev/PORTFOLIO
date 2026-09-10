@@ -34,7 +34,8 @@ test('bilingual foundation stays coherent across switching, reload and dialogs',
   const spanishSwitcher = page.locator(
     '.site-header__actions [data-language-switcher]',
   );
-  await spanishSwitcher.getByRole('link', { name: 'English' }).click();
+  await expect(spanishSwitcher.getByRole('link')).toHaveCount(1);
+  await spanishSwitcher.getByRole('link', { name: 'Cambiar a inglés' }).click();
 
   await expect(page).toHaveURL(/\/PORTFOLIO\/en\/$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
@@ -82,7 +83,10 @@ test('bilingual foundation stays coherent across switching, reload and dialogs',
   const englishSwitcher = page.locator(
     '.site-header__actions [data-language-switcher]',
   );
-  await englishSwitcher.getByRole('link', { name: 'Spanish' }).click();
+  await expect(englishSwitcher.getByRole('link')).toHaveCount(1);
+  await englishSwitcher
+    .getByRole('link', { name: 'Switch to Spanish' })
+    .click();
 
   await expect(page).toHaveURL(/\/PORTFOLIO\/$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');

@@ -56,7 +56,7 @@ test('Spanish root renders the restored shell, hero and professional overview', 
   );
 });
 
-test('language switcher lives beside the CV action and persists explicit choice', async ({
+test('language switcher exposes one target-locale action and persists explicit choice', async ({
   page,
 }) => {
   await page.goto('./');
@@ -68,33 +68,32 @@ test('language switcher lives beside the CV action and persists explicit choice'
   await expect(headerActions).toBeVisible();
   await expect(spanishSwitcher).toBeVisible();
   await expect(cvLink).toBeVisible();
-  await expect(spanishSwitcher.locator('[aria-current="true"]')).toHaveText(
-    'ES',
-  );
+  await expect(spanishSwitcher.getByRole('link')).toHaveCount(1);
+  await expect(spanishSwitcher.locator('[aria-current="true"]')).toHaveCount(0);
 
-  const englishLink = spanishSwitcher.getByRole('link', { name: 'English' });
+  const englishLink = spanishSwitcher.getByRole('link', {
+    name: 'Cambiar a inglés',
+  });
+  await expect(englishLink).toHaveText('EN');
   await expect(englishLink).toHaveAttribute('href', '/PORTFOLIO/en/');
+  await expect(englishLink).toHaveAttribute('hreflang', 'en');
 
   const desktopAppearance = await spanishSwitcher.evaluate((switcher) => {
     const switcherStyles = getComputedStyle(switcher);
-    const current = switcher.querySelector<HTMLElement>(
-      '[aria-current="true"]',
-    );
-    const currentStyles = current ? getComputedStyle(current) : null;
+    const link = switcher.querySelector<HTMLElement>('a');
+    const linkStyles = link ? getComputedStyle(link) : null;
 
     return {
       borderTopWidth: switcherStyles.borderTopWidth,
       backgroundColor: switcherStyles.backgroundColor,
-      currentBackgroundColor: currentStyles?.backgroundColor ?? null,
-      currentColor: currentStyles?.color ?? null,
+      linkBackgroundColor: linkStyles?.backgroundColor ?? null,
     };
   });
 
   expect(desktopAppearance).toEqual({
     borderTopWidth: '0px',
     backgroundColor: 'rgba(0, 0, 0, 0)',
-    currentBackgroundColor: 'rgba(0, 0, 0, 0)',
-    currentColor: 'rgb(14, 23, 42)',
+    linkBackgroundColor: 'rgba(0, 0, 0, 0)',
   });
 
   await englishLink.hover();
@@ -120,10 +119,17 @@ test('language switcher lives beside the CV action and persists explicit choice'
   const englishSwitcher = page.locator(
     '.site-header__actions [data-language-switcher]',
   );
-  await expect(englishSwitcher.locator('[aria-current="true"]')).toHaveText(
-    'EN',
-  );
-  await englishSwitcher.getByRole('link', { name: 'Spanish' }).click();
+  await expect(englishSwitcher.getByRole('link')).toHaveCount(1);
+  await expect(englishSwitcher.locator('[aria-current="true"]')).toHaveCount(0);
+
+  const spanishLink = englishSwitcher.getByRole('link', {
+    name: 'Switch to Spanish',
+  });
+  await expect(spanishLink).toHaveText('ES');
+  await expect(spanishLink).toHaveAttribute('href', '/PORTFOLIO/');
+  await expect(spanishLink).toHaveAttribute('hreflang', 'es');
+
+  await spanishLink.click();
   await expect(page).toHaveURL(/\/PORTFOLIO\/$/);
   await expect
     .poll(() =>
@@ -148,7 +154,7 @@ test('desktop header utility cluster does not overflow compact desktop', async (
   expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.clientWidth);
 });
 
-test('Spanish mobile menu keeps the locale control outside primary navigation', async ({
+test('Spanish mobile menu keeps the single locale action outside primary navigation', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -161,9 +167,11 @@ test('Spanish mobile menu keeps the locale control outside primary navigation', 
   await expect(menu).toBeVisible();
   await expect(menu.locator('nav [data-language-switcher]')).toHaveCount(0);
   await expect(switcher).toBeVisible();
-  await expect(
-    switcher.getByRole('link', {
-      name: 'English',
-    }),
-  ).toHaveAttribute('href', '/PORTFOLIO/en/');
+  await expect(switcher.getByRole('link')).toHaveCount(1);
+
+  const englishLink = switcher.getByRole('link', {
+    name: 'Cambiar a inglés',
+  });
+  await expect(englishLink).toHaveText('EN');
+  await expect(englishLink).toHaveAttribute('href', '/PORTFOLIO/en/');
 });
