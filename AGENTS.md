@@ -11,14 +11,15 @@ Before changing code, use these maintained repository sources in this order wher
 1. `README.md` for the public professional summary and primary links.
 2. `docs/operations/FINAL_SHELL.md` for the final bilingual shell, locale-control and utility-placement contract.
 3. `docs/operations/PREVIEW_AND_PAGES.md` for Preview, review-readiness, branch-protection and GitHub Pages operations.
-4. `package.json` for scripts, dependencies and execution requirements.
-5. `astro.config.mjs` and `scripts/lib/hosting-config.mjs` for static output, hosting and base-path behavior.
-6. `src/data/es/` and `src/data/en/` for localized editable content.
-7. `src/` for application behavior and shared component structure.
-8. `tests/` and `playwright.config.ts` for functional, accessibility, locale, route and responsive contracts.
-9. `.github/workflows/` for CI, deployment and repository automation.
-10. `input/`, `public/cv/` and `scripts/` for source assets, generated assets and the standalone CV/export flow.
-11. `docs/operations/BRANCH_LIFECYCLE.md` for abandoned/stale branch retirement.
+4. `docs/operations/MAIN_RULESET_GOVERNANCE.md` for the no-bypass protected-main contract.
+5. `package.json` for scripts, dependencies and execution requirements.
+6. `astro.config.mjs` and `scripts/lib/hosting-config.mjs` for static output, hosting and base-path behavior.
+7. `src/data/es/` and `src/data/en/` for localized editable content.
+8. `src/` for application behavior and shared component structure.
+9. `tests/` and `playwright.config.ts` for functional, accessibility, locale, route and responsive contracts.
+10. `.github/workflows/` for CI, deployment and repository automation.
+11. `input/`, `public/cv/` and `scripts/` for source assets, generated assets and the standalone CV/export flow.
+12. `docs/operations/BRANCH_LIFECYCLE.md` for abandoned/stale branch retirement.
 
 Do not use historical prompts, old PR descriptions, stale branches or duplicated context packages as the source of truth when maintained repository files or current issues supersede them.
 
@@ -44,6 +45,7 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 18. Never broaden an issue merely to “improve” unrelated code, copy, infrastructure or design.
 19. Never revive, merge, rebase forward or cherry-pick the retired pre-shell #53/#54 implementation branches. New route work must start from current `main`.
 20. Distinguish current behavior from approved future routes. Do not document a planned counterpart as already deployed before its owning issue merges.
+21. Never use an ordinary repository-role bypass to merge a PR while a required `main` check is red. A policy change must be made explicitly in the owning ruleset/issue instead of redefining failure as success.
 
 ## Current technical decisions
 
@@ -64,7 +66,7 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 - GitHub Pages is canonical production and is published from `main` through GitHub Actions.
 - Vercel, while configured, is Preview/review infrastructure only and must never be promoted as production.
 - Vercel Git deployments for `main` remain disabled by repository configuration.
-- The active repository ruleset currently names `Repository validation` and `Preview readiness`; #142 tracks retiring Vercel from required merge governance without blocking product work.
+- The active repository ruleset currently requires `Repository validation` and `Preview readiness`. #142 removes the ordinary repository-role pull-request bypass while preserving the required-check policy unless a separate governance issue explicitly changes it.
 
 ## Route ownership and execution order
 
@@ -73,13 +75,14 @@ Do not collapse the remaining bilingual work into one branch.
 The maintained sequence after the completed final-shell Epic is:
 
 1. #98 — repository source-of-truth synchronization.
-2. #53 — fresh bilingual project-index routes/navigation from the resulting `main`.
-3. #54 — locale metadata, alternate links, residual accessibility copy and 404 semantics after #53.
-4. #138 — approved CV-specific removal of Vercel from the visible CV technology set and CV-local JSON-LD.
-5. #130 → #131 → #132 → #133 — CV preservation baseline, English HTML, dual PDF export and final CV audit.
-6. #56 — final bilingual residue/routes/regression audit.
+2. #142 — remove ordinary pull-request bypass from protected `main` and prove red required checks cannot merge normally.
+3. #53 — fresh bilingual project-index routes/navigation from the resulting safe governance state.
+4. #54 — locale metadata, alternate links, residual accessibility copy and 404 semantics after #53.
+5. #138 — approved CV-specific removal of Vercel from the visible CV technology set and CV-local JSON-LD.
+6. #130 → #131 → #132 → #133 — CV preservation baseline, English HTML, dual PDF export and final CV audit.
+7. #56 — final bilingual residue/routes/regression audit.
 
-#136 remains a non-blocking physical cleanup task for already retired remote refs. #142 remains a non-blocking governance cleanup task for retiring Vercel as a required merge gate.
+#136 remains a non-blocking physical cleanup task for already retired remote refs. #142 is a governance blocker for safe downstream product merges until the live ruleset no longer exposes an ordinary PR bypass actor.
 
 The stale pre-shell #53/#54 refs are retired even if their remote names still physically exist. Their valid intent lives in the maintained issues and documentation, not in their code history.
 
@@ -107,7 +110,7 @@ npm run export:cv
 
 `Repository validation` is the authoritative code/test gate and must be green for the final PR head. Do not bypass a formatting, type, build, asset, CV-export, Playwright or other repository-validation failure.
 
-`Preview readiness` validates exact-head Vercel Preview evidence when the provider is available. The repository owner has explicitly authorized continuing when Vercel/provider infrastructure is unavailable or quota-limited, provided current-head `Repository validation` is green and the diff/scope are audited. Until #142 removes Vercel from required merge governance, owner PR bypass may be used only for that provider-only Preview blocker. It must never conceal a failing `Repository validation`, reuse Preview evidence from another SHA, or promote Vercel as production.
+`Preview readiness` remains a required check while the active `Protect main` ruleset declares it required. A Vercel/provider outage or quota limit is therefore a red required check under the current policy, not authorization to bypass it. If the repository decides that Preview should become optional or classified differently, make that change explicitly through the issue and ruleset that own Preview governance. Never reuse Preview evidence from another SHA and never promote Vercel as production.
 
 For visual work, preserve the exact-head review semantics in `docs/operations/PREVIEW_AND_PAGES.md` whenever Preview evidence is available. Screenshots are review evidence, not automatic pixel-diff approval.
 
@@ -119,8 +122,9 @@ If the local environment cannot execute a required command, use CI for the exact
 - Use one isolated branch and PR per issue/scope where practical.
 - Never modify `main` directly for normal work.
 - Keep PR descriptions and repository documentation in English.
-- Require green current-head `Repository validation` before merge.
-- Treat external Preview/provider recovery separately from code/test correctness.
+- Require all server-declared required checks to be green for the current PR head before normal merge.
+- Do not use repository-role PR bypass as a normal recovery mechanism.
+- Treat a desired change to Preview/provider policy as explicit governance work, separate from code/test correctness.
 - Do not mix cleanup, content, redesign, routes, metadata, CV work and infrastructure unless the owning issue explicitly couples them.
 - Re-check routes, base paths and references after structural changes.
 - After merge, verify the expected GitHub Pages production lifecycle when the change affects deployable output.
