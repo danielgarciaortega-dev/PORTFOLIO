@@ -29,6 +29,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Diagnose 404 formatting
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx prettier \
+            src/pages/404.astro \
+            src/scripts/not-found-locale.ts \
+            tests/not-found-locales.spec.ts \
+            tests/not-found-source.test.mjs \
+            --write
+          git diff -- \
+            src/pages/404.astro \
+            src/scripts/not-found-locale.ts \
+            tests/not-found-locales.spec.ts \
+            tests/not-found-source.test.mjs
+          exit 1
+
       - name: Audit dependencies
         run: npm audit --audit-level=high
 
