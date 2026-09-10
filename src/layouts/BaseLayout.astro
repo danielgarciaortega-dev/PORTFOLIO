@@ -33,12 +33,7 @@ const locale = resolveLocaleFromPathname(
 const copy = shellCopy[locale];
 const site = Astro.site ?? Astro.url.origin;
 const canonical = localizedRoute
-  ? getLocalizedRouteUrl(
-      site,
-      import.meta.env.BASE_URL,
-      locale,
-      localizedRoute,
-    )
+  ? getLocalizedRouteUrl(site, import.meta.env.BASE_URL, locale, localizedRoute)
   : new URL(Astro.url.pathname, site);
 const alternates = localizedRoute
   ? SUPPORTED_LOCALES.map((alternateLocale) => ({
