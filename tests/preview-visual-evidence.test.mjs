@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import {
   PREVIEW_VISUAL_SURFACES,
@@ -13,6 +14,10 @@ import {
 const PREVIEW = 'https://portfolio-git-example.vercel.app/';
 const HEAD = 'a'.repeat(40);
 const SECRET = 'test-bypass-secret';
+const captureEntry = readFileSync(
+  'scripts/capture-preview-visual-evidence.mjs',
+  'utf8',
+);
 
 test('accepts only protected-preview compatible HTTPS vercel.app hosts', () => {
   assert.equal(parseValidatedPreviewUrl(PREVIEW).href, PREVIEW);
@@ -80,6 +85,29 @@ test('keeps the #93 viewport and bilingual surface contract explicit', () => {
       ['en', '/en/'],
     ],
   );
+});
+
+test('waits for a settled mobile dialog instead of sleeping before evidence capture', () => {
+  assert.match(captureEntry, /waitForMobileMenuToSettle/);
+  assert.match(captureEntry, /page\.waitForFunction/);
+  assert.match(captureEntry, /menu instanceof HTMLDialogElement/);
+  assert.match(captureEntry, /!menu\.open/);
+  assert.match(captureEntry, /styles\.opacity === '1'/);
+  assert.match(captureEntry, /matrix\(1, 0, 0, 1, 0, 0\)/);
+  assert.match(captureEntry, /timeout: 5_000/);
+  assert.doesNotMatch(captureEntry, /waitForTimeout\(/);
+
+  const clickIndex = captureEntry.indexOf('surface.menuButtonName }).click()');
+  const settleIndex = captureEntry.indexOf(
+    'await waitForMobileMenuToSettle(page);',
+  );
+  const screenshotIndex = captureEntry.indexOf(
+    'page.screenshot({ path: path.join(viewportDirectory, menuFile) })',
+  );
+
+  assert.ok(clickIndex >= 0);
+  assert.ok(settleIndex > clickIndex);
+  assert.ok(screenshotIndex > settleIndex);
 });
 
 test('manifest contains review identity but cannot receive the bypass secret', () => {
