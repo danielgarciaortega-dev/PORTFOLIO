@@ -19,10 +19,7 @@ test('featured projects CTA uses the localized route contract in both locales', 
 
   await page.goto('./en/');
   const englishCta = page.getByRole('link', { name: 'View all projects' });
-  await expect(englishCta).toHaveAttribute(
-    'href',
-    '/PORTFOLIO/en/projects/',
-  );
+  await expect(englishCta).toHaveAttribute('href', '/PORTFOLIO/en/projects/');
 
   const source = await readHeroSource();
   expect(source).toContain("getLocalizedRoutePath(locale, 'projects')");
@@ -43,7 +40,9 @@ test('featured projects CTA arrow responds to pointer interaction without changi
 
   await cta.hover();
   await expect
-    .poll(() => arrow.evaluate((element) => getComputedStyle(element).transform))
+    .poll(() =>
+      arrow.evaluate((element) => getComputedStyle(element).transform),
+    )
     .not.toBe('none');
 
   const source = await readHeroSource();
