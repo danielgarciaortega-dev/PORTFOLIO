@@ -23,7 +23,9 @@ export function validateMainRuleset(ruleset) {
     failures.push('Protect main must target refs/heads/main');
   }
 
-  if ((ruleset.bypass_actors ?? []).length > 0) {
+  if (!Array.isArray(ruleset.bypass_actors)) {
+    failures.push('Protect main bypass actors must be observable before governance can pass');
+  } else if (ruleset.bypass_actors.length > 0) {
     failures.push('Protect main must not expose ordinary pull-request bypass actors');
   }
 
