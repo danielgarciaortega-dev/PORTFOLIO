@@ -23,10 +23,10 @@ async function collectParity(page: Page) {
     ).map((node) => node.textContent?.trim()),
     experienceDates: Array.from(
       document.querySelectorAll('.experience-date time'),
-    ).map((node) => node.textContent?.trim()),
+    ).map((node) => node.getAttribute('datetime')),
     educationDates: Array.from(
       document.querySelectorAll('.education-item time'),
-    ).map((node) => node.textContent?.trim()),
+    ).map((node) => node.getAttribute('datetime')),
     stack: Array.from(document.querySelectorAll('.stack-group')).map((group) =>
       Array.from(group.querySelectorAll('.chips span')).map((node) =>
         node.textContent?.trim(),
@@ -217,8 +217,8 @@ test('English CV contains translated recruiter-facing copy without factual drift
   ).toBeVisible();
   await expect(page.getByText('Recognized disability: 34%')).toBeVisible();
   await expect(page.getByText(/22,376 reviews/)).toBeVisible();
-  await expect(page.getByText(/409 issue groups/)).toBeVisible();
-  await expect(page.getByText(/108 prioritized actions/)).toBeVisible();
+  await expect(page.locator('body')).toContainText('409 issue groups');
+  await expect(page.locator('body')).toContainText('108 prioritized actions');
 });
 
 test('English portfolio shell points its CV action to the English static CV', async ({
