@@ -1,5 +1,10 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import {
+  expect,
+  test,
+  type Locator,
+  type Page,
+} from '@playwright/test';
 
 const desktopWidths = [1024, 1280, 1440, 1920];
 const mobileWidths = [360, 390, 430];
@@ -44,14 +49,15 @@ async function expectNoHorizontalOverflow(page: Page, context: string) {
 }
 
 async function expectMinimumTargetHeight(
-  locator: ReturnType<Page['locator']>,
+  locator: Locator,
   context: string,
 ) {
   const box = await locator.boundingBox();
   expect(box, `${context}: target must have a rendered box`).not.toBeNull();
-  expect(box?.height ?? 0, `${context}: target must remain at least 44px tall`).toBeGreaterThanOrEqual(
-    43.5,
-  );
+  expect(
+    box?.height ?? 0,
+    `${context}: target must remain at least 44px tall`,
+  ).toBeGreaterThanOrEqual(43.5);
 }
 
 test('final desktop shell contract holds in both locales at every supported desktop width', async ({
@@ -79,8 +85,12 @@ test('final desktop shell contract holds in both locales at every supported desk
         socials.getByRole('link', { name: 'LinkedIn' }),
       ).toBeVisible();
 
-      await expect(navigation.locator('[data-language-switcher]')).toHaveCount(0);
-      await expect(navigation.getByRole('link', { name: 'GitHub' })).toHaveCount(0);
+      await expect(
+        navigation.locator('[data-language-switcher]'),
+      ).toHaveCount(0);
+      await expect(
+        navigation.getByRole('link', { name: 'GitHub' }),
+      ).toHaveCount(0);
       await expect(
         navigation.getByRole('link', { name: 'LinkedIn' }),
       ).toHaveCount(0);
@@ -97,7 +107,9 @@ test('final desktop shell contract holds in both locales at every supported desk
       const cvAction = actions.getByRole('link', { name: locale.cvText });
       await expect(cvAction).toHaveCount(1);
       await expect(cvAction).toBeVisible();
-      await expect(actions.getByRole('link', { name: 'GitHub' })).toHaveCount(0);
+      await expect(
+        actions.getByRole('link', { name: 'GitHub' }),
+      ).toHaveCount(0);
       await expect(
         actions.getByRole('link', { name: 'LinkedIn' }),
       ).toHaveCount(0);
@@ -137,8 +149,12 @@ test('final mobile shell keeps navigation and utilities separated in both locale
       await expect(trigger).toHaveAttribute('aria-expanded', 'true');
       await expect(trigger).toHaveAttribute('aria-label', locale.closeMenu);
       await expect(navigation.locator('span')).toHaveText(['01', '02', '03']);
-      await expect(navigation.locator('[data-language-switcher]')).toHaveCount(0);
-      await expect(navigation.getByRole('link', { name: 'GitHub' })).toHaveCount(0);
+      await expect(
+        navigation.locator('[data-language-switcher]'),
+      ).toHaveCount(0);
+      await expect(
+        navigation.getByRole('link', { name: 'GitHub' }),
+      ).toHaveCount(0);
       await expect(
         navigation.getByRole('link', { name: 'LinkedIn' }),
       ).toHaveCount(0);
@@ -160,7 +176,10 @@ test('final mobile shell keeps navigation and utilities separated in both locale
       await expect(cvAction).toHaveCount(1);
       await expect(cvAction).toBeVisible();
 
-      await expectMinimumTargetHeight(github, `${locale.path} GitHub at ${width}px`);
+      await expectMinimumTargetHeight(
+        github,
+        `${locale.path} GitHub at ${width}px`,
+      );
       await expectMinimumTargetHeight(
         linkedin,
         `${locale.path} LinkedIn at ${width}px`,
@@ -175,7 +194,10 @@ test('final mobile shell keeps navigation and utilities separated in both locale
       );
 
       await expect(page.locator('.site-footer')).toHaveCount(0);
-      await expectNoHorizontalOverflow(page, `${locale.path} menu at ${width}px`);
+      await expectNoHorizontalOverflow(
+        page,
+        `${locale.path} menu at ${width}px`,
+      );
 
       await page.keyboard.press('Escape');
       await expect(menu).not.toBeVisible();
@@ -209,7 +231,9 @@ test('locale counterpart persistence and remaining home dialogs stay functional'
     .poll(() => page.evaluate(() => localStorage.getItem('portfolio.locale')))
     .toBe('es');
 
-  const contactTrigger = page.getByRole('button', { name: 'Contactar' }).first();
+  const contactTrigger = page
+    .getByRole('button', { name: 'Contactar' })
+    .first();
   await contactTrigger.click();
   const contactDialog = page.getByRole('dialog', { name: 'Hablemos.' });
   await expect(contactDialog).toBeVisible();
