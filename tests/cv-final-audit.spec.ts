@@ -33,7 +33,10 @@ for (const localeCase of localeCases) {
     await page.setViewportSize({ width: 1440, height: 1200 });
     const response = await page.goto(localeCase.route);
     expect(response?.ok()).toBe(true);
-    await expect(page.locator('html')).toHaveAttribute('lang', localeCase.locale);
+    await expect(page.locator('html')).toHaveAttribute(
+      'lang',
+      localeCase.locale,
+    );
 
     const counterpart = page.getByRole('link', {
       name: localeCase.counterpartLabel,
@@ -44,7 +47,10 @@ for (const localeCase of localeCases) {
     });
 
     await expect(page.locator('[data-locale-link]')).toHaveCount(1);
-    await expect(counterpart).toHaveAttribute('href', localeCase.counterpartHref);
+    await expect(counterpart).toHaveAttribute(
+      'href',
+      localeCase.counterpartHref,
+    );
     await expect(back).toHaveAttribute('href', '../');
     await expect(download).toHaveAttribute('href', localeCase.downloadHref);
     await expect(page.locator('.download-btn')).toHaveCount(1);
@@ -61,7 +67,9 @@ for (const localeCase of localeCases) {
 
     const containment = await page.evaluate(() => {
       const sheetElement = document.querySelector<HTMLElement>('.cv-sheet');
-      const footer = document.querySelector<HTMLElement>('.professional-footer');
+      const footer = document.querySelector<HTMLElement>(
+        '.professional-footer',
+      );
       if (!sheetElement || !footer) return null;
 
       const sheetRect = sheetElement.getBoundingClientRect();
@@ -107,7 +115,9 @@ for (const localeCase of localeCases) {
 
     const geometry = await page.evaluate(() => {
       const sheet = document.querySelector<HTMLElement>('.cv-sheet');
-      const footer = document.querySelector<HTMLElement>('.professional-footer');
+      const footer = document.querySelector<HTMLElement>(
+        '.professional-footer',
+      );
       const selectors = [
         '.projects-grid',
         '.stack-grid',
@@ -136,7 +146,9 @@ for (const localeCase of localeCases) {
     for (const columns of geometry?.columns ?? []) {
       expect(columns.trim().split(/\s+/)).toHaveLength(1);
     }
-    expect(geometry?.scrollWidth).toBeLessThanOrEqual(geometry?.clientWidth ?? 0);
+    expect(geometry?.scrollWidth).toBeLessThanOrEqual(
+      geometry?.clientWidth ?? 0,
+    );
 
     await expect(page.locator('.portfolio-back-link')).toBeVisible();
     await expect(page.locator('.download-btn')).toBeVisible();

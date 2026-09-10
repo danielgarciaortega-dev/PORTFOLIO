@@ -38,7 +38,11 @@ function backHref(source) {
 
 function mutateRequired(source, pattern, replacement) {
   const result = source.replace(pattern, replacement);
-  assert.notEqual(result, source, `Expected mutation ${String(pattern)} to apply`);
+  assert.notEqual(
+    result,
+    source,
+    `Expected mutation ${String(pattern)} to apply`,
+  );
   return result;
 }
 
@@ -146,7 +150,11 @@ const adversarialCases = [
     name: 'changed A4 height',
     mutate: (contract) => ({
       ...contract,
-      styles: mutateRequired(contract.styles, 'height: 297mm;', 'height: 296mm;'),
+      styles: mutateRequired(
+        contract.styles,
+        'height: 297mm;',
+        'height: 296mm;',
+      ),
     }),
   },
   {
