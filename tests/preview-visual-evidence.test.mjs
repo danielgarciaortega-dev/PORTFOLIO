@@ -73,18 +73,34 @@ test('injects the protection secret only for the exact Preview origin', () => {
   assert.equal('x-vercel-protection-bypass' in foreignHost, false);
 });
 
-test('keeps the #93 viewport and bilingual surface contract explicit', () => {
+test('keeps the #93 viewport contract and final shell review surfaces explicit', () => {
   assert.deepEqual(
     PREVIEW_VISUAL_VIEWPORTS.map((viewport) => viewport.name),
     ['390x844', '768x1024', '1440x900', '1920x1080'],
   );
   assert.deepEqual(
-    PREVIEW_VISUAL_SURFACES.map((surface) => [surface.locale, surface.path]),
+    PREVIEW_VISUAL_SURFACES.map((surface) => [
+      surface.captureName,
+      surface.locale,
+      surface.path,
+    ]),
     [
-      ['es', '/'],
-      ['en', '/en/'],
+      ['es-home', 'es', '/'],
+      ['en-home', 'en', '/en/'],
+      ['es-projects', 'es', '/proyectos/'],
     ],
   );
+});
+
+test('preserves stable home/menu filenames while adding projects evidence', () => {
+  const [spanishHome, englishHome, spanishProjects] = PREVIEW_VISUAL_SURFACES;
+
+  assert.equal(spanishHome.captureName, 'es-home');
+  assert.equal(spanishHome.menuCaptureName, 'es-menu');
+  assert.equal(englishHome.captureName, 'en-home');
+  assert.equal(englishHome.menuCaptureName, 'en-menu');
+  assert.equal(spanishProjects.captureName, 'es-projects');
+  assert.equal('menuCaptureName' in spanishProjects, false);
 });
 
 test('waits for a settled mobile dialog instead of sleeping before evidence capture', () => {

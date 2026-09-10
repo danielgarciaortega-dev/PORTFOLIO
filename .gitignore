@@ -3,6 +3,7 @@ node_modules/
 dist/
 playwright-report/
 test-results/
+artifacts/
 .playwright-cli/
 .playwright-mcp/
 .DS_Store

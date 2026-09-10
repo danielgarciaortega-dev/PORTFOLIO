@@ -41,7 +41,7 @@ async function waitForMobileMenuToSettle(page) {
 
 /**
  * @param {import('@playwright/test').Page} page
- * @param {{ locale: string, path: string, menuButtonName: string }} surface
+ * @param {{ captureName: string, state: string, locale: string, path: string, menuButtonName?: string, menuCaptureName?: string }} surface
  * @param {{ name: string, width: number, height: number }} viewport
  * @param {string} outputDirectory
  * @param {URL} previewUrl
@@ -81,9 +81,9 @@ async function captureSurface(
   const viewportDirectory = path.join(outputDirectory, viewport.name);
   await mkdir(viewportDirectory, { recursive: true });
 
-  const homeFile = `${surface.locale}-home.png`;
+  const surfaceFile = `${surface.captureName}.png`;
   await page.screenshot({
-    path: path.join(viewportDirectory, homeFile),
+    path: path.join(viewportDirectory, surfaceFile),
     fullPage: true,
   });
 
@@ -92,16 +92,20 @@ async function captureSurface(
       locale: surface.locale,
       route: surface.path,
       viewport: viewport.name,
-      state: 'home',
-      file: `${viewport.name}/${homeFile}`,
+      state: surface.state,
+      file: `${viewport.name}/${surfaceFile}`,
     },
   ];
 
-  if (viewport.width <= 900) {
+  if (
+    viewport.width <= 900 &&
+    surface.menuButtonName &&
+    surface.menuCaptureName
+  ) {
     await page.getByRole('button', { name: surface.menuButtonName }).click();
     await waitForMobileMenuToSettle(page);
 
-    const menuFile = `${surface.locale}-menu.png`;
+    const menuFile = `${surface.menuCaptureName}.png`;
     await page.screenshot({ path: path.join(viewportDirectory, menuFile) });
     captures.push({
       locale: surface.locale,

@@ -9,14 +9,26 @@ export const PREVIEW_VISUAL_VIEWPORTS = Object.freeze([
 
 export const PREVIEW_VISUAL_SURFACES = Object.freeze([
   Object.freeze({
+    captureName: 'es-home',
+    state: 'home',
     locale: 'es',
     path: '/',
     menuButtonName: 'Abrir menú',
+    menuCaptureName: 'es-menu',
   }),
   Object.freeze({
+    captureName: 'en-home',
+    state: 'home',
     locale: 'en',
     path: '/en/',
     menuButtonName: 'Open menu',
+    menuCaptureName: 'en-menu',
+  }),
+  Object.freeze({
+    captureName: 'es-projects',
+    state: 'projects',
+    locale: 'es',
+    path: '/proyectos/',
   }),
 ]);
 

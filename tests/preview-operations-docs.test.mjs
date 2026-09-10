@@ -69,6 +69,16 @@ test('documents exact-head visual evidence without promoting it to a required ga
   assert.match(docsIndex, /no es un tercer gate requerido/i);
 });
 
+test('documents the selected review-artifact visual QA model without pixel-baseline ambiguity', () => {
+  assert.match(docsIndex, /Modelo visual seleccionado/);
+  assert.match(docsIndex, /artefactos deterministas de revisión/i);
+  assert.match(docsIndex, /No se usan assertions de regresión visual por píxel/i);
+  assert.match(docsIndex, /tests\/shell-regressions\.spec\.ts/);
+  assert.match(docsIndex, /artifacts\/local-visual-evidence\//);
+  assert.match(docsIndex, /\/proyectos\//);
+  assert.doesNotMatch(docsIndex, /#88 podrá evolucionar/i);
+});
+
 test('documents visual-evidence secret isolation', () => {
   assert.match(runbook, /exact validated Preview origin/i);
   assert.match(runbook, /never contain the secret/i);

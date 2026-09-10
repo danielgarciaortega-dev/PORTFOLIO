@@ -15,8 +15,8 @@ for (const viewport of viewports) {
   test(`capturas verificables en ${viewport.name}`, async ({ page }) => {
     const output = path.join(
       process.cwd(),
-      'docs',
-      'screenshots',
+      'artifacts',
+      'local-visual-evidence',
       viewport.name,
     );
     await mkdir(output, { recursive: true });
