@@ -30,26 +30,6 @@ jobs:
         run: |
           node scripts/prepare-cv-131.mjs
           node scripts/link-cv-locale-assets-131.mjs
-          node --input-type=module <<'NODE'
-          import { readFile, writeFile } from 'node:fs/promises';
-          const path = 'tests/cv-locales.spec.ts';
-          let source = await readFile(path, 'utf8');
-          const original = source;
-          source = source.replace(
-            "document.querySelectorAll('.education-item time'),\n    ).map((node) => node.textContent?.trim()),",
-            "document.querySelectorAll('.education-item time'),\n    ).map((node) => node.getAttribute('datetime')),"," 
-          );
-          source = source.replace(
-            "await expect(page.getByText(/409 issue groups/)).toBeVisible();",
-            "await expect(page.locator('body')).toContainText('409 issue groups');",
-          );
-          source = source.replace(
-            "await expect(page.getByText(/108 prioritized actions/)).toBeVisible();",
-            "await expect(page.locator('body')).toContainText('108 prioritized actions');",
-          );
-          if (source === original) throw new Error('Expected CV parity test corrections were not applied');
-          await writeFile(path, source, 'utf8');
-          NODE
           npx prettier public/cv/index.html public/en/cv/index.html public/cv/locale.js public/cv/locale-controls.css src/components/layout/Header.astro tests/cv-locales.spec.ts --write
 
       - name: Install Chromium
