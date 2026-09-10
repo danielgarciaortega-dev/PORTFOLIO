@@ -15,6 +15,7 @@ const routeCases = [
     projectsHref: '/PORTFOLIO/proyectos/',
     switchLabel: 'Cambiar a inglés',
     switchHref: '/PORTFOLIO/en/projects/',
+    cvHref: '/PORTFOLIO/cv/',
     viewFeedback: 'Ver proyecto Feedback2Action',
     about: 'Sobre mí',
     aboutCopy: 'Formación y proyectos',
@@ -32,6 +33,7 @@ const routeCases = [
     projectsHref: '/PORTFOLIO/en/projects/',
     switchLabel: 'Switch to Spanish',
     switchHref: '/PORTFOLIO/proyectos/',
+    cvHref: '/PORTFOLIO/en/cv/',
     viewFeedback: 'View project Feedback2Action',
     about: 'About',
     aboutCopy: 'Education and projects',
@@ -153,7 +155,7 @@ test('Spanish and English projects indexes preserve structure with localized cop
     await expect(localeLink).toHaveAttribute('href', routeCase.switchHref);
     await expect(page.locator('.header-cv-link')).toHaveAttribute(
       'href',
-      '/PORTFOLIO/cv/',
+      routeCase.cvHref,
     );
     await expect(page.locator('.site-footer')).toHaveCount(0);
 
