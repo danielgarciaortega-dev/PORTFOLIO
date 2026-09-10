@@ -20,6 +20,25 @@ function requireEnvironment(name) {
   return value;
 }
 
+/** @param {import('@playwright/test').Page} page */
+async function waitForMobileMenuToSettle(page) {
+  await page.waitForFunction(
+    () => {
+      const menu = document.querySelector('[data-mobile-menu]');
+      if (!(menu instanceof HTMLDialogElement) || !menu.open) return false;
+
+      const styles = getComputedStyle(menu);
+      return (
+        styles.opacity === '1' &&
+        (styles.transform === 'none' ||
+          styles.transform === 'matrix(1, 0, 0, 1, 0, 0)')
+      );
+    },
+    undefined,
+    { timeout: 5_000 },
+  );
+}
+
 /**
  * @param {import('@playwright/test').Page} page
  * @param {{ locale: string, path: string, menuButtonName: string }} surface
@@ -80,6 +99,8 @@ async function captureSurface(
 
   if (viewport.width <= 900) {
     await page.getByRole('button', { name: surface.menuButtonName }).click();
+    await waitForMobileMenuToSettle(page);
+
     const menuFile = `${surface.locale}-menu.png`;
     await page.screenshot({ path: path.join(viewportDirectory, menuFile) });
     captures.push({
