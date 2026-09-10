@@ -175,3 +175,110 @@ test('Spanish mobile menu keeps the single locale action outside primary navigat
   await expect(englishLink).toHaveText('EN');
   await expect(englishLink).toHaveAttribute('href', '/PORTFOLIO/en/');
 });
+
+test('desktop shell keeps socials left, navigation clean and locale plus CV right', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./');
+
+  const header = page.locator('[data-site-header]');
+  const socials = header.locator('[data-header-socials]');
+  const navigation = header.getByRole('navigation', {
+    name: 'Navegación principal',
+  });
+  const actions = header.locator('.site-header__actions');
+
+  await expect(socials).toBeVisible();
+  await expect(socials.getByRole('link')).toHaveCount(2);
+  await expect(socials.getByRole('link', { name: 'GitHub' })).toBeVisible();
+  await expect(socials.getByRole('link', { name: 'LinkedIn' })).toBeVisible();
+
+  await expect(navigation.locator('[data-language-switcher]')).toHaveCount(0);
+  await expect(navigation.getByRole('link', { name: 'GitHub' })).toHaveCount(0);
+  await expect(navigation.getByRole('link', { name: 'LinkedIn' })).toHaveCount(
+    0,
+  );
+
+  await expect(
+    actions.getByRole('link', { name: 'Cambiar a inglés' }),
+  ).toHaveCount(1);
+  await expect(actions.locator('.header-cv-link')).toHaveCount(1);
+  await expect(actions.getByRole('link', { name: 'GitHub' })).toHaveCount(0);
+  await expect(actions.getByRole('link', { name: 'LinkedIn' })).toHaveCount(0);
+});
+
+test('mobile shell separates numbered navigation from social and locale/CV utilities', async ({
+  page,
+}) => {
+  for (const width of [360, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('./');
+
+    const header = page.locator('[data-site-header]');
+    const trigger = header.getByRole('button', { name: 'Abrir menú' });
+
+    await expect(header.locator('[data-header-socials]')).toBeHidden();
+    await expect(header.locator('.site-header__actions')).toBeHidden();
+    await expect(trigger).toBeVisible();
+
+    await trigger.focus();
+    await page.keyboard.press('Enter');
+
+    const menu = page.getByRole('dialog', { name: 'Navegación' });
+    const navigation = menu.getByRole('navigation', {
+      name: 'Navegación móvil',
+    });
+    const socials = menu.locator('[data-mobile-socials]');
+    const utilities = menu.locator('[data-mobile-utilities]');
+
+    await expect(menu).toBeVisible();
+    await expect(navigation.locator('span')).toHaveText(['01', '02', '03']);
+    await expect(navigation.locator('[data-language-switcher]')).toHaveCount(0);
+    await expect(navigation.getByRole('link', { name: 'GitHub' })).toHaveCount(
+      0,
+    );
+    await expect(
+      navigation.getByRole('link', { name: 'LinkedIn' }),
+    ).toHaveCount(0);
+
+    await expect(socials.getByRole('link')).toHaveCount(2);
+    await expect(socials.getByRole('link', { name: 'GitHub' })).toBeVisible();
+    await expect(socials.getByRole('link', { name: 'LinkedIn' })).toBeVisible();
+
+    await expect(
+      utilities.getByRole('link', { name: 'Cambiar a inglés' }),
+    ).toHaveCount(1);
+    await expect(utilities.locator('.mobile-menu__cv')).toHaveCount(1);
+
+    const viewport = await page.evaluate(() => ({
+      clientWidth: document.documentElement.clientWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+    }));
+    expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.clientWidth);
+
+    await page.keyboard.press('Escape');
+    await expect(menu).not.toBeVisible();
+    await expect(trigger).toBeFocused();
+    await expect(trigger).toHaveAttribute('aria-label', 'Abrir menú');
+  }
+});
+
+test('English mobile menu keeps localized trigger labels through open and Escape close', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('./en/');
+
+  const trigger = page.getByRole('button', { name: 'Open menu' });
+  await trigger.click();
+
+  const menu = page.getByRole('dialog', { name: 'Navigation' });
+  await expect(menu).toBeVisible();
+  await expect(trigger).toHaveAttribute('aria-label', 'Close menu');
+
+  await page.keyboard.press('Escape');
+  await expect(menu).not.toBeVisible();
+  await expect(trigger).toHaveAttribute('aria-label', 'Open menu');
+  await expect(trigger).toBeFocused();
+});
