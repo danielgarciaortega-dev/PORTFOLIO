@@ -1,0 +1,102 @@
+name: Apply CV landmark fix once
+
+on:
+  push:
+    branches:
+      - fix/160-cv-control-landmarks
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: fix/160-cv-control-landmarks
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply minimal landmark wrappers
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          html = Path('public/cv/index.html')
+          text = html.read_text()
+          back = '''    <a class="portfolio-back-link" href="../" aria-label="Volver al portfolio de Daniel García Ortega">
+                  <span aria-hidden="true">←</span>
+                  Volver al portfolio
+              </a>'''
+          assert text.count(back) == 1
+          wrapped_back = '''    <nav class="cv-page-landmark" aria-label="Navegación del CV">
+                  <a class="portfolio-back-link" href="../" aria-label="Volver al portfolio de Daniel García Ortega">
+                      <span aria-hidden="true">←</span>
+                      Volver al portfolio
+                  </a>
+              </nav>'''
+          text = text.replace(back, wrapped_back, 1)
+
+          download = '''    <a class="download-btn" href="CV-Daniel-Garcia-Ortega.pdf" download
+                  aria-label="Descargar CV de Daniel García Ortega en PDF">
+                  <i class="fas fa-download" aria-hidden="true"></i>
+                  Descargar PDF
+              </a>'''
+          assert text.count(download) == 1
+          wrapped_download = '''    <nav class="cv-page-landmark" aria-label="Acciones del CV">
+                  <a class="download-btn" href="CV-Daniel-Garcia-Ortega.pdf" download
+                      aria-label="Descargar CV de Daniel García Ortega en PDF">
+                      <i class="fas fa-download" aria-hidden="true"></i>
+                      Descargar PDF
+                  </a>
+              </nav>'''
+          html.write_text(text.replace(download, wrapped_download, 1))
+
+          css = Path('public/cv/styles.css')
+          styles = css.read_text()
+          anchor = '''a {
+              color: inherit;
+          }
+          '''
+          assert styles.count(anchor) == 1
+          addition = anchor + '''
+          .cv-page-landmark {
+              display: contents;
+          }
+          '''
+          css.write_text(styles.replace(anchor, addition, 1))
+          PY
+
+      - name: Format focused Playwright test
+        run: npx prettier tests/cv-accessibility.spec.ts --write
+
+      - name: Install Chromium
+        run: |
+          set -euo pipefail
+          sudo rm -f /etc/apt/sources.list.d/google-chrome.list /etc/apt/sources.list.d/google-chrome.sources
+          npx playwright install --with-deps chromium
+
+      - name: Verify focused accessibility fix
+        run: CI= npx playwright test tests/cv-accessibility.spec.ts tests/cv-content.spec.ts
+
+      - name: Commit fix and remove one-shot workflow
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/fix-cv-landmarks-160.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/cv/index.html public/cv/styles.css tests/cv-accessibility.spec.ts
+          git diff --cached --check
+          git commit -m "fix: contain CV page controls in landmarks"
+          git push origin HEAD:fix/160-cv-control-landmarks
