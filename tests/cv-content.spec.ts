@@ -13,6 +13,7 @@ test('CV Tools and structured data keep the corrected technology baseline', asyn
     .locator('.chips span')
     .allTextContents();
 
+  expect(visibleTools).toHaveLength(3);
   expect(visibleTools).toEqual(['Git/GitHub', 'Docker', 'Prisma']);
   expect(visibleTools).not.toContain('Vercel');
 
