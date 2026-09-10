@@ -5,6 +5,11 @@ const mobileMenu =
 
 if (menuTrigger && mobileMenu) {
   let restoreFocus = true;
+  const openLabel =
+    menuTrigger.dataset.openLabel ??
+    menuTrigger.getAttribute('aria-label') ??
+    '';
+  const closeLabel = menuTrigger.dataset.closeLabel ?? openLabel;
 
   const closeMenu = (shouldRestore = true) => {
     restoreFocus = shouldRestore;
@@ -15,7 +20,7 @@ if (menuTrigger && mobileMenu) {
     restoreFocus = true;
     mobileMenu.showModal();
     menuTrigger.setAttribute('aria-expanded', 'true');
-    menuTrigger.setAttribute('aria-label', 'Cerrar menú');
+    menuTrigger.setAttribute('aria-label', closeLabel);
     document.body.classList.add('menu-open');
     mobileMenu.querySelector<HTMLElement>('[data-menu-close]')?.focus();
   });
@@ -48,7 +53,7 @@ if (menuTrigger && mobileMenu) {
 
   mobileMenu.addEventListener('close', () => {
     menuTrigger.setAttribute('aria-expanded', 'false');
-    menuTrigger.setAttribute('aria-label', 'Abrir menú');
+    menuTrigger.setAttribute('aria-label', openLabel);
     document.body.classList.remove('menu-open');
     if (restoreFocus) menuTrigger.focus();
   });

@@ -1,4 +1,5 @@
 ---
+import { links } from '../../data/links';
 import { shellCopy } from '../../i18n/copy';
 import type { Locale } from '../../i18n/locale';
 import { withBase } from '../../utils/paths';
@@ -18,9 +19,40 @@ const cvUrl = withBase('cv/');
 
 <header class="site-header" data-site-header>
   <div class="site-header__inner">
-    <a class="brand" href={homeUrl} aria-label={copy.brandHomeLabel}>
-      <span>DGO</span><span aria-hidden="true">.</span>
-    </a>
+    <div class="site-header__left">
+      <a class="brand" href={homeUrl} aria-label={copy.brandHomeLabel}>
+        <span>DGO</span><span aria-hidden="true">.</span>
+      </a>
+
+      <div class="site-header__socials" data-header-socials>
+        <a
+          href={links.githubProfile}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"
+            ><path
+              d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+            ></path></svg
+          >
+        </a>
+        {
+          links.linkedin && (
+            <a
+              href={links.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+            >
+              <svg viewBox="0 0 448 512" aria-hidden="true" fill="currentColor">
+                <path d="M100.3 448l-92.9 0 0-299.1 92.9 0 0 299.1zM53.8 108.1C24.1 108.1 0 83.5 0 53.8 0 39.5 5.7 25.9 15.8 15.8s23.8-15.8 38-15.8 27.9 5.7 38 15.8 15.8 23.8 15.8 38c0 29.7-24.1 54.3-53.8 54.3zM447.9 448l-92.7 0 0-145.6c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7l0 148.1-92.8 0 0-299.1 89.1 0 0 40.8 1.3 0c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3l0 164.3-.1 0z" />
+              </svg>
+            </a>
+          )
+        }
+      </div>
+    </div>
 
     <nav class="desktop-navigation" aria-label={copy.mainNavigation}>
       <a
@@ -50,6 +82,8 @@ const cvUrl = withBase('cv/');
       aria-expanded="false"
       aria-controls="mobile-navigation"
       data-menu-open
+      data-open-label={copy.openMenu}
+      data-close-label={copy.closeMenu}
     >
       <span></span>
       <span></span>
@@ -78,6 +112,7 @@ const cvUrl = withBase('cv/');
         </svg>
       </button>
     </div>
+
     <nav aria-label={copy.mobileNavigation}>
       <a href={homeUrl} data-menu-link>{copy.home} <span>01</span></a>
       <button type="button" data-dialog-open="about-dialog" data-menu-action>
@@ -86,24 +121,182 @@ const cvUrl = withBase('cv/');
       </button>
       <a href={projectsUrl} data-menu-link>{copy.projects} <span>03</span></a>
     </nav>
-    <LanguageSwitcher {locale} variant="mobile" />
-    <a class="mobile-menu__cv" href={cvUrl} data-menu-link
-      >{copy.mobileViewCv}</a
-    >
+
+    <div class="mobile-menu__utilities" data-mobile-utilities>
+      <div class="mobile-menu__socials" data-mobile-socials>
+        <a
+          href={links.githubProfile}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"
+            ><path
+              d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+            ></path></svg
+          >
+          <span>GitHub</span>
+        </a>
+        {
+          links.linkedin && (
+            <a
+              href={links.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+            >
+              <svg viewBox="0 0 448 512" aria-hidden="true" fill="currentColor">
+                <path d="M100.3 448l-92.9 0 0-299.1 92.9 0 0 299.1zM53.8 108.1C24.1 108.1 0 83.5 0 53.8 0 39.5 5.7 25.9 15.8 15.8s23.8-15.8 38-15.8 27.9 5.7 38 15.8 15.8 23.8 15.8 38c0 29.7-24.1 54.3-53.8 54.3zM447.9 448l-92.7 0 0-145.6c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7l0 148.1-92.8 0 0-299.1 89.1 0 0 40.8 1.3 0c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3l0 164.3-.1 0z" />
+              </svg>
+              <span>LinkedIn</span>
+            </a>
+          )
+        }
+      </div>
+
+      <div class="mobile-menu__locale-cv">
+        <LanguageSwitcher {locale} variant="mobile" />
+        <a class="mobile-menu__cv" href={cvUrl} data-menu-link
+          >{copy.mobileViewCv}</a
+        >
+      </div>
+    </div>
   </div>
 </dialog>
 
 <style>
+  .site-header__left,
+  .site-header__socials,
+  .mobile-menu__socials,
+  .mobile-menu__locale-cv {
+    display: flex;
+    align-items: center;
+  }
+
+  .site-header__inner {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .site-header__left {
+    min-width: 0;
+    justify-self: start;
+    gap: clamp(0.65rem, 1.2vw, 1.1rem);
+  }
+
+  .site-header__socials {
+    gap: 0.15rem;
+  }
+
+  .site-header__socials a {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--color-text-muted);
+    transition:
+      background 180ms ease,
+      color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .site-header__socials a:hover {
+    background: var(--color-surface);
+    color: var(--color-text);
+    transform: translateY(-1px);
+  }
+
+  .site-header__socials svg {
+    width: 18px;
+    max-height: 18px;
+  }
+
   .site-header__actions {
     display: flex;
     align-items: center;
+    justify-self: end;
     justify-content: flex-end;
     gap: clamp(0.75rem, 1.5vw, 1rem);
   }
 
+  .mobile-menu__utilities {
+    display: none;
+  }
+
+  @media (max-width: 1100px) and (min-width: 901px) {
+    .site-header__left {
+      gap: 0.35rem;
+    }
+
+    .site-header__socials {
+      gap: 0;
+    }
+
+    .site-header__socials a {
+      width: 40px;
+    }
+  }
+
   @media (max-width: 900px) {
+    .site-header__inner {
+      grid-template-columns: 1fr auto;
+    }
+
+    .site-header__left {
+      display: block;
+    }
+
+    .site-header__socials,
     .site-header__actions {
       display: none;
+    }
+
+    .mobile-menu__utilities {
+      display: grid;
+      gap: 1rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .mobile-menu__socials {
+      gap: 0.6rem;
+    }
+
+    .mobile-menu__socials a {
+      min-width: 0;
+      min-height: 44px;
+      display: inline-flex;
+      flex: 1;
+      align-items: center;
+      gap: 0.6rem;
+      justify-content: center;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: 0.75rem;
+      color: var(--color-text-muted);
+      font-size: 0.82rem;
+      font-weight: 720;
+    }
+
+    .mobile-menu__socials svg {
+      width: 17px;
+      max-height: 17px;
+      flex: 0 0 auto;
+    }
+
+    .mobile-menu__locale-cv {
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .mobile-menu__locale-cv :global(.language-switcher--mobile) {
+      margin-top: 0;
+    }
+
+    .mobile-menu__cv {
+      min-height: 44px;
+      margin-top: 0;
+      padding-inline: 1rem;
     }
   }
 </style>
