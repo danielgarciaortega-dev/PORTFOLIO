@@ -1,7 +1,7 @@
 ---
 import { links } from '../../data/links';
 import { shellCopy } from '../../i18n/copy';
-import type { Locale } from '../../i18n/locale';
+import { getLocalizedRoutePath, type Locale } from '../../i18n/locale';
 import { withBase } from '../../utils/paths';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 
@@ -12,8 +12,8 @@ interface Props {
 
 const { currentPage, locale } = Astro.props;
 const copy = shellCopy[locale];
-const homeUrl = locale === 'en' ? withBase('en/') : withBase();
-const projectsUrl = withBase('proyectos/');
+const homeUrl = withBase(getLocalizedRoutePath(locale, 'home'));
+const projectsUrl = withBase(getLocalizedRoutePath(locale, 'projects'));
 const cvUrl = withBase('cv/');
 ---
 
@@ -71,7 +71,7 @@ const cvUrl = withBase('cv/');
     </nav>
 
     <div class="site-header__actions">
-      <LanguageSwitcher {locale} variant="desktop" />
+      <LanguageSwitcher {locale} {currentPage} variant="desktop" />
       <a class="header-cv-link" href={cvUrl}>{copy.viewCv}</a>
     </div>
 
@@ -155,7 +155,7 @@ const cvUrl = withBase('cv/');
       </div>
 
       <div class="mobile-menu__locale-cv">
-        <LanguageSwitcher {locale} variant="mobile" />
+        <LanguageSwitcher {locale} {currentPage} variant="mobile" />
         <a class="mobile-menu__cv" href={cvUrl} data-menu-link
           >{copy.mobileViewCv}</a
         >
