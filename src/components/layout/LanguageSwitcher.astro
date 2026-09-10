@@ -10,8 +10,10 @@ interface Props {
 
 const { locale, variant = 'desktop' } = Astro.props;
 const copy = shellCopy[locale];
-const spanishUrl = withBase();
-const englishUrl = withBase('en/');
+const targetLocale: Locale = locale === 'es' ? 'en' : 'es';
+const targetUrl = targetLocale === 'en' ? withBase('en/') : withBase();
+const targetLabel =
+  targetLocale === 'en' ? copy.switchToEnglish : copy.switchToSpanish;
 ---
 
 <div
@@ -20,59 +22,24 @@ const englishUrl = withBase('en/');
   aria-label={copy.languageSwitcher}
   data-language-switcher
 >
-  {
-    locale === 'es' ? (
-      <span
-        lang="es"
-        aria-current="true"
-        aria-label={`${copy.spanish}, ${copy.currentLanguage}`}
-      >
-        ES
-      </span>
-    ) : (
-      <a
-        href={spanishUrl}
-        lang="es"
-        hreflang="es"
-        aria-label={copy.spanish}
-        data-locale-link="es"
-      >
-        ES
-      </a>
-    )
-  }
-  {
-    locale === 'en' ? (
-      <span
-        lang="en"
-        aria-current="true"
-        aria-label={`${copy.english}, ${copy.currentLanguage}`}
-      >
-        EN
-      </span>
-    ) : (
-      <a
-        href={englishUrl}
-        lang="en"
-        hreflang="en"
-        aria-label={copy.english}
-        data-locale-link="en"
-      >
-        EN
-      </a>
-    )
-  }
+  <a
+    href={targetUrl}
+    lang={targetLocale}
+    hreflang={targetLocale}
+    aria-label={targetLabel}
+    data-locale-link={targetLocale}
+  >
+    {targetLocale.toUpperCase()}
+  </a>
 </div>
 
 <style>
   .language-switcher {
     display: inline-flex;
     align-items: center;
-    gap: 0.9rem;
   }
 
-  .language-switcher--desktop a,
-  .language-switcher--desktop span {
+  .language-switcher--desktop a {
     position: relative;
     min-height: 44px;
     display: inline-flex;
@@ -83,8 +50,7 @@ const englishUrl = withBase('en/');
     font-weight: 650;
   }
 
-  .language-switcher--desktop a::after,
-  .language-switcher--desktop span::after {
+  .language-switcher--desktop a::after {
     content: '';
     position: absolute;
     right: 0;
@@ -97,13 +63,11 @@ const englishUrl = withBase('en/');
     transition: transform 200ms ease;
   }
 
-  .language-switcher--desktop a:hover,
-  .language-switcher--desktop span[aria-current='true'] {
+  .language-switcher--desktop a:hover {
     color: var(--color-text);
   }
 
-  .language-switcher--desktop a:hover::after,
-  .language-switcher--desktop span[aria-current='true']::after {
+  .language-switcher--desktop a:hover::after {
     transform: scaleX(1);
     transform-origin: left;
   }
@@ -111,11 +75,9 @@ const englishUrl = withBase('en/');
   .language-switcher--mobile {
     width: fit-content;
     margin-top: 1.5rem;
-    gap: 1rem;
   }
 
-  .language-switcher--mobile a,
-  .language-switcher--mobile span {
+  .language-switcher--mobile a {
     position: relative;
     min-height: 44px;
     display: inline-flex;
@@ -128,8 +90,7 @@ const englishUrl = withBase('en/');
     line-height: 1;
   }
 
-  .language-switcher--mobile a::after,
-  .language-switcher--mobile span::after {
+  .language-switcher--mobile a::after {
     content: '';
     position: absolute;
     right: 0;
@@ -142,13 +103,11 @@ const englishUrl = withBase('en/');
     transition: transform 200ms ease;
   }
 
-  .language-switcher--mobile a:hover,
-  .language-switcher--mobile span[aria-current='true'] {
+  .language-switcher--mobile a:hover {
     color: var(--color-text);
   }
 
-  .language-switcher--mobile a:hover::after,
-  .language-switcher--mobile span[aria-current='true']::after {
+  .language-switcher--mobile a:hover::after {
     transform: scaleX(1);
     transform-origin: left;
   }
