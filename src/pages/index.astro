@@ -15,6 +15,7 @@ const projects = getProjects(locale);
   title="Daniel García Ortega · Desarrollador web full-stack"
   description="Portfolio de Daniel García Ortega, desarrollador web full-stack en Granada: proyectos, tecnologías, experiencia, formación y CV."
   currentPage="home"
+  localizedRoute="home"
 >
   <main id="contenido" class="home-page">
     <Hero projects={projects.filter((project) => project.featured)} {locale} />

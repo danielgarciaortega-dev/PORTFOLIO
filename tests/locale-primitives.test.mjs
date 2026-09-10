@@ -7,6 +7,7 @@ import {
   SUPPORTED_LOCALES,
   getLocaleCounterpartPath,
   getLocalizedRoutePath,
+  getLocalizedRouteUrl,
   isLocale,
   normalizeBasePath,
   persistLocalePreference,
@@ -53,6 +54,35 @@ test('base-path normalization is stable for root and GitHub Pages', () => {
   assert.equal(normalizeBasePath('/'), '/');
   assert.equal(normalizeBasePath('PORTFOLIO'), '/PORTFOLIO/');
   assert.equal(normalizeBasePath('/PORTFOLIO/'), '/PORTFOLIO/');
+});
+
+test('localized absolute route URLs are correct for GitHub Pages and root bases', () => {
+  const site = 'https://portfolio.example';
+
+  assert.equal(
+    getLocalizedRouteUrl(site, '/PORTFOLIO', 'es', 'home').toString(),
+    'https://portfolio.example/PORTFOLIO/',
+  );
+  assert.equal(
+    getLocalizedRouteUrl(site, '/PORTFOLIO/', 'en', 'home').toString(),
+    'https://portfolio.example/PORTFOLIO/en/',
+  );
+  assert.equal(
+    getLocalizedRouteUrl(site, '/PORTFOLIO', 'es', 'projects').toString(),
+    'https://portfolio.example/PORTFOLIO/proyectos/',
+  );
+  assert.equal(
+    getLocalizedRouteUrl(site, '/PORTFOLIO/', 'en', 'projects').toString(),
+    'https://portfolio.example/PORTFOLIO/en/projects/',
+  );
+  assert.equal(
+    getLocalizedRouteUrl(site, '/', 'es', 'home').toString(),
+    'https://portfolio.example/',
+  );
+  assert.equal(
+    getLocalizedRouteUrl(site, '/', 'en', 'projects').toString(),
+    'https://portfolio.example/en/projects/',
+  );
 });
 
 test('pathname locale resolution respects the GitHub Pages base path', () => {

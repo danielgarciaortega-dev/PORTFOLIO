@@ -12,9 +12,10 @@ const projects = getProjects(locale);
 ---
 
 <BaseLayout
-  title="Daniel García Ortega · Desarrollador web full-stack"
-  description="Portfolio de Daniel García Ortega, desarrollador web full-stack en Granada: proyectos, tecnologías, experiencia, formación y CV."
+  title="Daniel García Ortega · Full-stack web developer"
+  description="Portfolio of Daniel García Ortega, full-stack web developer in Granada: projects, technologies, experience, education and CV."
   currentPage="home"
+  localizedRoute="home"
 >
   <main id="contenido" class="home-page">
     <Hero projects={projects.filter((project) => project.featured)} {locale} />

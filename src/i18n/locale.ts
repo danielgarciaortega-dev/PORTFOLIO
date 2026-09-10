@@ -50,6 +50,17 @@ export function normalizeBasePath(basePath: string): string {
   return cleanBase === '' ? '/' : `${cleanBase}/`;
 }
 
+export function getLocalizedRouteUrl(
+  site: string | URL,
+  basePath: string,
+  locale: Locale,
+  route: LocalizedRoute,
+): URL {
+  const normalizedBase = normalizeBasePath(basePath);
+  const routePath = getLocalizedRoutePath(locale, route);
+  return new URL(`${normalizedBase}${routePath}`, site);
+}
+
 export function resolveLocaleFromPathname(
   pathname: string,
   basePath = '/',
