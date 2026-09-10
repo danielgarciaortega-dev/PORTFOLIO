@@ -2254,22 +2254,6 @@ a {
   align-items: start;
 }
 
-.overview-organization__logo {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  border-radius: 0.55rem;
-  background: var(--color-surface);
-}
-
-.overview-organization__logo img {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
-}
-
 /* Ancho y relleno más compactos para esta franja de anchos; el centrado
    con zoom y el max-height (basado en 100dvh) ya los fija el bloque base
    de .content-dialog / .dialog-panel más arriba. */
