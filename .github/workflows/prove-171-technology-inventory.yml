@@ -27,14 +27,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Replace obsolete Spanish count-only assertion
+      - name: Replace obsolete technology count-only assertions
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
 
-          path = Path('tests/portfolio.spec.ts')
-          source = path.read_text()
+          portfolio = Path('tests/portfolio.spec.ts')
+          source = portfolio.read_text()
           old = """  const technologyItems = page.locator('.home-overview__technologies li');
             await expect(technologyItems).toHaveCount(22);
             await expect(technologyItems.locator('img')).toHaveCount(22);
@@ -71,8 +71,22 @@ jobs:
             );
           """
           if old not in source:
-              raise SystemExit('Expected obsolete technology-count block was not found')
-          path.write_text(source.replace(old, new, 1))
+              raise SystemExit('Expected obsolete portfolio technology-count block was not found')
+          portfolio.write_text(source.replace(old, new, 1))
+
+          home_locales = Path('tests/home-locales.spec.ts')
+          source = home_locales.read_text()
+          old = """  await expect(
+            overview.locator('.home-overview__technologies li img'),
+          ).toHaveCount(22);
+          """
+          new = """  await expect(
+            overview.locator('.home-overview__technologies li img'),
+          ).toHaveCount(19);
+          """
+          if old not in source:
+              raise SystemExit('Expected obsolete home-locales technology-count block was not found')
+          home_locales.write_text(source.replace(old, new, 1))
           PY
 
       - name: Format maintained files
@@ -85,6 +99,7 @@ jobs:
           tests/technology-icons.test.mjs
           tests/professional-overview-english.spec.ts
           tests/portfolio.spec.ts
+          tests/home-locales.spec.ts
           --write
 
       - name: Run locale and icon contracts
@@ -94,7 +109,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run focused overview regressions
-        run: npx playwright test tests/professional-overview-english.spec.ts tests/portfolio.spec.ts
+        run: npx playwright test tests/professional-overview-english.spec.ts tests/portfolio.spec.ts tests/home-locales.spec.ts
 
       - name: Run full repository test suite
         run: npm test
@@ -117,9 +132,10 @@ jobs:
             public/images/technologies/laravel.svg \
             tests/technology-icons.test.mjs \
             tests/professional-overview-english.spec.ts \
-            tests/portfolio.spec.ts
+            tests/portfolio.spec.ts \
+            tests/home-locales.spec.ts
 
-          allowed='^(.github/workflows/prove-171-technology-inventory.yml|README.md|src/data/es/technologies.ts|src/data/en/technologies.ts|src/data/technology-icons.ts|public/images/technologies/angular.svg|public/images/technologies/laravel.svg|tests/technology-icons.test.mjs|tests/professional-overview-english.spec.ts|tests/portfolio.spec.ts)$'
+          allowed='^(.github/workflows/prove-171-technology-inventory.yml|README.md|src/data/es/technologies.ts|src/data/en/technologies.ts|src/data/technology-icons.ts|public/images/technologies/angular.svg|public/images/technologies/laravel.svg|tests/technology-icons.test.mjs|tests/professional-overview-english.spec.ts|tests/portfolio.spec.ts|tests/home-locales.spec.ts)$'
           unexpected="$(git status --short | awk '{print $2}' | grep -Ev "$allowed" || true)"
           if [ -n "$unexpected" ]; then
             echo 'Unexpected issue #171 worktree paths:'
