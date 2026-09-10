@@ -14,7 +14,9 @@ El runbook mantenido para Vercel PR Previews, checks exact-head, protección de 
 
 Ese documento es la referencia operativa para distinguir Preview de producción, diagnosticar fallos de `Repository validation` / `Preview readiness` y mantener el ciclo PR → revisión → merge → GitHub Pages.
 
-El ruleset activo de `main` todavía nombra `Repository validation` y `Preview readiness` como checks requeridos. #142 registra la retirada pendiente de Vercel como gate obligatorio. Mientras ese ajuste administrativo no se complete, el propietario ha autorizado continuar ante fallos **exclusivamente externos** de Vercel mediante el bypass de PR, pero solo después de que `Repository validation` esté verde para el head exacto y el diff haya sido auditado. Esta recuperación no permite ocultar fallos de código/tests, reutilizar evidencia de otro SHA ni convertir Vercel en producción.
+La política específica de protección de `main`, ausencia de bypass ordinario y prueba adversarial de merge está documentada en [`operations/MAIN_RULESET_GOVERNANCE.md`](operations/MAIN_RULESET_GOVERNANCE.md).
+
+El ruleset activo de `main` requiere actualmente `Repository validation` y `Preview readiness`. #142 corrige el defecto por el que un rol del repositorio puede saltarse esos checks mediante `bypass_mode: pull_request`. Mientras el actor de bypass siga presente, no debe usarse para fusionar #53, #54, #55 o #56. Un cambio futuro sobre qué checks son obligatorios pertenece a su propia decisión de gobernanza; no se implementa tratando un check rojo como si estuviera verde.
 
 ## `screenshots/`
 
@@ -38,7 +40,7 @@ El job separado `Preview visual evidence` captura directamente ese Preview prote
 
 El bypass de Deployment Protection se inyecta solo en peticiones HTTPS al origen exacto `*.vercel.app` ya validado. El secreto no se imprime, no se escribe en el manifest y no se sube al artifact. La evidencia tiene retención corta y existe para que un revisor pueda inspeccionar el mismo Preview exact-head aunque su navegador no tenga acceso interactivo al scope de Vercel.
 
-Este artifact **no es un tercer gate requerido, no hace pixel-diff y no aprueba visualmente la PR**. `Repository validation` sigue siendo el gate de corrección del repositorio. `Preview readiness` continúa existiendo mientras la integración siga configurada, pero #142 registra su retirada como requisito bloqueante si Vercel deja de formar parte del flujo obligatorio.
+Este artifact **no es un tercer gate requerido, no hace pixel-diff y no aprueba visualmente la PR**. `Repository validation` sigue siendo el gate de corrección del repositorio y `Preview readiness` continúa siendo un check requerido mientras el ruleset activo lo declare así. Cualquier cambio de esa política debe hacerse explícitamente en el ruleset y su issue propietaria; #142 no convierte un fallo de Preview en un permiso para bypass.
 
 ## Contrato de revisión visual en PR
 
@@ -57,7 +59,7 @@ Para una PR visual, la revisión manual debe registrar, cuando el flujo de Previ
 
 Cualquier push posterior invalida esa revisión manual y cualquier evidencia exact-head previa. No se puede reciclar una URL, un artifact ni un resultado de otro SHA para justificar el nuevo head.
 
-Los checks automatizados permanecen separados de la aprobación visual manual. Un fallo de `Repository validation` siempre bloquea el merge. Cuando el único fallo es externo a Vercel y el propietario ha autorizado recuperación, el bypass se limita a ese bloqueo de Preview hasta que #142 retire formalmente el requisito. Una PR visual no debe darse por buena si la evidencia disponible muestra un problema de layout o despliegue real.
+Los checks automatizados permanecen separados de la aprobación visual manual. Un fallo de `Repository validation` siempre bloquea el merge. `Preview readiness` también bloquea mientras figure como check requerido. #142 elimina el bypass ordinario que permitía saltarse esos estados; no redefine un fallo de proveedor ni de código como éxito.
 
 Para cambios no visuales no se deben regenerar capturas ni introducir churn de evidencias solo para completar la plantilla. El job `Preview visual evidence` se omite para esas PR.
 
