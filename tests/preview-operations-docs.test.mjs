@@ -11,6 +11,10 @@ const branchLifecycle = readFileSync(
   'utf8',
 );
 const shellContract = readFileSync('docs/operations/FINAL_SHELL.md', 'utf8');
+const mainRulesetGovernance = readFileSync(
+  'docs/operations/MAIN_RULESET_GOVERNANCE.md',
+  'utf8',
+);
 
 const requiredSourcePaths = [
   '.github/workflows/validate.yml',
@@ -158,6 +162,27 @@ test('documents the final bilingual shell and its ownership boundaries', () => {
   assert.match(docsIndex, /operations\/FINAL_SHELL\.md/);
 });
 
+test('documents the no-bypass protected-main governance contract', () => {
+  for (const requiredText of [
+    'target exactly `refs/heads/main`',
+    'require review-thread resolution',
+    'require strict/up-to-date `Repository validation`',
+    'require strict/up-to-date `Preview readiness`',
+    'no ordinary pull-request bypass actors',
+    'disposable PR whose `Repository validation` is deliberately red',
+    'Attempting a normal merge must be rejected by GitHub',
+  ]) {
+    assert.ok(mainRulesetGovernance.includes(requiredText), requiredText);
+  }
+
+  assert.match(docsIndex, /operations\/MAIN_RULESET_GOVERNANCE\.md/);
+  assert.match(agents, /Never use an ordinary repository-role bypass/i);
+  assert.match(
+    agents,
+    /#142 removes the ordinary repository-role pull-request bypass/i,
+  );
+});
+
 test('top-level sources describe the current bilingual architecture', () => {
   const agentSnippets = [
     'Spanish and English are first-class public locales',
@@ -170,8 +195,8 @@ test('top-level sources describe the current bilingual architecture', () => {
     '#55 owns the future English counterpart `/en/cv/`',
     'GitHub Pages is canonical production',
     'Repository validation` is the authoritative code/test gate',
-    'must never conceal a failing `Repository validation`',
-    '#142 tracks retiring Vercel from required merge governance',
+    'Never use an ordinary repository-role bypass',
+    '#142 removes the ordinary repository-role pull-request bypass',
     'Never revive, merge, rebase forward or cherry-pick',
   ];
   const readmeSnippets = [
@@ -186,11 +211,11 @@ test('top-level sources describe the current bilingual architecture', () => {
     'docs/operations/PREVIEW_AND_PAGES.md',
   ];
   const docsSnippets = [
-    'todavía nombra `Repository validation` y `Preview readiness`',
-    '#142 registra la retirada pendiente de Vercel',
-    'solo después de que `Repository validation` esté verde',
-    'no permite ocultar fallos de código/tests',
-    'reutilizar evidencia de otro SHA',
+    'requiere actualmente `Repository validation` y `Preview readiness`',
+    '#142 corrige el defecto',
+    'no debe usarse para fusionar #53, #54, #55 o #56',
+    'no se implementa tratando un check rojo como si estuviera verde',
+    'No se puede reciclar una URL, un artifact ni un resultado de otro SHA',
   ];
 
   assert.equal(agents.includes('Sitio en español.'), false);
