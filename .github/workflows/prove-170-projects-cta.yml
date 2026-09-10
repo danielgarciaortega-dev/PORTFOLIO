@@ -1,0 +1,63 @@
+name: Prove issue 170 projects CTA
+
+on:
+  push:
+    branches:
+      - fix/170-localized-projects-cta
+
+permissions:
+  contents: write
+
+jobs:
+  prove:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: fix/170-localized-projects-cta
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format maintained files
+        run: npx prettier src/components/home/Hero.astro tests/home-projects-cta.spec.ts --write
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run focused CTA regression tests
+        run: npx playwright test tests/home-projects-cta.spec.ts tests/home-locales.spec.ts tests/home-english.spec.ts
+
+      - name: Verify scope and retire proof workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          git rm .github/workflows/prove-170-projects-cta.yml
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/components/home/Hero.astro tests/home-projects-cta.spec.ts
+
+          changed="$(git status --short | awk '{print $2}' | sort)"
+          expected="$(printf '%s\n' \
+            '.github/workflows/prove-170-projects-cta.yml' \
+            'src/components/home/Hero.astro' \
+            'tests/home-projects-cta.spec.ts' | sort)"
+
+          if [ "$changed" != "$expected" ]; then
+            echo 'Unexpected issue #170 worktree diff:'
+            git status --short
+            exit 1
+          fi
+
+          git commit -m 'fix: finalize localized projects CTA'
+          git push origin HEAD:fix/170-localized-projects-cta
