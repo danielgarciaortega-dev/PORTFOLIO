@@ -64,12 +64,17 @@ Worked on a healthcare SaaS platform, fixing bugs and validating web and mobile 
 
 ## Bilingual architecture
 
-Spanish and English are first-class portfolio locales. The current public home routes are:
+Spanish and English are first-class portfolio locales. The current public route matrix includes:
 
-- Spanish: `/`
-- English: `/en/`
+- Spanish home: `/`
+- English home: `/en/`
+- Spanish projects: `/proyectos/`
+- English projects: `/en/projects/`
+- Current standalone CV: `/cv/`
 
-The shell exposes one target-locale action rather than simultaneous ES/EN controls. The current projects and CV entry points remain `/proyectos/` and `/cv/` until their dedicated bilingual route issues land; the repository must not present planned `/en/projects/` or `/en/cv/` counterparts as already deployed.
+The shell exposes one target-locale action rather than simultaneous ES/EN controls. Home switches `/` ↔ `/en/`, while the projects index switches `/proyectos/` ↔ `/en/projects/`. The unscoped `/projects/` alias is intentionally not part of the public route contract.
+
+The CV remains at `/cv/` for both shell locales until the CV-specific bilingual work adds `/en/cv/`.
 
 The final shell contract and route ownership boundaries are maintained in [`docs/operations/FINAL_SHELL.md`](docs/operations/FINAL_SHELL.md).
 
