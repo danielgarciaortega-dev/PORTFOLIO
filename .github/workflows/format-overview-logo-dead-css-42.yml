@@ -1,0 +1,41 @@
+name: Format overview logo dead CSS guard once
+
+on:
+  push:
+    branches: [maint/42-remove-obsolete-overview-logo-css]
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout maintenance branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: maint/42-remove-obsolete-overview-logo-css
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format maintained guard
+        run: npx prettier tests/overview-logo-dead-css.spec.ts --write
+
+      - name: Commit formatting and remove one-shot
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/format-overview-logo-dead-css-42.yml
+          git add tests/overview-logo-dead-css.spec.ts
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'style: format overview logo CSS guard'
+          git push origin HEAD:maint/42-remove-obsolete-overview-logo-css
