@@ -29,6 +29,24 @@ Protected `main` currently requires two status-check names:
 
 A new push creates a new head SHA and both required checks must pass for that current head. Do not reuse results from an older commit and do not bypass a failing repository check.
 
+## External Git integration retirement guard
+
+The previously connected Vercel Git integration is not part of the deployment architecture. However, it is still installed outside the repository and can react to Git pushes independently of GitHub Actions.
+
+Until that external project connection is removed in its provider dashboard, the root `vercel.json` is retained only as a **kill switch**:
+
+```json
+{
+  "git": {
+    "deploymentEnabled": false
+  }
+}
+```
+
+Its only allowed purpose is to disable automatic Git deployments for every branch. It must not define build commands, routes, Preview behavior, production behavior, secrets or deployment settings. `tests/github-pages-policy.test.mjs` protects this invariant.
+
+Once the external Git connection has been removed, this final retirement guard can be deleted together with its focused assertion. No GitHub workflow or product code should ever depend on it.
+
 ## Local validation
 
 Full contract:
