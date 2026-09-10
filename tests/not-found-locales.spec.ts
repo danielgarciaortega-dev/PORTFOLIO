@@ -33,22 +33,19 @@ test('Spanish missing route keeps HTTP 404 and the default localized shell', asy
 
   const actions = page.locator('[data-not-found-actions]');
   await expect(actions.getByRole('link')).toHaveCount(2);
-  await expect(actions.getByRole('link', { name: 'Volver al inicio' })).toHaveAttribute(
-    'href',
-    '/PORTFOLIO/',
-  );
-  await expect(actions.getByRole('link', { name: 'Ver proyectos' })).toHaveAttribute(
-    'href',
-    '/PORTFOLIO/proyectos/',
-  );
+  await expect(
+    actions.getByRole('link', { name: 'Volver al inicio' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/');
+  await expect(
+    actions.getByRole('link', { name: 'Ver proyectos' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/proyectos/');
 
   const navigation = page.getByRole('navigation', {
     name: 'Navegación principal',
   });
-  await expect(navigation.getByRole('link', { name: 'Inicio' })).toHaveAttribute(
-    'href',
-    '/PORTFOLIO/',
-  );
+  await expect(
+    navigation.getByRole('link', { name: 'Inicio' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/');
   await expect(
     navigation.getByRole('button', { name: 'Sobre mí' }),
   ).toBeVisible();
@@ -95,14 +92,12 @@ test('English-prefixed missing route keeps HTTP 404 and localizes the one shell'
 
   const actions = page.locator('[data-not-found-actions]');
   await expect(actions.getByRole('link')).toHaveCount(2);
-  await expect(actions.getByRole('link', { name: 'Back to home' })).toHaveAttribute(
-    'href',
-    '/PORTFOLIO/en/',
-  );
-  await expect(actions.getByRole('link', { name: 'View projects' })).toHaveAttribute(
-    'href',
-    '/PORTFOLIO/en/projects/',
-  );
+  await expect(
+    actions.getByRole('link', { name: 'Back to home' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/en/');
+  await expect(
+    actions.getByRole('link', { name: 'View projects' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/en/projects/');
 
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
   await expect(navigation.getByRole('link', { name: 'Home' })).toHaveAttribute(
@@ -111,10 +106,9 @@ test('English-prefixed missing route keeps HTTP 404 and localizes the one shell'
   );
   const aboutTrigger = navigation.getByRole('button', { name: 'About' });
   await expect(aboutTrigger).toBeVisible();
-  await expect(navigation.getByRole('link', { name: 'Projects' })).toHaveAttribute(
-    'href',
-    '/PORTFOLIO/en/projects/',
-  );
+  await expect(
+    navigation.getByRole('link', { name: 'Projects' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/en/projects/');
 
   const visibleLocaleAction = page
     .locator('.site-header__actions [data-language-switcher]')
@@ -123,7 +117,9 @@ test('English-prefixed missing route keeps HTTP 404 and localizes the one shell'
   await expect(visibleLocaleAction).toHaveAttribute('href', '/PORTFOLIO/');
 
   await aboutTrigger.click();
-  const aboutDialog = page.getByRole('dialog', { name: 'Daniel García Ortega' });
+  const aboutDialog = page.getByRole('dialog', {
+    name: 'Daniel García Ortega',
+  });
   await expect(aboutDialog).toBeVisible();
   await expect(aboutDialog.locator('[data-about-eyebrow]')).toHaveText('ABOUT');
   await expect(aboutDialog.locator('[data-about-education-title]')).toHaveText(
@@ -153,16 +149,17 @@ test('English 404 mobile menu stays localized, usable and overflow-free', async 
   const menu = page.getByRole('dialog', { name: 'Navigation' });
   await expect(menu).toBeVisible();
   await expect(trigger).toHaveAttribute('aria-label', 'Close menu');
-  const navigation = menu.getByRole('navigation', { name: 'Mobile navigation' });
+  const navigation = menu.getByRole('navigation', {
+    name: 'Mobile navigation',
+  });
   await expect(navigation.getByRole('link', { name: /Home/ })).toHaveAttribute(
     'href',
     '/PORTFOLIO/en/',
   );
   await expect(navigation.getByRole('button', { name: /About/ })).toBeVisible();
-  await expect(navigation.getByRole('link', { name: /Projects/ })).toHaveAttribute(
-    'href',
-    '/PORTFOLIO/en/projects/',
-  );
+  await expect(
+    navigation.getByRole('link', { name: /Projects/ }),
+  ).toHaveAttribute('href', '/PORTFOLIO/en/projects/');
   await expect(
     menu.getByRole('link', { name: 'Switch to Spanish' }),
   ).toHaveAttribute('href', '/PORTFOLIO/');
@@ -183,7 +180,9 @@ test('English 404 mobile menu stays localized, usable and overflow-free', async 
   await expect(trigger).toBeFocused();
 });
 
-test('representative Spanish and English 404 states pass axe', async ({ page }) => {
+test('representative Spanish and English 404 states pass axe', async ({
+  page,
+}) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
 
   for (const route of ['./missing-a11y/', './en/missing-a11y/']) {
