@@ -49,6 +49,16 @@ interface DialogCopy {
   copyFallback: string;
 }
 
+interface NotFoundCopy {
+  title: string;
+  description: string;
+  eyebrow: string;
+  heading: string;
+  body: string;
+  homeAction: string;
+  projectsAction: string;
+}
+
 export const shellCopy: Record<Locale, ShellCopy> = {
   es: {
     skipLink: 'Saltar al contenido',
@@ -148,5 +158,26 @@ export const dialogCopy: Record<Locale, DialogCopy> = {
     copyEmail: 'Copy email',
     copySuccess: 'Email copied',
     copyFallback: 'Email selected. Press Ctrl+C or Command+C to copy it.',
+  },
+};
+
+export const notFoundCopy: Record<Locale, NotFoundCopy> = {
+  es: {
+    title: 'Página no encontrada · Daniel García Ortega',
+    description: 'La página solicitada no existe.',
+    eyebrow: 'ERROR 404',
+    heading: 'Esta ruta no forma parte del proyecto.',
+    body: 'Vuelve al inicio o consulta los proyectos seleccionados.',
+    homeAction: 'Volver al inicio',
+    projectsAction: 'Ver proyectos',
+  },
+  en: {
+    title: 'Page not found · Daniel García Ortega',
+    description: 'The requested page does not exist.',
+    eyebrow: 'ERROR 404',
+    heading: 'This route is not part of the project.',
+    body: 'Return home or browse the selected projects.',
+    homeAction: 'Back to home',
+    projectsAction: 'View projects',
   },
 };

@@ -17,10 +17,11 @@ const copy = dialogCopy[locale];
   class="content-dialog project-dialog"
   id="about-dialog"
   aria-labelledby="about-dialog-title"
+  data-about-dialog
 >
   <div class="dialog-panel" data-dialog-panel>
     <header class="dialog-header">
-      <p class="eyebrow">{copy.aboutEyebrow}</p>
+      <p class="eyebrow" data-about-eyebrow>{copy.aboutEyebrow}</p>
       <div class="dialog-header__actions">
         <a
           href={links.githubProfile}
@@ -29,6 +30,7 @@ const copy = dialogCopy[locale];
           class="dialog-header__icon-link"
           aria-label={copy.viewGitHub}
           title={copy.viewGitHub}
+          data-about-github-link
         >
           <svg
             class="icon-brand"
@@ -50,6 +52,7 @@ const copy = dialogCopy[locale];
               class="dialog-header__icon-link"
               aria-label={copy.viewLinkedIn}
               title={copy.viewLinkedIn}
+              data-about-linkedin-link
             >
               <svg
                 class="icon-brand"
@@ -66,6 +69,7 @@ const copy = dialogCopy[locale];
           type="button"
           aria-label={copy.closeAbout}
           data-dialog-close
+          data-about-close
           autofocus
         >
           <svg viewBox="0 0 24 24" aria-hidden="true"
@@ -81,18 +85,21 @@ const copy = dialogCopy[locale];
           alt={profile.aboutImageAlt}
           width="280"
           height="280"
+          data-about-image
         />
       </div>
       <div>
-        <p class="project-dialog__context">{profile.location}</p>
+        <p class="project-dialog__context" data-about-location>
+          {profile.location}
+        </p>
         <h2 id="about-dialog-title">{profile.fullName}</h2>
-        <p>{profile.aboutIntro}</p>
+        <p data-about-intro>{profile.aboutIntro}</p>
       </div>
     </div>
     <div class="about-dialog__details">
       <div>
-        <h3>{copy.educationAndProjects}</h3>
-        <ul class="about-dialog__milestones">
+        <h3 data-about-education-title>{copy.educationAndProjects}</h3>
+        <ul class="about-dialog__milestones" data-about-milestones>
           {
             profile.milestones.map((milestone) => (
               <li>
@@ -104,8 +111,8 @@ const copy = dialogCopy[locale];
         </ul>
       </div>
       <div>
-        <h3>{copy.seeking}</h3>
-        <p>{profile.seeking}</p>
+        <h3 data-about-seeking-title>{copy.seeking}</h3>
+        <p data-about-seeking>{profile.seeking}</p>
       </div>
     </div>
   </div>
