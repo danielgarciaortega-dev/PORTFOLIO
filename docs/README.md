@@ -15,10 +15,10 @@ Las capturas responsive son generadas por la suite Playwright definida en `tests
 El modelo definitivo de QA visual seleccionado por #88 es **híbrido sin pixel-diff automático**:
 
 - las propiedades estables del shell se protegen con assertions Playwright semánticas, de visibilidad, geometría, overflow, foco, locale y accesibilidad;
-- `tests/visual.spec.ts` y `Preview visual evidence` generan capturas como evidencia de revisión humana;
+- `tests/visual.spec.ts` y `Preview visual evidence` generan capturas como artefactos de revisión humana;
 - las capturas no son baselines automáticos y no se aprueban mediante `toHaveScreenshot(...)`.
 
-Por tanto, una captura generada por sí sola no demuestra que no exista una regresión visual. Los tests estructurales deben fallar ante regresiones objetivas y la revisión exact-head debe detectar diferencias visuales que no sea razonable convertir en una assertion estable.
+Estas capturas son artefactos de revisión, no assertions de regresión visual por píxel. Por tanto, una captura generada por sí sola no demuestra que no exista una regresión visual. Los tests estructurales deben fallar ante regresiones objetivas y la revisión exact-head debe detectar diferencias visuales que no sea razonable convertir en una assertion estable.
 
 No deben editarse manualmente para ocultar regresiones visuales. Si cambia la interfaz de forma intencionada, las capturas deben regenerarse mediante la suite correspondiente y revisarse como parte del cambio. No se deben introducir snapshots por píxel para superficies dinámicas solo para aparentar una cobertura que sería frágil o generaría churn sin señal útil.
 
