@@ -34,17 +34,20 @@ test('retired external Preview integration files stay removed', () => {
   }
 });
 
-test('pull-request gates are GitHub-only and build the exact head for Pages', () => {
-  const workflow = read('.github/workflows/validate.yml');
+test(
+  'pull-request gates are GitHub-only and build the exact head for Pages',
+  () => {
+    const workflow = read('.github/workflows/validate.yml');
 
-  assert.match(workflow, /name: Repository validation/);
-  assert.match(workflow, /name: Preview readiness/);
-  assert.match(workflow, /npm run test:pages/);
-  assert.match(workflow, /npm run build/);
-  assert.match(workflow, /github\.event\.pull_request\.head\.sha/);
-  assert.doesNotMatch(workflow, new RegExp(retiredProvider, 'i'));
-  assert.doesNotMatch(workflow, /PREVIEW_URL|AUTOMATION_BYPASS_SECRET/i);
-});
+    assert.match(workflow, /name: Repository validation/);
+    assert.match(workflow, /name: Preview readiness/);
+    assert.match(workflow, /npm run test:pages/);
+    assert.match(workflow, /npm run build/);
+    assert.match(workflow, /github\.event\.pull_request\.head\.sha/);
+    assert.doesNotMatch(workflow, new RegExp(retiredProvider, 'i'));
+    assert.doesNotMatch(workflow, /PREVIEW_URL|AUTOMATION_BYPASS_SECRET/i);
+  },
+);
 
 test('production deployment remains GitHub Pages only', () => {
   const deployWorkflow = read('.github/workflows/deploy.yml');
@@ -59,7 +62,10 @@ test('package scripts keep a focused Pages readiness regression suite', () => {
 
   assert.match(packageJson.scripts['test:pages'], /astro-hosting-config/);
   assert.match(packageJson.scripts['test:pages'], /github-pages-policy/);
-  assert.doesNotMatch(packageJson.scripts['test:config'], new RegExp(retiredProvider, 'i'));
+  assert.doesNotMatch(
+    packageJson.scripts['test:config'],
+    new RegExp(retiredProvider, 'i'),
+  );
 });
 
 test('maintained Pages runbook replaces provider-specific Preview docs', () => {
