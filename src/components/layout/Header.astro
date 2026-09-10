@@ -14,7 +14,7 @@ const { currentPage, locale } = Astro.props;
 const copy = shellCopy[locale];
 const homeUrl = withBase(getLocalizedRoutePath(locale, 'home'));
 const projectsUrl = withBase(getLocalizedRoutePath(locale, 'projects'));
-const cvUrl = withBase('cv/');
+const cvUrl = withBase(locale === 'en' ? 'en/cv/' : 'cv/');
 ---
 
 <header class="site-header" data-site-header>

@@ -46,8 +46,8 @@ async function collectParity(page: Page) {
       ].find((className) => element.classList.contains(className)),
     ),
     knowsAbout: JSON.parse(
-      document.querySelector('script[type="application/ld+json"]')?.textContent ??
-        '{}',
+      document.querySelector('script[type="application/ld+json"]')
+        ?.textContent ?? '{}',
     ).knowsAbout,
   }));
 }
@@ -84,24 +84,30 @@ test('CV counterpart navigation is locale-correct, base-safe and persists portfo
   await expect(esSwitch).toHaveCount(1);
   await expect(esSwitch).toHaveAttribute('href', '../en/cv/');
   await expect(esSwitch).toHaveAttribute('hreflang', 'en');
-  await expect(page.locator('.portfolio-back-link')).toHaveAttribute('href', '../');
+  await expect(page.locator('.portfolio-back-link')).toHaveAttribute(
+    'href',
+    '../',
+  );
   await esSwitch.click();
   await expect(page).toHaveURL(/\/PORTFOLIO\/en\/cv\/$/);
-  expect(await page.evaluate(() => localStorage.getItem('portfolio.locale'))).toBe(
-    'en',
-  );
+  expect(
+    await page.evaluate(() => localStorage.getItem('portfolio.locale')),
+  ).toBe('en');
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   const enSwitch = page.locator('[data-locale-link]');
   await expect(enSwitch).toHaveCount(1);
   await expect(enSwitch).toHaveAttribute('href', '../../cv/');
   await expect(enSwitch).toHaveAttribute('hreflang', 'es');
-  await expect(page.locator('.portfolio-back-link')).toHaveAttribute('href', '../');
+  await expect(page.locator('.portfolio-back-link')).toHaveAttribute(
+    'href',
+    '../',
+  );
   await enSwitch.click();
   await expect(page).toHaveURL(/\/PORTFOLIO\/cv\/$/);
-  expect(await page.evaluate(() => localStorage.getItem('portfolio.locale'))).toBe(
-    'es',
-  );
+  expect(
+    await page.evaluate(() => localStorage.getItem('portfolio.locale')),
+  ).toBe('es');
 });
 
 test('counterpart link remains normal navigation when JavaScript is disabled', async ({
@@ -122,10 +128,7 @@ test('English CV reuses shared local assets and has no false Spanish PDF control
   const failedLocal: string[] = [];
   page.on('response', (response) => {
     const url = new URL(response.url());
-    if (
-      url.origin === 'http://127.0.0.1:4321' &&
-      response.status() >= 400
-    ) {
+    if (url.origin === 'http://127.0.0.1:4321' && response.status() >= 400) {
       failedLocal.push(url.pathname);
     }
   });
@@ -180,9 +183,8 @@ test('English CV preserves A4, mobile and accessibility geometry', async ({
 
   const mobile = await page.evaluate(() => ({
     sheetWidth:
-      document
-        .querySelector<HTMLElement>('.cv-sheet')
-        ?.getBoundingClientRect().width ?? 0,
+      document.querySelector<HTMLElement>('.cv-sheet')?.getBoundingClientRect()
+        .width ?? 0,
     scrollWidth: document.documentElement.scrollWidth,
     clientWidth: document.documentElement.clientWidth,
     footerPosition: getComputedStyle(
