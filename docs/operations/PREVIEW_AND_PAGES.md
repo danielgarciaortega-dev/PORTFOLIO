@@ -133,6 +133,8 @@ Security properties:
 
 `GITHUB_TOKEN` is the normal GitHub Actions token supplied by GitHub and is used with the read permissions declared in the workflow.
 
+The Vercel Protection Bypass secret is only an HTTP access mechanism for protected Preview deployments. It is unrelated to GitHub branch/ruleset bypass and must never be interpreted as permission to merge a PR with a red required check.
+
 ## 8. GitHub Pages production lifecycle
 
 `.github/workflows/deploy.yml` runs on pushes to `main` and manual dispatch.
@@ -164,7 +166,7 @@ A PR workflow cannot publish GitHub Pages. A successful Vercel Preview does not 
 
 Active repository ruleset: **`Protect main`**.
 
-The effective policy is:
+The required steady-state policy is:
 
 - target exactly `main`;
 - pull request required;
@@ -176,11 +178,13 @@ The effective policy is:
 - strict/up-to-date status-check policy enabled;
 - branch deletion blocked;
 - force/non-fast-forward pushes blocked;
-- repository-admin bypass is limited to pull requests only.
+- no ordinary repository-role pull-request bypass actor.
 
 Do not add the raw `Vercel` status or `Preview visual evidence` as another required check. `Preview readiness` already validates Vercel deployment identity and deployed smoke for the current head. Visual evidence supports the separate manual review contract.
 
-The admin bypass is an emergency recovery mechanism, not the normal merge path.
+A required check that is red remains blocking. Provider outage or quota exhaustion does not implicitly authorize a GitHub ruleset bypass. If the repository later changes which checks are required, make that change explicitly in the owning governance issue and ruleset.
+
+The detailed no-bypass contract and adversarial merge-proof procedure are maintained in `docs/operations/MAIN_RULESET_GOVERNANCE.md`.
 
 ## 10. Visual review
 
@@ -219,7 +223,7 @@ Normal lifecycle:
 4. for Visual PRs, wait for `Preview visual evidence` and inspect its exact-head artifact against current production;
 5. perform and record manual visual review when the change is visual;
 6. update the branch if `main` advanced; the new head must obtain fresh checks and fresh visual evidence;
-7. merge through the protected `main` ruleset;
+7. merge through the protected `main` ruleset only after every server-declared required check is green;
 8. verify the post-merge GitHub Pages run;
 9. merged same-repository branches are removed by `.github/workflows/branch-cleanup.yml`.
 
@@ -241,8 +245,9 @@ Closing a PR without merge must not change `main`. Its Vercel Preview and visual
 | Preview links/assets contain `/PORTFOLIO/`                     | Pages base leaked into Vercel build                                                   | Check `VERCEL`, `VERCEL_URL`, `SITE_URL`, `BASE_PATH` and built markup                  | Restore Vercel base `/`; keep `/PORTFOLIO` only for Pages                                                              |
 | `Repository validation` fails before Preview                   | Code/test/format/dependency failure                                                   | Inspect the failing named step/job                                                      | Fix repository validation first; Preview readiness must remain blocked                                                 |
 | Chromium install fails on unrelated Google Chrome APT metadata | Hosted runner's unrelated Chrome feed is unhealthy                                    | Inspect the failing Chromium install job                                                | Keep the workflow source-isolation guard and `playwright install --with-deps chromium`; do not skip browser validation |
-| Preview wait times out                                         | Provider never reached usable exact-head state within bound                           | Check current-head Vercel status/comment and workflow timestamps                        | Fix provider integration/build or rerun on the same unchanged head only after cause is understood                      |
+| Preview wait times out                                         | Provider never reached usable exact-head state within bound                           | Check current-head Vercel status/comment and workflow timestamps                        | Fix provider integration/build or change Preview governance explicitly; do not bypass a red required check             |
 | PR stays blocked after checks                                  | Branch not up to date, unresolved conversation, or current-head checks missing        | Read ruleset/check state for the current PR head                                        | Update branch, resolve conversation, then obtain fresh required checks                                                 |
+| Required check is red but a role can still merge               | `Protect main` contains an ordinary PR bypass actor                                   | Read the live ruleset with repository-admin visibility                                  | Remove the ordinary bypass actor and run the #142 adversarial red-PR rejection proof                                   |
 | Pages validation/build fails after merge                       | Production build regression or transient infrastructure problem                       | Inspect `Deploy to GitHub Pages` jobs on the merge SHA                                  | Fix through a new protected PR; do not promote the Vercel Preview as production                                        |
 | Pages deploy job is skipped                                    | `PUBLICATION_APPROVED` is not exactly `true`                                          | Inspect repository variable state without exposing secrets                              | Set the approved publication variable only when production publication is intended                                     |
 | Merged branch remains                                          | Cleanup workflow failed or branch is outside its safe conditions                      | Inspect `Clean merged branches` workflow and PR head ownership                          | Retry/fix cleanup; handle unmerged/abandoned refs through audited maintenance                                          |
@@ -279,4 +284,5 @@ Use these maintained files when debugging or changing the system:
 - `scripts/preview-readiness.mjs` and `scripts/lib/preview-readiness.mjs` — exact-head readiness entry/orchestration;
 - `scripts/lib/vercel-preview-evidence.mjs` and `scripts/lib/vercel-preview-fetch.mjs` — provider evidence and protected smoke isolation;
 - `scripts/capture-preview-visual-evidence.mjs` and `scripts/lib/preview-visual-evidence.mjs` — exact-head protected Preview screenshot evidence;
-- `tests/preview-readiness-workflow.test.mjs` and `tests/preview-visual-evidence.test.mjs` — workflow/evidence security contracts.
+- `tests/preview-readiness-workflow.test.mjs` and `tests/preview-visual-evidence.test.mjs` — workflow/evidence security contracts;
+- `docs/operations/MAIN_RULESET_GOVERNANCE.md` — required no-bypass `main` policy and adversarial merge-proof procedure.
