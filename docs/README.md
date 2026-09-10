@@ -12,9 +12,15 @@ Ese documento es la referencia operativa para distinguir Preview de producción,
 
 Las capturas responsive son generadas por la suite Playwright definida en `tests/visual.spec.ts` y cubren los viewports configurados para móvil, tablet y escritorio.
 
-Actualmente estas capturas son **artefactos de revisión**, no assertions de regresión visual por píxel: `tests/visual.spec.ts` usa `page.screenshot(...)` y no `toHaveScreenshot(...)`. Por tanto, una captura generada por sí sola no demuestra que no exista una regresión visual.
+El modelo definitivo de QA visual seleccionado por #88 es **híbrido sin pixel-diff automático**:
 
-No deben editarse manualmente para ocultar regresiones visuales. Si cambia la interfaz de forma intencionada, las capturas deben regenerarse mediante la suite correspondiente y revisarse como parte del cambio. #88 podrá evolucionar esta estrategia a snapshots deterministas, artefactos de revisión o un modelo híbrido; hasta entonces no debe describirse como un sistema de pixel-diff automático.
+- las propiedades estables del shell se protegen con assertions Playwright semánticas, de visibilidad, geometría, overflow, foco, locale y accesibilidad;
+- `tests/visual.spec.ts` y `Preview visual evidence` generan capturas como artefactos de revisión humana;
+- las capturas no son baselines automáticos y no se aprueban mediante `toHaveScreenshot(...)`.
+
+Estas capturas son artefactos de revisión, no assertions de regresión visual por píxel. Por tanto, una captura generada por sí sola no demuestra que no exista una regresión visual. Los tests estructurales deben fallar ante regresiones objetivas y la revisión exact-head debe detectar diferencias visuales que no sea razonable convertir en una assertion estable.
+
+No deben editarse manualmente para ocultar regresiones visuales. Si cambia la interfaz de forma intencionada, las capturas deben regenerarse mediante la suite correspondiente y revisarse como parte del cambio. No se deben introducir snapshots por píxel para superficies dinámicas solo para aparentar una cobertura que sería frágil o generaría churn sin señal útil.
 
 ## Evidencia visual del Preview protegido
 
