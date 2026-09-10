@@ -143,7 +143,8 @@ test('English 404 mobile menu stays localized, usable and overflow-free', async 
   const response = await page.goto('./en/mobile-missing/');
 
   expect(response?.status()).toBe(404);
-  const trigger = page.getByRole('button', { name: 'Open menu' });
+  const trigger = page.locator('[data-menu-open]');
+  await expect(trigger).toHaveAttribute('aria-label', 'Open menu');
   await trigger.click();
 
   const menu = page.getByRole('dialog', { name: 'Navigation' });
