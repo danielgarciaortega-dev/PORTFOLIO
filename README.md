@@ -6,7 +6,7 @@
 
 Second-year Web Application Development (DAW) student building real products, participating in hackathons, and gaining hands-on software development experience.
 
-[**View portfolio**](https://danielgarciaortega-dev.github.io/PORTFOLIO/) · [**English version**](https://danielgarciaortega-dev.github.io/PORTFOLIO/en/) · [**View CV**](https://danielgarciaortega-dev.github.io/PORTFOLIO/cv/) · [**LinkedIn**](https://linkedin.com/in/daniel-garcía-ortega-404754385/)
+[**View portfolio**](https://danielgarciaortega-dev.github.io/PORTFOLIO/) · [**English version**](https://danielgarciaortega-dev.github.io/PORTFOLIO/en/) · [**View CV (ES)**](https://danielgarciaortega-dev.github.io/PORTFOLIO/cv/) · [**View CV (EN)**](https://danielgarciaortega-dev.github.io/PORTFOLIO/en/cv/) · [**LinkedIn**](https://linkedin.com/in/daniel-garcía-ortega-404754385/)
 
 </div>
 
@@ -64,17 +64,18 @@ Worked on a healthcare SaaS platform, fixing bugs and validating web and mobile 
 
 ## Bilingual architecture
 
-Spanish and English are first-class portfolio locales. The current public route matrix includes:
+Spanish and English are first-class portfolio locales. The current public route matrix is:
 
 - Spanish home: `/`
 - English home: `/en/`
 - Spanish projects: `/proyectos/`
 - English projects: `/en/projects/`
-- Current standalone CV: `/cv/`
+- Spanish CV: `/cv/`
+- English CV: `/en/cv/`
 
-The shell exposes one target-locale action rather than simultaneous ES/EN controls. Home switches `/` ↔ `/en/`, while the projects index switches `/proyectos/` ↔ `/en/projects/`. The unscoped `/projects/` alias is intentionally not part of the public route contract.
+The shell exposes one target-locale action rather than simultaneous ES/EN controls. Home switches `/` ↔ `/en/`, the projects index switches `/proyectos/` ↔ `/en/projects/`, and the standalone CV switches `/cv/` ↔ `/en/cv/`. The unscoped `/projects/` alias is intentionally not part of the public route contract.
 
-The CV remains at `/cv/` for both shell locales until the CV-specific bilingual work adds `/en/cv/`.
+Both CV locales preserve the same factual/structural baseline and have independent downloadable PDF outputs generated from their corresponding HTML source.
 
 The final shell contract and route ownership boundaries are maintained in [`docs/operations/FINAL_SHELL.md`](docs/operations/FINAL_SHELL.md).
 
