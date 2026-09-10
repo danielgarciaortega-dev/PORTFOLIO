@@ -1,6 +1,30 @@
 import { expect, test } from '@playwright/test';
 
-test('professional overview uses approved English copy', async ({ page }) => {
+const expectedTechnologies = [
+  'HTML5',
+  'CSS3',
+  'JavaScript',
+  'TypeScript',
+  'React',
+  'Angular',
+  'Next.js',
+  'Java',
+  'Python',
+  'FastAPI',
+  'Node.js',
+  'Laravel/PHP',
+  'REST APIs',
+  'SQL',
+  'PostgreSQL',
+  'MySQL/MariaDB',
+  'BigQuery',
+  'Git',
+  'Docker',
+];
+
+test('professional overview uses approved English copy and recruiter-facing technology inventory', async ({
+  page,
+}) => {
   await page.goto('./en/');
 
   const overview = page.locator('.home-overview');
@@ -27,7 +51,13 @@ test('professional overview uses approved English copy', async ({ page }) => {
   await expect(overview).toContainText('Tools');
   await expect(overview).toContainText('REST APIs');
 
-  const technologies = overview.locator('.home-overview__technologies');
-  await expect(technologies.locator('li')).toHaveCount(22);
-  await expect(technologies.locator('li img')).toHaveCount(22);
+  const technologies = overview.locator('.home-overview__technologies li');
+  await expect(technologies).toHaveCount(expectedTechnologies.length);
+  await expect(technologies.locator('span')).toHaveText(expectedTechnologies);
+  await expect(technologies.locator('img')).toHaveCount(
+    expectedTechnologies.length,
+  );
+  await expect(overview.locator('.home-overview__technologies')).not.toContainText(
+    'GitHub',
+  );
 });
