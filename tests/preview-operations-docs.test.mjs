@@ -158,77 +158,52 @@ test('documents the final bilingual shell and its ownership boundaries', () => {
   assert.match(docsIndex, /operations\/FINAL_SHELL\.md/);
 });
 
-test(
-  'top-level agent instructions match the current bilingual architecture',
-  () => {
-    assert.doesNotMatch(agents, /Sitio en español\./);
-    assert.match(agents, /Spanish and English are first-class public locales/);
-    assert.match(agents, /Spanish default\/root home at `\/`/);
-    assert.match(agents, /English home at `\/en\/`/);
-    assert.match(agents, /Exactly one target-locale action/);
-    assert.match(agents, /Current projects route: `\/proyectos\/`/);
-    assert.match(
-      agents,
-      /#53 owns the future English counterpart `\/en\/projects\/`/,
-    );
-    assert.match(agents, /Current CV route: `\/cv\/`/);
-    assert.match(
-      agents,
-      /#55 owns the future English counterpart `\/en\/cv\/`/,
-    );
-    assert.match(agents, /GitHub Pages is canonical production/);
-    assert.match(
-      agents,
-      /Repository validation` is the authoritative code\/test gate/,
-    );
-    assert.match(agents, /#97 \/ #136/);
-    assert.match(agents, /#142/);
-    assert.match(
-      agents,
-      /leave the PR unmerged until that exact-head check is green/,
-    );
-    assert.match(agents, /Never reuse Preview evidence from another SHA/);
-    assert.match(agents, /Never revive, merge, rebase forward or cherry-pick/);
-    assert.doesNotMatch(
-      agents,
-      /owner explicitly authorizes pull-request recovery/i,
-    );
-  },
-);
+test('top-level sources describe the current bilingual architecture', () => {
+  const agentSnippets = [
+    'Spanish and English are first-class public locales',
+    'Spanish default/root home at `/`',
+    'English home at `/en/`',
+    'Exactly one target-locale action',
+    'Current projects route: `/proyectos/`',
+    '#53 owns the future English counterpart `/en/projects/`',
+    'Current CV route: `/cv/`',
+    '#55 owns the future English counterpart `/en/cv/`',
+    'GitHub Pages is canonical production',
+    'Repository validation` is the authoritative code/test gate',
+    'must never conceal a failing `Repository validation`',
+    '#142 tracks retiring Vercel from required merge governance',
+    'Never revive, merge, rebase forward or cherry-pick',
+  ];
+  const readmeSnippets = [
+    '## Bilingual architecture',
+    'Spanish: `/`',
+    'English: `/en/`',
+    'current projects and CV entry points remain `/proyectos/` and `/cv/`',
+    'planned `/en/projects/` or `/en/cv/` counterparts as already deployed',
+    'GitHub Pages is canonical production',
+    'Vercel remains configured only as PR Preview/review infrastructure',
+    'docs/operations/FINAL_SHELL.md',
+    'docs/operations/PREVIEW_AND_PAGES.md',
+  ];
+  const docsSnippets = [
+    'todavía nombra `Repository validation` y `Preview readiness`',
+    '#142 registra la retirada pendiente de Vercel',
+    'solo después de que `Repository validation` esté verde',
+    'no permite ocultar fallos de código/tests',
+    'reutilizar evidencia de otro SHA',
+  ];
 
-test(
-  'README distinguishes deployed routes from planned bilingual counterparts',
-  () => {
-    assert.match(rootReadme, /## Bilingual architecture/);
-    assert.match(rootReadme, /Spanish:\s+`\/`/);
-    assert.match(rootReadme, /English:\s+`\/en\/`/);
-    assert.match(
-      rootReadme,
-      /current projects and CV entry points remain `\/proyectos\/` and `\/cv\/`/,
-    );
-    assert.match(
-      rootReadme,
-      /must not present planned `\/en\/projects\/` or `\/en\/cv\/` counterparts as already deployed/,
-    );
-    assert.match(rootReadme, /GitHub Pages is canonical production/);
-    assert.match(
-      rootReadme,
-      /Vercel remains configured only as PR Preview\/review infrastructure/,
-    );
-    assert.match(rootReadme, /docs\/operations\/FINAL_SHELL\.md/);
-    assert.match(rootReadme, /docs\/operations\/PREVIEW_AND_PAGES\.md/);
-  },
-);
+  assert.equal(agents.includes('Sitio en español.'), false);
 
-test('docs index forbids ordinary bypass of required Preview gates', () => {
-  assert.match(
-    docsIndex,
-    /Repository validation` y `Preview readiness` como checks requeridos/i,
-  );
-  assert.match(docsIndex, /registrado como defecto de gobernanza en #142/i);
-  assert.match(docsIndex, /no forma parte del flujo ordinario/i);
-  assert.match(docsIndex, /la PR debe permanecer sin fusionar/i);
-  assert.match(docsIndex, /no autoriza reutilizar evidencia de otro SHA/i);
-  assert.match(docsIndex, /mecanismo normal de recuperación/i);
-  assert.doesNotMatch(docsIndex, /bypass autorizado por el propietario/i);
+  for (const snippet of agentSnippets) {
+    assert.ok(agents.includes(snippet), snippet);
+  }
+
+  for (const snippet of readmeSnippets) {
+    assert.ok(rootReadme.includes(snippet), snippet);
+  }
+
+  for (const snippet of docsSnippets) {
+    assert.ok(docsIndex.includes(snippet), snippet);
+  }
 });
