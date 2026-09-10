@@ -1,0 +1,119 @@
+name: Prove CV baseline guardrails once
+
+on:
+  push:
+    branches:
+      - test/130-lock-spanish-cv-baseline
+
+permissions:
+  contents: write
+
+jobs:
+  prove:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: test/130-lock-spanish-cv-baseline
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Format and prove clean baseline
+        run: |
+          set -euo pipefail
+          npx prettier tests/cv-baseline.spec.ts --write
+          CI= npx playwright test tests/cv-baseline.spec.ts tests/cv-content.spec.ts
+
+      - name: Prove A4 geometry break is rejected
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('public/cv/styles.css')
+          text = path.read_text()
+          old = '    width: 210mm;\n    height: 297mm;'
+          assert old in text
+          path.write_text(text.replace(old, '    width: 200mm;\n    height: 297mm;', 1))
+          PY
+          if CI= npx playwright test tests/cv-baseline.spec.ts --grep "A4 geometry"; then
+            echo "A4 mutation unexpectedly passed"
+            exit 1
+          fi
+          git checkout -- public/cv/styles.css
+
+      - name: Prove mobile width break is rejected
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('public/cv/styles.css')
+          text = path.read_text()
+          old = '''    .cv-sheet {
+                  width: 100%;
+                  height: auto;
+                  min-height: 100vh;'''
+          assert old in text
+          new = old.replace('width: 100%;', 'width: 210mm;')
+          path.write_text(text.replace(old, new, 1))
+          PY
+          if CI= npx playwright test tests/cv-baseline.spec.ts --grep "390px mobile baseline"; then
+            echo "Mobile mutation unexpectedly passed"
+            exit 1
+          fi
+          git checkout -- public/cv/styles.css
+
+      - name: Prove exporter destination break is rejected
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/export-cv.mjs')
+          text = path.read_text()
+          old = "'CV-Daniel-Garcia-Ortega.pdf'"
+          assert old in text
+          path.write_text(text.replace(old, "'broken-cv.pdf'", 1))
+          PY
+          if CI= npx playwright test tests/cv-baseline.spec.ts --grep "exporter and stylesheet"; then
+            echo "Exporter mutation unexpectedly passed"
+            exit 1
+          fi
+          git checkout -- scripts/export-cv.mjs
+
+      - name: Prove technology baseline break is rejected
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('public/cv/index.html')
+          text = path.read_text()
+          assert 'Prisma' in text
+          path.write_text(text.replace('Prisma', 'Vercel'))
+          PY
+          if CI= npx playwright test tests/cv-content.spec.ts; then
+            echo "Technology mutation unexpectedly passed"
+            exit 1
+          fi
+          git checkout -- public/cv/index.html
+
+      - name: Commit only the formatted maintained guard
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/prove-cv-baseline-130.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/cv-baseline.spec.ts
+          git diff --cached --check
+          git commit -m "style: format Spanish CV baseline guard"
+          git push origin HEAD:test/130-lock-spanish-cv-baseline
