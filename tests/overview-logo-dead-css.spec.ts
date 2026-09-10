@@ -37,6 +37,6 @@ test('overview logos keep using the shared project mark contract', async () => {
   expect(css).toContain('.project-preview__mark {');
   expect(css).toContain('.project-preview__mark img {');
   expect(geometryGuard).toContain(
-    ".overview-organization .project-preview__mark",
+    '.overview-organization .project-preview__mark',
   );
 });
