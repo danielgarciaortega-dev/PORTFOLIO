@@ -55,12 +55,16 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 - Localized application data under `src/data/es/` and `src/data/en/`.
 - Spanish default/root home at `/`.
 - English home at `/en/`.
+- Spanish projects index at `/proyectos/`.
+- English projects index at `/en/projects/`.
+- `/projects/` is not a canonical compatibility route and must remain absent unless separately approved.
 - Exactly one target-locale action is rendered per shell surface: Spanish shows `EN`; English shows `ES`.
+- Home counterpart switching is `/` ↔ `/en/`.
+- Projects counterpart switching is `/proyectos/` ↔ `/en/projects/`.
 - Desktop shell: DGO + GitHub/LinkedIn left, primary navigation center, locale + CV right.
 - Mobile shell: DGO + menu trigger in the top bar; numbered navigation, socials and locale/CV utilities remain separate inside the menu.
 - The public website has no full site footer. Do not confuse that removal with the standalone CV's internal `.professional-footer`.
-- Current projects route: `/proyectos/`. Until #53 merges, both locale shells still target this route. #53 owns the English counterpart `/en/projects/` and route-specific locale mapping.
-- Current CV route: `/cv/`. Until #55 merges, both locale shells still target this route. #55 owns the English counterpart `/en/cv/`, CV-local switching and dual PDF output.
+- Current CV route: `/cv/`. Until the CV-specific bilingual work merges, both locale shells still target this route; that work owns `/en/cv/`, CV-local switching and dual PDF output.
 - Current custom 404 remains owned by #54 for the final locale-aware metadata/404 pass.
 - GitHub Pages is canonical production and is published from `main` through GitHub Actions.
 - Pull requests are validated only through repository-controlled GitHub Actions and tests.
@@ -70,13 +74,12 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 
 Do not collapse the remaining bilingual work into one branch.
 
-The maintained sequence after the completed final-shell Epic is:
+After the bilingual project route work owned by #53, the maintained sequence is:
 
-1. #53 — bilingual project-index routes/navigation.
-2. #54 — locale metadata, alternate links, residual accessibility copy and 404 semantics after #53.
-3. #138 — approved CV-specific technology-content correction.
-4. #130 → #131 → #132 → #133 — CV preservation baseline, English HTML, dual PDF export and final CV audit.
-5. #56 — final bilingual residue/routes/regression audit.
+1. #54 — locale metadata, alternate links, residual accessibility copy and 404 semantics.
+2. #138 — approved CV-specific technology-content correction.
+3. #130 → #131 → #132 → #133 — CV preservation baseline, English HTML, dual PDF export and final CV audit.
+4. #56 — final bilingual residue/routes/regression audit.
 
 Retired stale refs remain non-implementation sources even if their remote names still physically exist. Their valid intent lives in maintained issues and documentation, not in obsolete branch topology.
 
