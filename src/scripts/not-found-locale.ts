@@ -70,7 +70,9 @@ function setAttribute(selector: string, name: string, value: string) {
 }
 
 function setMetaContent(selector: string, value: string) {
-  document.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', value);
+  document
+    .querySelector<HTMLMetaElement>(selector)
+    ?.setAttribute('content', value);
 }
 
 function setDirectText(element: Element | undefined, value: string) {
@@ -98,7 +100,8 @@ function localizeHeader(data: LocalePayload) {
     '.desktop-navigation',
   );
   desktopNavigation?.setAttribute('aria-label', shell.mainNavigation);
-  const desktopLinks = desktopNavigation?.querySelectorAll<HTMLAnchorElement>('a');
+  const desktopLinks =
+    desktopNavigation?.querySelectorAll<HTMLAnchorElement>('a');
   setDirectText(desktopLinks?.[0], shell.home);
   desktopLinks?.[0]?.setAttribute('href', routes.home);
   setDirectText(
@@ -113,7 +116,8 @@ function localizeHeader(data: LocalePayload) {
   setText('.header-cv-link', shell.viewCv);
   setAttribute('.header-cv-link', 'href', routes.cv);
 
-  const menuTrigger = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  const menuTrigger =
+    document.querySelector<HTMLButtonElement>('[data-menu-open]');
   if (menuTrigger) {
     menuTrigger.setAttribute('aria-label', shell.openMenu);
     menuTrigger.dataset.openLabel = shell.openMenu;
@@ -127,9 +131,8 @@ function localizeHeader(data: LocalePayload) {
     '#mobile-navigation nav',
   );
   mobileNavigation?.setAttribute('aria-label', shell.mobileNavigation);
-  const mobileLinks = mobileNavigation?.querySelectorAll<HTMLAnchorElement>(
-    'a[data-menu-link]',
-  );
+  const mobileLinks =
+    mobileNavigation?.querySelectorAll<HTMLAnchorElement>('a[data-menu-link]');
   setDirectText(mobileLinks?.[0], shell.home);
   mobileLinks?.[0]?.setAttribute('href', routes.home);
   setDirectText(
@@ -146,7 +149,8 @@ function localizeHeader(data: LocalePayload) {
     .querySelectorAll<HTMLElement>('[data-language-switcher]')
     .forEach((switcher) => {
       switcher.setAttribute('aria-label', shell.languageSwitcher);
-      const link = switcher.querySelector<HTMLAnchorElement>('[data-locale-link]');
+      const link =
+        switcher.querySelector<HTMLAnchorElement>('[data-locale-link]');
       if (!link) return;
 
       link.setAttribute('href', routes.localeTarget.href);
@@ -201,7 +205,10 @@ function localizeNotFoundPage(data: LocalePayload, locale: Locale) {
   setMetaContent('meta[property="og:description"]', notFound.description);
   setMetaContent('meta[name="twitter:title"]', notFound.title);
   setMetaContent('meta[name="twitter:description"]', notFound.description);
-  setMetaContent('meta[property="og:locale"]', locale === 'en' ? 'en_GB' : 'es_ES');
+  setMetaContent(
+    'meta[property="og:locale"]',
+    locale === 'en' ? 'en_GB' : 'es_ES',
+  );
 
   setText('[data-not-found-eyebrow]', notFound.eyebrow);
   setText('[data-not-found-heading]', notFound.heading);
@@ -220,7 +227,10 @@ function initializeNotFoundLocale() {
 
   let payload: Record<Locale, LocalePayload>;
   try {
-    payload = JSON.parse(dataElement.textContent) as Record<Locale, LocalePayload>;
+    payload = JSON.parse(dataElement.textContent) as Record<
+      Locale,
+      LocalePayload
+    >;
   } catch {
     return;
   }
