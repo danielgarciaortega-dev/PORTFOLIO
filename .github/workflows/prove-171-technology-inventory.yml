@@ -27,20 +27,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Replace obsolete technology count-only assertions
-        shell: bash
+      - name: Replace obsolete count-only contracts
         run: |
           python - <<'PY'
           from pathlib import Path
 
           portfolio = Path('tests/portfolio.spec.ts')
           source = portfolio.read_text()
-          old = """  const technologyItems = page.locator('.home-overview__technologies li');
-            await expect(technologyItems).toHaveCount(22);
-            await expect(technologyItems.locator('img')).toHaveCount(22);
-          """
-          new = """  const technologyItems = page.locator('.home-overview__technologies li');
-            const expectedTechnologies = [
+          count_contract = "await expect(technologyItems).toHaveCount(22);"
+          icon_contract = "await expect(technologyItems.locator('img')).toHaveCount(22);"
+          if source.count(count_contract) != 1 or source.count(icon_contract) != 1:
+              raise SystemExit('Portfolio technology contract is not in the expected pre-#171 state')
+          expected = """const expectedTechnologies = [
               'HTML5',
               'CSS3',
               'JavaScript',
@@ -61,79 +59,47 @@ jobs:
               'Git',
               'Docker',
             ];
-            await expect(technologyItems).toHaveCount(expectedTechnologies.length);
-            await expect(technologyItems.locator('span')).toHaveText(expectedTechnologies);
-            await expect(technologyItems.locator('img')).toHaveCount(
-              expectedTechnologies.length,
-            );
-            await expect(page.locator('.home-overview__technologies')).not.toContainText(
-              'GitHub',
-            );
-          """
-          if old not in source:
-              raise SystemExit('Expected obsolete portfolio technology-count block was not found')
-          portfolio.write_text(source.replace(old, new, 1))
+            await expect(technologyItems).toHaveCount(expectedTechnologies.length);"""
+          source = source.replace(count_contract, expected, 1)
+          source = source.replace(
+              icon_contract,
+              "await expect(technologyItems.locator('span')).toHaveText(expectedTechnologies);\n  await expect(technologyItems.locator('img')).toHaveCount(expectedTechnologies.length);\n  await expect(page.locator('.home-overview__technologies')).not.toContainText('GitHub');",
+              1,
+          )
+          portfolio.write_text(source)
 
           home_locales = Path('tests/home-locales.spec.ts')
           source = home_locales.read_text()
-          old = """  await expect(
-            overview.locator('.home-overview__technologies li img'),
-          ).toHaveCount(22);
-          """
-          new = """  await expect(
-            overview.locator('.home-overview__technologies li img'),
-          ).toHaveCount(19);
-          """
-          if old not in source:
-              raise SystemExit('Expected obsolete home-locales technology-count block was not found')
-          home_locales.write_text(source.replace(old, new, 1))
+          count_contract = ").toHaveCount(22);"
+          if source.count(count_contract) != 1:
+              raise SystemExit(f'Expected exactly one home-locales 22-count contract, found {source.count(count_contract)}')
+          home_locales.write_text(source.replace(count_contract, ").toHaveCount(19);", 1))
           PY
 
       - name: Format maintained files
         run: >-
-          npx prettier
-          README.md
-          src/data/es/technologies.ts
-          src/data/en/technologies.ts
-          src/data/technology-icons.ts
-          tests/technology-icons.test.mjs
-          tests/professional-overview-english.spec.ts
-          tests/portfolio.spec.ts
-          tests/home-locales.spec.ts
-          --write
+          npx prettier README.md src/data/es/technologies.ts src/data/en/technologies.ts
+          src/data/technology-icons.ts tests/technology-icons.test.mjs
+          tests/professional-overview-english.spec.ts tests/portfolio.spec.ts
+          tests/home-locales.spec.ts --write
 
-      - name: Run locale and icon contracts
-        run: npm run test:locale
-
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
-
-      - name: Run focused overview regressions
-        run: npx playwright test tests/professional-overview-english.spec.ts tests/portfolio.spec.ts tests/home-locales.spec.ts
+      - name: Run focused data and overview regressions
+        run: |
+          npm run test:locale
+          npx playwright install --with-deps chromium
+          npx playwright test tests/professional-overview-english.spec.ts tests/portfolio.spec.ts tests/home-locales.spec.ts
 
       - name: Run full repository test suite
         run: npm test
 
       - name: Verify scope and retire proof workflow
-        shell: bash
         run: |
           set -euo pipefail
           git diff --check
           git rm .github/workflows/prove-171-technology-inventory.yml
-
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add \
-            README.md \
-            src/data/es/technologies.ts \
-            src/data/en/technologies.ts \
-            src/data/technology-icons.ts \
-            public/images/technologies/angular.svg \
-            public/images/technologies/laravel.svg \
-            tests/technology-icons.test.mjs \
-            tests/professional-overview-english.spec.ts \
-            tests/portfolio.spec.ts \
-            tests/home-locales.spec.ts
+          git add README.md src/data/es/technologies.ts src/data/en/technologies.ts src/data/technology-icons.ts public/images/technologies/angular.svg public/images/technologies/laravel.svg tests/technology-icons.test.mjs tests/professional-overview-english.spec.ts tests/portfolio.spec.ts tests/home-locales.spec.ts
 
           allowed='^(.github/workflows/prove-171-technology-inventory.yml|README.md|src/data/es/technologies.ts|src/data/en/technologies.ts|src/data/technology-icons.ts|public/images/technologies/angular.svg|public/images/technologies/laravel.svg|tests/technology-icons.test.mjs|tests/professional-overview-english.spec.ts|tests/portfolio.spec.ts|tests/home-locales.spec.ts)$'
           unexpected="$(git status --short | awk '{print $2}' | grep -Ev "$allowed" || true)"
@@ -142,11 +108,6 @@ jobs:
             echo "$unexpected"
             exit 1
           fi
-
-          git diff --cached --quiet && {
-            echo 'Expected final formatting/test update commit is empty'
-            exit 1
-          }
 
           git commit -m 'test: finalize prioritized technology inventory'
           git push origin HEAD:feat/171-prioritize-home-technology-inventory
