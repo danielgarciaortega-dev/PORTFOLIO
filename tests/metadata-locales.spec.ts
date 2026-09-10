@@ -67,7 +67,7 @@ const metadataCases = [
 ] as const;
 
 for (const metadataCase of metadataCases) {
-  test(`${metadataCase.locale} ${metadataCase.route} publishes coherent canonical, alternate and social metadata`, async ({
+  test(`metadata ${metadataCase.locale} ${metadataCase.route}`, async ({
     page,
   }) => {
     const response = await page.goto(metadataCase.route);
