@@ -17,7 +17,7 @@ Before changing code, use these maintained repository sources in this order wher
 7. `src/` for application behavior and shared component structure.
 8. `tests/` and `playwright.config.ts` for functional, accessibility, locale, route and responsive contracts.
 9. `.github/workflows/` for CI, deployment and repository automation.
-10. `input/`, `public/cv/` and `scripts/` for source assets, generated assets and the standalone CV/export flow.
+10. `input/`, `public/cv/`, `public/en/cv/` and `scripts/` for source assets, generated assets and the standalone bilingual CV/export flow.
 11. `docs/operations/BRANCH_LIFECYCLE.md` for abandoned/stale branch retirement.
 
 Do not use historical prompts, old PR descriptions, stale branches or duplicated context packages as the source of truth when maintained repository files or current issues supersede them.
@@ -38,7 +38,7 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 12. Use semantic HTML and preserve the established accessibility patterns.
 13. Keep client-side JavaScript minimal.
 14. Do not add dependencies unless they solve a concrete approved requirement.
-15. Preserve the standalone CV source and export flow; never reconstruct the CV from screenshots or from the generated PDF.
+15. Preserve the standalone CV sources and export flow; never reconstruct either CV locale from screenshots or from a generated PDF.
 16. Do not manually edit generated assets in `public/images/` when a corresponding source exists in `input/`; use `npm run optimize:assets`.
 17. Keep changes small, issue-owned, coherent and reversible.
 18. Never broaden an issue merely to improve unrelated code, copy, infrastructure or design.
@@ -57,31 +57,34 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 - English home at `/en/`.
 - Spanish projects index at `/proyectos/`.
 - English projects index at `/en/projects/`.
+- Spanish standalone CV at `/cv/`.
+- English standalone CV at `/en/cv/`.
 - `/projects/` is not a canonical compatibility route and must remain absent unless separately approved.
 - Exactly one target-locale action is rendered per shell surface: Spanish shows `EN`; English shows `ES`.
 - Home counterpart switching is `/` ↔ `/en/`.
 - Projects counterpart switching is `/proyectos/` ↔ `/en/projects/`.
-- Desktop shell: DGO + GitHub/LinkedIn left, primary navigation center, locale + CV right.
+- CV counterpart switching is `/cv/` ↔ `/en/cv/`, with independent ES/EN PDF outputs generated from the corresponding HTML sources.
+- Desktop shell: DGO + GitHub/LinkedIn left, primary navigation center, locale + locale-correct CV right.
 - Mobile shell: DGO + menu trigger in the top bar; numbered navigation, socials and locale/CV utilities remain separate inside the menu.
 - The public website has no full site footer. Do not confuse that removal with the standalone CV's internal `.professional-footer`.
-- Current CV route: `/cv/`. Until the CV-specific bilingual work merges, both locale shells still target this route; that work owns `/en/cv/`, CV-local switching and dual PDF output.
-- Current custom 404 remains owned by #54 for the final locale-aware metadata/404 pass.
+- Locale-aware canonical/hreflang/Open Graph metadata and the static locale-aware real-404 behavior are delivered and regression-tested.
 - GitHub Pages is canonical production and is published from `main` through GitHub Actions.
 - Pull requests are validated only through repository-controlled GitHub Actions and tests.
 - The active ruleset currently names `Repository validation` and `Preview readiness`. The latter is retained only as a compatibility check name; its implementation is a GitHub-only Pages readiness build and must not depend on an external deployment service.
 
-## Route ownership and execution order
+## Completed bilingual baseline
 
-Do not collapse the remaining bilingual work into one branch.
+The former staged bilingual implementation chain is complete and is historical context, not pending execution work:
 
-After the bilingual project route work owned by #53, the maintained sequence is:
+1. #53 delivered the bilingual project-route counterparts.
+2. #54 delivered locale metadata, alternate links, residual accessibility copy and locale-aware 404 semantics.
+3. #138 corrected the CV-specific technology claim.
+4. #130 → #131 → #132 → #133 delivered the Spanish CV preservation baseline, English CV HTML, dual PDF export and final CV audit.
+5. #56 completed the final bilingual residue/routes/regression audit.
 
-1. #54 — locale metadata, alternate links, residual accessibility copy and 404 semantics.
-2. #138 — approved CV-specific technology-content correction.
-3. #130 → #131 → #132 → #133 — CV preservation baseline, English HTML, dual PDF export and final CV audit.
-4. #56 — final bilingual residue/routes/regression audit.
+Do not recreate that sequence, reopen its retired branches or treat `/en/cv/` as future work. New work must follow the scope and dependencies of the current open issue that owns it.
 
-Retired stale refs remain non-implementation sources even if their remote names still physically exist. Their valid intent lives in maintained issues and documentation, not in obsolete branch topology.
+Repository-hygiene issue #136 physically deleted the audited stale/proof remote refs after confirming they had no required implementation intent or open PR dependencies. Do not describe those refs as pending cleanup or use obsolete ref topology as an implementation source.
 
 ## Required validation
 
