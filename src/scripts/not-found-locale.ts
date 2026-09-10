@@ -75,7 +75,7 @@ function setMetaContent(selector: string, value: string) {
     ?.setAttribute('content', value);
 }
 
-function setDirectText(element: Element | undefined, value: string) {
+function setDirectText(element: Element | null | undefined, value: string) {
   if (!element) return;
 
   const textNode = Array.from(element.childNodes).find(
