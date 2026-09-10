@@ -1,10 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import {
-  expect,
-  test,
-  type Locator,
-  type Page,
-} from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
 
 const desktopWidths = [1024, 1280, 1440, 1920];
 const mobileWidths = [360, 390, 430];
@@ -48,10 +43,7 @@ async function expectNoHorizontalOverflow(page: Page, context: string) {
   ).toBeLessThanOrEqual(dimensions.clientWidth);
 }
 
-async function expectMinimumTargetHeight(
-  locator: Locator,
-  context: string,
-) {
+async function expectMinimumTargetHeight(locator: Locator, context: string) {
   const box = await locator.boundingBox();
   expect(box, `${context}: target must have a rendered box`).not.toBeNull();
   expect(
