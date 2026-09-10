@@ -55,9 +55,9 @@ Para una PR visual, la revisión manual debe registrar, cuando el flujo de Previ
 - capturas/evidencias actualizadas de forma intencionada;
 - diferencias visuales esperadas.
 
-Cualquier push posterior invalida una evidencia/revisión exact-head previa. No se puede reciclar una URL, un artifact ni un resultado de otro SHA para justificar el nuevo head.
+Cualquier push posterior invalida esa revisión manual y cualquier evidencia exact-head previa. No se puede reciclar una URL, un artifact ni un resultado de otro SHA para justificar el nuevo head.
 
-Un fallo de `Repository validation` siempre bloquea el merge. Cuando el único fallo es externo a Vercel y el propietario ha autorizado recuperación, el bypass se limita a ese bloqueo de Preview hasta que #142 retire formalmente el requisito. Una PR visual no debe darse por buena si la evidencia disponible muestra un problema de layout o despliegue real.
+Los checks automatizados permanecen separados de la aprobación visual manual. Un fallo de `Repository validation` siempre bloquea el merge. Cuando el único fallo es externo a Vercel y el propietario ha autorizado recuperación, el bypass se limita a ese bloqueo de Preview hasta que #142 retire formalmente el requisito. Una PR visual no debe darse por buena si la evidencia disponible muestra un problema de layout o despliegue real.
 
 Para cambios no visuales no se deben regenerar capturas ni introducir churn de evidencias solo para completar la plantilla. El job `Preview visual evidence` se omite para esas PR.
 
