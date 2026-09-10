@@ -76,9 +76,7 @@ test('all three canonical ES/EN route pairs form one deterministic counterpart s
     await expect(page).toHaveURL(new RegExp(`${pair.en.pathname}$`));
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect
-      .poll(() =>
-        page.evaluate(() => localStorage.getItem('portfolio.locale')),
-      )
+      .poll(() => page.evaluate(() => localStorage.getItem('portfolio.locale')))
       .toBe('en');
 
     await expect(
@@ -93,9 +91,7 @@ test('all three canonical ES/EN route pairs form one deterministic counterpart s
     await expect(page).toHaveURL(new RegExp(`${pair.es.pathname}$`));
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
     await expect
-      .poll(() =>
-        page.evaluate(() => localStorage.getItem('portfolio.locale')),
-      )
+      .poll(() => page.evaluate(() => localStorage.getItem('portfolio.locale')))
       .toBe('es');
   }
 });
@@ -108,9 +104,7 @@ test('curated public UI landmarks do not mix Spanish and English shell copy', as
     const navigation = page.getByRole('navigation', {
       name: 'Navegación principal',
     });
-    await expect(
-      navigation.getByText('Inicio', { exact: true }),
-    ).toBeVisible();
+    await expect(navigation.getByText('Inicio', { exact: true })).toBeVisible();
     await expect(
       navigation.getByText('Sobre mí', { exact: true }),
     ).toBeVisible();
@@ -119,9 +113,9 @@ test('curated public UI landmarks do not mix Spanish and English shell copy', as
     ).toBeVisible();
     await expect(navigation.getByText('Home', { exact: true })).toHaveCount(0);
     await expect(navigation.getByText('About', { exact: true })).toHaveCount(0);
-    await expect(
-      navigation.getByText('Projects', { exact: true }),
-    ).toHaveCount(0);
+    await expect(navigation.getByText('Projects', { exact: true })).toHaveCount(
+      0,
+    );
   }
 
   for (const route of ['./en/', './en/projects/']) {
@@ -134,10 +128,12 @@ test('curated public UI landmarks do not mix Spanish and English shell copy', as
     await expect(
       navigation.getByText('Projects', { exact: true }),
     ).toBeVisible();
-    await expect(navigation.getByText('Inicio', { exact: true })).toHaveCount(0);
-    await expect(
-      navigation.getByText('Sobre mí', { exact: true }),
-    ).toHaveCount(0);
+    await expect(navigation.getByText('Inicio', { exact: true })).toHaveCount(
+      0,
+    );
+    await expect(navigation.getByText('Sobre mí', { exact: true })).toHaveCount(
+      0,
+    );
     await expect(
       navigation.getByText('Proyectos', { exact: true }),
     ).toHaveCount(0);
