@@ -67,9 +67,9 @@ const metadataCases = [
 ] as const;
 
 for (const metadataCase of metadataCases) {
-  test(`metadata ${metadataCase.locale} ${metadataCase.route}`, async ({
-    page,
-  }) => {
+  const testName = `metadata ${metadataCase.locale} ${metadataCase.route}`;
+
+  test(testName, async ({ page }) => {
     const response = await page.goto(metadataCase.route);
     expect(response?.ok()).toBe(true);
 
@@ -155,17 +155,19 @@ for (const metadataCase of metadataCases) {
   });
 }
 
-test('standalone CV does not receive a fictional English alternate before CV localization', async ({
-  page,
-}) => {
+test('CV has no fictional English alternate', async ({ page }) => {
   const response = await page.goto('./cv/');
   expect(response?.ok()).toBe(true);
-  await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(0);
+  await expect(
+    page.locator('link[rel="alternate"][hreflang]'),
+  ).toHaveCount(0);
   await expect(page.locator('link[href*="/en/cv/"]')).toHaveCount(0);
 });
 
-test('custom 404 does not invent localized alternates', async ({ page }) => {
+test('404 has no fictional localized alternates', async ({ page }) => {
   const response = await page.goto('./missing-metadata-route/');
   expect(response?.status()).toBe(404);
-  await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(0);
+  await expect(
+    page.locator('link[rel="alternate"][hreflang]'),
+  ).toHaveCount(0);
 });
