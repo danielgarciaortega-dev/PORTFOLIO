@@ -31,7 +31,6 @@ jobs:
 
       - name: Verify protected-main governance
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: node scripts/check-main-ruleset-governance.mjs
 
