@@ -6,7 +6,7 @@
 
 Second-year Web Application Development (DAW) student building real products, participating in hackathons, and gaining hands-on software development experience.
 
-[**View portfolio**](https://danielgarciaortega-dev.github.io/PORTFOLIO/) · [**View CV**](https://danielgarciaortega-dev.github.io/PORTFOLIO/cv/) · [**LinkedIn**](https://linkedin.com/in/daniel-garcía-ortega-404754385/)
+[**View portfolio**](https://danielgarciaortega-dev.github.io/PORTFOLIO/) · [**English version**](https://danielgarciaortega-dev.github.io/PORTFOLIO/en/) · [**View CV**](https://danielgarciaortega-dev.github.io/PORTFOLIO/cv/) · [**LinkedIn**](https://linkedin.com/in/daniel-garcía-ortega-404754385/)
 
 </div>
 
@@ -62,9 +62,24 @@ Worked on a healthcare SaaS platform, fixing bugs and validating web and mobile 
 - **Data:** SQL, PostgreSQL, MySQL/MariaDB, BigQuery
 - **Tools:** Git, GitHub, Docker, Supabase
 
-## Built with
+## Bilingual architecture
 
-This portfolio is a static, responsive and accessible site built with **Astro 7**, **strict TypeScript**, and **Tailwind CSS 4**, deployed on **GitHub Pages**. The repository uses automated checks with **Playwright** and **axe** to protect navigation, responsive behavior and accessibility as the portfolio evolves.
+Spanish and English are first-class portfolio locales. The current public home routes are:
+
+- Spanish: `/`
+- English: `/en/`
+
+The shell exposes one target-locale action rather than simultaneous ES/EN controls. The current projects and CV entry points remain `/proyectos/` and `/cv/` until their dedicated bilingual route issues land; the repository must not present planned `/en/projects/` or `/en/cv/` counterparts as already deployed.
+
+The final shell contract and route ownership boundaries are maintained in [`docs/operations/FINAL_SHELL.md`](docs/operations/FINAL_SHELL.md).
+
+## Built, tested and published with
+
+This portfolio is a static, responsive and accessible site built with **Astro 7**, **strict TypeScript**, and **Tailwind CSS 4**.
+
+**GitHub Pages is canonical production.** Pull requests are protected by automated repository validation with Playwright, axe, build, formatting, locale and CV-export checks. Vercel remains configured only as PR Preview/review infrastructure; it is not a production target.
+
+Operational details for Preview evidence, recovery and GitHub Pages publication are maintained in [`docs/operations/PREVIEW_AND_PAGES.md`](docs/operations/PREVIEW_AND_PAGES.md).
 
 ## License
 
