@@ -1,0 +1,44 @@
+name: Format CV guard once
+
+on:
+  push:
+    branches:
+      - fix/138-remove-vercel-from-cv
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: fix/138-remove-vercel-from-cv
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format focused guard and remove one-shot workflow
+        run: |
+          set -euo pipefail
+          npx prettier tests/cv-content.spec.ts --write
+          git rm .github/workflows/format-cv-138.yml
+
+      - name: Commit deterministic formatting
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/cv-content.spec.ts
+          git diff --cached --check
+          git commit -m "style: apply repository Prettier to CV guard"
+          git push origin HEAD:fix/138-remove-vercel-from-cv
