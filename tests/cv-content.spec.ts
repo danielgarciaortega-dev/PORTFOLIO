@@ -9,7 +9,9 @@ test('CV Tools and structured data keep the corrected technology baseline', asyn
   const toolsGroup = page.locator('.stack-group').filter({
     has: page.getByRole('heading', { level: 3, name: 'Herramientas' }),
   });
-  const visibleTools = await toolsGroup.locator('.chips span').allTextContents();
+  const visibleTools = await toolsGroup
+    .locator('.chips span')
+    .allTextContents();
 
   expect(visibleTools).toEqual(['Git/GitHub', 'Docker', 'Prisma']);
   expect(visibleTools).not.toContain('Vercel');
