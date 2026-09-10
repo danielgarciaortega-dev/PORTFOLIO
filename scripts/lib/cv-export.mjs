@@ -1,11 +1,4 @@
-import {
-  access,
-  copyFile,
-  mkdir,
-  rename,
-  rm,
-  stat,
-} from 'node:fs/promises';
+import { access, copyFile, mkdir, rename, rm, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -18,12 +11,7 @@ export const CV_EXPORTS = [
   {
     locale: 'en',
     sourceSegments: ['public', 'en', 'cv', 'index.html'],
-    outputSegments: [
-      'public',
-      'en',
-      'cv',
-      'CV-Daniel-Garcia-Ortega-EN.pdf',
-    ],
+    outputSegments: ['public', 'en', 'cv', 'CV-Daniel-Garcia-Ortega-EN.pdf'],
   },
 ];
 
@@ -80,7 +68,9 @@ export async function exportCvDocuments({
 
   try {
     for (const definition of definitions) {
-      const { temporaryPath, backupPath } = transientPaths(definition.outputPath);
+      const { temporaryPath, backupPath } = transientPaths(
+        definition.outputPath,
+      );
       const page = await browser.newPage();
 
       try {
@@ -118,7 +108,10 @@ export async function exportCvDocuments({
       }
 
       for (const definition of prepared) {
-        await assertNonEmpty(definition.outputPath, `Published CV ${definition.locale}`);
+        await assertNonEmpty(
+          definition.outputPath,
+          `Published CV ${definition.locale}`,
+        );
       }
     } catch (error) {
       for (const definition of published) {

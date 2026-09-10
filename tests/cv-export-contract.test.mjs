@@ -44,7 +44,9 @@ function createFakeLauncher({ failLocale = null } = {}) {
           },
           async evaluate() {},
           async pdf(options) {
-            const locale = sourcePath.includes(`${path.sep}en${path.sep}cv${path.sep}`)
+            const locale = sourcePath.includes(
+              `${path.sep}en${path.sep}cv${path.sep}`,
+            )
               ? 'en'
               : 'es';
             state.pdfOptions.push({ locale, ...options });
@@ -82,12 +84,7 @@ test('dual CV definitions keep explicit locale source/output pairs', () => {
     {
       locale: 'en',
       sourceSegments: ['public', 'en', 'cv', 'index.html'],
-      outputSegments: [
-        'public',
-        'en',
-        'cv',
-        'CV-Daniel-Garcia-Ortega-EN.pdf',
-      ],
+      outputSegments: ['public', 'en', 'cv', 'CV-Daniel-Garcia-Ortega-EN.pdf'],
     },
   ]);
 });
@@ -99,16 +96,24 @@ test('successful dual export replaces both canonical targets and cleans transien
   try {
     await exportCvDocuments({ definitions, launchBrowser, logger: () => {} });
 
-    assert.equal(await readFile(definitions[0].outputPath, 'utf8'), '%PDF-fresh-es');
-    assert.equal(await readFile(definitions[1].outputPath, 'utf8'), '%PDF-fresh-en');
+    assert.equal(
+      await readFile(definitions[0].outputPath, 'utf8'),
+      '%PDF-fresh-es',
+    );
+    assert.equal(
+      await readFile(definitions[1].outputPath, 'utf8'),
+      '%PDF-fresh-en',
+    );
     assert.equal(state.launches, 1);
     assert.equal(state.browserClosed, true);
     assert.deepEqual(
-      state.pdfOptions.map(({ locale, printBackground, preferCSSPageSize }) => ({
-        locale,
-        printBackground,
-        preferCSSPageSize,
-      })),
+      state.pdfOptions.map(
+        ({ locale, printBackground, preferCSSPageSize }) => ({
+          locale,
+          printBackground,
+          preferCSSPageSize,
+        }),
+      ),
       [
         { locale: 'es', printBackground: true, preferCSSPageSize: true },
         { locale: 'en', printBackground: true, preferCSSPageSize: true },
@@ -150,8 +155,14 @@ for (const failingLocale of ['es', 'en']) {
         exportCvDocuments({ definitions, launchBrowser, logger: () => {} }),
         new RegExp(`simulated ${failingLocale} render failure`),
       );
-      assert.equal(await readFile(definitions[0].outputPath, 'utf8'), 'stale-es');
-      assert.equal(await readFile(definitions[1].outputPath, 'utf8'), 'stale-en');
+      assert.equal(
+        await readFile(definitions[0].outputPath, 'utf8'),
+        'stale-es',
+      );
+      assert.equal(
+        await readFile(definitions[1].outputPath, 'utf8'),
+        'stale-en',
+      );
       assert.equal(state.browserClosed, true);
       await assertNoTransients(definitions);
     } finally {

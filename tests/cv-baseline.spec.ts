@@ -159,15 +159,22 @@ test('Spanish CV remains fluid and one-column at the 390px mobile baseline', asy
 
 test('Spanish CV exporter and stylesheet keep the frozen source contract', async () => {
   const exporter = await readRepositoryFile('scripts/export-cv.mjs');
+  const exportContract = await readRepositoryFile('scripts/lib/cv-export.mjs');
   const styles = await readRepositoryFile('public/cv/styles.css');
 
-  expect(exporter).toContain("path.join(root, 'public', 'cv', 'index.html')");
-  expect(exporter).toContain("'CV-Daniel-Garcia-Ortega.pdf'");
-  expect(exporter).toContain('printBackground: true');
-  expect(exporter).toContain('preferCSSPageSize: true');
-  expect(exporter).toContain('document.fonts.ready');
-  expect(exporter).toMatch(/finally\s*\{/);
-  expect(exporter).toContain('await browser.close()');
+  expect(exporter).toContain('resolveCvExports(root)');
+  expect(exporter).toContain('exportCvDocuments');
+  expect(exportContract).toContain(
+    "sourceSegments: ['public', 'cv', 'index.html']",
+  );
+  expect(exportContract).toContain(
+    "outputSegments: ['public', 'cv', 'CV-Daniel-Garcia-Ortega.pdf']",
+  );
+  expect(exportContract).toContain('printBackground: true');
+  expect(exportContract).toContain('preferCSSPageSize: true');
+  expect(exportContract).toContain('document.fonts.ready');
+  expect(exportContract).toMatch(/finally\s*\{/);
+  expect(exportContract).toContain('await browser.close()');
 
   expect(styles).toMatch(
     /\.cv-sheet\s*\{[\s\S]*?width:\s*210mm;[\s\S]*?height:\s*297mm;/,
