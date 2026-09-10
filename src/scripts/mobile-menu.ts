@@ -6,7 +6,9 @@ const mobileMenu =
 if (menuTrigger && mobileMenu) {
   let restoreFocus = true;
   const openLabel =
-    menuTrigger.dataset.openLabel ?? menuTrigger.getAttribute('aria-label') ?? '';
+    menuTrigger.dataset.openLabel ??
+    menuTrigger.getAttribute('aria-label') ??
+    '';
   const closeLabel = menuTrigger.dataset.closeLabel ?? openLabel;
 
   const closeMenu = (shouldRestore = true) => {
