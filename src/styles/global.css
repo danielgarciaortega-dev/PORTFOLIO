@@ -706,37 +706,6 @@ a {
   white-space: nowrap;
 }
 
-.project-preview__open {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  padding: 0;
-  border: 1px solid var(--color-border);
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-  transition:
-    background 180ms ease,
-    border-color 180ms ease,
-    color 180ms ease;
-}
-
-.project-preview__open svg {
-  width: 20px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.8;
-}
-
-.project-preview__open:hover {
-  border-color: var(--color-accent);
-  background: var(--color-accent);
-  color: white;
-}
-
 .technology-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1654,10 +1623,6 @@ a {
     padding-left: 1rem;
     border-left: 1px solid var(--color-border);
   }
-
-  .project-preview__open {
-    display: none;
-  }
 }
 
 @media (max-width: 900px) {
@@ -1704,10 +1669,6 @@ a {
   .project-preview + .project-preview {
     padding-left: 0;
     border-left: 0;
-  }
-
-  .project-preview__open {
-    display: grid;
   }
 
   .technology-list {
@@ -1800,10 +1761,6 @@ a {
   .project-preview + .project-preview {
     padding-left: 0;
     border-left: 0;
-  }
-
-  .project-preview__open {
-    display: grid;
   }
 
   .technology-list {
@@ -1945,7 +1902,6 @@ a {
 }
 
 @media (forced-colors: active) {
-  .project-preview__open,
   .button-link,
   .header-cv-link,
   .tag-list li {
