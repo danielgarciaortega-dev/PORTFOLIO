@@ -2,6 +2,12 @@
 
 Este directorio conserva únicamente evidencias útiles para validar el portfolio actual.
 
+## Final bilingual shell contract
+
+The maintained shell, locale-control, utility-placement, footer-removal and ownership contract is documented in [`operations/FINAL_SHELL.md`](operations/FINAL_SHELL.md).
+
+That document is the source of truth for the final desktop/mobile shell delivered by #83 and for the boundaries that #53, #54 and #55 must respect.
+
 ## Operaciones de Preview y producción
 
 El runbook mantenido para Vercel PR Previews, checks exact-head, protección de `main`, GitHub Pages y troubleshooting está en [`operations/PREVIEW_AND_PAGES.md`](operations/PREVIEW_AND_PAGES.md).
