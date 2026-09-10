@@ -4,6 +4,8 @@ import test from 'node:test';
 
 const runbook = readFileSync('docs/operations/PREVIEW_AND_PAGES.md', 'utf8');
 const docsIndex = readFileSync('docs/README.md', 'utf8');
+const agents = readFileSync('AGENTS.md', 'utf8');
+const rootReadme = readFileSync('README.md', 'utf8');
 const branchLifecycle = readFileSync(
   'docs/operations/BRANCH_LIFECYCLE.md',
   'utf8',
@@ -154,4 +156,54 @@ test('documents the final bilingual shell and its ownership boundaries', () => {
     /evidence from another SHA must never be reused/i,
   );
   assert.match(docsIndex, /operations\/FINAL_SHELL\.md/);
+});
+
+test('top-level sources describe the current bilingual architecture', () => {
+  const agentSnippets = [
+    'Spanish and English are first-class public locales',
+    'Spanish default/root home at `/`',
+    'English home at `/en/`',
+    'Exactly one target-locale action',
+    'Current projects route: `/proyectos/`',
+    '#53 owns the future English counterpart `/en/projects/`',
+    'Current CV route: `/cv/`',
+    '#55 owns the future English counterpart `/en/cv/`',
+    'GitHub Pages is canonical production',
+    'Repository validation` is the authoritative code/test gate',
+    'must never conceal a failing `Repository validation`',
+    '#142 tracks retiring Vercel from required merge governance',
+    'Never revive, merge, rebase forward or cherry-pick',
+  ];
+  const readmeSnippets = [
+    '## Bilingual architecture',
+    'Spanish: `/`',
+    'English: `/en/`',
+    'current projects and CV entry points remain `/proyectos/` and `/cv/`',
+    'planned `/en/projects/` or `/en/cv/` counterparts as already deployed',
+    'GitHub Pages is canonical production',
+    'Vercel remains configured only as PR Preview/review infrastructure',
+    'docs/operations/FINAL_SHELL.md',
+    'docs/operations/PREVIEW_AND_PAGES.md',
+  ];
+  const docsSnippets = [
+    'todavía nombra `Repository validation` y `Preview readiness`',
+    '#142 registra la retirada pendiente de Vercel',
+    'solo después de que `Repository validation` esté verde',
+    'no permite ocultar fallos de código/tests',
+    'reutilizar evidencia de otro SHA',
+  ];
+
+  assert.equal(agents.includes('Sitio en español.'), false);
+
+  for (const snippet of agentSnippets) {
+    assert.ok(agents.includes(snippet), snippet);
+  }
+
+  for (const snippet of readmeSnippets) {
+    assert.ok(rootReadme.includes(snippet), snippet);
+  }
+
+  for (const snippet of docsSnippets) {
+    assert.ok(docsIndex.includes(snippet), snippet);
+  }
 });

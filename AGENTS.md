@@ -1,85 +1,127 @@
-# Instrucciones permanentes para Codex
+# Permanent repository instructions for agents
 
-## Objetivo
+## Objective
 
-Mantener un portfolio personal profesional, rápido, accesible y mantenible para Daniel García Ortega usando exclusivamente el alcance y los datos actuales de este repositorio.
+Maintain a professional, fast, accessible and maintainable personal portfolio for Daniel García Ortega using only the scope and factual data that belong to this repository.
 
-## Fuentes de verdad
+## Sources of truth
 
-Antes de modificar código, usa como referencia principal:
+Before changing code, use these maintained repository sources in this order where relevant:
 
-1. `README.md` para la presentación profesional y los enlaces públicos del portfolio.
-2. `package.json` para scripts, dependencias y requisitos de ejecución reales.
-3. `astro.config.mjs` para la configuración de Astro, salida estática y ruta base.
-4. `src/data/` para perfil, proyectos, tecnologías, formación y experiencia.
-5. `src/` para comportamiento y estructura de la aplicación.
-6. `tests/` y `playwright.config.ts` para requisitos funcionales, accesibilidad y rutas base.
-7. `.github/workflows/` para CI, despliegue y automatizaciones del repositorio.
-8. `input/` y `scripts/` para activos fuente y generación del CV/recursos.
+1. `README.md` for the public professional summary and primary links.
+2. `docs/operations/FINAL_SHELL.md` for the final bilingual shell, locale-control and utility-placement contract.
+3. `docs/operations/PREVIEW_AND_PAGES.md` for Preview, review-readiness, branch-protection and GitHub Pages operations.
+4. `package.json` for scripts, dependencies and execution requirements.
+5. `astro.config.mjs` and `scripts/lib/hosting-config.mjs` for static output, hosting and base-path behavior.
+6. `src/data/es/` and `src/data/en/` for localized editable content.
+7. `src/` for application behavior and shared component structure.
+8. `tests/` and `playwright.config.ts` for functional, accessibility, locale, route and responsive contracts.
+9. `.github/workflows/` for CI, deployment and repository automation.
+10. `input/`, `public/cv/` and `scripts/` for source assets, generated assets and the standalone CV/export flow.
+11. `docs/operations/BRANCH_LIFECYCLE.md` for abandoned/stale branch retirement.
 
-No dependas de paquetes de contexto, prompts históricos o documentación duplicada para tomar decisiones sobre el estado actual del proyecto.
+Do not use historical prompts, old PR descriptions, stale branches or duplicated context packages as the source of truth when maintained repository files or current issues supersede them.
 
-## Reglas no negociables
+## Non-negotiable rules
 
-1. No inventes datos personales, textos, enlaces, métricas, proyectos, clientes, logros ni tecnologías.
-2. No publiques datos marcados como privados o excluidos.
-3. Mantén Astro, TypeScript estricto y Tailwind CSS 4 salvo cambio explícitamente solicitado.
-4. No añadas React, Vue, Svelte, Next.js u otro framework de cliente a este portfolio sin una necesidad aprobada.
-5. No conviertas el portfolio en una SPA.
-6. No añadas backend, base de datos, CMS, analítica, cookies, modo oscuro o formularios de envío salvo cambio de alcance explícito.
-7. No uses enlaces `href="#"`, contenido de relleno ni botones sin función.
-8. Centraliza el contenido editable en `src/data/`; evita duplicar datos de proyectos o experiencia dentro de componentes.
-9. Respeta GitHub Pages y su ruta base. Las rutas internas y activos deben funcionar tanto en local como bajo `/PORTFOLIO/`.
-10. Toda interacción debe funcionar con teclado, ratón y pantalla táctil.
-11. Usa HTML semántico y conserva los patrones de accesibilidad existentes.
-12. Mantén el JavaScript del cliente al mínimo.
-13. No agregues dependencias salvo que cubran una necesidad concreta y documentada.
-14. Conserva el código fuente del CV y su flujo de exportación; no lo reconstruyas desde capturas o desde el PDF.
-15. No edites manualmente los activos generados en `public/images/` cuando exista una fuente correspondiente en `input/`; usa `npm run optimize:assets`.
-16. Mantén cambios pequeños, coherentes y reversibles.
-17. No alteres el alcance para “mejorarlo” dentro de una issue no relacionada.
+1. Do not invent personal data, copy, links, metrics, projects, clients, achievements or technologies.
+2. Do not publish data marked private or intentionally excluded.
+3. Keep Astro, strict TypeScript and Tailwind CSS 4 unless an approved issue explicitly changes the stack.
+4. Do not add React, Vue, Svelte, Next.js or another client framework to this portfolio without an approved requirement.
+5. Do not convert the portfolio into a SPA.
+6. Do not add a backend, database, CMS, analytics, cookies, dark mode or submission forms without an explicit scope change.
+7. Do not use `href="#"`, placeholder content or controls without real behavior.
+8. Keep editable application content in the established locale-aware data modules; do not create a third localization mechanism.
+9. Spanish and English are first-class public locales. Never replace one locale with the other or globally ban either language.
+10. Respect the GitHub Pages `/PORTFOLIO/` base. Internal routes and assets must remain base-safe, while Preview/local environments use their own root-base contract.
+11. Every interaction must work with keyboard, pointer and touch where applicable.
+12. Use semantic HTML and preserve the established accessibility patterns.
+13. Keep client-side JavaScript minimal.
+14. Do not add dependencies unless they solve a concrete approved requirement.
+15. Preserve the standalone CV source and export flow; never reconstruct the CV from screenshots or from the generated PDF.
+16. Do not manually edit generated assets in `public/images/` when a corresponding source exists in `input/`; use `npm run optimize:assets`.
+17. Keep changes small, issue-owned, coherent and reversible.
+18. Never broaden an issue merely to “improve” unrelated code, copy, infrastructure or design.
+19. Never revive, merge, rebase forward or cherry-pick the retired pre-shell #53/#54 implementation branches. New route work must start from current `main`.
+20. Distinguish current behavior from approved future routes. Do not document a planned counterpart as already deployed before its owning issue merges.
 
-## Decisiones técnicas actuales
+## Current technical decisions
 
-- Astro con salida estática.
-- TypeScript en modo estricto.
-- Tailwind CSS 4 mediante plugin de Vite.
-- Componentes Astro sin framework cliente.
-- Datos de contenido centralizados en módulos TypeScript.
-- Sitio en español.
-- Página principal `/`.
-- Página de proyectos `/proyectos/`.
-- CV servido desde `/cv/`.
-- Página `404` propia.
-- Diálogos nativos para “Sobre mí”, contacto y proyectos.
-- Despliegue mediante GitHub Actions y GitHub Pages.
+- Astro with static output.
+- Strict TypeScript.
+- Tailwind CSS 4 through the Vite plugin.
+- Astro components without an additional client framework.
+- Localized application data under `src/data/es/` and `src/data/en/`.
+- Spanish default/root home at `/`.
+- English home at `/en/`.
+- Exactly one target-locale action is rendered per shell surface: Spanish shows `EN`; English shows `ES`.
+- Desktop shell: DGO + GitHub/LinkedIn left, primary navigation center, locale + CV right.
+- Mobile shell: DGO + menu trigger in the top bar; numbered navigation, socials and locale/CV utilities remain separate inside the menu.
+- The public website has no full site footer. Do not confuse that removal with the standalone CV's internal `.professional-footer`.
+- Current projects route: `/proyectos/`. Until #53 merges, both locale shells still target this route. #53 owns the future English counterpart `/en/projects/` and the route-specific locale mapping.
+- Current CV route: `/cv/`. Until #55 merges, both locale shells still target this route. #55 owns the future English counterpart `/en/cv/`, CV-local switching and dual PDF output.
+- Current custom 404 remains owned by #54 for the final locale-aware metadata/404 pass.
+- GitHub Pages is canonical production and is published from `main` through GitHub Actions.
+- Vercel, while configured, is Preview/review infrastructure only and must never be promoted as production.
+- Vercel Git deployments for `main` remain disabled by repository configuration.
+- The active repository ruleset currently names `Repository validation` and `Preview readiness`; #142 tracks retiring Vercel from required merge governance without blocking product work.
 
-## Validación obligatoria
+## Route ownership and execution order
 
-Antes de dar una tarea de código por terminada, ejecuta cuando el entorno lo permita:
+Do not collapse the remaining bilingual work into one branch.
 
-```bash
-npm run format:check
-npm run check
-npm run build
-npm run test:e2e
-```
+The maintained sequence after the completed final-shell Epic is:
 
-El comando agregado equivalente es:
+1. #98 — repository source-of-truth synchronization.
+2. #53 — fresh bilingual project-index routes/navigation from the resulting `main`.
+3. #54 — locale metadata, alternate links, residual accessibility copy and 404 semantics after #53.
+4. #138 — approved CV-specific removal of Vercel from the visible CV technology set and CV-local JSON-LD.
+5. #130 → #131 → #132 → #133 — CV preservation baseline, English HTML, dual PDF export and final CV audit.
+6. #56 — final bilingual residue/routes/regression audit.
+
+#136 remains a non-blocking physical cleanup task for already retired remote refs. #142 remains a non-blocking governance cleanup task for retiring Vercel as a required merge gate.
+
+The stale pre-shell #53/#54 refs are retired even if their remote names still physically exist. Their valid intent lives in the maintained issues and documentation, not in their code history.
+
+## Required validation
+
+Before considering a code or documentation PR ready, use the checks proportional to its risk and always require the repository's current-head validation.
+
+For the full repository contract:
 
 ```bash
 npm test
 ```
 
-La suite Playwright debe conservar las comprobaciones de accesibilidad automatizada, rutas base, CV, navegación, comportamiento responsive y capturas en los viewports definidos en `tests/visual.spec.ts`.
+When generated public assets are relevant:
 
-Si el entorno impide ejecutar algún comando, indícalo explícitamente y usa el CI del mismo commit como evidencia antes de considerar el cambio listo para merge.
+```bash
+npm run optimize:assets
+```
 
-## Forma de trabajo
+When the CV or export contract is relevant:
 
-- Trabaja desde una rama específica por issue.
-- No modifiques `main` directamente.
-- Exige CI verde para el commit actual de la PR antes de mergear.
-- Evita mezclar limpieza, contenido, rediseño y funcionalidad en una misma PR.
-- Después de cada cambio estructural relevante comprueba referencias y rutas.
-- Entrega un resumen final con archivos modificados, decisiones, validaciones ejecutadas, resultados y pendientes reales.
+```bash
+npm run export:cv
+```
+
+`Repository validation` is the authoritative code/test gate and must be green for the final PR head. Do not bypass a formatting, type, build, asset, CV-export, Playwright or other repository-validation failure.
+
+`Preview readiness` validates exact-head Vercel Preview evidence when the provider is available. The repository owner has explicitly authorized continuing when Vercel/provider infrastructure is unavailable or quota-limited, provided current-head `Repository validation` is green and the diff/scope are audited. Until #142 removes Vercel from required merge governance, owner PR bypass may be used only for that provider-only Preview blocker. It must never conceal a failing `Repository validation`, reuse Preview evidence from another SHA, or promote Vercel as production.
+
+For visual work, preserve the exact-head review semantics in `docs/operations/PREVIEW_AND_PAGES.md` whenever Preview evidence is available. Screenshots are review evidence, not automatic pixel-diff approval.
+
+If the local environment cannot execute a required command, use CI for the exact same commit as evidence and state the limitation explicitly.
+
+## Working model
+
+- Start each implementation issue from current `main` unless its maintained dependency contract says otherwise.
+- Use one isolated branch and PR per issue/scope where practical.
+- Never modify `main` directly for normal work.
+- Keep PR descriptions and repository documentation in English.
+- Require green current-head `Repository validation` before merge.
+- Treat external Preview/provider recovery separately from code/test correctness.
+- Do not mix cleanup, content, redesign, routes, metadata, CV work and infrastructure unless the owning issue explicitly couples them.
+- Re-check routes, base paths and references after structural changes.
+- After merge, verify the expected GitHub Pages production lifecycle when the change affects deployable output.
+- Report modified files, decisions, validation results and genuine remaining blockers rather than claiming work that tooling could not perform.
