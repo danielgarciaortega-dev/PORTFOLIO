@@ -1,6 +1,6 @@
 # Final bilingual shell contract
 
-This document records the public shell delivered by #83 after #85, #86, #87 and #88, with the project-route counterpart extension delivered by #53. It is the maintained structural contract for future shell changes; historical issue or PR descriptions are not the source of truth.
+This document records the delivered public shell and its bilingual route contract. The shell baseline was delivered by #83 after #85, #86, #87 and #88, the project-route counterparts by #53, the locale metadata/404 pass by #54, and the bilingual CV chain by #138 and #130–#133. The final bilingual regression pass was completed by #56. Historical issue or PR descriptions are not the source of truth when this maintained contract or current code/tests supersede them.
 
 ## Locale model
 
@@ -12,9 +12,15 @@ The shell exposes exactly one target-locale action per rendered surface:
 - English surfaces show `ES` and label the action as switching to Spanish;
 - the current locale is never rendered as a second language action.
 
-`LanguageSwitcher.astro` owns the one-target control and reuses the shared locale persistence contract. Shell code must not introduce another locale selector or another persistence mechanism.
+`LanguageSwitcher.astro` owns the one-target control for the Astro shell and reuses the shared locale persistence contract. Shell code must not introduce another locale selector or another persistence mechanism.
 
-Home counterparts are `/` ↔ `/en/`. Project-index counterparts are `/proyectos/` ↔ `/en/projects/`. CV counterpart routing remains owned by the CV-specific bilingual work; until that work lands, both shell locales continue to target `/cv/` and must not invent `/en/cv/` behavior inside unrelated work.
+Delivered counterpart classes are:
+
+- home: `/` ↔ `/en/`;
+- project index: `/proyectos/` ↔ `/en/projects/`;
+- standalone CV: `/cv/` ↔ `/en/cv/`.
+
+The standalone CV uses its own minimal locale link while persisting the same `portfolio.locale` preference. Both CV locales have independent PDF outputs generated from their corresponding HTML sources.
 
 ## Desktop structure
 
@@ -40,7 +46,7 @@ Locale, CV and social utilities must not be moved into the primary navigation.
 ### Right zone
 
 - one target-locale action;
-- the boxed `View CV` / `Ver CV` action immediately beside it.
+- the boxed locale-correct `View CV` / `Ver CV` action immediately beside it: Spanish shell → `/cv/`, English shell → `/en/cv/`.
 
 GitHub and LinkedIn must not be duplicated on the right.
 
@@ -57,7 +63,7 @@ Inside the mobile dialog/panel:
 
 1. the numbered primary navigation remains a separate navigation block (`01` Home, `02` About, `03` Projects);
 2. GitHub and LinkedIn live together in one unnumbered social utility row;
-3. the target-locale action and CV action live together in a separate unnumbered utility group.
+3. the target-locale action and locale-correct CV action live together in a separate unnumbered utility group.
 
 The mobile utility area must not recreate the deleted footer: do not add duplicated brand, role/location copy, Contact, or a full-width footer composition.
 
@@ -73,22 +79,35 @@ Dialog mounts must follow actual visible triggers:
 - Contact is not a shell navigation item; it remains mounted only where an actual visible Contact trigger requires it;
 - the Spanish and English projects routes do not carry the old footer-only Contact trigger/dialog introduced for the removed footer topology.
 
-The standalone CV's internal `.professional-footer` is not the deleted website footer. It belongs to the CV document and is owned by the CV-specific bilingual work.
+The standalone CV's internal `.professional-footer` is not the deleted website footer. It belongs to both CV documents and remains protected by the CV-specific regression suite.
 
 ## Route and base-path constraints
 
 GitHub Pages production is served under `/PORTFOLIO/`. Shell links must therefore be generated through the repository base-path helpers rather than hard-coded as root-only URLs.
 
-Current ownership and route behavior:
+Current route behavior:
 
-- `Header.astro` targets `/proyectos/` for Spanish and `/en/projects/` for English through the shared locale route contract;
-- `LanguageSwitcher.astro` maps home counterparts `/` ↔ `/en/` and project counterparts `/proyectos/` ↔ `/en/projects/` through that same contract;
+- `Header.astro` derives `/proyectos/` for Spanish and `/en/projects/` for English from the shared locale route contract;
+- `Header.astro` targets `/cv/` for Spanish and `/en/cv/` for English;
+- `LanguageSwitcher.astro` maps home counterparts `/` ↔ `/en/` and project counterparts `/proyectos/` ↔ `/en/projects/` through the shared route contract;
+- the standalone CV pages map `/cv/` ↔ `/en/cv/` with normal base-safe navigation and persist the explicit locale choice;
 - `/projects/` is not a canonical alias and must remain absent unless separately approved;
-- `Header.astro` still targets `/cv/` from both locale shells until the CV-specific bilingual work introduces the English CV counterpart;
-- #54 owns canonical/hreflang/Open Graph and locale-aware 404 semantics;
-- the CV-specific bilingual work owns `/cv/` ↔ `/en/cv/`, CV-local locale navigation and both PDF outputs.
+- canonical/hreflang/Open Graph metadata are locale-aware for the delivered Astro routes;
+- the custom static 404 preserves real HTTP 404 semantics, uses locale-aware presentation for English-prefixed missing paths and remains `noindex, follow`.
 
-Do not solve #54 or CV-specific bilingual work inside a shell/project-route-only change.
+Do not introduce a second localization mechanism, compatibility aliases or root-only links to work around the established route contract.
+
+## CV output contract
+
+The standalone bilingual CV is a separate static/export surface from the Astro shell:
+
+- Spanish HTML source: `public/cv/index.html`;
+- English HTML source: `public/en/cv/index.html`;
+- Spanish PDF: `public/cv/CV-Daniel-Garcia-Ortega.pdf`;
+- English PDF: `public/en/cv/CV-Daniel-Garcia-Ortega-EN.pdf`;
+- `npm run export:cv` exports both definitions from their explicit locale HTML source.
+
+The two locales preserve factual and structural parity while allowing translated recruiter-facing copy. Their A4, print, mobile, accessibility and download behavior is regression-tested. Do not reconstruct either source from a screenshot or generated PDF.
 
 ## Regression guards
 
@@ -96,20 +115,22 @@ The final shell is protected primarily by semantic and geometry assertions rathe
 
 Relevant maintained coverage includes:
 
-- `tests/shell-regressions.spec.ts` — desktop/mobile utility placement, one locale action, no site footer, route-safe home switching, dialog topology and supported-width overflow checks;
-- `tests/home-locales.spec.ts` — bilingual home shell behavior;
+- `tests/shell-regressions.spec.ts` — desktop/mobile utility placement, one locale action, no site footer, route-safe switching, dialog topology and supported-width overflow checks;
+- `tests/home-locales.spec.ts` and `tests/home-english.spec.ts` — bilingual home shell behavior;
 - `tests/projects-locales.spec.ts` — bilingual project routes, localized navigation, project counterpart switching, persistence, mobile overflow and the absent `/projects/` alias;
+- `tests/metadata-locales.spec.ts` and `tests/not-found-locales.spec.ts` — locale-aware metadata and real-404 behavior;
+- `tests/cv-locales.spec.ts`, `tests/cv-pdf-locales.spec.ts` and the CV audit/export tests — `/cv/` ↔ `/en/cv/`, dual PDF output, structural parity, A4/mobile and accessibility contracts;
 - `tests/portfolio.spec.ts` — integrated shell, menu, route and no-footer checks;
 - `tests/accessibility.spec.ts` — representative axe coverage for public shell states;
 - `tests/visual.spec.ts` — deterministic screenshot generation for human review artifacts, not pixel-diff approval.
 
-A future shell change must keep these guards green and add focused coverage when it changes an invariant not already represented.
+A future shell or route change must keep the relevant guards green and add focused coverage when it changes an invariant not already represented.
 
 ## Visual review responsibility
 
 Pull-request validation and deployment mechanics are maintained separately in `docs/operations/GITHUB_PAGES.md`. This shell contract does not redefine those infrastructure rules.
 
-Visual changes must be reviewed against the exact current head using the repository Playwright, axe, responsive/no-overflow checks and maintained screenshots where relevant. Evidence from another SHA must never be reused. Screenshots are review evidence, not automatic approval.
+Visual changes must be reviewed against the exact current head using repository Playwright, axe, responsive/no-overflow checks and maintained screenshots where relevant. Evidence from another SHA must never be reused. Screenshots are review evidence, not automatic approval.
 
 ## Non-duplication rules
 
@@ -123,6 +144,6 @@ Future contributors must not reintroduce any of the following without a separate
 - Contact as a footer replacement merely to restore the removed topology;
 - a second mobile navigation block for utilities;
 - another route/localization mechanism that bypasses the shared home/projects counterpart contract;
-- a shell-owned `/en/cv/` route before the CV-specific work owns it.
+- additional CV aliases or another CV-locale persistence mechanism outside `/cv/` ↔ `/en/cv/`.
 
 The intended result is one coherent bilingual shell with explicit ownership boundaries, not a collection of duplicated fallbacks.
