@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
+const agentsInstructions = readFileSync('AGENTS.md', 'utf8');
+const rootReadme = readFileSync('README.md', 'utf8');
 const runbook = readFileSync('docs/operations/PREVIEW_AND_PAGES.md', 'utf8');
 const docsIndex = readFileSync('docs/README.md', 'utf8');
 const branchLifecycle = readFileSync(
@@ -154,4 +156,43 @@ test('documents the final bilingual shell and its ownership boundaries', () => {
     /evidence from another SHA must never be reused/i,
   );
   assert.match(docsIndex, /operations\/FINAL_SHELL\.md/);
+});
+
+test('keeps top-level repository instructions aligned with the bilingual preview architecture', () => {
+  for (const requiredText of [
+    'Sitio bilingüe ES/EN',
+    'español es el locale por defecto en `/`',
+    'inglés se publica bajo `/en/`',
+    'exactamente una acción hacia el locale alternativo',
+    'DGO + GitHub/LinkedIn',
+    'no tiene un footer completo `.site-footer`',
+    '`/en/projects/` pertenece al trabajo bilingüe de proyectos (#53)',
+    '`/en/cv/` y los dos PDFs pertenecen al trabajo bilingüe del CV (#55)',
+    'GitHub Pages es la producción canónica',
+    'Vercel se usa exclusivamente como infraestructura de Preview/revisión',
+    '`Repository validation` y `Preview readiness`',
+    'docs/operations/FINAL_SHELL.md',
+    'docs/operations/PREVIEW_AND_PAGES.md',
+    'docs/operations/BRANCH_LIFECYCLE.md',
+  ]) {
+    assert.match(
+      agentsInstructions,
+      new RegExp(requiredText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+    );
+  }
+
+  assert.doesNotMatch(agentsInstructions, /- Sitio en español\./);
+  assert.doesNotMatch(
+    agentsInstructions,
+    /Despliegue mediante GitHub Actions y GitHub Pages\./,
+  );
+  assert.match(agentsInstructions, /No reutilices un Preview de otro SHA/i);
+  assert.match(agentsInstructions, /no conviertas un bypass de permisos/i);
+});
+
+test('keeps the root README explicit about canonical production and PR previews', () => {
+  assert.match(rootReadme, /supports Spanish at `\/` and English under `\/en\/`/);
+  assert.match(rootReadme, /GitHub Pages is the canonical production host/);
+  assert.match(rootReadme, /Vercel exact-head Previews/);
+  assert.match(rootReadme, /Vercel is not the production deployment target/);
 });

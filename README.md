@@ -64,7 +64,9 @@ Worked on a healthcare SaaS platform, fixing bugs and validating web and mobile 
 
 ## Built with
 
-This portfolio is a static, responsive and accessible site built with **Astro 7**, **strict TypeScript**, and **Tailwind CSS 4**, deployed on **GitHub Pages**. The repository uses automated checks with **Playwright** and **axe** to protect navigation, responsive behavior and accessibility as the portfolio evolves.
+This portfolio is a static, responsive and accessible site built with **Astro 7**, **strict TypeScript**, and **Tailwind CSS 4**. Its public shell supports Spanish at `/` and English under `/en/`, while dedicated project/CV counterpart routes remain owned by their separate bilingual rollout.
+
+**GitHub Pages is the canonical production host.** Pull requests use automated **Playwright** and **axe** checks plus **Vercel exact-head Previews** for review; Vercel is not the production deployment target.
 
 ## License
 
