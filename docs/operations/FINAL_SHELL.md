@@ -105,9 +105,9 @@ A future shell change must keep these guards green and add focused coverage when
 
 ## Visual review responsibility
 
-Visual-review and deployment mechanics are maintained separately in `docs/operations/PREVIEW_AND_PAGES.md`. This shell contract does not redefine those infrastructure rules.
+Pull-request validation and deployment mechanics are maintained separately in `docs/operations/GITHUB_PAGES.md`. This shell contract does not redefine those infrastructure rules.
 
-When exact-head Preview evidence is used, it must correspond to the current PR head; evidence from another SHA must never be reused. Screenshots are review evidence, not automatic approval.
+Visual changes must be reviewed against the exact current head using the repository Playwright, axe, responsive/no-overflow checks and maintained screenshots where relevant. Evidence from another SHA must never be reused. Screenshots are review evidence, not automatic approval.
 
 ## Non-duplication rules
 

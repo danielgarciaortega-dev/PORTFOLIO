@@ -10,7 +10,7 @@ Before changing code, use these maintained repository sources in this order wher
 
 1. `README.md` for the public professional summary and primary links.
 2. `docs/operations/FINAL_SHELL.md` for the final bilingual shell, locale-control and utility-placement contract.
-3. `docs/operations/PREVIEW_AND_PAGES.md` for Preview, review-readiness, branch-protection and GitHub Pages operations.
+3. `docs/operations/GITHUB_PAGES.md` for pull-request validation, protected-main and GitHub Pages operations.
 4. `package.json` for scripts, dependencies and execution requirements.
 5. `astro.config.mjs` and `scripts/lib/hosting-config.mjs` for static output, hosting and base-path behavior.
 6. `src/data/es/` and `src/data/en/` for localized editable content.
@@ -33,7 +33,7 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 7. Do not use `href="#"`, placeholder content or controls without real behavior.
 8. Keep editable application content in the established locale-aware data modules; do not create a third localization mechanism.
 9. Spanish and English are first-class public locales. Never replace one locale with the other or globally ban either language.
-10. Respect the GitHub Pages `/PORTFOLIO/` base. Internal routes and assets must remain base-safe, while Preview/local environments use their own root-base contract.
+10. Respect the GitHub Pages `/PORTFOLIO/` base. Internal routes and assets must remain base-safe. Explicit local/test `SITE_URL` and `BASE_PATH` overrides are allowed for deterministic validation.
 11. Every interaction must work with keyboard, pointer and touch where applicable.
 12. Use semantic HTML and preserve the established accessibility patterns.
 13. Keep client-side JavaScript minimal.
@@ -41,9 +41,10 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 15. Preserve the standalone CV source and export flow; never reconstruct the CV from screenshots or from the generated PDF.
 16. Do not manually edit generated assets in `public/images/` when a corresponding source exists in `input/`; use `npm run optimize:assets`.
 17. Keep changes small, issue-owned, coherent and reversible.
-18. Never broaden an issue merely to “improve” unrelated code, copy, infrastructure or design.
-19. Never revive, merge, rebase forward or cherry-pick the retired pre-shell #53/#54 implementation branches. New route work must start from current `main`.
+18. Never broaden an issue merely to improve unrelated code, copy, infrastructure or design.
+19. Never revive, merge, rebase forward or cherry-pick retired implementation branches. New route work must start from current `main`.
 20. Distinguish current behavior from approved future routes. Do not document a planned counterpart as already deployed before its owning issue merges.
+21. GitHub Pages is the only deployment target. Do not add another deployment or PR-hosting provider without a new explicit architecture decision.
 
 ## Current technical decisions
 
@@ -58,13 +59,12 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 - Desktop shell: DGO + GitHub/LinkedIn left, primary navigation center, locale + CV right.
 - Mobile shell: DGO + menu trigger in the top bar; numbered navigation, socials and locale/CV utilities remain separate inside the menu.
 - The public website has no full site footer. Do not confuse that removal with the standalone CV's internal `.professional-footer`.
-- Current projects route: `/proyectos/`. Until #53 merges, both locale shells still target this route. #53 owns the future English counterpart `/en/projects/` and the route-specific locale mapping.
-- Current CV route: `/cv/`. Until #55 merges, both locale shells still target this route. #55 owns the future English counterpart `/en/cv/`, CV-local switching and dual PDF output.
+- Current projects route: `/proyectos/`. Until #53 merges, both locale shells still target this route. #53 owns the English counterpart `/en/projects/` and route-specific locale mapping.
+- Current CV route: `/cv/`. Until #55 merges, both locale shells still target this route. #55 owns the English counterpart `/en/cv/`, CV-local switching and dual PDF output.
 - Current custom 404 remains owned by #54 for the final locale-aware metadata/404 pass.
 - GitHub Pages is canonical production and is published from `main` through GitHub Actions.
-- Vercel, while configured, is Preview/review infrastructure only and must never be promoted as production.
-- Vercel Git deployments for `main` remain disabled by repository configuration.
-- The active repository ruleset currently names `Repository validation` and `Preview readiness`; #142 tracks retiring Vercel from required merge governance without blocking product work.
+- Pull requests are validated only through repository-controlled GitHub Actions and tests.
+- The active ruleset currently names `Repository validation` and `Preview readiness`. The latter is retained only as a compatibility check name; its implementation is a GitHub-only Pages readiness build and must not depend on an external deployment service.
 
 ## Route ownership and execution order
 
@@ -72,25 +72,28 @@ Do not collapse the remaining bilingual work into one branch.
 
 The maintained sequence after the completed final-shell Epic is:
 
-1. #98 — repository source-of-truth synchronization.
-2. #53 — fresh bilingual project-index routes/navigation from the resulting `main`.
-3. #54 — locale metadata, alternate links, residual accessibility copy and 404 semantics after #53.
-4. #138 — approved CV-specific removal of Vercel from the visible CV technology set and CV-local JSON-LD.
-5. #130 → #131 → #132 → #133 — CV preservation baseline, English HTML, dual PDF export and final CV audit.
-6. #56 — final bilingual residue/routes/regression audit.
+1. #53 — bilingual project-index routes/navigation.
+2. #54 — locale metadata, alternate links, residual accessibility copy and 404 semantics after #53.
+3. #138 — approved CV-specific technology-content correction.
+4. #130 → #131 → #132 → #133 — CV preservation baseline, English HTML, dual PDF export and final CV audit.
+5. #56 — final bilingual residue/routes/regression audit.
 
-#136 remains a non-blocking physical cleanup task for already retired remote refs. #142 remains a non-blocking governance cleanup task for retiring Vercel as a required merge gate.
-
-The stale pre-shell #53/#54 refs are retired even if their remote names still physically exist. Their valid intent lives in the maintained issues and documentation, not in their code history.
+Retired stale refs remain non-implementation sources even if their remote names still physically exist. Their valid intent lives in maintained issues and documentation, not in obsolete branch topology.
 
 ## Required validation
 
-Before considering a code or documentation PR ready, use the checks proportional to its risk and always require the repository's current-head validation.
+Before considering a code or documentation PR ready, use checks proportional to its risk and always require the repository's current-head validation.
 
 For the full repository contract:
 
 ```bash
 npm test
+```
+
+For the focused GitHub Pages/hosting contract:
+
+```bash
+npm run test:pages
 ```
 
 When generated public assets are relevant:
@@ -107,11 +110,11 @@ npm run export:cv
 
 `Repository validation` is the authoritative code/test gate and must be green for the final PR head. Do not bypass a formatting, type, build, asset, CV-export, Playwright or other repository-validation failure.
 
-`Preview readiness` validates exact-head Vercel Preview evidence when the provider is available. The repository owner has explicitly authorized continuing when Vercel/provider infrastructure is unavailable or quota-limited, provided current-head `Repository validation` is green and the diff/scope are audited. Until #142 removes Vercel from required merge governance, owner PR bypass may be used only for that provider-only Preview blocker. It must never conceal a failing `Repository validation`, reuse Preview evidence from another SHA, or promote Vercel as production.
+`Preview readiness` is currently only the protected-ruleset status-check name. Its workflow checks the exact pull-request head using GitHub Actions, runs the focused Pages tests, builds the static site and verifies required output. It must contain no external deployment dependency, provider secret or provider URL.
 
-For visual work, preserve the exact-head review semantics in `docs/operations/PREVIEW_AND_PAGES.md` whenever Preview evidence is available. Screenshots are review evidence, not automatic pixel-diff approval.
+For visual work, use repository Playwright assertions, axe, responsive/no-overflow coverage and maintained screenshot generation. Screenshots are review evidence, not automatic pixel-diff approval. Record the exact reviewed head SHA; a later push invalidates that review.
 
-If the local environment cannot execute a required command, use CI for the exact same commit as evidence and state the limitation explicitly.
+If a local environment cannot execute a required command, use GitHub Actions for the exact same commit as evidence and state the limitation explicitly.
 
 ## Working model
 
@@ -119,8 +122,8 @@ If the local environment cannot execute a required command, use CI for the exact
 - Use one isolated branch and PR per issue/scope where practical.
 - Never modify `main` directly for normal work.
 - Keep PR descriptions and repository documentation in English.
-- Require green current-head `Repository validation` before merge.
-- Treat external Preview/provider recovery separately from code/test correctness.
+- Require green current-head `Repository validation` and `Preview readiness` before merge.
+- Treat both required checks as repository-controlled correctness gates, not provider availability gates.
 - Do not mix cleanup, content, redesign, routes, metadata, CV work and infrastructure unless the owning issue explicitly couples them.
 - Re-check routes, base paths and references after structural changes.
 - After merge, verify the expected GitHub Pages production lifecycle when the change affects deployable output.

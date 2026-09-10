@@ -1,10 +1,10 @@
 ## Scope
 
-Issue: <!-- e.g. #93 -->
+Issue: <!-- e.g. #154 -->
 
 Change type:
 
-- [ ] Visual — rendered UI, layout, responsive behavior or visual evidence changes.
+- [ ] Visual — rendered UI, layout or responsive behavior changes.
 - [ ] Non-visual — no intentional rendered UI change.
 
 Summary:
@@ -16,9 +16,9 @@ Summary:
 Before merge, the current PR head must have:
 
 - [ ] `Repository validation` — success.
-- [ ] `Preview readiness` — success for the same current head SHA.
+- [ ] `Preview readiness` — success.
 
-These automated gates do not replace manual visual review when the PR changes rendered UI.
+`Preview readiness` is retained as a required-check name for protected-main compatibility. It is a GitHub Actions **Pages readiness** check: it does not deploy or validate an external PR Preview.
 
 ## Visual review
 
@@ -27,10 +27,6 @@ Complete this section only for **Visual** changes. For non-visual changes, do no
 Current reviewed PR head SHA:
 
 `<!-- exact SHA -->`
-
-Validated Vercel Preview URL:
-
-<!-- URL resolved for the exact head by Preview readiness -->
 
 Production comparison target:
 
@@ -51,14 +47,14 @@ Viewports reviewed:
 
 Visual evidence / screenshot updates:
 
-<!-- List intentionally regenerated artifacts, or write "None". -->
+<!-- List intentionally regenerated Playwright artifacts, or write "None". -->
 
 Expected visual differences:
 
 <!-- Explain intentional differences so they are not mistaken for regressions. -->
 
-- [ ] I reviewed the validated Preview for the exact SHA above against current GitHub Pages production.
-- [ ] I understand that any new push invalidates this visual review until the new exact-head Preview is ready and reviewed again.
+- [ ] I reviewed the exact current head using the repository Playwright/axe/responsive checks and the available local/CI visual evidence.
+- [ ] I understand that any new push invalidates the recorded head SHA and requires the relevant checks/review again.
 
 ## Non-visual confirmation
 

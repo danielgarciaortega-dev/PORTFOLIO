@@ -1,64 +1,55 @@
 # Documentación de QA
 
-Este directorio conserva únicamente evidencias útiles para validar el portfolio actual.
+Este directorio conserva únicamente contratos y evidencias útiles para validar el portfolio actual.
 
-## Final bilingual shell contract
+## Contrato final del shell bilingüe
 
-The maintained shell, locale-control, utility-placement, footer-removal and ownership contract is documented in [`operations/FINAL_SHELL.md`](operations/FINAL_SHELL.md).
+El shell, el control de idioma, la colocación de utilidades, la ausencia de footer global y los límites de ownership se documentan en [`operations/FINAL_SHELL.md`](operations/FINAL_SHELL.md).
 
-That document is the source of truth for the final desktop/mobile shell delivered by #83 and for the boundaries that #53, #54 and #55 must respect.
+Ese documento es la fuente de verdad para el shell desktop/mobile entregado por #83 y para los límites que deben respetar #53, #54 y #55.
 
-## Operaciones de Preview y producción
+## Validación y producción
 
-El runbook mantenido para Vercel PR Previews, checks exact-head, protección de `main`, GitHub Pages y troubleshooting está en [`operations/PREVIEW_AND_PAGES.md`](operations/PREVIEW_AND_PAGES.md).
+El runbook operativo está en [`operations/GITHUB_PAGES.md`](operations/GITHUB_PAGES.md).
 
-Ese documento es la referencia operativa para distinguir Preview de producción, diagnosticar fallos de `Repository validation` / `Preview readiness` y mantener el ciclo PR → revisión → merge → GitHub Pages.
+La arquitectura mantenida es simple:
 
-El ruleset activo de `main` todavía nombra `Repository validation` y `Preview readiness` como checks requeridos. #142 registra la retirada pendiente de Vercel como gate obligatorio. Mientras ese ajuste administrativo no se complete, el propietario ha autorizado continuar ante fallos **exclusivamente externos** de Vercel mediante el bypass de PR, pero solo después de que `Repository validation` esté verde para el head exacto y el diff haya sido auditado. Esta recuperación no permite ocultar fallos de código/tests, reutilizar evidencia de otro SHA ni convertir Vercel en producción.
+- `GitHub Pages` es el único destino de despliegue;
+- `GitHub Actions` ejecuta toda la validación de pull requests;
+- `Repository validation` es el gate completo de formato, tipos, datos, build, Playwright, axe, responsive y CV;
+- `Preview readiness` conserva temporalmente ese nombre porque el ruleset de `main` lo exige, pero su implementación es únicamente una comprobación GitHub-native de compatibilidad/build para Pages;
+- ningún gate depende de un despliegue, URL, cuota o secreto de un proveedor externo.
+
+Un fallo de cualquiera de los checks requeridos debe corregirse en el mismo head antes del merge. No se reutiliza evidencia de otro SHA y no se ocultan fallos mediante bypass.
 
 ## `screenshots/`
 
 Las capturas responsive son generadas por la suite Playwright definida en `tests/visual.spec.ts` y cubren los viewports configurados para móvil, tablet y escritorio.
 
-El modelo definitivo de QA visual seleccionado por #88 es **híbrido sin pixel-diff automático**:
+El modelo de QA visual es híbrido sin pixel-diff automático:
 
-- las propiedades estables del shell se protegen con assertions Playwright semánticas, de visibilidad, geometría, overflow, foco, locale y accesibilidad;
-- `tests/visual.spec.ts` y `Preview visual evidence` generan capturas como artefactos de revisión humana;
+- las propiedades estables se protegen con assertions Playwright semánticas, de visibilidad, geometría, overflow, foco, locale y accesibilidad;
+- `tests/visual.spec.ts` genera capturas como artefactos de revisión humana;
 - las capturas no son baselines automáticos y no se aprueban mediante `toHaveScreenshot(...)`.
 
-Estas capturas son artefactos de revisión, no assertions de regresión visual por píxel. Por tanto, una captura generada por sí sola no demuestra que no exista una regresión visual. Los tests estructurales deben fallar ante regresiones objetivas y la revisión exact-head debe detectar diferencias visuales que no sea razonable convertir en una assertion estable.
+Una captura por sí sola no demuestra ausencia de regresiones. Los tests estructurales deben fallar ante problemas objetivos y la revisión humana debe cubrir diferencias visuales que no sea razonable fijar como una assertion estable.
 
-No deben editarse manualmente para ocultar regresiones visuales. Si cambia la interfaz de forma intencionada, las capturas deben regenerarse mediante la suite correspondiente y revisarse como parte del cambio. No se deben introducir snapshots por píxel para superficies dinámicas solo para aparentar una cobertura que sería frágil o generaría churn sin señal útil.
-
-## Evidencia visual del Preview protegido
-
-Las PR marcadas como **Visual** generan además un artifact efímero de GitHub Actions llamado `preview-visual-evidence-<PR>-<SHA>` después de que `Preview readiness` haya validado el Vercel Preview del head exacto.
-
-El job separado `Preview visual evidence` captura directamente ese Preview protegido en 390×844, 768×1024, 1440×900 y 1920×1080. Incluye las superficies `/` y `/en/`, y en los dos viewports de hasta 900 px también captura el menú móvil abierto. El artifact contiene únicamente imágenes y un `manifest.json` con el SHA, la URL validada y el inventario de capturas.
-
-El bypass de Deployment Protection se inyecta solo en peticiones HTTPS al origen exacto `*.vercel.app` ya validado. El secreto no se imprime, no se escribe en el manifest y no se sube al artifact. La evidencia tiene retención corta y existe para que un revisor pueda inspeccionar el mismo Preview exact-head aunque su navegador no tenga acceso interactivo al scope de Vercel.
-
-Este artifact **no es un tercer gate requerido, no hace pixel-diff y no aprueba visualmente la PR**. `Repository validation` sigue siendo el gate de corrección del repositorio. `Preview readiness` continúa existiendo mientras la integración siga configurada, pero #142 registra su retirada como requisito bloqueante si Vercel deja de formar parte del flujo obligatorio.
+No deben editarse manualmente para ocultar regresiones. Si la interfaz cambia de forma intencionada, las capturas relevantes se regeneran mediante la suite correspondiente y se revisan contra el head exacto del cambio.
 
 ## Contrato de revisión visual en PR
 
 La plantilla `.github/pull_request_template.md` separa cambios **Visual** y **Non-visual**.
 
-Para una PR visual, la revisión manual debe registrar, cuando el flujo de Preview esté disponible:
+Para una PR visual deben quedar registrados:
 
 - SHA exacto del head revisado;
-- Vercel Preview validado para ese mismo SHA;
-- comparación contra la producción canónica en GitHub Pages;
-- superficies modificadas intencionadamente;
+- comparación con la producción canónica en GitHub Pages cuando sea relevante;
+- superficies modificadas de forma intencionada;
 - revisión en 390×844, 768×1024, 1440×900 y 1920×1080;
-- comprobación explícita de móvil y escritorio;
-- capturas/evidencias actualizadas de forma intencionada;
+- comprobación de móvil y escritorio;
+- capturas/evidencias actualizadas cuando correspondan;
 - diferencias visuales esperadas.
 
-Cualquier push posterior invalida esa revisión manual y cualquier evidencia exact-head previa. No se puede reciclar una URL, un artifact ni un resultado de otro SHA para justificar el nuevo head.
+Cualquier push posterior invalida la revisión asociada al SHA anterior. Para cambios no visuales no se deben regenerar capturas ni introducir churn de evidencias solo para completar la plantilla.
 
-Los checks automatizados permanecen separados de la aprobación visual manual. Un fallo de `Repository validation` siempre bloquea el merge. Cuando el único fallo es externo a Vercel y el propietario ha autorizado recuperación, el bypass se limita a ese bloqueo de Preview hasta que #142 retire formalmente el requisito. Una PR visual no debe darse por buena si la evidencia disponible muestra un problema de layout o despliegue real.
-
-Para cambios no visuales no se deben regenerar capturas ni introducir churn de evidencias solo para completar la plantilla. El job `Preview visual evidence` se omite para esas PR.
-
-Los informes históricos de la implementación inicial no forman parte de la documentación activa del proyecto. El estado actual del repositorio se documenta en `README.md`, `AGENTS.md`, `package.json`, `src/`, `tests/`, `docs/` y `.github/workflows/`.
+Los informes históricos de implementaciones anteriores no son fuente de verdad. El estado actual se documenta en `README.md`, `AGENTS.md`, `package.json`, `src/`, `tests/`, `docs/` y `.github/workflows/`.

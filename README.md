@@ -77,9 +77,9 @@ The final shell contract and route ownership boundaries are maintained in [`docs
 
 This portfolio is a static, responsive and accessible site built with **Astro 7**, **strict TypeScript**, and **Tailwind CSS 4**.
 
-**GitHub Pages is canonical production.** Pull requests are protected by automated repository validation with Playwright, axe, build, formatting, locale and CV-export checks. Vercel remains configured only as PR Preview/review infrastructure; it is not a production target.
+**GitHub Pages is the only deployment target.** Pull requests are validated entirely with GitHub Actions using formatting, Astro/TypeScript checks, locale/config tests, build validation, Playwright, axe, responsive checks and CV export. No external PR deployment service is required.
 
-Operational details for Preview evidence, recovery and GitHub Pages publication are maintained in [`docs/operations/PREVIEW_AND_PAGES.md`](docs/operations/PREVIEW_AND_PAGES.md).
+Operational details for pull-request gates and GitHub Pages publication are maintained in [`docs/operations/GITHUB_PAGES.md`](docs/operations/GITHUB_PAGES.md).
 
 ## License
 
