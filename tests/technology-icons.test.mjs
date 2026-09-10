@@ -81,10 +81,7 @@ test('every displayed technology has an icon and localized REST labels share one
     technologyIcons['REST APIs'],
     'REST API aliases must share one icon',
   );
-  assert.equal(
-    technologyIcons.Angular,
-    'images/technologies/angular.svg',
-  );
+  assert.equal(technologyIcons.Angular, 'images/technologies/angular.svg');
   assert.equal(
     technologyIcons['Laravel/PHP'],
     'images/technologies/laravel.svg',
@@ -92,7 +89,10 @@ test('every displayed technology has an icon and localized REST labels share one
 });
 
 test('README recruiter-facing Stack matches the approved homepage inventory', async () => {
-  const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8');
+  const readme = await readFile(
+    new URL('../README.md', import.meta.url),
+    'utf8',
+  );
 
   assert.match(
     readme,

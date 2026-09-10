@@ -57,7 +57,7 @@ test('professional overview uses approved English copy and recruiter-facing tech
   await expect(technologies.locator('img')).toHaveCount(
     expectedTechnologies.length,
   );
-  await expect(overview.locator('.home-overview__technologies')).not.toContainText(
-    'GitHub',
-  );
+  await expect(
+    overview.locator('.home-overview__technologies'),
+  ).not.toContainText('GitHub');
 });

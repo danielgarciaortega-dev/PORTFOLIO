@@ -206,8 +206,37 @@ test('la franja profesional muestra logos junto a tecnologías, formación y exp
   await page.goto('./');
 
   const technologyItems = page.locator('.home-overview__technologies li');
-  await expect(technologyItems).toHaveCount(22);
-  await expect(technologyItems.locator('img')).toHaveCount(22);
+  const expectedTechnologies = [
+    'HTML5',
+    'CSS3',
+    'JavaScript',
+    'TypeScript',
+    'React',
+    'Angular',
+    'Next.js',
+    'Java',
+    'Python',
+    'FastAPI',
+    'Node.js',
+    'Laravel/PHP',
+    'APIs REST',
+    'SQL',
+    'PostgreSQL',
+    'MySQL/MariaDB',
+    'BigQuery',
+    'Git',
+    'Docker',
+  ];
+  await expect(technologyItems).toHaveCount(expectedTechnologies.length);
+  await expect(technologyItems.locator('span')).toHaveText(
+    expectedTechnologies,
+  );
+  await expect(technologyItems.locator('img')).toHaveCount(
+    expectedTechnologies.length,
+  );
+  await expect(page.locator('.home-overview__technologies')).not.toContainText(
+    'GitHub',
+  );
   await expect(
     page.locator('img[src$="/images/education/foc.svg"]'),
   ).toBeVisible();
