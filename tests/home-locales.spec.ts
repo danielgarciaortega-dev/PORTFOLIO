@@ -49,11 +49,7 @@ test('Spanish root renders the restored shell, hero and professional overview', 
     overview.locator('.home-overview__technologies li img'),
   ).toHaveCount(22);
 
-  const footer = page.locator('.site-footer');
-  await footer.scrollIntoViewIfNeeded();
-  await expect(footer).toContainText(
-    'Desarrollador web full-stack · Granada, España',
-  );
+  await expect(page.locator('.site-footer')).toHaveCount(0);
 });
 
 test('language switcher exposes one target-locale action and persists explicit choice', async ({

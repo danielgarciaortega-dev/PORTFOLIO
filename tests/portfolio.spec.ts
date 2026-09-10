@@ -178,33 +178,26 @@ test('copiar correo en el modal de contacto muestra confirmación visible', asyn
   expect(clipboardText).toBe('dangarort123@gmail.com');
 });
 
-test('el footer muestra enlaces con icono (GitHub, LinkedIn, CV, contacto) sin texto visible', async ({
+test('el shell conserva GitHub y LinkedIn sin renderizar el footer redundante', async ({
   page,
 }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./en/');
-  const footer = page.locator('.site-footer');
-  await footer.scrollIntoViewIfNeeded();
 
-  await expect(footer).not.toContainText('2026');
-  await expect(footer.locator('svg')).toHaveCount(4);
+  await expect(page.locator('.site-footer')).toHaveCount(0);
 
-  await expect(footer.getByRole('link', { name: 'GitHub' })).toHaveAttribute(
+  const header = page.locator('[data-site-header]');
+  const socials = header.locator('[data-header-socials]');
+  await expect(socials.getByRole('link')).toHaveCount(2);
+  await expect(socials.getByRole('link', { name: 'GitHub' })).toHaveAttribute(
     'href',
     'https://github.com/danielgarciaortega-dev',
   );
-  await expect(footer.getByRole('link', { name: 'LinkedIn' })).toHaveAttribute(
+  await expect(socials.getByRole('link', { name: 'LinkedIn' })).toHaveAttribute(
     'href',
     'https://linkedin.com/in/daniel-garcía-ortega-404754385/',
   );
-  await expect(footer.getByRole('link', { name: 'View CV' })).toHaveAttribute(
-    'href',
-    /\/cv\/$/,
-  );
-
-  await footer.getByRole('button', { name: 'Contact' }).click();
-  await expect(
-    page.getByRole('dialog', { name: 'Get in touch.' }),
-  ).toBeVisible();
+  await expect(header.locator('.header-cv-link')).toHaveCount(1);
 });
 
 test('la franja profesional muestra logos junto a tecnologías, formación y experiencia', async ({
@@ -315,7 +308,7 @@ test('no hay desbordamiento horizontal en los breakpoints definidos', async ({
   }
 });
 
-test('la portada cabe en una pantalla de ~900px de alto o más', async ({
+test('la portada cabe en una pantalla de ~900px de alto o más sin footer', async ({
   page,
 }) => {
   for (const viewport of [
@@ -324,16 +317,13 @@ test('la portada cabe en una pantalla de ~900px de alto o más', async ({
   ]) {
     await page.setViewportSize(viewport);
     await page.goto('./');
-    const { overflow, footerHeight } = await page.evaluate(() => ({
-      overflow: document.documentElement.scrollHeight - window.innerHeight,
-      footerHeight:
-        document.querySelector('.site-footer')?.getBoundingClientRect()
-          .height ?? 0,
-    }));
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollHeight - window.innerHeight,
+    );
     expect(
       overflow,
       `${viewport.width}x${viewport.height}`,
-    ).toBeLessThanOrEqual(footerHeight + 1);
+    ).toBeLessThanOrEqual(1);
   }
 });
 
