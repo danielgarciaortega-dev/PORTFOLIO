@@ -12,7 +12,12 @@ interface Props {
   robots?: string;
 }
 
-const { title, description, currentPage, robots = 'index, follow' } = Astro.props;
+const {
+  title,
+  description,
+  currentPage,
+  robots = 'index, follow',
+} = Astro.props;
 const locale = resolveLocaleFromPathname(
   Astro.url.pathname,
   import.meta.env.BASE_URL,
