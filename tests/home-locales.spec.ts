@@ -270,7 +270,8 @@ test('English mobile menu keeps localized trigger labels through open and Escape
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('./en/');
 
-  const trigger = page.getByRole('button', { name: 'Open menu' });
+  const trigger = page.locator('[data-menu-open]');
+  await expect(trigger).toHaveAttribute('aria-label', 'Open menu');
   await trigger.click();
 
   const menu = page.getByRole('dialog', { name: 'Navigation' });
