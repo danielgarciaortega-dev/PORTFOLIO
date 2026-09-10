@@ -69,6 +69,23 @@ test('rejects the repository-role pull-request bypass that caused issue 142', ()
   );
 });
 
+test('fails closed when the API does not expose bypass actors', () => {
+  const hidden = createSafeRuleset();
+  delete hidden.bypass_actors;
+
+  const result = validateMainRuleset(hidden);
+  assert.equal(result.ok, false);
+  assert.ok(
+    result.failures.includes(
+      'Protect main bypass actors must be observable before governance can pass',
+    ),
+  );
+  assert.throws(
+    () => assertMainRuleset(hidden),
+    /bypass actors must be observable/,
+  );
+});
+
 test('rejects weakening strict checks or dropping either protected context', () => {
   const hostile = createSafeRuleset();
   const statusRule = hostile.rules.find(
