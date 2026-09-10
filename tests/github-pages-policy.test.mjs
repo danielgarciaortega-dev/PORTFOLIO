@@ -6,7 +6,6 @@ const retiredProvider = ['ver', 'cel'].join('');
 const read = (path) => readFileSync(path, 'utf8');
 
 const retiredIntegrationPaths = [
-  `${retiredProvider}.json`,
   'scripts/preview-readiness.mjs',
   'scripts/capture-preview-visual-evidence.mjs',
   'scripts/lib/preview-readiness.mjs',
@@ -32,6 +31,12 @@ test('retired external Preview integration files stay removed', () => {
   for (const path of retiredIntegrationPaths) {
     assert.equal(existsSync(path), false, `${path} must stay removed`);
   }
+});
+
+test('the external Git integration is hard-disabled for every branch', () => {
+  const guard = JSON.parse(read(`${retiredProvider}.json`));
+
+  assert.equal(guard.git?.deploymentEnabled, false);
 });
 
 test(
@@ -74,5 +79,4 @@ test('maintained Pages runbook replaces provider-specific Preview docs', () => {
 
   assert.match(runbook, /GitHub Pages/);
   assert.match(runbook, /Repository validation/);
-  assert.doesNotMatch(runbook, new RegExp(retiredProvider, 'i'));
 });
