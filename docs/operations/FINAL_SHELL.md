@@ -1,6 +1,6 @@
 # Final bilingual shell contract
 
-This document records the public shell delivered by #83 after #85, #86, #87 and #88. It is the maintained structural contract for future shell changes; historical issue or PR descriptions are not the source of truth.
+This document records the public shell delivered by #83 after #85, #86, #87 and #88, with the project-route counterpart extension delivered by #53. It is the maintained structural contract for future shell changes; historical issue or PR descriptions are not the source of truth.
 
 ## Locale model
 
@@ -14,7 +14,7 @@ The shell exposes exactly one target-locale action per rendered surface:
 
 `LanguageSwitcher.astro` owns the one-target control and reuses the shared locale persistence contract. Shell code must not introduce another locale selector or another persistence mechanism.
 
-At the current #83 boundary, the home counterparts are `/` ↔ `/en/`. Project-index counterpart routing belongs to #53 and CV counterpart routing belongs to #55. Until those issues land, the shell must not invent `/en/projects/` or `/en/cv/` behavior inside unrelated shell work.
+Home counterparts are `/` ↔ `/en/`. Project-index counterparts are `/proyectos/` ↔ `/en/projects/`. CV counterpart routing remains owned by the CV-specific bilingual work; until that work lands, both shell locales continue to target `/cv/` and must not invent `/en/cv/` behavior inside unrelated work.
 
 ## Desktop structure
 
@@ -71,23 +71,24 @@ Dialog mounts must follow actual visible triggers:
 
 - About remains available through shell navigation and therefore requires a valid About dialog mount on routes exposing that trigger;
 - Contact is not a shell navigation item; it remains mounted only where an actual visible Contact trigger requires it;
-- the Spanish projects route no longer carries the old footer-only Contact trigger/dialog introduced for the removed footer topology.
+- the Spanish and English projects routes do not carry the old footer-only Contact trigger/dialog introduced for the removed footer topology.
 
-The standalone CV's internal `.professional-footer` is not the deleted website footer. It belongs to the CV document and is owned by #55.
+The standalone CV's internal `.professional-footer` is not the deleted website footer. It belongs to the CV document and is owned by the CV-specific bilingual work.
 
 ## Route and base-path constraints
 
 GitHub Pages production is served under `/PORTFOLIO/`. Shell links must therefore be generated through the repository base-path helpers rather than hard-coded as root-only URLs.
 
-Current transitional ownership matters:
+Current ownership and route behavior:
 
-- `Header.astro` still targets `/proyectos/` from both locale shells until #53 introduces the English projects counterpart;
-- `Header.astro` still targets `/cv/` from both locale shells until #55 introduces the English CV counterpart;
-- #53 owns `/proyectos/` ↔ `/en/projects/` navigation semantics;
+- `Header.astro` targets `/proyectos/` for Spanish and `/en/projects/` for English through the shared locale route contract;
+- `LanguageSwitcher.astro` maps home counterparts `/` ↔ `/en/` and project counterparts `/proyectos/` ↔ `/en/projects/` through that same contract;
+- `/projects/` is not a canonical alias and must remain absent unless separately approved;
+- `Header.astro` still targets `/cv/` from both locale shells until the CV-specific bilingual work introduces the English CV counterpart;
 - #54 owns canonical/hreflang/Open Graph and locale-aware 404 semantics;
-- #55 owns `/cv/` ↔ `/en/cv/`, CV-local locale navigation and both PDF outputs.
+- the CV-specific bilingual work owns `/cv/` ↔ `/en/cv/`, CV-local locale navigation and both PDF outputs.
 
-Do not solve #53, #54 or #55 inside a shell-only change.
+Do not solve #54 or CV-specific bilingual work inside a shell/project-route-only change.
 
 ## Regression guards
 
@@ -97,6 +98,7 @@ Relevant maintained coverage includes:
 
 - `tests/shell-regressions.spec.ts` — desktop/mobile utility placement, one locale action, no site footer, route-safe home switching, dialog topology and supported-width overflow checks;
 - `tests/home-locales.spec.ts` — bilingual home shell behavior;
+- `tests/projects-locales.spec.ts` — bilingual project routes, localized navigation, project counterpart switching, persistence, mobile overflow and the absent `/projects/` alias;
 - `tests/portfolio.spec.ts` — integrated shell, menu, route and no-footer checks;
 - `tests/accessibility.spec.ts` — representative axe coverage for public shell states;
 - `tests/visual.spec.ts` — deterministic screenshot generation for human review artifacts, not pixel-diff approval.
@@ -120,6 +122,7 @@ Future contributors must not reintroduce any of the following without a separate
 - a full website footer that repeats brand/profile/actions;
 - Contact as a footer replacement merely to restore the removed topology;
 - a second mobile navigation block for utilities;
-- shell-owned project/CV locale routes that belong to #53/#55.
+- another route/localization mechanism that bypasses the shared home/projects counterpart contract;
+- a shell-owned `/en/cv/` route before the CV-specific work owns it.
 
 The intended result is one coherent bilingual shell with explicit ownership boundaries, not a collection of duplicated fallbacks.

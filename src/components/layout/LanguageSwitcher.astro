@@ -1,17 +1,27 @@
 ---
 import { shellCopy } from '../../i18n/copy';
-import type { Locale } from '../../i18n/locale';
+import {
+  getLocaleCounterpartPath,
+  type Locale,
+  type LocalizedRoute,
+} from '../../i18n/locale';
 import { withBase } from '../../utils/paths';
 
 interface Props {
   locale: Locale;
+  currentPage?: 'home' | 'projects' | '404';
   variant?: 'desktop' | 'mobile';
 }
 
-const { locale, variant = 'desktop' } = Astro.props;
+const { locale, currentPage = 'home', variant = 'desktop' } = Astro.props;
 const copy = shellCopy[locale];
-const targetLocale: Locale = locale === 'es' ? 'en' : 'es';
-const targetUrl = targetLocale === 'en' ? withBase('en/') : withBase();
+const counterpartRoute: LocalizedRoute =
+  currentPage === 'projects' ? 'projects' : 'home';
+const { targetLocale, path: targetPath } = getLocaleCounterpartPath(
+  locale,
+  counterpartRoute,
+);
+const targetUrl = withBase(targetPath);
 const targetLabel =
   targetLocale === 'en' ? copy.switchToEnglish : copy.switchToSpanish;
 ---
