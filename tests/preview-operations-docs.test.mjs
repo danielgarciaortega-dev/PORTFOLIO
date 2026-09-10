@@ -181,11 +181,18 @@ test(
       agents,
       /Repository validation` is the authoritative code\/test gate/,
     );
+    assert.match(agents, /#97 \/ #136/);
+    assert.match(agents, /#142/);
     assert.match(
       agents,
-      /must never be used to conceal a failing `Repository validation`/,
+      /leave the PR unmerged until that exact-head check is green/,
     );
+    assert.match(agents, /Never reuse Preview evidence from another SHA/);
     assert.match(agents, /Never revive, merge, rebase forward or cherry-pick/);
+    assert.doesNotMatch(
+      agents,
+      /owner explicitly authorizes pull-request recovery/i,
+    );
   },
 );
 
@@ -213,10 +220,15 @@ test(
   },
 );
 
-test('docs index limits owner recovery to external Preview failures', () => {
-  assert.match(docsIndex, /bypass de recuperación limitada a pull requests/i);
-  assert.match(docsIndex, /Repository validation` debe quedar verde/i);
-  assert.match(docsIndex, /se limita al bloqueo de Preview/i);
-  assert.match(docsIndex, /no permite reutilizar evidencia de otro SHA/i);
-  assert.match(docsIndex, /ni usar Vercel como producción/i);
+test('docs index forbids ordinary bypass of required Preview gates', () => {
+  assert.match(
+    docsIndex,
+    /Repository validation` y `Preview readiness` como checks requeridos/i,
+  );
+  assert.match(docsIndex, /registrado como defecto de gobernanza en #142/i);
+  assert.match(docsIndex, /no forma parte del flujo ordinario/i);
+  assert.match(docsIndex, /la PR debe permanecer sin fusionar/i);
+  assert.match(docsIndex, /no autoriza reutilizar evidencia de otro SHA/i);
+  assert.match(docsIndex, /mecanismo normal de recuperación/i);
+  assert.doesNotMatch(docsIndex, /bypass autorizado por el propietario/i);
 });
