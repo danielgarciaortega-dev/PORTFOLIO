@@ -14,6 +14,8 @@ El runbook mantenido para Vercel PR Previews, checks exact-head, protección de 
 
 Ese documento es la referencia operativa para distinguir Preview de producción, diagnosticar fallos de `Repository validation` / `Preview readiness` y mantener el ciclo PR → revisión → merge → GitHub Pages.
 
+El ruleset activo de `main` nombra `Repository validation` y `Preview readiness` como checks requeridos y dispone de una capacidad de bypass de recuperación limitada a pull requests. Esa capacidad no convierte un fallo de CI en éxito: `Repository validation` debe quedar verde para el head que se mergea. Un bypass autorizado por el propietario ante una caída, cuota o indisponibilidad externa de Vercel se limita al bloqueo de Preview; no permite reutilizar evidencia de otro SHA, ocultar un fallo de código/tests ni usar Vercel como producción.
+
 ## `screenshots/`
 
 Las capturas responsive son generadas por la suite Playwright definida en `tests/visual.spec.ts` y cubren los viewports configurados para móvil, tablet y escritorio.
@@ -36,7 +38,7 @@ El job separado `Preview visual evidence` captura directamente ese Preview prote
 
 El bypass de Deployment Protection se inyecta solo en peticiones HTTPS al origen exacto `*.vercel.app` ya validado. El secreto no se imprime, no se escribe en el manifest y no se sube al artifact. La evidencia tiene retención corta y existe para que un revisor pueda inspeccionar el mismo Preview exact-head aunque su navegador no tenga acceso interactivo al scope de Vercel.
 
-Este artifact **no es un tercer gate requerido, no hace pixel-diff y no aprueba visualmente la PR**. `Repository validation` y `Preview readiness` siguen siendo los dos gates automatizados protegidos; la evidencia complementa la revisión manual definida por #93.
+Este artifact **no es un tercer gate requerido, no hace pixel-diff y no aprueba visualmente la PR**. `Repository validation` y `Preview readiness` siguen siendo los dos checks automatizados protegidos del ruleset; la evidencia complementa la revisión manual definida por #93.
 
 ## Contrato de revisión visual en PR
 
@@ -45,7 +47,7 @@ La plantilla `.github/pull_request_template.md` separa cambios **Visual** y **No
 Para una PR visual, la revisión manual debe registrar:
 
 - SHA exacto del head revisado;
-- Vercel Preview validado para ese mismo SHA;
+- Vercel Preview validado para ese mismo SHA cuando el flujo de Preview está disponible;
 - comparación contra la producción canónica en GitHub Pages;
 - superficies modificadas intencionadamente;
 - revisión en 390×844, 768×1024, 1440×900 y 1920×1080;
@@ -53,9 +55,9 @@ Para una PR visual, la revisión manual debe registrar:
 - capturas/evidencias actualizadas de forma intencionada;
 - diferencias visuales esperadas.
 
-Cualquier push posterior invalida esa revisión manual hasta que el nuevo head obtenga un nuevo `Preview readiness` y sea revisado de nuevo.
+Cualquier push posterior invalida una evidencia/revisión exact-head previa. No se puede reciclar una URL, un artifact ni un resultado de otro SHA para justificar el nuevo head.
 
-Los checks obligatorios `Repository validation` y `Preview readiness` son automatizados y permanecen separados de la aprobación visual manual. Una PR visual no debe darse por buena solo porque esos checks estén verdes si el Preview o su evidencia exact-head muestran un problema de layout o despliegue.
+`Repository validation` y `Preview readiness` permanecen separados de la aprobación visual manual. Una PR visual no debe darse por buena solo porque un check esté verde si la evidencia disponible muestra un problema de layout o despliegue.
 
 Para cambios no visuales no se deben regenerar capturas ni introducir churn de evidencias solo para completar la plantilla. El job `Preview visual evidence` se omite para esas PR.
 
