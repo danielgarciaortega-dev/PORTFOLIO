@@ -38,14 +38,19 @@ test('retired project preview open selector stays absent from runtime source', a
   );
 
   expect(
-    legacyReferences.map(({ filePath }) => path.relative(process.cwd(), filePath)),
+    legacyReferences.map(({ filePath }) =>
+      path.relative(process.cwd(), filePath),
+    ),
   ).toEqual([]);
 
   const component = await readFile(
     path.join(runtimeRoot, 'components/projects/ProjectPreview.astro'),
     'utf8',
   );
-  const css = await readFile(path.join(runtimeRoot, 'styles/global.css'), 'utf8');
+  const css = await readFile(
+    path.join(runtimeRoot, 'styles/global.css'),
+    'utf8',
+  );
 
   expect(component).toContain('project-preview__button');
   expect(component).toContain('project-preview__arrow');
