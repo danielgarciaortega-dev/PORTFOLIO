@@ -5,6 +5,8 @@ import {
   DEFAULT_LOCALE,
   LOCALE_STORAGE_KEY,
   SUPPORTED_LOCALES,
+  getLocaleCounterpartPath,
+  getLocalizedRoutePath,
   isLocale,
   normalizeBasePath,
   persistLocalePreference,
@@ -21,6 +23,30 @@ test('locale contract supports exactly Spanish and English', () => {
   assert.equal(isLocale('en'), true);
   assert.equal(isLocale('fr'), false);
   assert.equal(isLocale(null), false);
+});
+
+test('localized home and projects routes have deterministic counterparts', () => {
+  assert.equal(getLocalizedRoutePath('es', 'home'), '');
+  assert.equal(getLocalizedRoutePath('en', 'home'), 'en/');
+  assert.equal(getLocalizedRoutePath('es', 'projects'), 'proyectos/');
+  assert.equal(getLocalizedRoutePath('en', 'projects'), 'en/projects/');
+
+  assert.deepEqual(getLocaleCounterpartPath('es', 'home'), {
+    targetLocale: 'en',
+    path: 'en/',
+  });
+  assert.deepEqual(getLocaleCounterpartPath('en', 'home'), {
+    targetLocale: 'es',
+    path: '',
+  });
+  assert.deepEqual(getLocaleCounterpartPath('es', 'projects'), {
+    targetLocale: 'en',
+    path: 'en/projects/',
+  });
+  assert.deepEqual(getLocaleCounterpartPath('en', 'projects'), {
+    targetLocale: 'es',
+    path: 'proyectos/',
+  });
 });
 
 test('base-path normalization is stable for root and GitHub Pages', () => {
