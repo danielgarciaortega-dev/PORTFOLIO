@@ -19,9 +19,12 @@ test('Spanish CV preserves its corrected semantic topology and factual ordering'
   const majorOrder = await page.locator('.cv-content').evaluate((content) =>
     Array.from(content.children)
       .map((element) =>
-        ['projects-section', 'experience-section', 'stack-section', 'bottom-grid'].find(
-          (className) => element.classList.contains(className),
-        ),
+        [
+          'projects-section',
+          'experience-section',
+          'stack-section',
+          'bottom-grid',
+        ].find((className) => element.classList.contains(className)),
       )
       .filter(Boolean),
   );
@@ -104,7 +107,10 @@ test('Spanish CV keeps A4 geometry, print containment and footer placement', asy
     A4_TOLERANCE_PX,
   );
   await expect(page.locator('.download-btn')).toHaveCSS('display', 'none');
-  await expect(page.locator('.portfolio-back-link')).toHaveCSS('display', 'none');
+  await expect(page.locator('.portfolio-back-link')).toHaveCSS(
+    'display',
+    'none',
+  );
 });
 
 test('Spanish CV remains fluid and one-column at the 390px mobile baseline', async ({
