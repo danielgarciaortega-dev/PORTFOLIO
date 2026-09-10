@@ -1,9 +1,21 @@
 export const SUPPORTED_LOCALES = ['es', 'en'] as const;
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
+export type LocalizedRoute = 'home' | 'projects';
 
 export const DEFAULT_LOCALE: Locale = 'es';
 export const LOCALE_STORAGE_KEY = 'portfolio.locale';
+
+const LOCALIZED_ROUTE_PATHS = {
+  es: {
+    home: '',
+    projects: 'proyectos/',
+  },
+  en: {
+    home: 'en/',
+    projects: 'en/projects/',
+  },
+} as const satisfies Record<Locale, Record<LocalizedRoute, string>>;
 
 type StorageReader = Pick<Storage, 'getItem'>;
 type StorageWriter = Pick<Storage, 'setItem'>;
@@ -13,6 +25,24 @@ export function isLocale(value: unknown): value is Locale {
   return (
     typeof value === 'string' && SUPPORTED_LOCALES.includes(value as Locale)
   );
+}
+
+export function getLocalizedRoutePath(
+  locale: Locale,
+  route: LocalizedRoute,
+): string {
+  return LOCALIZED_ROUTE_PATHS[locale][route];
+}
+
+export function getLocaleCounterpartPath(
+  locale: Locale,
+  route: LocalizedRoute,
+): { targetLocale: Locale; path: string } {
+  const targetLocale: Locale = locale === 'es' ? 'en' : 'es';
+  return {
+    targetLocale,
+    path: getLocalizedRoutePath(targetLocale, route),
+  };
 }
 
 export function normalizeBasePath(basePath: string): string {
