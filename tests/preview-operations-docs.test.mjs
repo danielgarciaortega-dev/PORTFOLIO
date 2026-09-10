@@ -172,7 +172,10 @@ test(
       /#53 owns the future English counterpart `\/en\/projects\/`/,
     );
     assert.match(agents, /Current CV route: `\/cv\/`/);
-    assert.match(agents, /#55 owns the future English counterpart `\/en\/cv\/`/);
+    assert.match(
+      agents,
+      /#55 owns the future English counterpart `\/en\/cv\/`/,
+    );
     assert.match(agents, /GitHub Pages is canonical production/);
     assert.match(
       agents,
