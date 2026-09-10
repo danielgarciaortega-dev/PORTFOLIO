@@ -27,34 +27,30 @@ const retiredIntegrationPaths = [
   'docs/operations/PREVIEW_AND_PAGES.md',
 ];
 
-test('retired external Preview integration files stay removed', () => {
+test('retired Preview files stay removed', () => {
   for (const path of retiredIntegrationPaths) {
     assert.equal(existsSync(path), false, `${path} must stay removed`);
   }
 });
 
-test('the external Git integration is hard-disabled for every branch', () => {
+test('external Git deployments stay disabled', () => {
   const guard = JSON.parse(read(`${retiredProvider}.json`));
-
   assert.equal(guard.git?.deploymentEnabled, false);
 });
 
-test(
-  'pull-request gates are GitHub-only and build the exact head for Pages',
-  () => {
-    const workflow = read('.github/workflows/validate.yml');
+test('PR gates stay GitHub-only', () => {
+  const workflow = read('.github/workflows/validate.yml');
 
-    assert.match(workflow, /name: Repository validation/);
-    assert.match(workflow, /name: Preview readiness/);
-    assert.match(workflow, /npm run test:pages/);
-    assert.match(workflow, /npm run build/);
-    assert.match(workflow, /github\.event\.pull_request\.head\.sha/);
-    assert.doesNotMatch(workflow, new RegExp(retiredProvider, 'i'));
-    assert.doesNotMatch(workflow, /PREVIEW_URL|AUTOMATION_BYPASS_SECRET/i);
-  },
-);
+  assert.match(workflow, /name: Repository validation/);
+  assert.match(workflow, /name: Preview readiness/);
+  assert.match(workflow, /npm run test:pages/);
+  assert.match(workflow, /npm run build/);
+  assert.match(workflow, /github\.event\.pull_request\.head\.sha/);
+  assert.doesNotMatch(workflow, new RegExp(retiredProvider, 'i'));
+  assert.doesNotMatch(workflow, /PREVIEW_URL|AUTOMATION_BYPASS_SECRET/i);
+});
 
-test('production deployment remains GitHub Pages only', () => {
+test('production stays on GitHub Pages', () => {
   const deployWorkflow = read('.github/workflows/deploy.yml');
 
   assert.match(deployWorkflow, /name: Deploy to GitHub Pages/);
@@ -62,18 +58,16 @@ test('production deployment remains GitHub Pages only', () => {
   assert.doesNotMatch(deployWorkflow, new RegExp(retiredProvider, 'i'));
 });
 
-test('package scripts keep a focused Pages readiness regression suite', () => {
+test('package scripts expose the Pages test suite', () => {
   const packageJson = JSON.parse(read('package.json'));
+  const configTests = packageJson.scripts['test:config'];
 
   assert.match(packageJson.scripts['test:pages'], /astro-hosting-config/);
   assert.match(packageJson.scripts['test:pages'], /github-pages-policy/);
-  assert.doesNotMatch(
-    packageJson.scripts['test:config'],
-    new RegExp(retiredProvider, 'i'),
-  );
+  assert.doesNotMatch(configTests, new RegExp(retiredProvider, 'i'));
 });
 
-test('maintained Pages runbook replaces provider-specific Preview docs', () => {
+test('Pages runbook stays maintained', () => {
   assert.equal(existsSync('docs/operations/GITHUB_PAGES.md'), true);
   const runbook = read('docs/operations/GITHUB_PAGES.md');
 
