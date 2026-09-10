@@ -12,15 +12,20 @@ export const technologyGroups: TechnologyGroup[] = [
       'JavaScript',
       'TypeScript',
       'React',
+      'Angular',
       'Next.js',
-      'Astro',
-      'Tailwind CSS',
-      'Vite',
     ],
   },
   {
     label: 'Backend',
-    technologies: ['Java', 'Python', 'FastAPI', 'Node.js', 'APIs REST'],
+    technologies: [
+      'Java',
+      'Python',
+      'FastAPI',
+      'Node.js',
+      'Laravel/PHP',
+      'APIs REST',
+    ],
   },
   {
     label: 'Datos',
@@ -28,6 +33,6 @@ export const technologyGroups: TechnologyGroup[] = [
   },
   {
     label: 'Herramientas',
-    technologies: ['Git', 'GitHub', 'Docker', 'Supabase'],
+    technologies: ['Git', 'Docker'],
   },
 ];
