@@ -40,12 +40,7 @@ test('English homepage shell and hero use the approved copy', async ({
   await expect(page.locator('.home-overview')).toContainText('Technologies');
   await expect(page.locator('.home-overview')).toContainText('Education');
   await expect(page.locator('.home-overview')).toContainText('Experience');
-
-  const footer = page.locator('.site-footer');
-  await footer.scrollIntoViewIfNeeded();
-  await expect(footer).toContainText(
-    'Full-stack web developer · Granada, Spain',
-  );
+  await expect(page.locator('.site-footer')).toHaveCount(0);
 });
 
 test('English mobile navigation exposes accessible names and locale control', async ({

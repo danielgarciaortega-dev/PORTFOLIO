@@ -1035,64 +1035,6 @@ a {
   text-transform: uppercase;
 }
 
-.site-footer {
-  padding-inline: var(--page-padding);
-}
-
-.site-footer__inner {
-  width: min(100%, var(--max-width));
-  min-height: 150px;
-  margin-inline: auto;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 2rem;
-  align-items: center;
-}
-
-.brand--footer {
-  font-size: 1.1rem;
-}
-
-.site-footer__inner > p {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: 0.98rem;
-}
-
-.site-footer__links {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-}
-
-.site-footer__links a,
-.site-footer__links button {
-  width: 44px;
-  height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  transition:
-    color 160ms ease,
-    background-color 160ms ease;
-}
-
-.site-footer__links a:hover,
-.site-footer__links button:hover {
-  background: var(--color-surface-soft);
-  color: var(--color-text);
-}
-
-.site-footer__links svg {
-  width: 19px;
-  height: 19px;
-}
-
 .content-dialog {
   --dialog-pad: clamp(1.4rem, 4vw, 3.25rem);
   position: fixed;
@@ -1793,15 +1735,6 @@ a {
   .experience-list__detail {
     grid-column: 2;
   }
-
-  .site-footer__inner {
-    grid-template-columns: auto 1fr;
-  }
-
-  .site-footer__links {
-    grid-column: 1 / -1;
-    justify-content: flex-start;
-  }
 }
 
 @media (max-width: 720px) {
@@ -1926,18 +1859,6 @@ a {
   .contact__location {
     right: var(--page-padding);
     left: var(--page-padding);
-  }
-
-  .site-footer__inner {
-    min-height: 230px;
-    grid-template-columns: 1fr;
-    gap: 0.65rem;
-    padding-block: 2.5rem;
-  }
-
-  .site-footer__links {
-    grid-column: 1;
-    justify-content: flex-start;
   }
 
   .project-dialog__hero,

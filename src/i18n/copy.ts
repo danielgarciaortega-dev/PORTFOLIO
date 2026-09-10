@@ -19,8 +19,6 @@ interface ShellCopy {
   currentLanguage: string;
   switchToSpanish: string;
   switchToEnglish: string;
-  viewCvAria: string;
-  contactAria: string;
 }
 
 interface HomeCopy {
@@ -71,8 +69,6 @@ export const shellCopy: Record<Locale, ShellCopy> = {
     currentLanguage: 'idioma actual',
     switchToSpanish: 'Cambiar a español',
     switchToEnglish: 'Cambiar a inglés',
-    viewCvAria: 'Ver CV',
-    contactAria: 'Contactar',
   },
   en: {
     skipLink: 'Skip to content',
@@ -93,8 +89,6 @@ export const shellCopy: Record<Locale, ShellCopy> = {
     currentLanguage: 'current language',
     switchToSpanish: 'Switch to Spanish',
     switchToEnglish: 'Switch to English',
-    viewCvAria: 'View CV',
-    contactAria: 'Contact',
   },
 };
 
