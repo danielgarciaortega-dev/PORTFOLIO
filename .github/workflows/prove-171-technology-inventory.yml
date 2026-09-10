@@ -1,0 +1,136 @@
+name: Prove issue 171 technology inventory
+
+on:
+  push:
+    branches:
+      - feat/171-prioritize-home-technology-inventory
+
+permissions:
+  contents: write
+
+jobs:
+  prove:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: feat/171-prioritize-home-technology-inventory
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Replace obsolete Spanish count-only assertion
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('tests/portfolio.spec.ts')
+          source = path.read_text()
+          old = """  const technologyItems = page.locator('.home-overview__technologies li');
+            await expect(technologyItems).toHaveCount(22);
+            await expect(technologyItems.locator('img')).toHaveCount(22);
+          """
+          new = """  const technologyItems = page.locator('.home-overview__technologies li');
+            const expectedTechnologies = [
+              'HTML5',
+              'CSS3',
+              'JavaScript',
+              'TypeScript',
+              'React',
+              'Angular',
+              'Next.js',
+              'Java',
+              'Python',
+              'FastAPI',
+              'Node.js',
+              'Laravel/PHP',
+              'APIs REST',
+              'SQL',
+              'PostgreSQL',
+              'MySQL/MariaDB',
+              'BigQuery',
+              'Git',
+              'Docker',
+            ];
+            await expect(technologyItems).toHaveCount(expectedTechnologies.length);
+            await expect(technologyItems.locator('span')).toHaveText(expectedTechnologies);
+            await expect(technologyItems.locator('img')).toHaveCount(
+              expectedTechnologies.length,
+            );
+            await expect(page.locator('.home-overview__technologies')).not.toContainText(
+              'GitHub',
+            );
+          """
+          if old not in source:
+              raise SystemExit('Expected obsolete technology-count block was not found')
+          path.write_text(source.replace(old, new, 1))
+          PY
+
+      - name: Format maintained files
+        run: >-
+          npx prettier
+          README.md
+          src/data/es/technologies.ts
+          src/data/en/technologies.ts
+          src/data/technology-icons.ts
+          tests/technology-icons.test.mjs
+          tests/professional-overview-english.spec.ts
+          tests/portfolio.spec.ts
+          --write
+
+      - name: Run locale and icon contracts
+        run: npm run test:locale
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run focused overview regressions
+        run: npx playwright test tests/professional-overview-english.spec.ts tests/portfolio.spec.ts
+
+      - name: Run full repository test suite
+        run: npm test
+
+      - name: Verify scope and retire proof workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          git rm .github/workflows/prove-171-technology-inventory.yml
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            README.md \
+            src/data/es/technologies.ts \
+            src/data/en/technologies.ts \
+            src/data/technology-icons.ts \
+            public/images/technologies/angular.svg \
+            public/images/technologies/laravel.svg \
+            tests/technology-icons.test.mjs \
+            tests/professional-overview-english.spec.ts \
+            tests/portfolio.spec.ts
+
+          allowed='^(.github/workflows/prove-171-technology-inventory.yml|README.md|src/data/es/technologies.ts|src/data/en/technologies.ts|src/data/technology-icons.ts|public/images/technologies/angular.svg|public/images/technologies/laravel.svg|tests/technology-icons.test.mjs|tests/professional-overview-english.spec.ts|tests/portfolio.spec.ts)$'
+          unexpected="$(git status --short | awk '{print $2}' | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected" ]; then
+            echo 'Unexpected issue #171 worktree paths:'
+            echo "$unexpected"
+            exit 1
+          fi
+
+          git diff --cached --quiet && {
+            echo 'Expected final formatting/test update commit is empty'
+            exit 1
+          }
+
+          git commit -m 'test: finalize prioritized technology inventory'
+          git push origin HEAD:feat/171-prioritize-home-technology-inventory
