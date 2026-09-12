@@ -54,16 +54,21 @@ test('desktop header and home content share deliberate gutters with centered nav
       expect(portraitBox).not.toBeNull();
       expect(overviewBox).not.toBeNull();
 
-      expect(Math.abs((brandBox?.x ?? 0) - (portraitBox?.x ?? 0))).toBeLessThanOrEqual(1);
-      expect(Math.abs((brandBox?.x ?? 0) - (overviewBox?.x ?? 0))).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs((brandBox?.x ?? 0) - (portraitBox?.x ?? 0)),
+      ).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs((brandBox?.x ?? 0) - (overviewBox?.x ?? 0)),
+      ).toBeLessThanOrEqual(1);
 
       const heroContentRight = await heroGrid.evaluate((element) => {
         const rect = element.getBoundingClientRect();
-        const paddingRight = Number.parseFloat(getComputedStyle(element).paddingRight);
+        const paddingRight = Number.parseFloat(
+          getComputedStyle(element).paddingRight,
+        );
         return rect.right - paddingRight;
       });
-      const actionsRight =
-        (actionsBox?.x ?? 0) + (actionsBox?.width ?? 0);
+      const actionsRight = (actionsBox?.x ?? 0) + (actionsBox?.width ?? 0);
       expect(Math.abs(actionsRight - heroContentRight)).toBeLessThanOrEqual(1);
 
       const navigationCenter =
