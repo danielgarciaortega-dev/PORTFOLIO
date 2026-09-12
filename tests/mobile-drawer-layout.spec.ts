@@ -126,23 +126,26 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
   }
 });
 
-test('mobile drawer preserves close and backdrop dismissal', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('./');
+test(
+  'mobile drawer preserves close and backdrop dismissal',
+  async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('./');
 
-  const trigger = page.getByRole('button', { name: 'Abrir menú' });
-  const menu = page.getByRole('dialog', { name: 'Navegación' });
+    const trigger = page.getByRole('button', { name: 'Abrir menú' });
+    const menu = page.getByRole('dialog', { name: 'Navegación' });
 
-  await trigger.click();
-  await menu.getByRole('button', { name: 'Cerrar menú' }).click();
-  await expect(menu).toBeHidden();
-  await expect(trigger).toBeFocused();
+    await trigger.click();
+    await menu.getByRole('button', { name: 'Cerrar menú' }).click();
+    await expect(menu).toBeHidden();
+    await expect(trigger).toBeFocused();
 
-  await trigger.click();
-  const menuBox = await menu.boundingBox();
-  expect(menuBox).not.toBeNull();
-  expect(menuBox?.x ?? 0).toBeGreaterThan(1);
-  await page.mouse.click((menuBox?.x ?? 2) / 2, 12);
-  await expect(menu).toBeHidden();
-  await expect(trigger).toBeFocused();
-});
+    await trigger.click();
+    const menuBox = await menu.boundingBox();
+    expect(menuBox).not.toBeNull();
+    expect(menuBox?.x ?? 0).toBeGreaterThan(1);
+    await page.mouse.click((menuBox?.x ?? 2) / 2, 12);
+    await expect(menu).toBeHidden();
+    await expect(trigger).toBeFocused();
+  },
+);
