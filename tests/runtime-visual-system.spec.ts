@@ -50,9 +50,9 @@ test('semantic tokens preserve the certified runtime colors', async ({
     projectMarkWarm: '#fff0df',
     contactEyebrow: '#f3b28e',
     accentPressed: '#b43f1d',
-    kickerSize: '0.76rem',
+    kickerSize: '.76rem',
     kickerWeight: '800',
-    kickerTracking: '0.16em',
+    kickerTracking: '.16em',
   });
 
   await expect(page.locator('.availability')).toHaveCSS(
