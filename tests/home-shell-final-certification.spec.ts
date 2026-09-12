@@ -33,6 +33,10 @@ const viewportMatrix = [
   { width: 1920, height: 1080 },
 ] as const;
 
+function normalizeTechnologyLabel(technology: string) {
+  return technology === 'APIs REST' ? 'REST APIs' : technology;
+}
+
 async function expectNoHorizontalOverflow(page: Page, context: string) {
   const geometry = await page.evaluate(() => ({
     clientWidth: document.documentElement.clientWidth,
@@ -137,7 +141,12 @@ test('final technology inventory remains locale-equivalent', async ({
   }
 
   expect(inventories[0]).toHaveLength(19);
-  expect(inventories[1]).toEqual(inventories[0]);
+  expect(inventories[1]).toHaveLength(19);
+  expect(inventories[0]).toContain('APIs REST');
+  expect(inventories[1]).toContain('REST APIs');
+  expect(inventories[1].map(normalizeTechnologyLabel)).toEqual(
+    inventories[0].map(normalizeTechnologyLabel),
+  );
 });
 
 test('reduced-motion keeps touched shell motion effectively disabled', async ({
