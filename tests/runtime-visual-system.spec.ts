@@ -129,18 +129,12 @@ test('shared kicker typography stays equivalent in shell and dialogs', async ({
   const dialogKicker = page.locator('.project-dialog .eyebrow').first();
 
   for (const property of ['font-size', 'font-weight', 'letter-spacing']) {
-    const shellValue = await shellKicker.evaluate(
-      (element, cssProperty) => {
-        return getComputedStyle(element).getPropertyValue(cssProperty);
-      },
-      property,
-    );
-    const dialogValue = await dialogKicker.evaluate(
-      (element, cssProperty) => {
-        return getComputedStyle(element).getPropertyValue(cssProperty);
-      },
-      property,
-    );
+    const shellValue = await shellKicker.evaluate((element, cssProperty) => {
+      return getComputedStyle(element).getPropertyValue(cssProperty);
+    }, property);
+    const dialogValue = await dialogKicker.evaluate((element, cssProperty) => {
+      return getComputedStyle(element).getPropertyValue(cssProperty);
+    }, property);
     expect(dialogValue).toBe(shellValue);
   }
 });
