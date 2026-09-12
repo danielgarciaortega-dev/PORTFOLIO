@@ -1,0 +1,33 @@
+name: Issue 186 CSS prune
+
+on:
+  push:
+    branches:
+      - issue-186-css-hygiene
+
+permissions:
+  contents: write
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout issue branch
+        uses: actions/checkout@v4
+        with:
+          ref: issue-186-css-hygiene
+
+      - name: Apply verified CSS cleanup
+        run: node scripts/issue-186-prune-css.mjs
+
+      - name: Commit generated cleanup
+        run: |
+          if git diff --quiet -- src/styles/global.css; then
+            echo "No CSS cleanup changes required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/styles/global.css
+          git commit -m "refactor: remove verified obsolete css"
+          git push origin HEAD:issue-186-css-hygiene
