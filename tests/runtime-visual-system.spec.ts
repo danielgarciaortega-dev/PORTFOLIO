@@ -7,6 +7,14 @@ async function getBox(locator: Locator) {
   return result!;
 }
 
+function getCssBlock(css: string, selector: string) {
+  const start = css.indexOf(`${selector} {`);
+  expect(start, `missing CSS block for ${selector}`).toBeGreaterThanOrEqual(0);
+  const end = css.indexOf('\n}', start);
+  expect(end, `unterminated CSS block for ${selector}`).toBeGreaterThan(start);
+  return css.slice(start, end + 2);
+}
+
 test('runtime visual system loads after legacy global styles', async () => {
   const [layout, hero, overview] = await Promise.all([
     readFile('src/layouts/BaseLayout.astro', 'utf8'),
@@ -21,6 +29,51 @@ test('runtime visual system loads after legacy global styles', async () => {
   expect(systemImport).toBeGreaterThan(globalImport);
   expect(hero).toContain('width: min(100%, var(--layout-shell-width));');
   expect(overview).toContain('width: min(100%, var(--layout-shell-width));');
+});
+
+test('legacy global CSS no longer duplicates certified visual-system ownership', async () => {
+  const css = await readFile('src/styles/global.css', 'utf8');
+
+  for (const obsoleteSelector of [
+    '.project-preview__number {',
+    '.project-preview__body p {',
+    '.project-preview__body h3 {',
+    '.project-preview__mark--sidn-cost-control {',
+    '.contact .eyebrow {',
+  ]) {
+    expect(css).not.toContain(obsoleteSelector);
+  }
+
+  expect(getCssBlock(css, '.eyebrow')).not.toContain('font-size: 0.76rem;');
+  expect(getCssBlock(css, '.eyebrow')).not.toContain('font-weight: 800;');
+  expect(getCssBlock(css, '.eyebrow')).not.toContain('letter-spacing: 0.16em;');
+  expect(getCssBlock(css, '.site-header__inner')).not.toContain('width:');
+  expect(getCssBlock(css, '.mobile-menu__head p')).not.toContain(
+    'font-size: 0.76rem;',
+  );
+  expect(getCssBlock(css, '.mobile-menu__head p')).not.toContain(
+    'font-weight: 800;',
+  );
+  expect(getCssBlock(css, '.mobile-menu__head p')).not.toContain(
+    'letter-spacing: 0.16em;',
+  );
+  expect(getCssBlock(css, '.availability')).not.toContain('color: #176a48;');
+  expect(getCssBlock(css, '.button-link--primary:hover')).not.toContain(
+    'background: #b43f1d;',
+  );
+  expect(getCssBlock(css, '.contact-dialog__copy-status')).not.toContain(
+    'color: #176a48;',
+  );
+  expect(getCssBlock(css, '.award-label')).not.toContain('color: #93421f;');
+  expect(getCssBlock(css, '.project-row__meta span')).not.toContain(
+    'color: #93421f;',
+  );
+  expect(getCssBlock(css, '.home-page .hero__grid')).not.toContain(
+    'width: min(100%, 1536px);',
+  );
+  expect(getCssBlock(css, '.home-overview__inner')).not.toContain(
+    'width: min(100%, 1536px);',
+  );
 });
 
 test('semantic tokens preserve the certified runtime colors', async ({
