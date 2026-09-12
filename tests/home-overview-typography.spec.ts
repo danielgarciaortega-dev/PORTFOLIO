@@ -73,18 +73,14 @@ async function expectOverviewTypographyAndGeometry(page: Page, route: string) {
   }
 }
 
-test.describe('professional overview typography and geometry', () => {
-  test(
-    'Spanish keeps a coherent heading scale without overflow',
-    async ({ page }) => {
-      await expectOverviewTypographyAndGeometry(page, './');
-    },
-  );
+test('Spanish keeps a coherent heading scale without overflow', async ({
+  page,
+}) => {
+  await expectOverviewTypographyAndGeometry(page, './');
+});
 
-  test(
-    'English keeps the same heading scale without overflow',
-    async ({ page }) => {
-      await expectOverviewTypographyAndGeometry(page, './en/');
-    },
-  );
+test('English keeps the same heading scale without overflow', async ({
+  page,
+}) => {
+  await expectOverviewTypographyAndGeometry(page, './en/');
 });
