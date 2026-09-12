@@ -5,6 +5,7 @@ import { test } from '@playwright/test';
 test.describe.configure({ mode: 'serial' });
 
 const viewports = [
+  { name: '320x568', width: 320, height: 568 },
   { name: '390x844', width: 390, height: 844 },
   { name: '844x390', width: 844, height: 390 },
   { name: '768x1024', width: 768, height: 1024 },
