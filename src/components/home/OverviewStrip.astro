@@ -163,4 +163,19 @@ const copy = homeCopy[locale];
       grid-template-columns: 44px minmax(0, 1fr);
     }
   }
+
+  @media (max-width: 720px) {
+    .technology-groups {
+      grid-template-columns: 1fr;
+      row-gap: 1.15rem;
+    }
+
+    .technology-group:first-child {
+      grid-column: auto;
+    }
+
+    .home-overview__fact-list {
+      gap: 0.9rem;
+    }
+  }
 </style>
