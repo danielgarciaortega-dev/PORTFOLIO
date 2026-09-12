@@ -33,9 +33,7 @@ test('desktop shell gutters stay aligned with centered navigation', async ({
       const actions = header.locator('.site-header__actions');
       const heroGrid = page.locator('.home-page .hero__grid');
       const heroPortrait = page.locator('.hero__portrait');
-      const overviewTechnologies = page.locator(
-        '.home-overview__technologies',
-      );
+      const overviewTechnologies = page.locator('.home-overview__technologies');
 
       const [brandBox, navigationBox, actionsBox, heroGridBox, portraitBox] =
         await Promise.all([
