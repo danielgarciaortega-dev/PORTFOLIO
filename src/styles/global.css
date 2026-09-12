@@ -141,9 +141,6 @@ a {
 .eyebrow {
   margin-bottom: 0.9rem;
   color: var(--color-brand-hover);
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
   line-height: 1.25;
   text-transform: uppercase;
 }
@@ -211,7 +208,6 @@ a {
 }
 
 .site-header__inner {
-  width: min(100%, calc(var(--max-width) + (var(--page-padding) * 2)));
   height: 100%;
   margin-inline: auto;
   padding-inline: var(--page-padding);
@@ -369,9 +365,6 @@ a {
 .mobile-menu__head p {
   margin: 0;
   color: var(--color-text-muted);
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
@@ -513,7 +506,6 @@ a {
   gap: 0.6rem;
   align-items: center;
   margin: 1.35rem 0 0;
-  color: #176a48;
   font-size: 0.87rem;
   font-weight: 700;
 }
@@ -569,7 +561,6 @@ a {
 }
 
 .button-link--primary:hover {
-  background: #b43f1d;
   transform: translateY(-2px);
 }
 
@@ -644,13 +635,6 @@ a {
   transform: translateX(3px);
 }
 
-.project-preview__number {
-  color: var(--color-brand-hover);
-  font-size: 0.66rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-}
-
 .project-preview__mark {
   width: 64px;
   height: 64px;
@@ -671,30 +655,8 @@ a {
   background: var(--color-accent-soft);
 }
 
-.project-preview__mark--sidn-cost-control {
-  background: #fff0df;
-}
-
 .project-preview__body {
   min-width: 0;
-}
-
-.project-preview__body p {
-  margin: 0 0 0.25rem;
-  overflow: hidden;
-  color: var(--color-text-muted);
-  font-size: 0.67rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-overflow: ellipsis;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.project-preview__body h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.06rem;
-  letter-spacing: -0.025em;
 }
 
 .project-preview__body span {
@@ -920,10 +882,6 @@ a {
   letter-spacing: -0.09em;
   line-height: 0.8;
   pointer-events: none;
-}
-
-.contact .eyebrow {
-  color: #f3b28e;
 }
 
 .contact h2 {
@@ -1173,7 +1131,6 @@ a {
 .contact-dialog__copy-status {
   margin: 0.75rem 0 0;
   min-height: 1.2em;
-  color: #176a48;
   font-size: 0.85rem;
   font-weight: 700;
 }
@@ -1285,7 +1242,6 @@ a {
   padding: 0.35rem 0.65rem;
   border-radius: 999px;
   background: var(--color-accent-soft);
-  color: #93421f;
   font-size: 0.72rem;
   font-weight: 800;
 }
@@ -1491,7 +1447,6 @@ a {
   padding: 0.28rem 0.55rem;
   border-radius: 999px;
   background: var(--color-accent-soft);
-  color: #93421f;
   font-size: 0.68rem;
   font-weight: 800;
 }
@@ -1921,7 +1876,6 @@ a {
 }
 
 .home-page .hero__grid {
-  width: min(100%, 1536px);
   min-height: 0;
   padding: clamp(1.35rem, 2.8vh, 2.4rem) var(--page-padding);
   grid-template-columns:
@@ -2100,7 +2054,6 @@ a {
 }
 
 .home-overview__inner {
-  width: min(100%, 1536px);
   min-height: 158px;
   margin-inline: auto;
   padding: 1.25rem var(--page-padding);
