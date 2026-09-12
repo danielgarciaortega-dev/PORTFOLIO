@@ -62,3 +62,15 @@ test('English mobile menu passes automated axe checks', async ({ page }) => {
   await page.getByRole('button', { name: 'Open menu' }).click();
   await expectNoAxeViolations(page);
 });
+
+test('narrow Spanish home passes automated axe checks', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto('./');
+  await expectNoAxeViolations(page);
+});
+
+test('English tablet home passes automated axe checks', async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await page.goto('./en/');
+  await expectNoAxeViolations(page);
+});
