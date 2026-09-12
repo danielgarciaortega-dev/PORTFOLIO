@@ -17,7 +17,7 @@ async function expectNoHorizontalOverflow(page: Page, context: string) {
   expect(overflow, context).toBeLessThanOrEqual(0);
 }
 
-test('desktop header and home content share deliberate gutters with centered navigation', async ({
+test('desktop shell gutters stay aligned with centered navigation', async ({
   page,
 }) => {
   for (const localeCase of localeCases) {
