@@ -75,9 +75,7 @@ test('narrow home stacks intro, portrait, projects and overview deliberately', a
         expect(summaryFits).toBe(true);
       }
 
-      const technologyGroups = page.locator(
-        '.home-overview .technology-group',
-      );
+      const technologyGroups = page.locator('.home-overview .technology-group');
       const groupCount = await technologyGroups.count();
       expect(groupCount).toBeGreaterThan(1);
       const groupBoxes = [];
@@ -126,9 +124,7 @@ test('tablet home keeps readable projects and a two-column overview without clip
       ),
     );
 
-    const projectButtons = page.locator(
-      '.home-page .project-preview__button',
-    );
+    const projectButtons = page.locator('.home-page .project-preview__button');
     await expect(projectButtons).toHaveCount(3);
     for (let index = 0; index < 3; index += 1) {
       const button = projectButtons.nth(index);
