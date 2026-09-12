@@ -1,0 +1,49 @@
+:root {
+  --layout-shell-width: calc(var(--max-width) + (var(--page-padding) * 2));
+  --type-kicker-size: 0.76rem;
+  --type-kicker-weight: 800;
+  --type-kicker-tracking: 0.16em;
+  --color-positive-text: #176a48;
+  --color-accent-ink: #93421f;
+  --color-project-mark-warm: #fff0df;
+  --color-contact-eyebrow: #f3b28e;
+  --color-accent-pressed: #b43f1d;
+}
+
+/*
+ * #185 establishes semantic aliases without changing rendered values.
+ * Matching legacy literals/declarations in global.css intentionally remain
+ * until #186 performs the separate cascade/dead-CSS removal audit.
+ */
+.site-header__inner {
+  width: min(100%, var(--layout-shell-width));
+}
+
+.eyebrow,
+.mobile-menu__head p {
+  font-size: var(--type-kicker-size);
+  font-weight: var(--type-kicker-weight);
+  letter-spacing: var(--type-kicker-tracking);
+}
+
+.availability,
+.contact-dialog__copy-status {
+  color: var(--color-positive-text);
+}
+
+.award-label,
+.project-row__meta span {
+  color: var(--color-accent-ink);
+}
+
+.project-preview__mark--sidn-cost-control {
+  background: var(--color-project-mark-warm);
+}
+
+.contact .eyebrow {
+  color: var(--color-contact-eyebrow);
+}
+
+.button-link--primary:hover {
+  background: var(--color-accent-pressed);
+}
