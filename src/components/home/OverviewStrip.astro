@@ -117,6 +117,32 @@ const copy = homeCopy[locale];
 </section>
 
 <style>
+  .home-overview__inner {
+    --overview-item-heading-size: 0.86rem;
+    --overview-item-heading-line-height: 1.25;
+  }
+
+  .technology-group__label,
+  .home-overview__fact h2 {
+    font-size: var(--overview-item-heading-size);
+    line-height: var(--overview-item-heading-line-height);
+  }
+
+  .technology-group__label {
+    margin-bottom: 0.45rem;
+    font-weight: 760;
+    letter-spacing: 0.015em;
+  }
+
+  .home-overview__fact h2 {
+    font-weight: 760;
+    letter-spacing: -0.01em;
+  }
+
+  .technology-groups {
+    row-gap: 1.05rem;
+  }
+
   .overview-organization {
     grid-template-columns: 64px minmax(0, 1fr);
   }
