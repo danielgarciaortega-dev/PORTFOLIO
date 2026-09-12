@@ -60,22 +60,22 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
       await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
       await expect(panel).toHaveCSS('overflow-y', 'auto');
 
-      const [menuBox, headBox, navigationBox, utilitiesBox] = await Promise.all([
+      const boxes = await Promise.all([
         menu.boundingBox(),
         head.boundingBox(),
         navigation.boundingBox(),
         utilities.boundingBox(),
       ]);
+      const [menuBox, headBox, navigationBox, utilitiesBox] = boxes;
 
       expect(menuBox).not.toBeNull();
       expect(headBox).not.toBeNull();
       expect(navigationBox).not.toBeNull();
       expect(utilitiesBox).not.toBeNull();
 
+      const menuRight = (menuBox?.x ?? 0) + (menuBox?.width ?? 0);
       expect(menuBox?.x ?? 0).toBeGreaterThanOrEqual(-1);
-      expect((menuBox?.x ?? 0) + (menuBox?.width ?? 0)).toBeLessThanOrEqual(
-        viewport.width + 1,
-      );
+      expect(menuRight).toBeLessThanOrEqual(viewport.width + 1);
       expect(menuBox?.height ?? 0).toBeLessThanOrEqual(viewport.height + 1);
 
       const headBottom = (headBox?.y ?? 0) + (headBox?.height ?? 0);
@@ -100,26 +100,22 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
       const cvLink = menu.locator('.mobile-menu__cv');
       await cvLink.scrollIntoViewIfNeeded();
       const cvBox = await cvLink.boundingBox();
+      const cvBottom = (cvBox?.y ?? 0) + (cvBox?.height ?? 0);
       expect(cvBox).not.toBeNull();
       expect(cvBox?.y ?? -1).toBeGreaterThanOrEqual(-1);
-      expect((cvBox?.y ?? 0) + (cvBox?.height ?? 0)).toBeLessThanOrEqual(
-        viewport.height + 1,
-      );
+      expect(cvBottom).toBeLessThanOrEqual(viewport.height + 1);
 
       if (viewport.width === 844 && viewport.height === 390) {
         const scrollGeometry = await panel.evaluate((element) => ({
           clientHeight: element.clientHeight,
           scrollHeight: element.scrollHeight,
         }));
-        expect(scrollGeometry.scrollHeight).toBeGreaterThan(
-          scrollGeometry.clientHeight,
-        );
+        const { clientHeight, scrollHeight } = scrollGeometry;
+        expect(scrollHeight).toBeGreaterThan(clientHeight);
       }
 
-      await expectNoHorizontalOverflow(
-        page,
-        `${localeCase.route} ${viewport.width}x${viewport.height}`,
-      );
+      const context = `${localeCase.route} ${viewport.width}x${viewport.height}`;
+      await expectNoHorizontalOverflow(page, context);
 
       await page.keyboard.press('Escape');
       await expect(menu).toBeHidden();
@@ -130,9 +126,7 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
   }
 });
 
-test('mobile drawer close button and backdrop preserve dismissal contract', async ({
-  page,
-}) => {
+test('mobile drawer preserves close and backdrop dismissal', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('./');
 
