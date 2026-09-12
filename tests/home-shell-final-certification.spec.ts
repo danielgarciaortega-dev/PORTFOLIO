@@ -99,9 +99,11 @@ test('final bilingual home and shell stay coherent across the certification matr
       );
       const overviewCount = await overviewItems.count();
       for (let index = 0; index < overviewCount; index += 1) {
-        const fits = await overviewItems.nth(index).evaluate(
-          (element) => element.scrollWidth <= element.clientWidth + 1,
-        );
+        const fits = await overviewItems
+          .nth(index)
+          .evaluate(
+            (element) => element.scrollWidth <= element.clientWidth + 1,
+          );
         expect(fits, `${context} overview item ${index}`).toBe(true);
       }
 
