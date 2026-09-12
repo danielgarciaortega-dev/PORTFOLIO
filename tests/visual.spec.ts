@@ -6,6 +6,7 @@ test.describe.configure({ mode: 'serial' });
 
 const viewports = [
   { name: '390x844', width: 390, height: 844 },
+  { name: '844x390', width: 844, height: 390 },
   { name: '768x1024', width: 768, height: 1024 },
   { name: '1440x900', width: 1440, height: 900 },
   { name: '1920x1080', width: 1920, height: 1080 },
