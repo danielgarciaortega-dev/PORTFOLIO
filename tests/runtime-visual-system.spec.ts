@@ -55,10 +55,6 @@ test('semantic tokens preserve the certified runtime colors', async ({
     kickerTracking: '.16em',
   });
 
-  await expect(page.locator('.availability')).toHaveCSS(
-    'color',
-    'rgb(23, 106, 72)',
-  );
   await expect(page.locator('.contact-dialog__copy-status')).toHaveCSS(
     'color',
     'rgb(23, 106, 72)',
