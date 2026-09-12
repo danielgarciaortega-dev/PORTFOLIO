@@ -39,9 +39,7 @@ async function expectNoHorizontalOverflow(page: Page, context: string) {
     scrollWidth: document.documentElement.scrollWidth,
   }));
 
-  expect(geometry.scrollWidth, context).toBeLessThanOrEqual(
-    geometry.clientWidth,
-  );
+  expect(geometry.scrollWidth, context).toBeLessThanOrEqual(geometry.clientWidth);
 }
 
 async function expectVisibleControlsInsideViewport(
@@ -59,9 +57,10 @@ async function expectVisibleControlsInsideViewport(
     const box = await control.boundingBox();
     if (!box) continue;
 
-    expect(box.x, `${context} control ${index} left edge`).toBeGreaterThanOrEqual(
-      -1,
-    );
+    expect(
+      box.x,
+      `${context} control ${index} left edge`,
+    ).toBeGreaterThanOrEqual(-1);
     expect(
       box.x + box.width,
       `${context} control ${index} right edge`,
@@ -116,7 +115,9 @@ test('final bilingual home and shell stay coherent across the certification matr
   }
 });
 
-test('final technology inventory remains locale-equivalent', async ({ page }) => {
+test('final technology inventory remains locale-equivalent', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 1280, height: 900 });
 
   const inventories: string[][] = [];
