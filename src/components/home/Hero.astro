@@ -94,6 +94,10 @@ const [firstName, ...lastNames] = profile.fullName.split(' ');
 </section>
 
 <style>
+  :global(.home-page) .hero__grid {
+    width: min(100%, calc(var(--max-width) + (var(--page-padding) * 2)));
+  }
+
   .hero__projects-link > span {
     display: inline-block;
     transition: transform 180ms ease;
