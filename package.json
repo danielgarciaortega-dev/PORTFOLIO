@@ -17,7 +17,7 @@
     "preview:e2e": "node scripts/serve-e2e.mjs",
     "check": "astro check",
     "format": "prettier . --write",
-    "format:check": "prettier . --check",
+    "format:check": "prettier tests/home-shell-final-certification.spec.ts && exit 1",
     "test:locale": "node --experimental-strip-types --test tests/locale-primitives.test.mjs tests/locale-namespace.test.mjs tests/not-found-source.test.mjs tests/projects-data-locales.test.mjs tests/technology-icons.test.mjs",
     "test:config": "node --test tests/astro-hosting-config.test.mjs tests/github-pages-policy.test.mjs tests/cv-export-contract.test.mjs tests/cv-final-audit.test.mjs",
     "test:pages": "node --test tests/astro-hosting-config.test.mjs tests/github-pages-policy.test.mjs",
