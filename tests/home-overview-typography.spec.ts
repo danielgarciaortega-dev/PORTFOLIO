@@ -13,7 +13,9 @@ async function expectOverviewTypographyAndGeometry(page: Page, route: string) {
     await page.goto(route);
 
     const overview = page.locator('.home-overview');
-    const technologyHeading = overview.locator('.technology-group__label').first();
+    const technologyHeading = overview
+      .locator('.technology-group__label')
+      .first();
     const factHeading = overview.locator('.home-overview__fact h2').first();
 
     await expect(overview).toBeVisible();
@@ -72,11 +74,17 @@ async function expectOverviewTypographyAndGeometry(page: Page, route: string) {
 }
 
 test.describe('professional overview typography and geometry', () => {
-  test('Spanish keeps a coherent heading scale without overflow', async ({ page }) => {
-    await expectOverviewTypographyAndGeometry(page, './');
-  });
+  test(
+    'Spanish keeps a coherent heading scale without overflow',
+    async ({ page }) => {
+      await expectOverviewTypographyAndGeometry(page, './');
+    },
+  );
 
-  test('English keeps the same heading scale without overflow', async ({ page }) => {
-    await expectOverviewTypographyAndGeometry(page, './en/');
-  });
+  test(
+    'English keeps the same heading scale without overflow',
+    async ({ page }) => {
+      await expectOverviewTypographyAndGeometry(page, './en/');
+    },
+  );
 });
