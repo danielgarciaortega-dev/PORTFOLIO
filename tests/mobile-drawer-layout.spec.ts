@@ -43,7 +43,8 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
       await page.setViewportSize(viewport);
       await page.goto(localeCase.route);
 
-      const trigger = page.getByRole('button', { name: localeCase.open });
+      const trigger = page.locator('[data-menu-open]');
+      await expect(trigger).toHaveAttribute('aria-label', localeCase.open);
       await trigger.click();
 
       const menu = page.getByRole('dialog', { name: localeCase.menu });
@@ -132,9 +133,10 @@ test('mobile drawer preserves close and backdrop dismissal', async ({
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('./');
 
-  const trigger = page.getByRole('button', { name: 'Abrir menú' });
+  const trigger = page.locator('[data-menu-open]');
   const menu = page.getByRole('dialog', { name: 'Navegación' });
 
+  await expect(trigger).toHaveAttribute('aria-label', 'Abrir menú');
   await trigger.click();
   await menu.getByRole('button', { name: 'Cerrar menú' }).click();
   await expect(menu).toBeHidden();
