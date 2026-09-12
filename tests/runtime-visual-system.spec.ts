@@ -23,7 +23,9 @@ test('runtime visual system loads after legacy global styles', async () => {
   expect(overview).toContain('width: min(100%, var(--layout-shell-width));');
 });
 
-test('semantic tokens preserve the certified runtime colors', async ({ page }) => {
+test('semantic tokens preserve the certified runtime colors', async ({
+  page,
+}) => {
   await page.goto('./');
 
   const tokens = await page.evaluate(() => {
@@ -71,10 +73,7 @@ test('semantic tokens preserve the certified runtime colors', async ({ page }) =
 
   const primaryAction = page.locator('.button-link--primary').first();
   await primaryAction.hover();
-  await expect(primaryAction).toHaveCSS(
-    'background-color',
-    'rgb(180, 63, 29)',
-  );
+  await expect(primaryAction).toHaveCSS('background-color', 'rgb(180, 63, 29)');
 });
 
 test('one Inter font contract remains authoritative across Astro routes', async ({
@@ -130,12 +129,18 @@ test('shared kicker typography stays equivalent in shell and dialogs', async ({
   const dialogKicker = page.locator('.project-dialog .eyebrow').first();
 
   for (const property of ['font-size', 'font-weight', 'letter-spacing']) {
-    const shellValue = await shellKicker.evaluate((element, cssProperty) => {
-      return getComputedStyle(element).getPropertyValue(cssProperty);
-    }, property);
-    const dialogValue = await dialogKicker.evaluate((element, cssProperty) => {
-      return getComputedStyle(element).getPropertyValue(cssProperty);
-    }, property);
+    const shellValue = await shellKicker.evaluate(
+      (element, cssProperty) => {
+        return getComputedStyle(element).getPropertyValue(cssProperty);
+      },
+      property,
+    );
+    const dialogValue = await dialogKicker.evaluate(
+      (element, cssProperty) => {
+        return getComputedStyle(element).getPropertyValue(cssProperty);
+      },
+      property,
+    );
     expect(dialogValue).toBe(shellValue);
   }
 });
