@@ -108,6 +108,33 @@ const [firstName, ...lastNames] = profile.fullName.split(' ');
     transform: translateX(3px);
   }
 
+  @media (max-width: 900px) {
+    :global(.home-page .project-preview__body > span) {
+      overflow: visible;
+      line-height: 1.35;
+      text-overflow: clip;
+      white-space: normal;
+    }
+  }
+
+  @media (max-width: 720px) {
+    :global(.home-page) .hero__intro {
+      order: 1;
+    }
+
+    :global(.home-page) .hero__portrait {
+      order: 2;
+    }
+
+    :global(.home-page) .hero__projects {
+      order: 3;
+    }
+
+    :global(.home-page) .hero__actions .button-link {
+      white-space: nowrap;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero__projects-link > span {
       transition: none;
