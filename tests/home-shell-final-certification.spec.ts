@@ -39,7 +39,9 @@ async function expectNoHorizontalOverflow(page: Page, context: string) {
     scrollWidth: document.documentElement.scrollWidth,
   }));
 
-  expect(geometry.scrollWidth, context).toBeLessThanOrEqual(geometry.clientWidth);
+  expect(geometry.scrollWidth, context).toBeLessThanOrEqual(
+    geometry.clientWidth,
+  );
 }
 
 async function expectVisibleControlsInsideViewport(
@@ -79,7 +81,10 @@ test('final bilingual home and shell stay coherent across the certification matr
       await page.goto(localeCase.route);
 
       const context = `${localeCase.lang} ${viewport.width}x${viewport.height}`;
-      await expect(page.locator('html')).toHaveAttribute('lang', localeCase.lang);
+      await expect(page.locator('html')).toHaveAttribute(
+        'lang',
+        localeCase.lang,
+      );
       await expect(
         page.getByRole('link', { name: localeCase.projectsCta }),
       ).toHaveAttribute('href', localeCase.projectsHref);
