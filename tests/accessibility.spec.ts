@@ -56,7 +56,7 @@ test('menú móvil abierto sin violaciones automatizadas de axe', async ({
   await expectNoAxeViolations(page);
 });
 
-test('English mobile menu has no automated axe violations', async ({ page }) => {
+test('English mobile menu passes automated axe checks', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('./en/');
   await page.getByRole('button', { name: 'Open menu' }).click();
