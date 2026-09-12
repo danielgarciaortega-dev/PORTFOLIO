@@ -1,4 +1,9 @@
-import { expect, test, type Page } from '@playwright/test';
+import {
+  expect,
+  test,
+  type Locator,
+  type Page,
+} from '@playwright/test';
 
 const localeCases = [
   {
@@ -35,6 +40,14 @@ async function expectNoHorizontalOverflow(page: Page, context: string) {
   expect(overflow, context).toBeLessThanOrEqual(0);
 }
 
+async function waitForDrawerMotion(menu: Locator) {
+  await menu.evaluate(async (element) => {
+    await Promise.allSettled(
+      element.getAnimations().map((animation) => animation.finished),
+    );
+  });
+}
+
 test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
   page,
 }) => {
@@ -60,6 +73,7 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
       await expect(trigger).toHaveAttribute('aria-label', localeCase.close);
       await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
       await expect(panel).toHaveCSS('overflow-y', 'auto');
+      await waitForDrawerMotion(menu);
 
       const boxes = await Promise.all([
         menu.boundingBox(),
@@ -143,6 +157,7 @@ test('mobile drawer preserves close and backdrop dismissal', async ({
   await expect(trigger).toBeFocused();
 
   await trigger.click();
+  await waitForDrawerMotion(menu);
   const menuBox = await menu.boundingBox();
   expect(menuBox).not.toBeNull();
   expect(menuBox?.x ?? 0).toBeGreaterThan(1);
