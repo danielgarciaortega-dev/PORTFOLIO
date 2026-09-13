@@ -15,12 +15,10 @@ Repository visibility is treated as a disclosure boundary, not as a quality scor
 
 Four public repositories currently qualify as professional project evidence in the canonical inventory:
 
-| Canonical id | Project | Role context | Public presentation |
-|---|---|---|---|
-| `al-lio` | AL-LÍO | Personal product / full-stack development | Featured |
-| `sidn-cost-control` | SIDN Cost Control | Team project / public case study | Featured |
-| `feedback2action` | Feedback2Action | Team project / public case study | Featured |
-| `portfolio` | Daniel García Ortega Portfolio | Personal web/quality-engineering project | Not featured as a project card |
+- `al-lio` — **AL-LÍO** — personal product / full-stack development — featured publicly.
+- `sidn-cost-control` — **SIDN Cost Control** — team project / public case study — featured publicly.
+- `feedback2action` — **Feedback2Action** — team project / public case study — featured publicly.
+- `portfolio` — **Daniel García Ortega Portfolio** — personal web / quality-engineering project — canonical evidence, not a featured project card.
 
 The remaining public repository is account/profile infrastructure rather than a distinct software project and is not included as application evidence.
 
