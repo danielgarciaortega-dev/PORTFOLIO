@@ -115,11 +115,20 @@ The canonical contract must not add technologies merely because they are common 
 
 The future generated export in #198 will also carry export-level provenance including schema version and source revision.
 
-## Visibility
+## Visibility and repository privacy
 
 `public` means the fact is appropriate for the public professional profile/export.
 
-`consumer-only` means the record may be useful to approved professional consumers but is not necessarily rendered in the public UI. This classification must not be used to introduce private/sensitive job-search data into the public repository.
+`consumer-only` means the record may be useful to an approved professional consumer without being rendered in the public website UI. It is a **presentation/export classification, not a secrecy boundary**.
+
+`PORTFOLIO` is a public GitHub repository. Any record committed here — including a `consumer-only` record — is visible in the repository history. Therefore:
+
+- private repository names, private client names, private URLs or confidential implementation details must not be committed here merely because they are useful evidence;
+- private repositories may be inspected as evidence by an authorized workflow, but only facts already approved as public professional information may be normalized into this public canonical repository;
+- a downstream private repository may keep a separately sourced private evidence overlay when it needs details that cannot safely be published here;
+- sensitive job-search eligibility data remains outside this repository unless Daniel explicitly changes that policy.
+
+The inventory work in #197 must record the distinction between **professional relevance** and **safe public canonicalization**. A relevant private repository can support a decision without automatically becoming a public canonical project record.
 
 ## Consumer contract
 
@@ -128,8 +137,8 @@ Consumers such as `employee-searching` should:
 1. consume the generated contract introduced by #198 rather than scrape pages;
 2. retain the schema/source revision of their cached snapshot;
 3. use stable record IDs when selecting evidence;
-4. choose projects from the complete canonical inventory, not only featured projects;
-5. keep workflow-specific facts separate from canonical public facts.
+4. choose projects from the complete **public-safe canonical inventory**, not only featured projects;
+5. keep workflow-specific facts and any authorized private evidence overlay separate from canonical public facts.
 
 The detailed external-consumer/versioning contract is tracked in #199.
 
@@ -139,7 +148,7 @@ The detailed external-consumer/versioning contract is tracked in #199.
 
 Next steps:
 
-- #197 populates and audits the complete project/repository inventory;
+- #197 audits the complete owned repository/project set and populates the public-safe canonical project inventory;
 - #198 generates the stable external export;
 - #199 documents/tests consumer compatibility;
-- `employee-searching` #660 consumes that export and retires its competing hand-maintained project catalog.
+- `employee-searching` #660 consumes that export, retires its competing hand-maintained project catalog and may maintain an explicitly separate private evidence overlay where necessary.
