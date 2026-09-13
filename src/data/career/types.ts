@@ -1,43 +1,81 @@
-export type CareerVisibility = 'public' | 'consumer-only';
+export const CAREER_VISIBILITIES = ['public', 'consumer-only'] as const;
+export type CareerVisibility = (typeof CAREER_VISIBILITIES)[number];
 
-export type ProjectLifecycle =
-  | 'active'
-  | 'completed'
-  | 'experimental'
-  | 'archived'
-  | 'unknown';
+export const PROJECT_LIFECYCLES = [
+  'active',
+  'completed',
+  'experimental',
+  'archived',
+  'unknown',
+] as const;
+export type ProjectLifecycle = (typeof PROJECT_LIFECYCLES)[number];
 
-export type EvidenceTag =
-  | 'frontend'
-  | 'backend'
-  | 'full-stack'
-  | 'java'
-  | 'python'
-  | 'data'
-  | 'sql'
-  | 'api'
-  | 'integration'
-  | 'ai'
-  | 'testing'
-  | 'qa'
-  | 'devops'
-  | 'deployment'
-  | 'automation'
-  | 'product'
-  | 'mobile'
-  | 'customer-support'
-  | 'sales'
-  | 'business';
+export const EVIDENCE_TAGS = [
+  'frontend',
+  'backend',
+  'full-stack',
+  'java',
+  'python',
+  'data',
+  'sql',
+  'api',
+  'integration',
+  'ai',
+  'testing',
+  'qa',
+  'devops',
+  'deployment',
+  'automation',
+  'product',
+  'mobile',
+  'customer-support',
+  'sales',
+  'business',
+] as const;
+export type EvidenceTag = (typeof EVIDENCE_TAGS)[number];
+
+export const SOURCE_KINDS = [
+  'repository',
+  'portfolio',
+  'education',
+  'employment',
+  'event',
+  'award',
+  'public-link',
+] as const;
+export type SourceKind = (typeof SOURCE_KINDS)[number];
+
+export const PROJECT_OWNERSHIP_TYPES = [
+  'personal',
+  'team',
+  'professional',
+  'unknown',
+] as const;
+export type ProjectOwnership = (typeof PROJECT_OWNERSHIP_TYPES)[number];
+
+export const TECHNOLOGY_CATEGORIES = [
+  'frontend',
+  'backend',
+  'data',
+  'mobile',
+  'tooling',
+  'cloud',
+  'other',
+] as const;
+export type TechnologyCategory = (typeof TECHNOLOGY_CATEGORIES)[number];
+
+export const PUBLIC_LINK_KINDS = [
+  'github',
+  'linkedin',
+  'portfolio',
+  'cv',
+  'email',
+  'other',
+] as const;
+export type PublicLinkKind = (typeof PUBLIC_LINK_KINDS)[number];
 
 export interface SourceReference {
-  kind:
-    | 'repository'
-    | 'portfolio'
-    | 'education'
-    | 'employment'
-    | 'event'
-    | 'award'
-    | 'public-link';
+  kind: SourceKind;
   url: string | null;
   note?: string;
 }
@@ -79,7 +117,7 @@ export interface CanonicalProjectRecord extends CanonicalRecordBase {
   lifecycle: ProjectLifecycle;
   featuredPublicly: boolean;
   applicationEvidence: boolean;
-  ownership: 'personal' | 'team' | 'professional' | 'unknown';
+  ownership: ProjectOwnership;
   technologies: string[];
   evidenceTags: EvidenceTag[];
   awardIds: string[];
@@ -93,14 +131,7 @@ export interface CanonicalAchievementRecord extends CanonicalRecordBase {
 
 export interface CanonicalTechnologyRecord extends CanonicalRecordBase {
   name: string;
-  category:
-    | 'frontend'
-    | 'backend'
-    | 'data'
-    | 'mobile'
-    | 'tooling'
-    | 'cloud'
-    | 'other';
+  category: TechnologyCategory;
   evidenceIds: string[];
 }
 
@@ -113,7 +144,7 @@ export interface CanonicalLanguageRecord extends CanonicalRecordBase {
 export interface CanonicalPublicLinkRecord extends CanonicalRecordBase {
   label: string;
   url: string;
-  kind: 'github' | 'linkedin' | 'portfolio' | 'cv' | 'email' | 'other';
+  kind: PublicLinkKind;
 }
 
 export interface CareerDataSchema {
