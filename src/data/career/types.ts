@@ -93,7 +93,14 @@ export interface CanonicalAchievementRecord extends CanonicalRecordBase {
 
 export interface CanonicalTechnologyRecord extends CanonicalRecordBase {
   name: string;
-  category: 'frontend' | 'backend' | 'data' | 'mobile' | 'tooling' | 'cloud' | 'other';
+  category:
+    | 'frontend'
+    | 'backend'
+    | 'data'
+    | 'mobile'
+    | 'tooling'
+    | 'cloud'
+    | 'other';
   evidenceIds: string[];
 }
 
