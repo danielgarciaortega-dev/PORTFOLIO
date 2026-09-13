@@ -76,8 +76,7 @@ export const canonicalProjects = [
     id: 'feedback2action',
     visibility: 'public',
     name: 'Feedback2Action',
-    repositoryUrl:
-      'https://github.com/danielgarciaortega-dev/Feedback2Action',
+    repositoryUrl: 'https://github.com/danielgarciaortega-dev/Feedback2Action',
     liveUrl: null,
     lifecycle: 'completed',
     featuredPublicly: true,
