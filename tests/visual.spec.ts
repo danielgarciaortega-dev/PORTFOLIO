@@ -54,6 +54,26 @@ for (const viewport of viewports) {
       fullPage: true,
     });
 
+    if (viewport.name === '390x844' || viewport.name === '1440x900') {
+      await page.goto('./cv/opciones/');
+      await page.screenshot({
+        path: path.join(output, 'cv-centro.png'),
+        fullPage: true,
+      });
+
+      await page.goto('./cv/ats/');
+      await page.screenshot({
+        path: path.join(output, 'cv-ats-es.png'),
+        fullPage: true,
+      });
+
+      await page.goto('./en/cv/ats/');
+      await page.screenshot({
+        path: path.join(output, 'cv-ats-en.png'),
+        fullPage: true,
+      });
+    }
+
     if (viewport.width <= 900) {
       await page.goto('./');
       await page.getByRole('button', { name: 'Abrir menú' }).click();

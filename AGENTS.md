@@ -57,14 +57,20 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 - English home at `/en/`.
 - Spanish projects index at `/proyectos/`.
 - English projects index at `/en/projects/`.
-- Spanish standalone CV at `/cv/`.
-- English standalone CV at `/en/cv/`.
+- Spanish CV center at `/cv/opciones/`.
+- English CV center at `/en/cv/options/`.
+- Designed Spanish CV remains directly available at `/cv/`.
+- Designed English CV remains directly available at `/en/cv/`.
+- ATS Spanish CV is available at `/cv/ats/`.
+- ATS English CV is available at `/en/cv/ats/`.
 - `/projects/` is not a canonical compatibility route and must remain absent unless separately approved.
 - Exactly one target-locale action is rendered per shell surface: Spanish shows `EN`; English shows `ES`.
 - Home counterpart switching is `/` ↔ `/en/`.
 - Projects counterpart switching is `/proyectos/` ↔ `/en/projects/`.
-- CV counterpart switching is `/cv/` ↔ `/en/cv/`, with independent ES/EN PDF outputs generated from the corresponding HTML sources.
-- Desktop shell: DGO + GitHub/LinkedIn left, primary navigation center, locale + locale-correct CV right.
+- CV-center counterpart switching is `/cv/opciones/` ↔ `/en/cv/options/`; the designed CV keeps its own direct `/cv/` ↔ `/en/cv/` locale links.
+- The shell's CV action opens the locale-correct CV center, not a PDF or a direct designed-CV viewer.
+- CV export is a single four-definition Playwright pipeline: designed ES/EN plus ATS ES/EN, each with its own stable PDF output.
+- Desktop shell: DGO + GitHub/LinkedIn left, primary navigation center, locale + locale-correct CV-center action right.
 - Mobile shell: DGO + menu trigger in the top bar; numbered navigation, socials and locale/CV utilities remain separate inside the menu.
 - The public website has no full site footer. Do not confuse that removal with the standalone CV's internal `.professional-footer`.
 - Locale-aware canonical/hreflang/Open Graph metadata and the static locale-aware real-404 behavior are delivered and regression-tested.
@@ -113,6 +119,8 @@ When the CV or export contract is relevant:
 ```bash
 npm run export:cv
 ```
+
+That command must continue to produce all four configured outputs (designed ES/EN and ATS ES/EN) through the same fail-closed exporter.
 
 `Repository validation` is the authoritative code/test gate and must be green for the final PR head. Do not bypass a formatting, type, build, asset, CV-export, Playwright or other repository-validation failure.
 

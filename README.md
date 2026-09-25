@@ -6,7 +6,7 @@
 
 Second-year Web Application Development (DAW) student building real products, participating in hackathons, and gaining hands-on software development experience.
 
-[**View portfolio**](https://danielgarciaortega-dev.github.io/PORTFOLIO/) · [**English version**](https://danielgarciaortega-dev.github.io/PORTFOLIO/en/) · [**View CV (ES)**](https://danielgarciaortega-dev.github.io/PORTFOLIO/cv/) · [**View CV (EN)**](https://danielgarciaortega-dev.github.io/PORTFOLIO/en/cv/) · [**LinkedIn**](https://linkedin.com/in/daniel-garcía-ortega-404754385/)
+[**View portfolio**](https://danielgarciaortega-dev.github.io/PORTFOLIO/) · [**English version**](https://danielgarciaortega-dev.github.io/PORTFOLIO/en/) · [**CV center (ES)**](https://danielgarciaortega-dev.github.io/PORTFOLIO/cv/opciones/) · [**CV center (EN)**](https://danielgarciaortega-dev.github.io/PORTFOLIO/en/cv/options/) · [**LinkedIn**](https://linkedin.com/in/daniel-garcía-ortega-404754385/)
 
 </div>
 
@@ -72,12 +72,16 @@ Spanish and English are first-class portfolio locales. The current public route 
 - English home: `/en/`
 - Spanish projects: `/proyectos/`
 - English projects: `/en/projects/`
-- Spanish CV: `/cv/`
-- English CV: `/en/cv/`
+- Spanish CV center: `/cv/opciones/`
+- English CV center: `/en/cv/options/`
+- Designed Spanish CV: `/cv/`
+- Designed English CV: `/en/cv/`
+- ATS Spanish CV: `/cv/ats/`
+- ATS English CV: `/en/cv/ats/`
 
-The shell exposes one target-locale action rather than simultaneous ES/EN controls. Home switches `/` ↔ `/en/`, the projects index switches `/proyectos/` ↔ `/en/projects/`, and the standalone CV switches `/cv/` ↔ `/en/cv/`. The unscoped `/projects/` alias is intentionally not part of the public route contract.
+The shell exposes one target-locale action rather than simultaneous ES/EN controls. Home switches `/` ↔ `/en/`, the projects index switches `/proyectos/` ↔ `/en/projects/`, and the CV center switches `/cv/opciones/` ↔ `/en/cv/options/`. The designed standalone CV keeps its direct `/cv/` ↔ `/en/cv/` locale links. The unscoped `/projects/` alias is intentionally not part of the public route contract.
 
-Both CV locales preserve the same factual/structural baseline and have independent downloadable PDF outputs generated from their corresponding HTML source.
+The CV center exposes four variants: designed ES/EN and ATS ES/EN. All four preserve the same stable professional facts, and one Playwright export pipeline generates four independent downloadable PDF outputs.
 
 The final shell contract and route ownership boundaries are maintained in [`docs/operations/FINAL_SHELL.md`](docs/operations/FINAL_SHELL.md).
 
