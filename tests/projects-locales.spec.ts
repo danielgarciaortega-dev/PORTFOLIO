@@ -111,6 +111,56 @@ test('English home uses approved project copy and unique accessible CTAs', async
   await expect(feedbackDialog).toContainText('108 prioritized actions');
 });
 
+test('SIDN winner metadata stays editorial instead of rendering as a pill', async ({
+  page,
+}) => {
+  const cases = [
+    {
+      route: './proyectos/',
+      open: 'Ver proyecto SIDN Cost Control',
+      award: 'Ganador de la I Edición GEN AI ARENA',
+    },
+    {
+      route: './en/projects/',
+      open: 'View project SIDN Cost Control',
+      award: 'Winner of I Edición GEN AI ARENA',
+    },
+  ] as const;
+
+  for (const awardCase of cases) {
+    await page.goto(awardCase.route);
+    await page.getByRole('button', { name: awardCase.open }).click();
+
+    const dialog = page.getByRole('dialog', { name: 'SIDN Cost Control' });
+    const award = dialog.locator('.award-label');
+    await expect(award).toHaveText(awardCase.award);
+    await expect(award).toBeVisible();
+
+    const presentation = await award.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const rule = getComputedStyle(element, '::before');
+
+      return {
+        background: style.backgroundColor,
+        borderRadius: style.borderRadius,
+        padding: style.padding,
+        fontWeight: style.fontWeight,
+        ruleWidth: rule.width,
+        ruleHeight: rule.height,
+      };
+    });
+
+    expect(presentation.background).toBe('rgba(0, 0, 0, 0)');
+    expect(presentation.borderRadius).toBe('0px');
+    expect(presentation.padding).toBe('0px');
+    expect(presentation.fontWeight).toBe('700');
+    expect(presentation.ruleWidth).toBe('28px');
+    expect(presentation.ruleHeight).toBe('1px');
+
+    await page.keyboard.press('Escape');
+  }
+});
+
 test('Spanish and English projects indexes preserve structure with localized copy', async ({
   page,
 }) => {
