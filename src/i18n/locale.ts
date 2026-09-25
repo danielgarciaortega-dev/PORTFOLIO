@@ -1,7 +1,7 @@
 export const SUPPORTED_LOCALES = ['es', 'en'] as const;
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
-export type LocalizedRoute = 'home' | 'projects' | 'cvCenter';
+export type LocalizedRoute = 'home' | 'about' | 'projects' | 'cvCenter';
 export type CvDocumentVariant = 'designed' | 'ats';
 
 export const DEFAULT_LOCALE: Locale = 'es';
@@ -10,11 +10,13 @@ export const LOCALE_STORAGE_KEY = 'portfolio.locale';
 const LOCALIZED_ROUTE_PATHS = {
   es: {
     home: '',
+    about: 'sobre-mi/',
     projects: 'proyectos/',
     cvCenter: 'cv/opciones/',
   },
   en: {
     home: 'en/',
+    about: 'en/about/',
     projects: 'en/projects/',
     cvCenter: 'en/cv/options/',
   },
