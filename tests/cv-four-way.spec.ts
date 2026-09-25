@@ -6,6 +6,8 @@ const viewerCases = [
     locale: 'es',
     variant: 'designed',
     root: '.cv-sheet',
+    toolbar: '.cv-page-landmark',
+    backHref: 'opciones/',
     download: 'CV-Daniel-Garcia-Ortega.pdf',
   },
   {
@@ -13,6 +15,8 @@ const viewerCases = [
     locale: 'en',
     variant: 'designed',
     root: '.cv-sheet',
+    toolbar: '.cv-page-landmark',
+    backHref: 'options/',
     download: 'CV-Daniel-Garcia-Ortega-EN.pdf',
   },
   {
@@ -20,6 +24,8 @@ const viewerCases = [
     locale: 'es',
     variant: 'ats',
     root: '.ats-document',
+    toolbar: '.ats-toolbar',
+    backHref: '../opciones/',
     download: 'CV-Daniel-Garcia-Ortega-ATS.pdf',
   },
   {
@@ -27,6 +33,8 @@ const viewerCases = [
     locale: 'en',
     variant: 'ats',
     root: '.ats-document',
+    toolbar: '.ats-toolbar',
+    backHref: '../options/',
     download: 'CV-Daniel-Garcia-Ortega-ATS-EN.pdf',
   },
 ] as const;
@@ -98,6 +106,23 @@ test('all four CV viewers preserve stable facts and ordering', async ({
     expectOrderedText(text, projectOrder);
     expectOrderedText(text, experienceOrder);
     await expectProfessionalLinks(page);
+  }
+});
+
+test('all four viewer toolbars return to the CV center without locale switches', async ({
+  page,
+}) => {
+  for (const viewer of viewerCases) {
+    await page.goto(viewer.route);
+
+    const toolbar = page.locator(viewer.toolbar);
+    await expect(toolbar).toHaveCount(1);
+    await expect(toolbar.getByRole('link')).toHaveCount(2);
+    await expect(toolbar.locator('.portfolio-back-link, a').first()).toHaveAttribute(
+      'href',
+      viewer.backHref,
+    );
+    await expect(page.locator('[data-locale-link]')).toHaveCount(0);
   }
 });
 
