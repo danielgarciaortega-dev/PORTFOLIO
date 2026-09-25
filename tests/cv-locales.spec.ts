@@ -75,50 +75,49 @@ test('Spanish and English static CVs preserve factual and structural parity', as
   expect(JSON.stringify(en.stack)).toContain('Docker');
 });
 
-test('CV counterpart navigation is locale-correct, base-safe and persists portfolio.locale', async ({
+test('designed CV viewers return to the selector without internal locale controls', async ({
   page,
 }) => {
-  await page.goto('./cv/');
-  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
-  const esSwitch = page.locator('[data-locale-link]');
-  await expect(esSwitch).toHaveCount(1);
-  await expect(esSwitch).toHaveAttribute('href', '../en/cv/');
-  await expect(esSwitch).toHaveAttribute('hreflang', 'en');
-  await expect(page.locator('.portfolio-back-link')).toHaveAttribute(
-    'href',
-    '../',
-  );
-  await esSwitch.click();
-  await expect(page).toHaveURL(/\/PORTFOLIO\/en\/cv\/$/);
-  expect(
-    await page.evaluate(() => localStorage.getItem('portfolio.locale')),
-  ).toBe('en');
+  for (const viewer of [
+    {
+      route: './cv/',
+      lang: 'es',
+      backHref: 'opciones/',
+      backName: 'Volver al selector de currículums de Daniel García Ortega',
+      selectorUrl: /\/PORTFOLIO\/cv\/opciones\/$/,
+    },
+    {
+      route: './en/cv/',
+      lang: 'en',
+      backHref: 'options/',
+      backName: 'Back to Daniel García Ortega CV options',
+      selectorUrl: /\/PORTFOLIO\/en\/cv\/options\/$/,
+    },
+  ]) {
+    await page.goto(viewer.route);
+    await expect(page.locator('html')).toHaveAttribute('lang', viewer.lang);
+    await expect(page.locator('[data-locale-link]')).toHaveCount(0);
 
-  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  const enSwitch = page.locator('[data-locale-link]');
-  await expect(enSwitch).toHaveCount(1);
-  await expect(enSwitch).toHaveAttribute('href', '../../cv/');
-  await expect(enSwitch).toHaveAttribute('hreflang', 'es');
-  await expect(page.locator('.portfolio-back-link')).toHaveAttribute(
-    'href',
-    '../',
-  );
-  await enSwitch.click();
-  await expect(page).toHaveURL(/\/PORTFOLIO\/cv\/$/);
-  expect(
-    await page.evaluate(() => localStorage.getItem('portfolio.locale')),
-  ).toBe('es');
+    const back = page.getByRole('link', { name: viewer.backName });
+    await expect(back).toHaveAttribute('href', viewer.backHref);
+    await back.click();
+    await expect(page).toHaveURL(viewer.selectorUrl);
+  }
 });
 
-test('counterpart link remains normal navigation when JavaScript is disabled', async ({
+test('back-to-selector remains normal navigation when JavaScript is disabled', async ({
   browser,
   baseURL,
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto(new URL('cv/', baseURL).href);
-  await page.locator('[data-locale-link]').click();
-  await expect(page).toHaveURL(/\/PORTFOLIO\/en\/cv\/$/);
+  await page
+    .getByRole('link', {
+      name: 'Volver al selector de currículums de Daniel García Ortega',
+    })
+    .click();
+  await expect(page).toHaveURL(/\/PORTFOLIO\/cv\/opciones\/$/);
   await context.close();
 });
 
@@ -149,8 +148,8 @@ test('English CV reuses shared local assets and downloads only its English PDF',
 
   const source = await readRepositoryFile('public/en/cv/index.html');
   expect(source).toContain('href="../../cv/styles.css"');
-  expect(source).toContain('href="../../cv/locale-controls.css"');
-  expect(source).toContain('src="../../cv/locale.js"');
+  expect(source).not.toContain('locale-controls.css');
+  expect(source).not.toContain('locale.js');
   expect(source).toContain('src="../../cv/FOTO CARNET.jpg"');
   expect(source).toContain('href="CV-Daniel-Garcia-Ortega-EN.pdf"');
   expect(source).not.toContain('href="CV-Daniel-Garcia-Ortega.pdf"');
@@ -182,7 +181,7 @@ test('English CV preserves A4, mobile and accessibility geometry', async ({
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 
   await page.emulateMedia({ media: 'print' });
-  await expect(page.locator('.cv-locale-link')).toHaveCSS('display', 'none');
+  await expect(page.locator('[data-locale-link]')).toHaveCount(0);
   await page.emulateMedia({ media: 'screen' });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
@@ -200,7 +199,7 @@ test('English CV preserves A4, mobile and accessibility geometry', async ({
   expect(mobile.sheetWidth).toBeLessThanOrEqual(391);
   expect(mobile.scrollWidth).toBeLessThanOrEqual(mobile.clientWidth);
   expect(mobile.footerPosition).toBe('static');
-  await expect(page.locator('.cv-locale-link')).toBeVisible();
+  await expect(page.locator('[data-locale-link]')).toHaveCount(0);
 });
 
 test('English CV contains translated recruiter-facing copy without factual drift', async ({
