@@ -103,9 +103,9 @@ for (const routeCase of cases) {
       'href',
       routeCase.canonical,
     );
-    await expect(
-      page.locator('link[rel="alternate"][hreflang]'),
-    ).toHaveCount(2);
+    await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(
+      2,
+    );
 
     const visibleText = await main.innerText();
     expect(visibleText).not.toMatch(/(^|\s)0[1-4](\s|$)/);
