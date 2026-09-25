@@ -209,23 +209,20 @@ test('locale round trip remains base-path safe and persists the explicit choice'
     .toBe('es');
 });
 
-test('remaining About and Contact triggers match mounted dialogs after footer removal', async ({
+test('About uses real navigation while Contact keeps its dialog behavior', async ({
   page,
 }) => {
   await page.goto('./');
 
-  const aboutTrigger = page
+  const aboutLink = page
     .getByRole('navigation', { name: 'Navegación principal' })
-    .getByRole('button', { name: 'Sobre mí' });
-  await aboutTrigger.click();
-  const aboutDialog = page.getByRole('dialog', {
-    name: 'Daniel García Ortega',
-  });
-  await expect(aboutDialog).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(aboutDialog).toBeHidden();
-  await expect(aboutTrigger).toBeFocused();
+    .getByRole('link', { name: 'Sobre mí' });
+  await expect(aboutLink).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
+  await aboutLink.click();
+  await expect(page).toHaveURL(/\/PORTFOLIO\/sobre-mi\/$/);
+  await expect(page.locator('#about-dialog')).toHaveCount(0);
 
+  await page.goto('./');
   const contactTrigger = page
     .getByRole('button', { name: 'Contactar' })
     .first();
@@ -242,6 +239,6 @@ test('remaining About and Contact triggers match mounted dialogs after footer re
   await expect(
     page
       .getByRole('navigation', { name: 'Navegación principal' })
-      .getByRole('button', { name: 'Sobre mí' }),
-  ).toBeVisible();
+      .getByRole('link', { name: 'Sobre mí' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
 });
