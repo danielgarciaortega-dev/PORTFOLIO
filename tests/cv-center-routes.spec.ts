@@ -9,8 +9,8 @@ const cases = [
     counterpartName: 'Cambiar a inglés',
     counterpartHref: '/PORTFOLIO/en/cv/options/',
     heading: 'Elige formato e idioma',
-    designedGroup: 'CON DISEÑO',
-    atsGroup: 'FORMATO ATS',
+    designedGroup: 'CV VISUAL',
+    atsGroup: 'CV ATS',
   },
   {
     route: './en/cv/options/',
@@ -19,8 +19,8 @@ const cases = [
     counterpartName: 'Switch to Spanish',
     counterpartHref: '/PORTFOLIO/cv/opciones/',
     heading: 'Choose format and language',
-    designedGroup: 'DESIGNED',
-    atsGroup: 'ATS FORMAT',
+    designedGroup: 'DESIGNED CV',
+    atsGroup: 'ATS CV',
   },
 ] as const;
 
@@ -69,7 +69,17 @@ for (const routeCase of cases) {
     await expect(
       page.getByRole('heading', { level: 2, name: routeCase.atsGroup }),
     ).toBeVisible();
+    await expect(page.locator('[data-cv-format]')).toHaveCount(2);
+    await expect(page.locator('[data-cv-format="designed"]')).toHaveCount(1);
+    await expect(page.locator('[data-cv-format="ats"]')).toHaveCount(1);
     await expect(page.locator('[data-cv-option]')).toHaveCount(4);
+    await expect(
+      page.locator('[data-cv-format="designed"] [data-cv-option]'),
+    ).toHaveCount(2);
+    await expect(
+      page.locator('[data-cv-format="ats"] [data-cv-option]'),
+    ).toHaveCount(2);
+    await expect(page.locator('.cv-center__option')).toHaveCount(0);
 
     for (const option of expectedOptions) {
       const link = page.locator(
