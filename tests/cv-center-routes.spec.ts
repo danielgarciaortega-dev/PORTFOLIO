@@ -101,6 +101,37 @@ for (const routeCase of cases) {
   });
 }
 
+test('CV center hero stays on one line at representative widths', async ({
+  page,
+}) => {
+  for (const width of [390, 768, 1280]) {
+    await page.setViewportSize({ width, height: 844 });
+
+    for (const routeCase of cases) {
+      await page.goto(routeCase.route);
+      const heading = page.getByRole('heading', {
+        level: 1,
+        name: routeCase.heading,
+      });
+
+      const geometry = await heading.evaluate((element) => {
+        const style = getComputedStyle(element);
+        return {
+          whiteSpace: style.whiteSpace,
+          scrollWidth: element.scrollWidth,
+          clientWidth: element.clientWidth,
+          height: element.getBoundingClientRect().height,
+          lineHeight: Number.parseFloat(style.lineHeight),
+        };
+      });
+
+      expect(geometry.whiteSpace).toBe('nowrap');
+      expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.clientWidth);
+      expect(geometry.height).toBeLessThanOrEqual(geometry.lineHeight * 1.1);
+    }
+  }
+});
+
 for (const width of [360, 390, 430]) {
   test(`CV center stays overflow-free at ${width}px in both locales`, async ({
     page,
