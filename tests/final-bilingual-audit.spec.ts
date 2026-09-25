@@ -151,18 +151,14 @@ test('curated public UI landmarks do not mix Spanish and English shell copy', as
   await expect(page.locator('.role')).toHaveText(
     'DESARROLLADOR WEB FULL-STACK',
   );
-  await expect(
-    page.getByText('Back to CVs', { exact: true }),
-  ).toHaveCount(0);
+  await expect(page.getByText('Back to CVs', { exact: true })).toHaveCount(0);
 
   await page.goto('./en/cv/');
   await expect(page.locator('.portfolio-back-link')).toContainText(
     'Back to CVs',
   );
   await expect(page.locator('.role')).toHaveText('FULL-STACK WEB DEVELOPER');
-  await expect(
-    page.getByText('Volver a CVs', { exact: true }),
-  ).toHaveCount(0);
+  await expect(page.getByText('Volver a CVs', { exact: true })).toHaveCount(0);
 });
 
 test('every canonical bilingual route stays overflow-free at the maintained mobile width', async ({
