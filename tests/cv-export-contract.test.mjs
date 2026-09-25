@@ -104,12 +104,7 @@ test('CV export config defines four unique outputs', () => {
       locale: 'en',
       variant: 'designed',
       sourceSegments: ['public', 'en', 'cv', 'index.html'],
-      outputSegments: [
-        'public',
-        'en',
-        'cv',
-        'CV-Daniel-Garcia-Ortega-EN.pdf',
-      ],
+      outputSegments: ['public', 'en', 'cv', 'CV-Daniel-Garcia-Ortega-EN.pdf'],
     },
     {
       locale: 'es',
@@ -163,13 +158,11 @@ test('four-way export replaces outputs and cleans temp files', async () => {
     assert.equal(state.launches, 1);
     assert.equal(state.browserClosed, true);
     assert.deepEqual(
-      state.pdfOptions.map(
-        ({ key, printBackground, preferCSSPageSize }) => ({
-          key,
-          printBackground,
-          preferCSSPageSize,
-        }),
-      ),
+      state.pdfOptions.map(({ key, printBackground, preferCSSPageSize }) => ({
+        key,
+        printBackground,
+        preferCSSPageSize,
+      })),
       [
         {
           key: 'es:designed',
