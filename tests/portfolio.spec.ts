@@ -75,16 +75,27 @@ test('los proyectos abren el diálogo correcto y derivan sus CTAs de los datos',
     }
 
     if (title === 'AL-LÍO') {
+      const liveAppLink = dialog.getByRole('link', {
+        name: 'Abrir aplicación AL-LÍO',
+      });
+      await expect(liveAppLink).toBeVisible();
+      await expect(liveAppLink).toHaveAttribute(
+        'href',
+        'https://al-lio.danielcode.dev',
+      );
       await expect(
-        dialog.getByRole('link', { name: 'Abrir demo' }),
-      ).toBeVisible();
+        dialog.locator('.project-dialog__title-row').getByRole('link', {
+          name: 'Abrir aplicación AL-LÍO',
+        }),
+      ).toHaveCount(1);
+      await expect(
+        dialog.locator('.dialog-header .project-dialog__live-link'),
+      ).toHaveCount(0);
       await expect(
         dialog.getByRole('link', { name: 'Ver código' }),
       ).toBeVisible();
     } else {
-      await expect(
-        dialog.getByRole('link', { name: 'Abrir demo' }),
-      ).toHaveCount(0);
+      await expect(dialog.locator('.project-dialog__live-link')).toHaveCount(0);
       await expect(
         dialog.getByRole('link', { name: 'Ver código' }),
       ).toHaveCount(0);
