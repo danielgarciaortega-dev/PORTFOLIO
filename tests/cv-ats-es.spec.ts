@@ -87,7 +87,6 @@ test('Spanish ATS print view hides browser navigation and keeps readable flow', 
   expect(geometry.overflowX).not.toBe('scroll');
 });
 
-
 test('English ATS CV preserves the approved ATS structure and facts', async ({
   page,
 }) => {
