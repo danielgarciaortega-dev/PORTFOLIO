@@ -5,19 +5,40 @@ import { pathToFileURL } from 'node:url';
 export const CV_EXPORTS = [
   {
     locale: 'es',
+    variant: 'designed',
     sourceSegments: ['public', 'cv', 'index.html'],
     outputSegments: ['public', 'cv', 'CV-Daniel-Garcia-Ortega.pdf'],
   },
   {
     locale: 'en',
+    variant: 'designed',
     sourceSegments: ['public', 'en', 'cv', 'index.html'],
     outputSegments: ['public', 'en', 'cv', 'CV-Daniel-Garcia-Ortega-EN.pdf'],
+  },
+  {
+    locale: 'es',
+    variant: 'ats',
+    sourceSegments: ['public', 'cv', 'ats', 'index.html'],
+    outputSegments: ['public', 'cv', 'ats', 'CV-Daniel-Garcia-Ortega-ATS.pdf'],
+  },
+  {
+    locale: 'en',
+    variant: 'ats',
+    sourceSegments: ['public', 'en', 'cv', 'ats', 'index.html'],
+    outputSegments: [
+      'public',
+      'en',
+      'cv',
+      'ats',
+      'CV-Daniel-Garcia-Ortega-ATS-EN.pdf',
+    ],
   },
 ];
 
 export function resolveCvExports(root) {
   return CV_EXPORTS.map((definition) => ({
     locale: definition.locale,
+    variant: definition.variant,
     sourcePath: path.join(root, ...definition.sourceSegments),
     outputPath: path.join(root, ...definition.outputSegments),
   }));
@@ -28,6 +49,10 @@ function transientPaths(outputPath) {
     temporaryPath: `${outputPath}.tmp`,
     backupPath: `${outputPath}.bak`,
   };
+}
+
+function exportLabel(definition) {
+  return `CV ${definition.locale.toUpperCase()} ${definition.variant.toUpperCase()}`;
 }
 
 async function exists(filePath) {
@@ -53,6 +78,11 @@ export async function exportCvDocuments({
 }) {
   if (!Array.isArray(definitions) || definitions.length === 0) {
     throw new Error('At least one CV export definition is required');
+  }
+
+  const outputPaths = definitions.map((definition) => definition.outputPath);
+  if (new Set(outputPaths).size !== outputPaths.length) {
+    throw new Error('CV export output paths must be unique');
   }
 
   for (const definition of definitions) {
@@ -83,7 +113,7 @@ export async function exportCvDocuments({
           printBackground: true,
           preferCSSPageSize: true,
         });
-        await assertNonEmpty(temporaryPath, `CV ${definition.locale}`);
+        await assertNonEmpty(temporaryPath, exportLabel(definition));
       } finally {
         await page.close();
       }
@@ -110,7 +140,7 @@ export async function exportCvDocuments({
       for (const definition of prepared) {
         await assertNonEmpty(
           definition.outputPath,
-          `Published CV ${definition.locale}`,
+          `Published ${exportLabel(definition)}`,
         );
       }
     } catch (error) {
@@ -133,9 +163,7 @@ export async function exportCvDocuments({
 
     for (const definition of prepared) {
       await rm(definition.backupPath, { force: true });
-      logger(
-        `CV ${definition.locale.toUpperCase()} exported to ${definition.outputPath}`,
-      );
+      logger(`${exportLabel(definition)} exported to ${definition.outputPath}`);
     }
   } finally {
     for (const definition of definitions) {

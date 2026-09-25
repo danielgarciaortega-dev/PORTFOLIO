@@ -45,6 +45,12 @@ test('Spanish ATS CV is semantic, complete and text-first', async ({
   await expect(page.locator('.ats-document')).toContainText('Prisma');
   await expect(page.locator('.ats-document')).toContainText('Docker');
   await expect(page.locator('.ats-document')).not.toContainText('Vercel');
+  const spanishDownload = page.getByRole('link', { name: 'Descargar PDF' });
+  await expect(spanishDownload).toHaveAttribute(
+    'href',
+    'CV-Daniel-Garcia-Ortega-ATS.pdf',
+  );
+  await expect(spanishDownload).toHaveAttribute('download', '');
 
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
@@ -119,6 +125,12 @@ test('English ATS CV preserves the approved ATS structure and facts', async ({
   await expect(page.locator('table')).toHaveCount(0);
   await expect(page.locator('img')).toHaveCount(0);
   await expect(page.locator('.ats-document')).not.toContainText('Vercel');
+  const englishDownload = page.getByRole('link', { name: 'Download PDF' });
+  await expect(englishDownload).toHaveAttribute(
+    'href',
+    'CV-Daniel-Garcia-Ortega-ATS-EN.pdf',
+  );
+  await expect(englishDownload).toHaveAttribute('download', '');
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
 
