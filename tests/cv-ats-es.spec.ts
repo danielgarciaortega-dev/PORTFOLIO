@@ -86,3 +86,55 @@ test('Spanish ATS print view hides browser navigation and keeps readable flow', 
   expect(geometry.display).toBe('block');
   expect(geometry.overflowX).not.toBe('scroll');
 });
+
+
+test('English ATS CV preserves the approved ATS structure and facts', async ({
+  page,
+}) => {
+  const response = await page.goto('./en/cv/ats/');
+  expect(response?.ok()).toBe(true);
+
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Daniel García Ortega' }),
+  ).toBeVisible();
+
+  for (const value of [
+    'Salunox',
+    'Konecta',
+    'Alcampo',
+    'AL-LÍO',
+    'SIDN Cost Control',
+    'Feedback2Action',
+    'Instituto Fomento Ocupacional FOC',
+    '22,376',
+    '409',
+    '108',
+    'Prisma',
+    'Docker',
+    'Recognized disability: 34%',
+  ]) {
+    await expect(page.locator('.ats-document')).toContainText(value);
+  }
+
+  await expect(page.locator('table')).toHaveCount(0);
+  await expect(page.locator('img')).toHaveCount(0);
+  await expect(page.locator('.ats-document')).not.toContainText('Vercel');
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});
+
+for (const width of [360, 390, 430]) {
+  test(`English ATS CV has no horizontal overflow at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('./en/cv/ats/');
+
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
