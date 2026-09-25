@@ -54,6 +54,20 @@ for (const localeCase of localeCases) {
     await expect(back).toHaveAttribute('href', '../');
     await expect(download).toHaveAttribute('href', localeCase.downloadHref);
     await expect(page.locator('.download-btn')).toHaveCount(1);
+    await expect(page.locator('.cv-page-actions')).toHaveCSS(
+      'position',
+      'fixed',
+    );
+    await expect(download).toHaveCSS('position', 'static');
+
+    const desktopDownloadBox = await download.boundingBox();
+    const desktopLocaleBox = await counterpart.boundingBox();
+    expect(desktopDownloadBox).not.toBeNull();
+    expect(desktopLocaleBox).not.toBeNull();
+    expect(desktopDownloadBox?.y ?? Number.MAX_SAFE_INTEGER).toBeLessThan(32);
+    expect(desktopDownloadBox?.x ?? 0).toBeGreaterThan(
+      desktopLocaleBox?.x ?? Number.MAX_SAFE_INTEGER,
+    );
 
     const sheet = page.locator('.cv-sheet');
     const box = await sheet.boundingBox();
@@ -153,5 +167,39 @@ for (const localeCase of localeCases) {
     await expect(page.locator('.portfolio-back-link')).toBeVisible();
     await expect(page.locator('.download-btn')).toBeVisible();
     await expect(page.locator('.cv-locale-link')).toBeVisible();
+    await expect(page.locator('.cv-page-landmark')).toHaveCSS(
+      'display',
+      'flex',
+    );
+    await expect(page.locator('.cv-page-actions')).toHaveCSS(
+      'position',
+      'static',
+    );
+    await expect(page.locator('.download-btn__label')).toHaveCSS(
+      'display',
+      'none',
+    );
+
+    const mobileNavBox = await page.locator('.cv-page-landmark').boundingBox();
+    const mobileSheetBox = await page.locator('.cv-sheet').boundingBox();
+    const mobileDownloadBox = await page.locator('.download-btn').boundingBox();
+    expect(mobileNavBox).not.toBeNull();
+    expect(mobileSheetBox).not.toBeNull();
+    expect(mobileDownloadBox).not.toBeNull();
+    expect(mobileDownloadBox?.width ?? 0).toBeGreaterThanOrEqual(43);
+    expect(mobileDownloadBox?.width ?? 0).toBeLessThanOrEqual(45);
+    expect(
+      (mobileNavBox?.y ?? 0) + (mobileNavBox?.height ?? 0),
+    ).toBeLessThanOrEqual((mobileSheetBox?.y ?? 0) + 1);
+
+    for (const width of [360, 430]) {
+      await page.setViewportSize({ width, height: 844 });
+      await page.reload();
+      const overflow = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      }));
+      expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth);
+    }
   });
 }
