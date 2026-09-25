@@ -18,10 +18,9 @@ Delivered counterpart classes are:
 
 - home: `/` ↔ `/en/`;
 - project index: `/proyectos/` ↔ `/en/projects/`;
-- CV center: `/cv/opciones/` ↔ `/en/cv/options/`;
-- designed standalone CV: `/cv/` ↔ `/en/cv/`.
+- CV center: `/cv/opciones/` ↔ `/en/cv/options/`.
 
-The designed standalone CV keeps its own minimal locale link while persisting the same `portfolio.locale` preference. ATS viewers are explicit variant routes (`/cv/ats/` and `/en/cv/ats/`) selected through the CV center rather than a second locale-switching mechanism.
+The CV center owns format and language selection. Designed and ATS viewers are explicit direct routes selected from that center. Once a viewer is open, its browser-level toolbar returns to the locale-correct CV center and exposes the viewer's own PDF download; viewers do not render a second locale-switching mechanism or persist a locale choice themselves.
 
 ## Desktop structure
 
@@ -92,7 +91,7 @@ Current route behavior:
 - `Header.astro` targets the CV center: `/cv/opciones/` for Spanish and `/en/cv/options/` for English;
 - `LanguageSwitcher.astro` maps home, projects and CV-center counterparts through the shared locale route contract;
 - the selector exposes exactly four base-safe destinations: designed ES `/cv/`, designed EN `/en/cv/`, ATS ES `/cv/ats/`, ATS EN `/en/cv/ats/`;
-- the designed standalone CV pages keep their direct `/cv/` ↔ `/en/cv/` locale links and persist the explicit locale choice;
+- designed ES `/cv/`, designed EN `/en/cv/`, ATS ES `/cv/ats/` and ATS EN `/en/cv/ats/` remain directly addressable, but each viewer returns to its locale-correct CV center instead of switching language internally;
 - `/projects/` is not a canonical alias and must remain absent unless separately approved;
 - canonical/hreflang/Open Graph metadata are locale-aware for the delivered Astro routes;
 - the custom static 404 preserves real HTTP 404 semantics, uses locale-aware presentation for English-prefixed missing paths and remains `noindex, follow`.
@@ -121,7 +120,7 @@ Viewer sources and PDFs:
 
 `npm run export:cv` owns all four definitions through the same Playwright exporter. The exporter validates unique outputs, renders every configured source before publication and keeps the established temporary/backup rollback behavior. Do not add a second PDF pipeline.
 
-Designed and ATS documents preserve the same stable professional facts while using different presentation contracts. Designed CVs keep their A4 visual layout; ATS variants are text-first, semantic and single-column. All variants have locale-correct download targets, and no viewer may fall back to another locale or variant's PDF.
+Designed and ATS documents preserve the same stable professional facts while using different presentation contracts. Designed CVs keep their A4 visual layout; ATS variants are text-first, semantic and single-column. All variants have locale-correct download targets, return to the relevant CV center, and contain no internal ES/EN switch. No viewer may fall back to another locale or variant's PDF.
 
 The standalone CV's internal `.professional-footer` belongs only to the designed CV document. It is unrelated to any public-site footer topology. Do not reconstruct any CV source from screenshots or generated PDFs.
 
@@ -135,10 +134,10 @@ Relevant maintained coverage includes:
 - `tests/home-locales.spec.ts` and `tests/home-english.spec.ts` — bilingual home shell behavior;
 - `tests/projects-locales.spec.ts` — bilingual project routes, localized navigation, project counterpart switching, persistence, mobile overflow and the absent `/projects/` alias;
 - `tests/metadata-locales.spec.ts` and `tests/not-found-locales.spec.ts` — locale-aware metadata and real-404 behavior;
-- `tests/cv-locales.spec.ts`, `tests/cv-pdf-locales.spec.ts` and the designed-CV audit tests — direct `/cv/` ↔ `/en/cv/`, A4/mobile and designed-CV parity;
-- `tests/cv-center-routes.spec.ts` — CV-center counterparts, exactly four selector destinations, focus/axe and responsive overflow;
-- `tests/cv-ats-es.spec.ts` — ATS ES/EN semantic, download, print, axe and narrow-width behavior;
-- `tests/cv-four-way-regression.spec.ts` — cross-variant stable facts/order, locale/variant-correct downloads, base-safe selector destinations and rejected aliases;
+- `tests/cv-locales.spec.ts`, `tests/cv-pdf-locales.spec.ts` and the designed-CV audit tests — designed-viewer selector return, no internal locale control, A4/mobile and designed-CV parity;
+- `tests/cv-center-routes.spec.ts` — one-line hero, two format panels, exactly four selector destinations, focus/axe and responsive overflow;
+- `tests/cv-ats-es.spec.ts` — ATS selector return, two-action toolbar, download, print, axe and narrow-width behavior;
+- `tests/cv-four-way.spec.ts` — cross-variant stable facts/order, viewer toolbar ownership, locale/variant-correct downloads, base-safe selector destinations and rejected aliases;
 - `tests/cv-export-contract.test.mjs` — four unique export definitions plus fail-closed/rollback behavior;
 - `tests/portfolio.spec.ts` — integrated shell, menu, route and no-footer checks;
 - `tests/accessibility.spec.ts` — representative axe coverage for public shell states;
@@ -164,6 +163,6 @@ Future contributors must not reintroduce any of the following without a separate
 - Contact as a footer replacement merely to restore the removed topology;
 - a second mobile navigation block for utilities;
 - another route/localization mechanism that bypasses the shared home/projects counterpart contract;
-- additional CV aliases, a fifth CV variant, a second PDF exporter or another CV-locale persistence mechanism outside the maintained selector/designed-CV contracts.
+- additional CV aliases, a fifth CV variant, a second PDF exporter, internal viewer language controls or another CV-locale persistence mechanism outside the maintained selector contract.
 
 The intended result is one coherent bilingual shell with explicit ownership boundaries, not a collection of duplicated fallbacks.
