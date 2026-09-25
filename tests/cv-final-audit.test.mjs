@@ -95,6 +95,7 @@ function assertFinalCvContract({
   assert.match(en, /src="\.\.\/\.\.\/cv\/locale\.js"/);
   assert.deepEqual([...englishDirectoryEntries].sort(), [
     'CV-Daniel-Garcia-Ortega-EN.pdf',
+    'ats',
     'index.html',
   ]);
 
