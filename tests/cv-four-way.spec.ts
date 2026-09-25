@@ -100,10 +100,6 @@ test('each CV viewer downloads only its own PDF', async ({ page }) => {
   for (const viewer of viewerCases) {
     await page.goto(viewer.route);
 
-    const download = page.locator('a[download]').filter({
-      has: page.locator('i, span'),
-    });
-
     const candidates =
       viewer.variant === 'designed'
         ? page.locator('.download-btn[download]')
@@ -113,7 +109,6 @@ test('each CV viewer downloads only its own PDF', async ({ page }) => {
     await expect(candidates).toHaveAttribute('href', viewer.download);
     await expect(candidates).toHaveAttribute('download', '');
 
-    expect(await download.count()).toBeGreaterThanOrEqual(0);
   }
 });
 
@@ -126,13 +121,18 @@ test('CV center exposes the four base-safe viewer destinations', async ({
     const options = page.locator('[data-cv-option]');
     await expect(options).toHaveCount(4);
 
-    await expect(options.nth(0)).toHaveAttribute('href', '/PORTFOLIO/cv/');
-    await expect(options.nth(1)).toHaveAttribute('href', '/PORTFOLIO/en/cv/');
-    await expect(options.nth(2)).toHaveAttribute('href', '/PORTFOLIO/cv/ats/');
-    await expect(options.nth(3)).toHaveAttribute(
-      'href',
-      '/PORTFOLIO/en/cv/ats/',
-    );
+    for (const viewer of viewerCases) {
+      const option = page.locator(
+        `[data-cv-option][data-cv-variant="${viewer.variant}"][data-cv-locale="${viewer.locale}"]`,
+      );
+      const expectedHref = new URL(
+        viewer.route.replace('./', '/PORTFOLIO/'),
+        'https://example.test',
+      ).pathname;
+
+      await expect(option).toHaveCount(1);
+      await expect(option).toHaveAttribute('href', expectedHref);
+    }
   }
 });
 
