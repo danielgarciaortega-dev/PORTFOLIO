@@ -100,15 +100,26 @@
         <span aria-hidden="true">←</span>
         Back to portfolio
       </a>
-      <a
-        class="cv-locale-link"
-        href="../../cv/"
-        lang="es"
-        hreflang="es"
-        aria-label="View CV in Spanish"
-        data-locale-link="es"
-        >ES</a
-      >
+      <div class="cv-page-actions">
+        <a
+          class="cv-locale-link"
+          href="../../cv/"
+          lang="es"
+          hreflang="es"
+          aria-label="View CV in Spanish"
+          data-locale-link="es"
+          >ES</a
+        >
+        <a
+          class="download-btn"
+          href="CV-Daniel-Garcia-Ortega-EN.pdf"
+          download
+          aria-label="Download Daniel García Ortega CV as PDF"
+        >
+          <i class="fas fa-download" aria-hidden="true"></i>
+          <span class="download-btn__label">Download PDF</span>
+        </a>
+      </div>
     </nav>
     <div class="cv-sheet" itemscope itemtype="https://schema.org/Person">
       <header class="hero" role="banner">
@@ -562,17 +573,6 @@
         </a>
       </footer>
     </div>
-    <nav class="cv-page-landmark" aria-label="CV actions">
-      <a
-        class="download-btn"
-        href="CV-Daniel-Garcia-Ortega-EN.pdf"
-        download
-        aria-label="Download Daniel García Ortega CV as PDF"
-      >
-        <i class="fas fa-download" aria-hidden="true"></i>
-        Download PDF
-      </a>
-    </nav>
     <script>
       const originalTitle = document.title;
       window.addEventListener(

@@ -33,7 +33,7 @@ test('CV standalone browser controls remain accessible landmark content', async 
     await downloadLink.evaluate(
       (element) =>
         element.closest('nav')?.getAttribute('aria-label') ===
-        'Acciones del CV',
+        'Navegación del CV',
     ),
   ).toBe(true);
 
