@@ -51,8 +51,12 @@ jobs:
       - name: Validate CV export
         run: npm run export:cv
 
-      - name: Run repository validation
-        run: npm test
+      - name: Show exact Prettier diff
+        shell: bash
+        run: |
+          npx prettier src/components/about/AboutPage.astro tests/about-routes.spec.ts --write
+          git diff -- src/components/about/AboutPage.astro tests/about-routes.spec.ts
+          exit 1
 
   pages_readiness:
     # Keep this status-check name until the protected-main ruleset is renamed.
