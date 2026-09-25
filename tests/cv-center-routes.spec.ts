@@ -70,9 +70,12 @@ for (const routeCase of cases) {
       page.getByRole('heading', { level: 2, name: routeCase.atsGroup }),
     ).toBeVisible();
     await expect(page.locator('[data-cv-format]')).toHaveCount(2);
+    await expect(page.locator('.cv-center__intro > p:not(.eyebrow)')).toHaveCount(0);
+    await expect(page.locator('.cv-center__format-description')).toHaveCount(0);
     await expect(page.locator('[data-cv-format="designed"]')).toHaveCount(1);
     await expect(page.locator('[data-cv-format="ats"]')).toHaveCount(1);
     await expect(page.locator('[data-cv-option]')).toHaveCount(4);
+    await expect(page.locator('[data-cv-option] small')).toHaveCount(4);
     await expect(
       page.locator('[data-cv-format="designed"] [data-cv-option]'),
     ).toHaveCount(2);
