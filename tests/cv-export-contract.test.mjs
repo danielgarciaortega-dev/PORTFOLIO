@@ -20,10 +20,10 @@ async function createFixture() {
 
   for (const definition of definitions) {
     const key = definitionKey(definition);
-    const source = `<html lang="${definition.locale}"><body>${key}</body></html>`;
+    const html = `<html lang="${definition.locale}"><body>${key}</body></html>`;
 
     await mkdir(path.dirname(definition.sourcePath), { recursive: true });
-    await writeFile(definition.sourcePath, source);
+    await writeFile(definition.sourcePath, html);
     await writeFile(definition.outputPath, `stale-${key}`);
   }
 
