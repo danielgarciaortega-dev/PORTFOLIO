@@ -79,9 +79,9 @@ Spanish and English are first-class portfolio locales. The current public route 
 - ATS Spanish CV: `/cv/ats/`
 - ATS English CV: `/en/cv/ats/`
 
-The shell exposes one target-locale action rather than simultaneous ES/EN controls. Home switches `/` ↔ `/en/`, the projects index switches `/proyectos/` ↔ `/en/projects/`, and the CV center switches `/cv/opciones/` ↔ `/en/cv/options/`. The designed standalone CV keeps its direct `/cv/` ↔ `/en/cv/` locale links. The unscoped `/projects/` alias is intentionally not part of the public route contract.
+The shell exposes one target-locale action rather than simultaneous ES/EN controls. Home switches `/` ↔ `/en/`, the projects index switches `/proyectos/` ↔ `/en/projects/`, and the CV center switches `/cv/opciones/` ↔ `/en/cv/options/`. The CV center owns both format and language selection. Once a viewer is open, its browser-level toolbar returns to the locale-correct CV center and exposes only that viewer's PDF download; language switching is intentionally absent inside CV viewers. The unscoped `/projects/` alias is intentionally not part of the public route contract.
 
-The CV center exposes four variants: designed ES/EN and ATS ES/EN. All four preserve the same stable professional facts, and one Playwright export pipeline generates four independent downloadable PDF outputs.
+The CV center exposes four variants through two format-first panels: designed ES/EN and ATS ES/EN. All four direct viewer routes remain supported, preserve the same stable professional facts, and use one Playwright export pipeline that generates four independent downloadable PDF outputs.
 
 The final shell contract and route ownership boundaries are maintained in [`docs/operations/FINAL_SHELL.md`](docs/operations/FINAL_SHELL.md).
 

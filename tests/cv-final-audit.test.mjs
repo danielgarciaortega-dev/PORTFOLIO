@@ -72,7 +72,13 @@ function mutateRequired(source, pattern, replacement) {
   return result;
 }
 
-function assertFinalCvContract({ es, en, styles, englishDirectoryEntries }) {
+function assertFinalCvContract({
+  es,
+  en,
+  styles,
+  spanishDirectoryEntries,
+  englishDirectoryEntries,
+}) {
   assert.equal(count(es, /data-locale-link=/g), 0);
   assert.equal(count(en, /data-locale-link=/g), 0);
   assert.doesNotMatch(es, /cv-locale-link/);
@@ -87,6 +93,8 @@ function assertFinalCvContract({ es, en, styles, englishDirectoryEntries }) {
   assert.match(en, /href="\.\.\/\.\.\/cv\/styles\.css"/);
   assert.doesNotMatch(es, /locale-controls\.css|locale\.js/);
   assert.doesNotMatch(en, /locale-controls\.css|locale\.js/);
+  assert.equal(spanishDirectoryEntries.includes('locale-controls.css'), false);
+  assert.equal(spanishDirectoryEntries.includes('locale.js'), false);
   assert.deepEqual([...englishDirectoryEntries].sort(), [
     'CV-Daniel-Garcia-Ortega-EN.pdf',
     'ats',
@@ -157,6 +165,7 @@ const current = {
   es: await readRepositoryFile('public/cv/index.html'),
   en: await readRepositoryFile('public/en/cv/index.html'),
   styles: await readRepositoryFile('public/cv/styles.css'),
+  spanishDirectoryEntries: await readdir(new URL('public/cv/', root)),
   englishDirectoryEntries: await readdir(new URL('public/en/cv/', root)),
 };
 
@@ -239,6 +248,16 @@ const adversarialCases = [
     mutate: (contract) => ({
       ...contract,
       en: `${contract.en}<a data-locale-link="es" href="../../cv/">ES</a>`,
+    }),
+  },
+  {
+    name: 'reintroduced retired locale-control asset',
+    mutate: (contract) => ({
+      ...contract,
+      spanishDirectoryEntries: [
+        ...contract.spanishDirectoryEntries,
+        'locale.js',
+      ],
     }),
   },
   {
