@@ -27,9 +27,11 @@ test('locale contract supports exactly Spanish and English', () => {
   assert.equal(isLocale(null), false);
 });
 
-test('localized home and projects routes have deterministic counterparts', () => {
+test('localized public routes have deterministic counterparts', () => {
   assert.equal(getLocalizedRoutePath('es', 'home'), '');
   assert.equal(getLocalizedRoutePath('en', 'home'), 'en/');
+  assert.equal(getLocalizedRoutePath('es', 'about'), 'sobre-mi/');
+  assert.equal(getLocalizedRoutePath('en', 'about'), 'en/about/');
   assert.equal(getLocalizedRoutePath('es', 'projects'), 'proyectos/');
   assert.equal(getLocalizedRoutePath('en', 'projects'), 'en/projects/');
   assert.equal(getLocalizedRoutePath('es', 'cvCenter'), 'cv/opciones/');
@@ -42,6 +44,14 @@ test('localized home and projects routes have deterministic counterparts', () =>
   assert.deepEqual(getLocaleCounterpartPath('en', 'home'), {
     targetLocale: 'es',
     path: '',
+  });
+  assert.deepEqual(getLocaleCounterpartPath('es', 'about'), {
+    targetLocale: 'en',
+    path: 'en/about/',
+  });
+  assert.deepEqual(getLocaleCounterpartPath('en', 'about'), {
+    targetLocale: 'es',
+    path: 'sobre-mi/',
   });
   assert.deepEqual(getLocaleCounterpartPath('es', 'projects'), {
     targetLocale: 'en',
@@ -86,6 +96,14 @@ test('localized absolute route URLs are correct for GitHub Pages and root bases'
     'https://portfolio.example/PORTFOLIO/en/',
   );
   assert.equal(
+    getLocalizedRouteUrl(site, '/PORTFOLIO', 'es', 'about').toString(),
+    'https://portfolio.example/PORTFOLIO/sobre-mi/',
+  );
+  assert.equal(
+    getLocalizedRouteUrl(site, '/PORTFOLIO/', 'en', 'about').toString(),
+    'https://portfolio.example/PORTFOLIO/en/about/',
+  );
+  assert.equal(
     getLocalizedRouteUrl(site, '/PORTFOLIO', 'es', 'projects').toString(),
     'https://portfolio.example/PORTFOLIO/proyectos/',
   );
@@ -96,6 +114,14 @@ test('localized absolute route URLs are correct for GitHub Pages and root bases'
   assert.equal(
     getLocalizedRouteUrl(site, '/', 'es', 'home').toString(),
     'https://portfolio.example/',
+  );
+  assert.equal(
+    getLocalizedRouteUrl(site, '/', 'es', 'about').toString(),
+    'https://portfolio.example/sobre-mi/',
+  );
+  assert.equal(
+    getLocalizedRouteUrl(site, '/', 'en', 'about').toString(),
+    'https://portfolio.example/en/about/',
   );
   assert.equal(
     getLocalizedRouteUrl(site, '/', 'en', 'projects').toString(),
@@ -114,11 +140,19 @@ test('localized absolute route URLs are correct for GitHub Pages and root bases'
 test('pathname locale resolution respects the GitHub Pages base path', () => {
   assert.equal(resolveLocaleFromPathname('/PORTFOLIO/', '/PORTFOLIO/'), 'es');
   assert.equal(
+    resolveLocaleFromPathname('/PORTFOLIO/sobre-mi/', '/PORTFOLIO/'),
+    'es',
+  );
+  assert.equal(
     resolveLocaleFromPathname('/PORTFOLIO/proyectos/', '/PORTFOLIO/'),
     'es',
   );
   assert.equal(
     resolveLocaleFromPathname('/PORTFOLIO/en/', '/PORTFOLIO/'),
+    'en',
+  );
+  assert.equal(
+    resolveLocaleFromPathname('/PORTFOLIO/en/about/', '/PORTFOLIO/'),
     'en',
   );
   assert.equal(
