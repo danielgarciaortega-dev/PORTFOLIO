@@ -5,10 +5,7 @@ test('About and Contact dialogs use the approved English copy', async ({
 }) => {
   await page.goto('./en/');
 
-  await page
-    .getByRole('button', { name: 'About', exact: true })
-    .first()
-    .click();
+  await page.getByRole('button', { name: 'View profile' }).click();
   const aboutDialog = page.getByRole('dialog', {
     name: 'Daniel García Ortega',
   });
