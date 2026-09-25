@@ -46,7 +46,11 @@ const sharedFacts = [
   '34%',
 ] as const;
 
-const projectOrder = ['AL-LÍO', 'SIDN Cost Control', 'Feedback2Action'] as const;
+const projectOrder = [
+  'AL-LÍO',
+  'SIDN Cost Control',
+  'Feedback2Action',
+] as const;
 const experienceOrder = ['Salunox', 'Konecta', 'Alcampo'] as const;
 
 function expectOrderedText(source: string, values: readonly string[]) {
@@ -84,9 +88,10 @@ test('all four CV viewers preserve stable facts and ordering', async ({
     const text = await page.locator(viewer.root).innerText();
 
     for (const fact of sharedFacts) {
-      expect(text, `${viewer.locale}:${viewer.variant} missing ${fact}`).toContain(
-        fact,
-      );
+      expect(
+        text,
+        `${viewer.locale}:${viewer.variant} missing ${fact}`,
+      ).toContain(fact);
     }
 
     expect(text).not.toContain('Vercel');
@@ -108,7 +113,6 @@ test('each CV viewer downloads only its own PDF', async ({ page }) => {
     await expect(candidates).toHaveCount(1);
     await expect(candidates).toHaveAttribute('href', viewer.download);
     await expect(candidates).toHaveAttribute('download', '');
-
   }
 });
 
