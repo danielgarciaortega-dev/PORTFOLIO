@@ -11,6 +11,17 @@ const cases = [
     heading: 'Elige formato e idioma',
     designedGroup: 'CV VISUAL',
     atsGroup: 'CV ATS',
+    forbiddenCopy: [
+      'Primero elige cómo quieres presentar tu perfil. Después abre directamente la versión en español o en inglés.',
+      'Una versión cuidada para enviar, compartir o presentar directamente a una persona.',
+      'Una versión en una sola columna pensada para procesos y plataformas de selección.',
+    ],
+    microcopy: [
+      'CV visual en español',
+      'Designed CV in English',
+      'CV ATS en español',
+      'ATS CV in English',
+    ],
   },
   {
     route: './en/cv/options/',
@@ -21,6 +32,17 @@ const cases = [
     heading: 'Choose format and language',
     designedGroup: 'DESIGNED CV',
     atsGroup: 'ATS CV',
+    forbiddenCopy: [
+      'Choose how you want to present your profile first, then open the Spanish or English version directly.',
+      'A polished version for sharing, attaching or presenting directly to a person.',
+      'A single-column version designed for recruitment processes and application platforms.',
+    ],
+    microcopy: [
+      'Designed CV in Spanish',
+      'Designed CV in English',
+      'ATS CV in Spanish',
+      'ATS CV in English',
+    ],
   },
 ] as const;
 
@@ -70,9 +92,22 @@ for (const routeCase of cases) {
       page.getByRole('heading', { level: 2, name: routeCase.atsGroup }),
     ).toBeVisible();
     await expect(page.locator('[data-cv-format]')).toHaveCount(2);
+    await expect(
+      page.locator('.cv-center__intro > p:not(.eyebrow)'),
+    ).toHaveCount(0);
+    await expect(page.locator('.cv-center__format-description')).toHaveCount(0);
     await expect(page.locator('[data-cv-format="designed"]')).toHaveCount(1);
     await expect(page.locator('[data-cv-format="ats"]')).toHaveCount(1);
     await expect(page.locator('[data-cv-option]')).toHaveCount(4);
+    await expect(page.locator('[data-cv-option] small')).toHaveCount(4);
+
+    for (const removedText of routeCase.forbiddenCopy) {
+      await expect(page.getByText(removedText, { exact: true })).toHaveCount(0);
+    }
+
+    await expect(page.locator('[data-cv-option] small')).toHaveText(
+      routeCase.microcopy,
+    );
     await expect(
       page.locator('[data-cv-format="designed"] [data-cv-option]'),
     ).toHaveCount(2);
