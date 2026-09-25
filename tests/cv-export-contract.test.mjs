@@ -90,7 +90,9 @@ async function assertStaleOutputs(definitions) {
   }
 }
 
-test('four CV definitions keep unique locale/variant source and output pairs', () => {
+test(
+  'four CV definitions keep unique locale/variant source and output pairs',
+  () => {
   assert.deepEqual(CV_EXPORTS, [
     {
       locale: 'es',
@@ -131,10 +133,16 @@ test('four CV definitions keep unique locale/variant source and output pairs', (
 
   const resolved = resolveCvExports('/tmp/example');
   assert.equal(new Set(resolved.map(({ sourcePath }) => sourcePath)).size, 4);
-  assert.equal(new Set(resolved.map(({ outputPath }) => outputPath)).size, 4);
-});
+    assert.equal(
+      new Set(resolved.map(({ outputPath }) => outputPath)).size,
+      4,
+    );
+  },
+);
 
-test('successful four-way export replaces every canonical target and cleans transients', async () => {
+test(
+  'successful four-way export replaces every canonical target and cleans transients',
+  async () => {
   const { root, definitions } = await createFixture();
   const { launchBrowser, state } = createFakeLauncher({ definitions });
   const logs = [];
@@ -184,12 +192,15 @@ test('successful four-way export replaces every canonical target and cleans tran
     assert.match(logs[2], /CV ES ATS exported/);
     assert.match(logs[3], /CV EN ATS exported/);
     await assertNoTransients(definitions);
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
-});
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  },
+);
 
-test('duplicate output targets are rejected before browser launch', async () => {
+test(
+  'duplicate output targets are rejected before browser launch',
+  async () => {
   const { root, definitions } = await createFixture();
   const duplicatedDefinitions = definitions.map((definition) => ({
     ...definition,
@@ -209,12 +220,15 @@ test('duplicate output targets are rejected before browser launch', async () => 
       /output paths must be unique/,
     );
     assert.equal(state.launches, 0);
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
-});
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  },
+);
 
-test('missing ATS source fails before browser launch and stale PDFs cannot mask it', async () => {
+test(
+  'missing ATS source fails before browser launch and stale PDFs cannot mask it',
+  async () => {
   const { root, definitions } = await createFixture();
   const { launchBrowser, state } = createFakeLauncher({ definitions });
 
@@ -226,13 +240,16 @@ test('missing ATS source fails before browser launch and stale PDFs cannot mask 
     assert.equal(state.launches, 0);
     await assertStaleOutputs(definitions);
     await assertNoTransients(definitions);
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
-});
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  },
+);
 
 for (const failKey of ['es:designed', 'en:designed', 'es:ats', 'en:ats']) {
-  test(`${failKey} render failure publishes no variant and closes Chromium`, async () => {
+  test(
+    `${failKey} render failure publishes no variant and closes Chromium`,
+    async () => {
     const { root, definitions } = await createFixture();
     const { launchBrowser, state } = createFakeLauncher({
       definitions,
@@ -247,8 +264,9 @@ for (const failKey of ['es:designed', 'en:designed', 'es:ats', 'en:ats']) {
       await assertStaleOutputs(definitions);
       assert.equal(state.browserClosed, true);
       await assertNoTransients(definitions);
-    } finally {
-      await rm(root, { recursive: true, force: true });
-    }
-  });
+      } finally {
+        await rm(root, { recursive: true, force: true });
+      }
+    },
+  );
 }
