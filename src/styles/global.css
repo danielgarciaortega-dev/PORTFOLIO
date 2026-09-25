@@ -1302,7 +1302,7 @@ a {
 }
 
 .award-label::before {
-  content: "";
+  content: '';
   width: 1.75rem;
   height: 1px;
   flex: 0 0 auto;
