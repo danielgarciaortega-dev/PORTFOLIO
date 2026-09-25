@@ -64,6 +64,36 @@ const metadataCases = [
       en: `${origin}/PORTFOLIO/en/projects/`,
     },
   },
+  {
+    route: './cv/opciones/',
+    locale: 'es',
+    title: 'Currículum · Daniel García Ortega',
+    description:
+      'Elige entre el currículum con diseño o la versión ATS de Daniel García Ortega, en español o inglés.',
+    canonical: `${origin}/PORTFOLIO/cv/opciones/`,
+    ogLocale: 'es_ES',
+    ogAlternateLocale: 'en_GB',
+    imageAlt: 'Daniel García Ortega, desarrollador web full-stack',
+    alternates: {
+      es: `${origin}/PORTFOLIO/cv/opciones/`,
+      en: `${origin}/PORTFOLIO/en/cv/options/`,
+    },
+  },
+  {
+    route: './en/cv/options/',
+    locale: 'en',
+    title: 'CV · Daniel García Ortega',
+    description:
+      "Choose Daniel García Ortega's designed or ATS CV in Spanish or English.",
+    canonical: `${origin}/PORTFOLIO/en/cv/options/`,
+    ogLocale: 'en_GB',
+    ogAlternateLocale: 'es_ES',
+    imageAlt: 'Daniel García Ortega, full-stack web developer',
+    alternates: {
+      es: `${origin}/PORTFOLIO/cv/opciones/`,
+      en: `${origin}/PORTFOLIO/en/cv/options/`,
+    },
+  },
 ] as const;
 
 for (const metadataCase of metadataCases) {

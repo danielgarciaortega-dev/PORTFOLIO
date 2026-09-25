@@ -9,14 +9,18 @@ import { withBase } from '../../utils/paths';
 
 interface Props {
   locale: Locale;
-  currentPage?: 'home' | 'projects' | '404';
+  currentPage?: 'home' | 'projects' | 'cvCenter' | '404';
   variant?: 'desktop' | 'mobile';
 }
 
 const { locale, currentPage = 'home', variant = 'desktop' } = Astro.props;
 const copy = shellCopy[locale];
 const counterpartRoute: LocalizedRoute =
-  currentPage === 'projects' ? 'projects' : 'home';
+  currentPage === 'projects'
+    ? 'projects'
+    : currentPage === 'cvCenter'
+      ? 'cvCenter'
+      : 'home';
 const { targetLocale, path: targetPath } = getLocaleCounterpartPath(
   locale,
   counterpartRoute,

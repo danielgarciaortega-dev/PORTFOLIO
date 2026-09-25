@@ -1,7 +1,8 @@
 export const SUPPORTED_LOCALES = ['es', 'en'] as const;
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
-export type LocalizedRoute = 'home' | 'projects';
+export type LocalizedRoute = 'home' | 'projects' | 'cvCenter';
+export type CvDocumentVariant = 'designed' | 'ats';
 
 export const DEFAULT_LOCALE: Locale = 'es';
 export const LOCALE_STORAGE_KEY = 'portfolio.locale';
@@ -10,12 +11,25 @@ const LOCALIZED_ROUTE_PATHS = {
   es: {
     home: '',
     projects: 'proyectos/',
+    cvCenter: 'cv/opciones/',
   },
   en: {
     home: 'en/',
     projects: 'en/projects/',
+    cvCenter: 'en/cv/options/',
   },
 } as const satisfies Record<Locale, Record<LocalizedRoute, string>>;
+
+const CV_DOCUMENT_PATHS = {
+  es: {
+    designed: 'cv/',
+    ats: 'cv/ats/',
+  },
+  en: {
+    designed: 'en/cv/',
+    ats: 'en/cv/ats/',
+  },
+} as const satisfies Record<Locale, Record<CvDocumentVariant, string>>;
 
 type StorageReader = Pick<Storage, 'getItem'>;
 type StorageWriter = Pick<Storage, 'setItem'>;
@@ -32,6 +46,13 @@ export function getLocalizedRoutePath(
   route: LocalizedRoute,
 ): string {
   return LOCALIZED_ROUTE_PATHS[locale][route];
+}
+
+export function getCvDocumentPath(
+  locale: Locale,
+  variant: CvDocumentVariant,
+): string {
+  return CV_DOCUMENT_PATHS[locale][variant];
 }
 
 export function getLocaleCounterpartPath(
