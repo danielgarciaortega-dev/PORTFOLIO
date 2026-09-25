@@ -11,13 +11,15 @@ export interface CvCenterCopy {
   intro: string;
   designedGroup: string;
   designedMeta: string;
+  designedDescription: string;
   atsGroup: string;
   atsMeta: string;
+  atsDescription: string;
   designedEs: CvCenterOptionCopy;
   designedEn: CvCenterOptionCopy;
   atsEs: CvCenterOptionCopy;
   atsEn: CvCenterOptionCopy;
-  optionAria: (label: string) => string;
+  optionAria: (format: string, label: string) => string;
 }
 
 export const cvCenterCopy: Record<Locale, CvCenterCopy> = {
@@ -25,58 +27,62 @@ export const cvCenterCopy: Record<Locale, CvCenterCopy> = {
     eyebrow: 'CURRÍCULUM',
     title: 'Elige formato e idioma',
     intro:
-      'Usa la versión con diseño para compartir tu perfil visualmente o la versión ATS cuando prefieras una lectura más simple y estructurada.',
-    designedGroup: 'CON DISEÑO',
-    designedMeta: 'PDF · PRESENTACIÓN',
-    atsGroup: 'FORMATO ATS',
-    atsMeta: 'PDF · TEXTO ESTRUCTURADO',
+      'Primero elige cómo quieres presentar tu perfil. Después abre directamente la versión en español o en inglés.',
+    designedGroup: 'CV VISUAL',
+    designedMeta: 'PRESENTACIÓN',
+    designedDescription:
+      'Una versión cuidada para enviar, compartir o presentar directamente a una persona.',
+    atsGroup: 'CV ATS',
+    atsMeta: 'TEXTO ESTRUCTURADO',
+    atsDescription:
+      'Una versión en una sola columna pensada para procesos y plataformas de selección.',
     designedEs: {
-      label: 'Currículum · Español',
-      description: 'Para enviar por email, adjuntar o compartir el enlace.',
+      label: 'Español',
+      description: 'CV visual en español',
     },
     designedEn: {
-      label: 'Résumé · English',
-      description: 'La misma información profesional, presentada en inglés.',
+      label: 'English',
+      description: 'Designed CV in English',
     },
     atsEs: {
-      label: 'Currículum ATS · Español',
-      description:
-        'Una columna, contenido semántico y lectura clara para procesos de selección.',
+      label: 'Español',
+      description: 'CV ATS en español',
     },
     atsEn: {
-      label: 'ATS résumé · English',
-      description:
-        'La versión en inglés con la misma estructura simple y legible.',
+      label: 'English',
+      description: 'ATS CV in English',
     },
-    optionAria: (label) => 'Abrir ' + label,
+    optionAria: (format, label) => `Abrir ${format} · ${label}`,
   },
   en: {
     eyebrow: 'CV',
     title: 'Choose format and language',
     intro:
-      'Use the designed version when presentation matters, or the ATS version when you want a simpler, more structured reading format.',
-    designedGroup: 'DESIGNED',
-    designedMeta: 'PDF · PRESENTATION',
-    atsGroup: 'ATS FORMAT',
-    atsMeta: 'PDF · STRUCTURED TEXT',
+      'Choose how you want to present your profile first, then open the Spanish or English version directly.',
+    designedGroup: 'DESIGNED CV',
+    designedMeta: 'PRESENTATION',
+    designedDescription:
+      'A polished version for sharing, attaching or presenting directly to a person.',
+    atsGroup: 'ATS CV',
+    atsMeta: 'STRUCTURED TEXT',
+    atsDescription:
+      'A single-column version designed for recruitment processes and application platforms.',
     designedEs: {
-      label: 'Currículum · Español',
-      description: 'Spanish designed CV for sharing, attaching or linking.',
+      label: 'Spanish',
+      description: 'Designed CV in Spanish',
     },
     designedEn: {
-      label: 'Résumé · English',
-      description: 'The same professional information, presented in English.',
+      label: 'English',
+      description: 'Designed CV in English',
     },
     atsEs: {
-      label: 'Currículum ATS · Español',
-      description:
-        'Single-column semantic content with a clear recruitment-oriented reading order.',
+      label: 'Spanish',
+      description: 'ATS CV in Spanish',
     },
     atsEn: {
-      label: 'ATS résumé · English',
-      description:
-        'The English counterpart with the same simple, readable structure.',
+      label: 'English',
+      description: 'ATS CV in English',
     },
-    optionAria: (label) => 'Open ' + label,
+    optionAria: (format, label) => `Open ${format} · ${label}`,
   },
 };
