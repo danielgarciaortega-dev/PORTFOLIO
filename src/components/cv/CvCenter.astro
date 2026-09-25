@@ -1,66 +1,19 @@
 ---
 import { cvCenterCopy } from '../../i18n/cv-center-copy';
-import {
-  getCvDocumentPath,
-  type CvDocumentVariant,
-  type Locale,
-} from '../../i18n/locale';
+import { getCvDocumentPath, type Locale } from '../../i18n/locale';
 import { withBase } from '../../utils/paths';
 
 interface Props {
   locale: Locale;
 }
 
-interface Option {
-  locale: Locale;
-  variant: CvDocumentVariant;
-  label: string;
-  description: string;
-}
-
 const { locale } = Astro.props;
 const copy = cvCenterCopy[locale];
 
-const designedOptions: Option[] = [
-  {
-    locale: 'es',
-    variant: 'designed',
-    ...copy.designedEs,
-  },
-  {
-    locale: 'en',
-    variant: 'designed',
-    ...copy.designedEn,
-  },
-];
-
-const atsOptions: Option[] = [
-  {
-    locale: 'es',
-    variant: 'ats',
-    ...copy.atsEs,
-  },
-  {
-    locale: 'en',
-    variant: 'ats',
-    ...copy.atsEn,
-  },
-];
-
-const groups = [
-  {
-    id: 'designed',
-    title: copy.designedGroup,
-    meta: copy.designedMeta,
-    options: designedOptions,
-  },
-  {
-    id: 'ats',
-    title: copy.atsGroup,
-    meta: copy.atsMeta,
-    options: atsOptions,
-  },
-];
+const designedEs = withBase(getCvDocumentPath('es', 'designed'));
+const designedEn = withBase(getCvDocumentPath('en', 'designed'));
+const atsEs = withBase(getCvDocumentPath('es', 'ats'));
+const atsEn = withBase(getCvDocumentPath('en', 'ats'));
 ---
 
 <main id="contenido" class="cv-center" data-cv-center>
@@ -72,46 +25,94 @@ const groups = [
     </header>
 
     <div class="cv-center__groups">
-      {
-        groups.map((group) => (
-          <section
-            class="cv-center__group"
-            aria-labelledby={'cv-center-' + group.id}
-          >
-            <div class="cv-center__group-head">
-              <h2 id={'cv-center-' + group.id}>{group.title}</h2>
-              <span>{group.meta}</span>
-            </div>
+      <section
+        class="cv-center__group"
+        aria-labelledby="cv-center-designed"
+      >
+        <div class="cv-center__group-head">
+          <h2 id="cv-center-designed">{copy.designedGroup}</h2>
+          <span>{copy.designedMeta}</span>
+        </div>
 
-            <div class="cv-center__options">
-              {group.options.map((option) => (
-                <a
-                  class="cv-center__option"
-                  href={withBase(
-                    getCvDocumentPath(option.locale, option.variant),
-                  )}
-                  hreflang={
-                    option.locale !== locale ? option.locale : undefined
-                  }
-                  aria-label={copy.optionAria(option.label)}
-                  data-cv-option
-                  data-cv-variant={option.variant}
-                  data-cv-locale={option.locale}
-                >
-                  <span class="cv-center__language" aria-hidden="true">
-                    {option.locale.toUpperCase()}
-                  </span>
-                  <span class="cv-center__option-copy">
-                    <strong>{option.label}</strong>
-                    <span>{option.description}</span>
-                  </span>
-                  <span class="cv-center__arrow" aria-hidden="true">↗</span>
-                </a>
-              ))}
-            </div>
-          </section>
-        ))
-      }
+        <div class="cv-center__options">
+          <a
+            class="cv-center__option"
+            href={designedEs}
+            hreflang="es"
+            aria-label={copy.optionAria(copy.designedEs.label)}
+            data-cv-option
+            data-cv-variant="designed"
+            data-cv-locale="es"
+          >
+            <span class="cv-center__language" aria-hidden="true">ES</span>
+            <span class="cv-center__option-copy">
+              <strong>{copy.designedEs.label}</strong>
+              <span>{copy.designedEs.description}</span>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+
+          <a
+            class="cv-center__option"
+            href={designedEn}
+            hreflang="en"
+            aria-label={copy.optionAria(copy.designedEn.label)}
+            data-cv-option
+            data-cv-variant="designed"
+            data-cv-locale="en"
+          >
+            <span class="cv-center__language" aria-hidden="true">EN</span>
+            <span class="cv-center__option-copy">
+              <strong>{copy.designedEn.label}</strong>
+              <span>{copy.designedEn.description}</span>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="cv-center__group" aria-labelledby="cv-center-ats">
+        <div class="cv-center__group-head">
+          <h2 id="cv-center-ats">{copy.atsGroup}</h2>
+          <span>{copy.atsMeta}</span>
+        </div>
+
+        <div class="cv-center__options">
+          <a
+            class="cv-center__option"
+            href={atsEs}
+            hreflang="es"
+            aria-label={copy.optionAria(copy.atsEs.label)}
+            data-cv-option
+            data-cv-variant="ats"
+            data-cv-locale="es"
+          >
+            <span class="cv-center__language" aria-hidden="true">ES</span>
+            <span class="cv-center__option-copy">
+              <strong>{copy.atsEs.label}</strong>
+              <span>{copy.atsEs.description}</span>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+
+          <a
+            class="cv-center__option"
+            href={atsEn}
+            hreflang="en"
+            aria-label={copy.optionAria(copy.atsEn.label)}
+            data-cv-option
+            data-cv-variant="ats"
+            data-cv-locale="en"
+          >
+            <span class="cv-center__language" aria-hidden="true">EN</span>
+            <span class="cv-center__option-copy">
+              <strong>{copy.atsEn.label}</strong>
+              <span>{copy.atsEn.description}</span>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
     </div>
   </div>
 </main>
