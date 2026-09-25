@@ -1287,13 +1287,17 @@ a {
 }
 
 .award-label {
-  display: inline-flex;
-  margin: -0.6rem 0 1rem;
-  padding: 0.35rem 0.65rem;
-  border-radius: 999px;
-  background: var(--color-accent-soft);
+  display: flex;
+  align-items: center;
+  margin: -0.25rem 0 1.15rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--color-accent);
+  color: var(--color-brand-hover);
+  background: transparent;
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: 0.025em;
 }
 
 .project-dialog__details {
