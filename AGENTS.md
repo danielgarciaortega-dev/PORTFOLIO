@@ -67,8 +67,8 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 - Exactly one target-locale action is rendered per shell surface: Spanish shows `EN`; English shows `ES`.
 - Home counterpart switching is `/` ↔ `/en/`.
 - Projects counterpart switching is `/proyectos/` ↔ `/en/projects/`.
-- CV-center counterpart switching is `/cv/opciones/` ↔ `/en/cv/options/`; the designed CV keeps its own direct `/cv/` ↔ `/en/cv/` locale links.
-- The shell's CV action opens the locale-correct CV center, not a PDF or a direct designed-CV viewer.
+- CV-center counterpart switching is `/cv/opciones/` ↔ `/en/cv/options/`; the CV center is the only place where format and language are selected.
+- The shell's CV action opens the locale-correct CV center, not a PDF or a direct designed-CV viewer. Every CV viewer returns to that center and exposes its own download without an internal language switch.
 - CV export is a single four-definition Playwright pipeline: designed ES/EN plus ATS ES/EN, each with its own stable PDF output.
 - Desktop shell: DGO + GitHub/LinkedIn left, primary navigation center, locale + locale-correct CV-center action right.
 - Mobile shell: DGO + menu trigger in the top bar; numbered navigation, socials and locale/CV utilities remain separate inside the menu.
