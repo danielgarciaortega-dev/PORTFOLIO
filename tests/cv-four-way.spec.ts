@@ -118,7 +118,7 @@ test('all four viewer toolbars return to the CV center without locale switches',
     const toolbar = page.locator(viewer.toolbar);
     await expect(toolbar).toHaveCount(1);
     await expect(toolbar.getByRole('link')).toHaveCount(2);
-    await expect(toolbar.locator('.portfolio-back-link, a').first()).toHaveAttribute(
+    await expect(toolbar.getByRole('link').first()).toHaveAttribute(
       'href',
       viewer.backHref,
     );
