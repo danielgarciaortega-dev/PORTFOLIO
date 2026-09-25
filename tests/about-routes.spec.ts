@@ -49,7 +49,10 @@ for (const routeCase of cases) {
     const response = await page.goto(routeCase.route);
     expect(response?.ok()).toBe(true);
 
-    await expect(page.locator('html')).toHaveAttribute('lang', routeCase.locale);
+    await expect(page.locator('html')).toHaveAttribute(
+      'lang',
+      routeCase.locale,
+    );
     await expect(page).toHaveTitle(routeCase.title);
     await expect(page.locator('[data-about-page]')).toHaveCount(1);
     await expect(
@@ -76,31 +79,33 @@ for (const routeCase of cases) {
     ).toBeVisible();
 
     const main = page.locator('main[data-about-page]');
-    await expect(main.getByRole('link', { name: routeCase.projectsAction })).toHaveAttribute(
-      'href',
-      routeCase.projectsHref,
-    );
-    await expect(main.getByRole('link', { name: routeCase.cvAction })).toHaveAttribute(
-      'href',
-      routeCase.cvHref,
-    );
-    await expect(main.getByRole('link', { name: routeCase.contactAction })).toHaveAttribute(
-      'href',
-      'mailto:dangarort123@gmail.com',
-    );
+    await expect(
+      main.getByRole('link', { name: routeCase.projectsAction }),
+    ).toHaveAttribute('href', routeCase.projectsHref);
+    await expect(
+      main.getByRole('link', { name: routeCase.cvAction }),
+    ).toHaveAttribute('href', routeCase.cvHref);
+    await expect(
+      main.getByRole('link', { name: routeCase.contactAction }),
+    ).toHaveAttribute('href', 'mailto:dangarort123@gmail.com');
     await expect(main.getByRole('link', { name: 'GitHub' })).toHaveCount(0);
     await expect(main.getByRole('link', { name: 'LinkedIn' })).toHaveCount(0);
 
     const counterpart = page
       .locator('.site-header__actions')
       .getByRole('link', { name: routeCase.counterpartName });
-    await expect(counterpart).toHaveAttribute('href', routeCase.counterpartHref);
+    await expect(counterpart).toHaveAttribute(
+      'href',
+      routeCase.counterpartHref,
+    );
 
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       'href',
       routeCase.canonical,
     );
-    await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(2);
+    await expect(
+      page.locator('link[rel="alternate"][hreflang]'),
+    ).toHaveCount(2);
 
     const visibleText = await main.innerText();
     expect(visibleText).not.toMatch(/(^|\s)0[1-4](\s|$)/);
