@@ -413,13 +413,6 @@ a {
   text-align: left;
 }
 
-.mobile-menu nav span {
-  color: var(--color-brand-hover);
-  font-size: 0.7rem;
-  font-weight: 750;
-  letter-spacing: 0.1em;
-}
-
 .mobile-menu__cv {
   min-height: 52px;
   display: flex;

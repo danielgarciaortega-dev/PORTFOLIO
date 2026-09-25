@@ -35,7 +35,6 @@ const atsEn = withBase(getCvDocumentPath('en', 'ats'));
             <p>{copy.designedMeta}</p>
             <h2 id="cv-center-designed">{copy.designedGroup}</h2>
           </div>
-          <span aria-hidden="true">01</span>
         </div>
 
         <p class="cv-center__format-description">
@@ -95,7 +94,6 @@ const atsEn = withBase(getCvDocumentPath('en', 'ats'));
             <p>{copy.atsMeta}</p>
             <h2 id="cv-center-ats">{copy.atsGroup}</h2>
           </div>
-          <span aria-hidden="true">02</span>
         </div>
 
         <p class="cv-center__format-description">
@@ -228,13 +226,6 @@ const atsEn = withBase(getCvDocumentPath('en', 'ats'));
     font-size: clamp(1.35rem, 2.2vw, 1.75rem);
     font-weight: 780;
     letter-spacing: -0.03em;
-  }
-
-  .cv-center__format-head > span {
-    color: var(--color-text-muted);
-    font-size: 0.68rem;
-    font-weight: 760;
-    letter-spacing: 0.12em;
   }
 
   .cv-center__format-description {
