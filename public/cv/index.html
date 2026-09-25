@@ -81,7 +81,15 @@
             <span aria-hidden="true">←</span>
             Volver al portfolio
         </a>
-        <a class="cv-locale-link" href="../en/cv/" lang="en" hreflang="en" aria-label="Ver CV en inglés" data-locale-link="en">EN</a>
+        <div class="cv-page-actions">
+            <a class="cv-locale-link" href="../en/cv/" lang="en" hreflang="en"
+                aria-label="Ver CV en inglés" data-locale-link="en">EN</a>
+            <a class="download-btn" href="CV-Daniel-Garcia-Ortega.pdf" download
+                aria-label="Descargar CV de Daniel García Ortega en PDF">
+                <i class="fas fa-download" aria-hidden="true"></i>
+                <span class="download-btn__label">Descargar PDF</span>
+            </a>
+        </div>
     </nav>
     <div class="cv-sheet" itemscope itemtype="https://schema.org/Person">
         <header class="hero" role="banner">
@@ -394,13 +402,6 @@
 
     </div>
 
-    <nav class="cv-page-landmark" aria-label="Acciones del CV">
-        <a class="download-btn" href="CV-Daniel-Garcia-Ortega.pdf" download
-            aria-label="Descargar CV de Daniel García Ortega en PDF">
-            <i class="fas fa-download" aria-hidden="true"></i>
-            Descargar PDF
-        </a>
-    </nav>
 
     <script>
         const originalTitle = document.title;
