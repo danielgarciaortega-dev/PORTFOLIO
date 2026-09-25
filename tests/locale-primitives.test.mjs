@@ -5,6 +5,7 @@ import {
   DEFAULT_LOCALE,
   LOCALE_STORAGE_KEY,
   SUPPORTED_LOCALES,
+  getCvDocumentPath,
   getLocaleCounterpartPath,
   getLocalizedRoutePath,
   getLocalizedRouteUrl,
@@ -31,6 +32,8 @@ test('localized home and projects routes have deterministic counterparts', () =>
   assert.equal(getLocalizedRoutePath('en', 'home'), 'en/');
   assert.equal(getLocalizedRoutePath('es', 'projects'), 'proyectos/');
   assert.equal(getLocalizedRoutePath('en', 'projects'), 'en/projects/');
+  assert.equal(getLocalizedRoutePath('es', 'cvCenter'), 'cv/opciones/');
+  assert.equal(getLocalizedRoutePath('en', 'cvCenter'), 'en/cv/options/');
 
   assert.deepEqual(getLocaleCounterpartPath('es', 'home'), {
     targetLocale: 'en',
@@ -48,6 +51,21 @@ test('localized home and projects routes have deterministic counterparts', () =>
     targetLocale: 'es',
     path: 'proyectos/',
   });
+  assert.deepEqual(getLocaleCounterpartPath('es', 'cvCenter'), {
+    targetLocale: 'en',
+    path: 'en/cv/options/',
+  });
+  assert.deepEqual(getLocaleCounterpartPath('en', 'cvCenter'), {
+    targetLocale: 'es',
+    path: 'cv/opciones/',
+  });
+});
+
+test('CV route contract keeps designed documents and ATS viewers distinct', () => {
+  assert.equal(getCvDocumentPath('es', 'designed'), 'cv/');
+  assert.equal(getCvDocumentPath('en', 'designed'), 'en/cv/');
+  assert.equal(getCvDocumentPath('es', 'ats'), 'cv/ats/');
+  assert.equal(getCvDocumentPath('en', 'ats'), 'en/cv/ats/');
 });
 
 test('base-path normalization is stable for root and GitHub Pages', () => {
@@ -83,6 +101,14 @@ test('localized absolute route URLs are correct for GitHub Pages and root bases'
     getLocalizedRouteUrl(site, '/', 'en', 'projects').toString(),
     'https://portfolio.example/en/projects/',
   );
+  assert.equal(
+    getLocalizedRouteUrl(site, '/PORTFOLIO', 'es', 'cvCenter').toString(),
+    'https://portfolio.example/PORTFOLIO/cv/opciones/',
+  );
+  assert.equal(
+    getLocalizedRouteUrl(site, '/PORTFOLIO/', 'en', 'cvCenter').toString(),
+    'https://portfolio.example/PORTFOLIO/en/cv/options/',
+  );
 });
 
 test('pathname locale resolution respects the GitHub Pages base path', () => {
@@ -97,6 +123,14 @@ test('pathname locale resolution respects the GitHub Pages base path', () => {
   );
   assert.equal(
     resolveLocaleFromPathname('/PORTFOLIO/en/projects/', '/PORTFOLIO/'),
+    'en',
+  );
+  assert.equal(
+    resolveLocaleFromPathname('/PORTFOLIO/cv/opciones/', '/PORTFOLIO/'),
+    'es',
+  );
+  assert.equal(
+    resolveLocaleFromPathname('/PORTFOLIO/en/cv/options/', '/PORTFOLIO/'),
     'en',
   );
   assert.equal(resolveLocaleFromPathname('/en/', '/'), 'en');
