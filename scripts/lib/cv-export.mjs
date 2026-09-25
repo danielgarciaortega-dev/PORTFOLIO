@@ -19,12 +19,7 @@ export const CV_EXPORTS = [
     locale: 'es',
     variant: 'ats',
     sourceSegments: ['public', 'cv', 'ats', 'index.html'],
-    outputSegments: [
-      'public',
-      'cv',
-      'ats',
-      'CV-Daniel-Garcia-Ortega-ATS.pdf',
-    ],
+    outputSegments: ['public', 'cv', 'ats', 'CV-Daniel-Garcia-Ortega-ATS.pdf'],
   },
   {
     locale: 'en',
