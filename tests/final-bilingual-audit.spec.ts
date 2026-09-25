@@ -36,14 +36,18 @@ const counterpartPairs: CounterpartPair[] = [
     selector: '.site-header__actions [data-language-switcher] a',
   },
   {
-    name: 'CV',
-    es: { route: './cv/', locale: 'es', pathname: '/PORTFOLIO/cv/' },
-    en: {
-      route: './en/cv/',
-      locale: 'en',
-      pathname: '/PORTFOLIO/en/cv/',
+    name: 'CV center',
+    es: {
+      route: './cv/opciones/',
+      locale: 'es',
+      pathname: '/PORTFOLIO/cv/opciones/',
     },
-    selector: '[data-locale-link]',
+    en: {
+      route: './en/cv/options/',
+      locale: 'en',
+      pathname: '/PORTFOLIO/en/cv/options/',
+    },
+    selector: '.site-header__actions [data-language-switcher] a',
   },
 ];
 
@@ -142,22 +146,22 @@ test('curated public UI landmarks do not mix Spanish and English shell copy', as
 
   await page.goto('./cv/');
   await expect(page.locator('.portfolio-back-link')).toContainText(
-    'Volver al portfolio',
+    'Volver a CVs',
   );
   await expect(page.locator('.role')).toHaveText(
     'DESARROLLADOR WEB FULL-STACK',
   );
   await expect(
-    page.getByText('Back to portfolio', { exact: true }),
+    page.getByText('Back to CVs', { exact: true }),
   ).toHaveCount(0);
 
   await page.goto('./en/cv/');
   await expect(page.locator('.portfolio-back-link')).toContainText(
-    'Back to portfolio',
+    'Back to CVs',
   );
   await expect(page.locator('.role')).toHaveText('FULL-STACK WEB DEVELOPER');
   await expect(
-    page.getByText('Volver al portfolio', { exact: true }),
+    page.getByText('Volver a CVs', { exact: true }),
   ).toHaveCount(0);
 });
 
