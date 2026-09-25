@@ -278,7 +278,7 @@ test('el menú móvil abre, cierra con Escape y restaura el foco', async ({
   expect(widths.scrollWidth).toBeLessThanOrEqual(widths.clientWidth);
 });
 
-test('el CV carga sus recursos, vuelve al portfolio y conserva la exportación', async ({
+test('el CV carga sus recursos, vuelve al selector y conserva la exportación', async ({
   page,
 }) => {
   const failedLocalResources: string[] = [];
@@ -307,9 +307,9 @@ test('el CV carga sus recursos, vuelve al portfolio y conserva la exportación',
   await expect(downloadLink).toHaveAttribute('download', '');
   await expect(
     page.getByRole('link', {
-      name: 'Volver al portfolio de Daniel García Ortega',
+      name: 'Volver al selector de currículums de Daniel García Ortega',
     }),
-  ).toHaveAttribute('href', '../');
+  ).toHaveAttribute('href', 'opciones/');
 
   const pdfResponse = await page.request.get(
     './cv/CV-Daniel-Garcia-Ortega.pdf',
