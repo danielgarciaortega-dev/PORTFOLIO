@@ -1001,12 +1001,39 @@ button:focus-visible {
         border-left: 0;
     }
 
+    .timeline {
+        border-top: 0;
+    }
+
+    .experience-item {
+        gap: 10px;
+        padding: 16px 0 16px 34px;
+    }
+
+    .experience-item::before {
+        left: 8px;
+        top: 20px;
+        width: 10px;
+        height: 10px;
+    }
+
+    .experience-item::after {
+        left: 12.5px;
+        top: 30px;
+        bottom: -25px;
+    }
+
+    .experience-date {
+        padding-left: 0;
+    }
+
     .experience-company {
+        padding-right: 0;
         border-right: 0;
     }
 
     .experience-detail {
-        padding-left: 8mm;
+        padding-left: 0;
     }
 
     .cv-page-landmark {
