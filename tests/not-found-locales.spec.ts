@@ -138,9 +138,10 @@ test('English 404 mobile menu stays localized, usable and overflow-free', async 
     'href',
     '/PORTFOLIO/en/',
   );
-  await expect(
-    navigation.getByRole('link', { name: /About/ }),
-  ).toHaveAttribute('href', '/PORTFOLIO/en/about/');
+  await expect(navigation.getByRole('link', { name: /About/ })).toHaveAttribute(
+    'href',
+    '/PORTFOLIO/en/about/',
+  );
   await expect(
     navigation.getByRole('link', { name: /Projects/ }),
   ).toHaveAttribute('href', '/PORTFOLIO/en/projects/');
