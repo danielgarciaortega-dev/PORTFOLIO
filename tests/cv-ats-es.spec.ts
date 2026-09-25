@@ -55,6 +55,43 @@ test('Spanish ATS CV is semantic, complete and text-first', async ({
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
 
+test('ATS toolbars keep only selector navigation and the correct download', async ({
+  page,
+}) => {
+  for (const viewer of [
+    {
+      route: './cv/ats/',
+      backName: '← Volver a CVs',
+      backHref: '../opciones/',
+      downloadName: 'Descargar PDF',
+      downloadHref: 'CV-Daniel-Garcia-Ortega-ATS.pdf',
+    },
+    {
+      route: './en/cv/ats/',
+      backName: '← Back to CVs',
+      backHref: '../options/',
+      downloadName: 'Download PDF',
+      downloadHref: 'CV-Daniel-Garcia-Ortega-ATS-EN.pdf',
+    },
+  ]) {
+    await page.goto(viewer.route);
+
+    const toolbar = page.locator('.ats-toolbar');
+    await expect(toolbar.getByRole('link')).toHaveCount(2);
+    await expect(
+      toolbar.getByRole('link', { name: viewer.backName }),
+    ).toHaveAttribute('href', viewer.backHref);
+    await expect(
+      toolbar.getByRole('link', { name: viewer.downloadName }),
+    ).toHaveAttribute('href', viewer.downloadHref);
+    await expect(
+      toolbar.getByRole('link', { name: 'Portfolio', exact: true }),
+    ).toHaveCount(0);
+
+    await expect(page.locator('.ats-contact')).toContainText('Portfolio');
+  }
+});
+
 for (const width of [360, 390, 430]) {
   test(`Spanish ATS CV has no horizontal overflow at ${width}px`, async ({
     page,
