@@ -229,9 +229,12 @@ test('English CV contains translated recruiter-facing copy without factual drift
   await expect(page.locator('body')).toContainText('108 prioritized actions');
 });
 
-test('English portfolio shell points its CV action to the English static CV', async ({
+test('English portfolio shell points its CV action to the English CV center', async ({
   page,
 }) => {
   await page.goto('./en/');
-  expect(await page.locator('a[href$="/en/cv/"]').count()).toBeGreaterThan(0);
+  await expect(page.locator('.header-cv-link')).toHaveAttribute(
+    'href',
+    '/PORTFOLIO/en/cv/options/',
+  );
 });
