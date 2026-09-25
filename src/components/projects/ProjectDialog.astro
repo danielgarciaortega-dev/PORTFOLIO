@@ -24,32 +24,6 @@ const copy = projectCopy[locale];
       <p class="eyebrow">{copy.eyebrow}</p>
       <div class="dialog-header__actions">
         {
-          project.liveUrl && (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="dialog-header__icon-link"
-              aria-label={copy.openDemoAria(project.title)}
-              title={copy.openDemoTitle}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M14 3h7v7" />
-                <path d="M10 14 21 3" />
-                <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" />
-              </svg>
-            </a>
-          )
-        }
-        {
           project.repositoryUrl && (
             <a
               href={project.repositoryUrl}
@@ -118,7 +92,35 @@ const copy = projectCopy[locale];
       </div>
       <div>
         <p class="project-dialog__context">{project.context}</p>
-        <h2 id={`project-${project.id}-title`}>{project.title}</h2>
+        <div class="project-dialog__title-row">
+          <h2 id={`project-${project.id}-title`}>{project.title}</h2>
+          {
+            project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-dialog__live-link"
+                aria-label={copy.openAppAria(project.title)}
+              >
+                <span>{copy.openAppLabel}</span>
+                <svg
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M11 4h5v5" />
+                  <path d="m9 11 7-7" />
+                  <path d="M15 11v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4" />
+                </svg>
+              </a>
+            )
+          }
+        </div>
         {project.award && <p class="award-label">{project.award}</p>}
         <p>{project.modalDescription}</p>
       </div>

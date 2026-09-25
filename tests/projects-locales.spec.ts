@@ -58,7 +58,7 @@ test('Spanish project cards keep unique accessible CTAs and Spanish dialog copy'
   await expect(dialog.getByRole('heading', { name: 'Objetivo' })).toBeVisible();
   await expect(dialog.getByRole('heading', { name: 'Solución' })).toBeVisible();
   await expect(
-    dialog.getByRole('link', { name: 'Abrir demo de AL-LÍO' }),
+    dialog.getByRole('link', { name: 'Abrir aplicación AL-LÍO' }),
   ).toBeVisible();
   await expect(
     dialog.getByRole('link', { name: 'Ver código de AL-LÍO' }),
@@ -92,7 +92,7 @@ test('English home uses approved project copy and unique accessible CTAs', async
     'AL-LÍO brings tasks, calendar, learning and professional opportunities into one place to reduce switching between separate tools.',
   );
   await expect(
-    alLioDialog.getByRole('link', { name: 'Open AL-LÍO demo' }),
+    alLioDialog.getByRole('link', { name: 'Open AL-LÍO application' }),
   ).toBeVisible();
   await expect(
     alLioDialog.getByRole('link', { name: 'View AL-LÍO code' }),

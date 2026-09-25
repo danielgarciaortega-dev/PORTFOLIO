@@ -5,8 +5,8 @@ interface ProjectCopy {
   technologiesFor: (title: string) => string;
   viewProject: string;
   viewProjectAria: (title: string) => string;
-  openDemoAria: (title: string) => string;
-  openDemoTitle: string;
+  openAppAria: (title: string) => string;
+  openAppLabel: string;
   viewCodeAria: (title: string) => string;
   viewCodeTitle: string;
   viewEventAria: (title: string) => string;
@@ -25,8 +25,8 @@ export const projectCopy: Record<Locale, ProjectCopy> = {
     technologiesFor: (title) => `Tecnologías de ${title}`,
     viewProject: 'Ver proyecto',
     viewProjectAria: (title) => `Ver proyecto ${title}`,
-    openDemoAria: (title) => `Abrir demo de ${title}`,
-    openDemoTitle: 'Abrir demo',
+    openAppAria: (title) => `Abrir aplicación ${title}`,
+    openAppLabel: 'Abrir app',
     viewCodeAria: (title) => `Ver código de ${title}`,
     viewCodeTitle: 'Ver código',
     viewEventAria: (title) => `Ver evento de ${title}`,
@@ -43,8 +43,8 @@ export const projectCopy: Record<Locale, ProjectCopy> = {
     technologiesFor: (title) => `Technologies for ${title}`,
     viewProject: 'View project',
     viewProjectAria: (title) => `View project ${title}`,
-    openDemoAria: (title) => `Open ${title} demo`,
-    openDemoTitle: 'Open demo',
+    openAppAria: (title) => `Open ${title} application`,
+    openAppLabel: 'Open app',
     viewCodeAria: (title) => `View ${title} code`,
     viewCodeTitle: 'View code',
     viewEventAria: (title) => `View ${title} event`,
