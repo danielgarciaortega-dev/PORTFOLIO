@@ -189,8 +189,12 @@ test('maintained source-of-truth docs preserve the delivered bilingual route con
     '/en/',
     '/proyectos/',
     '/en/projects/',
+    '/cv/opciones/',
+    '/en/cv/options/',
     '/cv/',
     '/en/cv/',
+    '/cv/ats/',
+    '/en/cv/ats/',
   ]) {
     expect(readme).toContain(route);
     expect(agents).toContain(route);
@@ -209,5 +213,10 @@ test('maintained source-of-truth docs preserve the delivered bilingual route con
 
   expect(readme).toContain('GitHub Pages is the only deployment target.');
   expect(agents).toContain('GitHub Pages is the only deployment target.');
-  expect(finalShell).toContain('Both CV locales have independent PDF outputs');
+  expect(finalShell).toContain(
+    'The CV system has one Astro selector surface and four static/export viewer variants.',
+  );
+  expect(finalShell).toContain('npm run export:cv');
+  expect(finalShell).toContain('CV-Daniel-Garcia-Ortega-ATS.pdf');
+  expect(finalShell).toContain('CV-Daniel-Garcia-Ortega-ATS-EN.pdf');
 });
