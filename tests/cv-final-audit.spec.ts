@@ -164,6 +164,34 @@ for (const localeCase of localeCases) {
       geometry?.clientWidth ?? 0,
     );
 
+    const firstExperience = page.locator('.experience-item').first();
+    await expect(firstExperience).toHaveCSS('padding-left', '34px');
+    await expect(page.locator('.experience-date').first()).toHaveCSS(
+      'padding-left',
+      '0px',
+    );
+    await expect(page.locator('.experience-detail').first()).toHaveCSS(
+      'padding-left',
+      '0px',
+    );
+
+    const timelinePseudo = await firstExperience.evaluate((element) => ({
+      nodeLeft: getComputedStyle(element, '::before').left,
+      connectorLeft: getComputedStyle(element, '::after').left,
+      connectorBottom: getComputedStyle(element, '::after').bottom,
+    }));
+    expect(timelinePseudo).toEqual({
+      nodeLeft: '8px',
+      connectorLeft: '12.5px',
+      connectorBottom: '-25px',
+    });
+
+    const lastConnectorDisplay = await page
+      .locator('.experience-item')
+      .last()
+      .evaluate((element) => getComputedStyle(element, '::after').display);
+    expect(lastConnectorDisplay).toBe('none');
+
     await expect(page.locator('.portfolio-back-link')).toBeVisible();
     await expect(page.locator('.download-btn')).toBeVisible();
     await expect(page.locator('.cv-locale-link')).toBeVisible();
