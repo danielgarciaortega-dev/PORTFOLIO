@@ -89,7 +89,11 @@ for (const routeCase of cases) {
 
     await expect(activeAboutLink).toHaveAttribute('aria-current', 'page');
     await expect
-      .poll(() => activeAboutLink.evaluate((element) => getComputedStyle(element).fontWeight))
+      .poll(() =>
+        activeAboutLink.evaluate(
+          (element) => getComputedStyle(element).fontWeight,
+        ),
+      )
       .toBe('800');
   });
 }
