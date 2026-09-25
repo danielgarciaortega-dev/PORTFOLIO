@@ -9,25 +9,23 @@ const localeCases = [
   {
     locale: 'es',
     route: './cv/',
-    counterpartHref: '../en/cv/',
-    counterpartLabel: 'Ver CV en inglés',
-    backLabel: 'Volver al portfolio de Daniel García Ortega',
+    backHref: 'opciones/',
+    backLabel: 'Volver al selector de currículums de Daniel García Ortega',
     downloadLabel: 'Descargar CV de Daniel García Ortega en PDF',
     downloadHref: 'CV-Daniel-Garcia-Ortega.pdf',
   },
   {
     locale: 'en',
     route: './en/cv/',
-    counterpartHref: '../../cv/',
-    counterpartLabel: 'View CV in Spanish',
-    backLabel: 'Back to Daniel García Ortega portfolio',
+    backHref: 'options/',
+    backLabel: 'Back to Daniel García Ortega CV options',
     downloadLabel: 'Download Daniel García Ortega CV as PDF',
     downloadHref: 'CV-Daniel-Garcia-Ortega-EN.pdf',
   },
 ] as const;
 
 for (const localeCase of localeCases) {
-  test(`${localeCase.locale} final CV keeps A4 containment, accessibility and one-target navigation`, async ({
+  test(`${localeCase.locale} final CV keeps A4 containment, accessibility and selector-first navigation`, async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 1200 });
@@ -38,20 +36,13 @@ for (const localeCase of localeCases) {
       localeCase.locale,
     );
 
-    const counterpart = page.getByRole('link', {
-      name: localeCase.counterpartLabel,
-    });
     const back = page.getByRole('link', { name: localeCase.backLabel });
     const download = page.getByRole('link', {
       name: localeCase.downloadLabel,
     });
 
-    await expect(page.locator('[data-locale-link]')).toHaveCount(1);
-    await expect(counterpart).toHaveAttribute(
-      'href',
-      localeCase.counterpartHref,
-    );
-    await expect(back).toHaveAttribute('href', '../');
+    await expect(page.locator('[data-locale-link]')).toHaveCount(0);
+    await expect(back).toHaveAttribute('href', localeCase.backHref);
     await expect(download).toHaveAttribute('href', localeCase.downloadHref);
     await expect(page.locator('.download-btn')).toHaveCount(1);
     await expect(page.locator('.cv-page-actions')).toHaveCSS(
@@ -61,13 +52,11 @@ for (const localeCase of localeCases) {
     await expect(download).toHaveCSS('position', 'static');
 
     const desktopDownloadBox = await download.boundingBox();
-    const desktopLocaleBox = await counterpart.boundingBox();
+    const desktopBackBox = await back.boundingBox();
     expect(desktopDownloadBox).not.toBeNull();
-    expect(desktopLocaleBox).not.toBeNull();
+    expect(desktopBackBox).not.toBeNull();
     expect(desktopDownloadBox?.y ?? Number.MAX_SAFE_INTEGER).toBeLessThan(32);
-    expect(desktopDownloadBox?.x ?? 0).toBeGreaterThan(
-      desktopLocaleBox?.x ?? Number.MAX_SAFE_INTEGER,
-    );
+    expect(desktopBackBox?.y ?? Number.MAX_SAFE_INTEGER).toBeLessThan(32);
 
     const sheet = page.locator('.cv-sheet');
     const box = await sheet.boundingBox();
@@ -117,7 +106,7 @@ for (const localeCase of localeCases) {
       'none',
     );
     await expect(page.locator('.download-btn')).toHaveCSS('display', 'none');
-    await expect(page.locator('.cv-locale-link')).toHaveCSS('display', 'none');
+    await expect(page.locator('[data-locale-link]')).toHaveCount(0);
   });
 
   test(`${localeCase.locale} final CV stays fluid at the 390px mobile baseline`, async ({
@@ -194,7 +183,7 @@ for (const localeCase of localeCases) {
 
     await expect(page.locator('.portfolio-back-link')).toBeVisible();
     await expect(page.locator('.download-btn')).toBeVisible();
-    await expect(page.locator('.cv-locale-link')).toBeVisible();
+    await expect(page.locator('[data-locale-link]')).toHaveCount(0);
     await expect(page.locator('.cv-page-landmark')).toHaveCSS(
       'display',
       'flex',
