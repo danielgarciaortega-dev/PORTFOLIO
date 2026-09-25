@@ -252,11 +252,7 @@ const adversarialCases = [
     name: 'wrong English back destination',
     mutate: (contract) => ({
       ...contract,
-      en: mutateRequired(
-        contract.en,
-        'href="options/"',
-        'href="../"',
-      ),
+      en: mutateRequired(contract.en, 'href="options/"', 'href="../"'),
     }),
   },
 ];
