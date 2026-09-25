@@ -1,0 +1,316 @@
+---
+import { cvCenterCopy } from '../../i18n/cv-center-copy';
+import { getCvDocumentPath, type Locale } from '../../i18n/locale';
+import { withBase } from '../../utils/paths';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = cvCenterCopy[locale];
+
+const designedEs = withBase(getCvDocumentPath('es', 'designed'));
+const designedEn = withBase(getCvDocumentPath('en', 'designed'));
+const atsEs = withBase(getCvDocumentPath('es', 'ats'));
+const atsEn = withBase(getCvDocumentPath('en', 'ats'));
+---
+
+<main id="contenido" class="cv-center" data-cv-center>
+  <div class="cv-center__inner">
+    <header class="cv-center__intro">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1>{copy.title}</h1>
+      <p>{copy.intro}</p>
+    </header>
+
+    <div class="cv-center__groups">
+      <section class="cv-center__group" aria-labelledby="cv-center-designed">
+        <div class="cv-center__group-head">
+          <h2 id="cv-center-designed">{copy.designedGroup}</h2>
+          <span>{copy.designedMeta}</span>
+        </div>
+
+        <div class="cv-center__options">
+          <a
+            class="cv-center__option"
+            href={designedEs}
+            hreflang="es"
+            aria-label={copy.optionAria(copy.designedEs.label)}
+            data-cv-option
+            data-cv-variant="designed"
+            data-cv-locale="es"
+          >
+            <span class="cv-center__language" aria-hidden="true">ES</span>
+            <span class="cv-center__option-copy">
+              <strong>{copy.designedEs.label}</strong>
+              <span>{copy.designedEs.description}</span>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+
+          <a
+            class="cv-center__option"
+            href={designedEn}
+            hreflang="en"
+            aria-label={copy.optionAria(copy.designedEn.label)}
+            data-cv-option
+            data-cv-variant="designed"
+            data-cv-locale="en"
+          >
+            <span class="cv-center__language" aria-hidden="true">EN</span>
+            <span class="cv-center__option-copy">
+              <strong>{copy.designedEn.label}</strong>
+              <span>{copy.designedEn.description}</span>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="cv-center__group" aria-labelledby="cv-center-ats">
+        <div class="cv-center__group-head">
+          <h2 id="cv-center-ats">{copy.atsGroup}</h2>
+          <span>{copy.atsMeta}</span>
+        </div>
+
+        <div class="cv-center__options">
+          <a
+            class="cv-center__option"
+            href={atsEs}
+            hreflang="es"
+            aria-label={copy.optionAria(copy.atsEs.label)}
+            data-cv-option
+            data-cv-variant="ats"
+            data-cv-locale="es"
+          >
+            <span class="cv-center__language" aria-hidden="true">ES</span>
+            <span class="cv-center__option-copy">
+              <strong>{copy.atsEs.label}</strong>
+              <span>{copy.atsEs.description}</span>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+
+          <a
+            class="cv-center__option"
+            href={atsEn}
+            hreflang="en"
+            aria-label={copy.optionAria(copy.atsEn.label)}
+            data-cv-option
+            data-cv-variant="ats"
+            data-cv-locale="en"
+          >
+            <span class="cv-center__language" aria-hidden="true">EN</span>
+            <span class="cv-center__option-copy">
+              <strong>{copy.atsEn.label}</strong>
+              <span>{copy.atsEn.description}</span>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<style>
+  .cv-center {
+    min-height: calc(100vh - var(--header-height));
+  }
+
+  .cv-center__inner {
+    width: min(100%, 860px);
+    margin-inline: auto;
+    padding: clamp(4.5rem, 8vw, 7.5rem) var(--page-padding)
+      clamp(5rem, 9vw, 8rem);
+  }
+
+  .cv-center__intro {
+    padding-bottom: clamp(2.4rem, 4vw, 3.5rem);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .cv-center__intro .eyebrow {
+    margin-bottom: 0.65rem;
+    font-size: 0.72rem;
+    font-weight: 760;
+    letter-spacing: 0.16em;
+  }
+
+  .cv-center__intro h1 {
+    max-width: 12ch;
+    margin-bottom: 0.9rem;
+    font-size: clamp(2.45rem, 6vw, 4.7rem);
+    font-weight: 780;
+    letter-spacing: -0.055em;
+  }
+
+  .cv-center__intro > p:last-child {
+    max-width: 58ch;
+    margin-bottom: 0;
+    color: var(--color-text-muted);
+    font-size: clamp(0.98rem, 1.6vw, 1.08rem);
+  }
+
+  .cv-center__groups {
+    display: grid;
+    gap: clamp(2.25rem, 4vw, 3.25rem);
+    padding-top: clamp(2.25rem, 4vw, 3.25rem);
+  }
+
+  .cv-center__group-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .cv-center__group-head h2,
+  .cv-center__group-head span {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.68rem;
+    font-weight: 760;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .cv-center__group-head span {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .cv-center__options {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .cv-center__option {
+    min-height: 84px;
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    gap: clamp(0.9rem, 2vw, 1.25rem);
+    align-items: center;
+    padding: 1rem 0.2rem;
+    border-bottom: 1px solid var(--color-border);
+    transition:
+      background 180ms ease,
+      transform 180ms ease;
+  }
+
+  .cv-center__option:hover {
+    background: color-mix(in srgb, var(--color-surface) 58%, transparent);
+    transform: translateX(3px);
+  }
+
+  .cv-center__language {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border: 1px solid
+      color-mix(in srgb, var(--color-border) 88%, var(--color-brand));
+    border-radius: 0.85rem;
+    background: color-mix(
+      in srgb,
+      var(--color-brand-soft) 62%,
+      var(--color-surface)
+    );
+    color: var(--color-brand-hover);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+
+  .cv-center__option-copy {
+    min-width: 0;
+    display: grid;
+    gap: 0.18rem;
+  }
+
+  .cv-center__option-copy strong {
+    color: var(--color-text);
+    font-size: clamp(0.98rem, 1.8vw, 1.08rem);
+    font-weight: 760;
+    line-height: 1.3;
+  }
+
+  .cv-center__option-copy > span {
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .cv-center__arrow {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    transition:
+      color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .cv-center__option:hover .cv-center__arrow,
+  .cv-center__option:focus-visible .cv-center__arrow {
+    color: var(--color-accent-hover);
+    transform: translate(2px, -2px);
+  }
+
+  @media (max-width: 640px) {
+    .cv-center__inner {
+      padding-top: 3.25rem;
+    }
+
+    .cv-center__intro h1 {
+      max-width: 10ch;
+    }
+
+    .cv-center__group-head {
+      align-items: flex-end;
+    }
+
+    .cv-center__group-head span {
+      max-width: 16ch;
+      white-space: normal;
+    }
+
+    .cv-center__option {
+      min-height: 92px;
+      grid-template-columns: 46px minmax(0, 1fr) 30px;
+      gap: 0.8rem;
+      padding-block: 0.9rem;
+    }
+
+    .cv-center__language {
+      width: 42px;
+      height: 42px;
+      border-radius: 0.75rem;
+    }
+
+    .cv-center__option-copy > span {
+      font-size: 0.82rem;
+    }
+
+    .cv-center__arrow {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cv-center__option,
+    .cv-center__arrow {
+      transition: none;
+    }
+
+    .cv-center__option:hover,
+    .cv-center__option:hover .cv-center__arrow,
+    .cv-center__option:focus-visible .cv-center__arrow {
+      transform: none;
+    }
+  }
+</style>

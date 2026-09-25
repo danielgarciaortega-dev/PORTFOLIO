@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 const cases = [
@@ -7,6 +8,9 @@ const cases = [
     title: 'Currículum · Daniel García Ortega',
     counterpartName: 'Cambiar a inglés',
     counterpartHref: '/PORTFOLIO/en/cv/options/',
+    heading: 'Elige formato e idioma',
+    designedGroup: 'CON DISEÑO',
+    atsGroup: 'FORMATO ATS',
   },
   {
     route: './en/cv/options/',
@@ -14,6 +18,9 @@ const cases = [
     title: 'CV · Daniel García Ortega',
     counterpartName: 'Switch to Spanish',
     counterpartHref: '/PORTFOLIO/cv/opciones/',
+    heading: 'Choose format and language',
+    designedGroup: 'DESIGNED',
+    atsGroup: 'ATS FORMAT',
   },
 ] as const;
 
@@ -53,6 +60,15 @@ for (const routeCase of cases) {
     );
     await expect(page).toHaveTitle(routeCase.title);
     await expect(page.locator('[data-cv-center]')).toHaveCount(1);
+    await expect(
+      page.getByRole('heading', { level: 1, name: routeCase.heading }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 2, name: routeCase.designedGroup }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 2, name: routeCase.atsGroup }),
+    ).toBeVisible();
     await expect(page.locator('[data-cv-option]')).toHaveCount(4);
 
     for (const option of expectedOptions) {
@@ -71,12 +87,37 @@ for (const routeCase of cases) {
       routeCase.counterpartHref,
     );
 
+    const firstOption = page.locator('[data-cv-option]').first();
+    await firstOption.focus();
+    await expect(firstOption).toBeFocused();
+
     const overflow = await page.evaluate(
       () =>
         document.documentElement.scrollWidth -
         document.documentElement.clientWidth,
     );
     expect(overflow).toBeLessThanOrEqual(0);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  });
+}
+
+for (const width of [360, 390, 430]) {
+  test(`CV center stays overflow-free at ${width}px in both locales`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 844 });
+
+    for (const routeCase of cases) {
+      await page.goto(routeCase.route);
+      await expect(page.locator('[data-cv-option]')).toHaveCount(4);
+
+      const overflow = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+      );
+      expect(overflow).toBeLessThanOrEqual(0);
+    }
   });
 }
 

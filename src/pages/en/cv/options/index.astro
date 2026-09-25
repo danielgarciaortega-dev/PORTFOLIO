@@ -1,13 +1,9 @@
 ---
 import AboutDialog from '../../../../components/dialogs/AboutDialog.astro';
-import { getCvDocumentPath } from '../../../../i18n/locale';
+import CvCenter from '../../../../components/cv/CvCenter.astro';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
-import { withBase } from '../../../../utils/paths';
 
-const designedEs = withBase(getCvDocumentPath('es', 'designed'));
-const designedEn = withBase(getCvDocumentPath('en', 'designed'));
-const atsEs = withBase(getCvDocumentPath('es', 'ats'));
-const atsEn = withBase(getCvDocumentPath('en', 'ats'));
+const locale = 'en';
 ---
 
 <BaseLayout
@@ -16,69 +12,6 @@ const atsEn = withBase(getCvDocumentPath('en', 'ats'));
   currentPage="cvCenter"
   localizedRoute="cvCenter"
 >
-  <main id="contenido" class="cv-center-page" data-cv-center>
-    <section class="section-shell" aria-labelledby="cv-center-title">
-      <p class="eyebrow">CV</p>
-      <h1 id="cv-center-title">Choose format and language</h1>
-      <p>
-        All four routes belong to the same CV and preserve the same professional
-        information.
-      </p>
-
-      <section aria-labelledby="cv-designed-title">
-        <h2 id="cv-designed-title">Designed</h2>
-        <ul>
-          <li>
-            <a
-              href={designedEs}
-              hreflang="es"
-              data-cv-option
-              data-cv-variant="designed"
-              data-cv-locale="es"
-            >
-              Currículum · Español
-            </a>
-          </li>
-          <li>
-            <a
-              href={designedEn}
-              data-cv-option
-              data-cv-variant="designed"
-              data-cv-locale="en"
-            >
-              Résumé · English
-            </a>
-          </li>
-        </ul>
-      </section>
-
-      <section aria-labelledby="cv-ats-title">
-        <h2 id="cv-ats-title">ATS format</h2>
-        <ul>
-          <li>
-            <a
-              href={atsEs}
-              hreflang="es"
-              data-cv-option
-              data-cv-variant="ats"
-              data-cv-locale="es"
-            >
-              Currículum ATS · Español
-            </a>
-          </li>
-          <li>
-            <a
-              href={atsEn}
-              data-cv-option
-              data-cv-variant="ats"
-              data-cv-locale="en"
-            >
-              ATS résumé · English
-            </a>
-          </li>
-        </ul>
-      </section>
-    </section>
-  </main>
+  <CvCenter {locale} />
   <AboutDialog />
 </BaseLayout>
