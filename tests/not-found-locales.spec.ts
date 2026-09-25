@@ -115,7 +115,6 @@ test('English-prefixed missing route keeps HTTP 404 and localizes the one shell'
     .getByRole('link', { name: 'Switch to Spanish' });
   await expect(visibleLocaleAction).toHaveText('ES');
   await expect(visibleLocaleAction).toHaveAttribute('href', '/PORTFOLIO/');
-
 });
 
 test('English 404 mobile menu stays localized, usable and overflow-free', async ({
