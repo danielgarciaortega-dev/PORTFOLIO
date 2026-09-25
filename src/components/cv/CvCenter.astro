@@ -90,7 +90,9 @@ const groups = [
                   href={withBase(
                     getCvDocumentPath(option.locale, option.variant),
                   )}
-                  hreflang={option.locale !== locale ? option.locale : undefined}
+                  hreflang={
+                    option.locale !== locale ? option.locale : undefined
+                  }
                   aria-label={copy.optionAria(option.label)}
                   data-cv-option
                   data-cv-variant={option.variant}
@@ -103,9 +105,7 @@ const groups = [
                     <strong>{option.label}</strong>
                     <span>{option.description}</span>
                   </span>
-                  <span class="cv-center__arrow" aria-hidden="true">
-                    ↗
-                  </span>
+                  <span class="cv-center__arrow" aria-hidden="true">↗</span>
                 </a>
               ))}
             </div>
