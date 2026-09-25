@@ -11,6 +11,7 @@ interface LocaleCase {
   localeHref: string;
   cv: string;
   mobileCv: string;
+  cvHref: string;
 }
 
 const localeCases: LocaleCase[] = [
@@ -25,6 +26,7 @@ const localeCases: LocaleCase[] = [
     localeHref: '/PORTFOLIO/en/',
     cv: 'Ver CV',
     mobileCv: 'Consultar CV',
+    cvHref: '/PORTFOLIO/cv/opciones/',
   },
   {
     locale: 'en',
@@ -37,6 +39,7 @@ const localeCases: LocaleCase[] = [
     localeHref: '/PORTFOLIO/',
     cv: 'View CV',
     mobileCv: 'View CV',
+    cvHref: '/PORTFOLIO/en/cv/options/',
   },
 ];
 
@@ -91,9 +94,9 @@ test('final desktop shell contract stays deterministic across supported widths a
       });
       await expect(localeLink).toHaveCount(1);
       await expect(localeLink).toHaveAttribute('href', localeCase.localeHref);
-      await expect(
-        actions.getByRole('link', { name: localeCase.cv }),
-      ).toHaveCount(1);
+      const cvLink = actions.getByRole('link', { name: localeCase.cv });
+      await expect(cvLink).toHaveCount(1);
+      await expect(cvLink).toHaveAttribute('href', localeCase.cvHref);
       await expect(
         page.locator('[data-language-switcher]:visible'),
       ).toHaveCount(1);
@@ -155,9 +158,11 @@ test('final mobile shell keeps navigation and utilities separate without overflo
       });
       await expect(localeLink).toHaveCount(1);
       await expect(localeLink).toHaveAttribute('href', localeCase.localeHref);
-      await expect(
-        utilities.getByRole('link', { name: localeCase.mobileCv }),
-      ).toHaveCount(1);
+      const mobileCvLink = utilities.getByRole('link', {
+        name: localeCase.mobileCv,
+      });
+      await expect(mobileCvLink).toHaveCount(1);
+      await expect(mobileCvLink).toHaveAttribute('href', localeCase.cvHref);
       await expect(
         page.locator('[data-language-switcher]:visible'),
       ).toHaveCount(1);
