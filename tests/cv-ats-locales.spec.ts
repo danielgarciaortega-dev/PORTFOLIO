@@ -3,19 +3,10 @@ import { expect, test, type Page } from '@playwright/test';
 
 async function collectAtsFacts(page: Page) {
   return page.evaluate(() => ({
-    name:
-      document.querySelector('h1')?.textContent?.trim() ??
-      '',
-    projects: Array.from(
-      document.querySelectorAll(
-        '#projects-title ~ .ats-entry h3',
-      ),
-    ).map((node) => node.textContent?.trim()),
-    employers: Array.from(
-      document.querySelectorAll(
-        '#experience-title ~ .ats-entry h3[itemprop="name"]',
-      ),
-    ).map((node) => node.textContent?.trim()),
+    name: document.querySelector('h1')?.textContent?.trim() ?? '',
+    entries: Array.from(document.querySelectorAll('.ats-entry h3')).map(
+      (node) => node.textContent?.trim(),
+    ),
     dates: Array.from(document.querySelectorAll('.ats-entry time')).map(
       (node) => node.getAttribute('datetime'),
     ),
@@ -42,27 +33,19 @@ test('English ATS CV mirrors the Spanish ATS factual contract', async ({
   const en = await collectAtsFacts(page);
   expect(en).toEqual(es);
 
-  await expect(
-    page.getByRole('heading', { level: 2, name: 'Professional profile' }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('heading', { level: 2, name: 'Technical stack' }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('heading', { level: 2, name: 'Professional experience' }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('heading', { level: 2, name: 'Featured projects' }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('heading', { level: 2, name: 'Education' }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('heading', { level: 2, name: 'Languages' }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('heading', { level: 2, name: 'Additional information' }),
-  ).toBeVisible();
+  for (const heading of [
+    'Professional profile',
+    'Technical stack',
+    'Professional experience',
+    'Featured projects',
+    'Education',
+    'Languages',
+    'Additional information',
+  ]) {
+    await expect(
+      page.getByRole('heading', { level: 2, name: heading }),
+    ).toBeVisible();
+  }
 
   await expect(page.locator('table')).toHaveCount(0);
   await expect(page.locator('img')).toHaveCount(0);
@@ -88,8 +71,9 @@ for (const width of [360, 390, 430]) {
 
 test('English ATS reuses the shared ATS stylesheet', async ({ page }) => {
   await page.goto('./en/cv/ats/');
-  const stylesheet = page.locator(
-    'link[rel="stylesheet"][href="../../../cv/ats/styles.css"]',
-  );
-  await expect(stylesheet).toHaveCount(1);
+  await expect(
+    page.locator(
+      'link[rel="stylesheet"][href="../../../cv/ats/styles.css"]',
+    ),
+  ).toHaveCount(1);
 });
