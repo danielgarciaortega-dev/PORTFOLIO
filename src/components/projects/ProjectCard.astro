@@ -13,7 +13,7 @@ const { project, locale } = Astro.props;
 const copy = projectCopy[locale];
 ---
 
-<article class="project-row" data-reveal>
+<article class="project-row" data-reveal data-project-context={project.id}>
   <div
     class:list={['project-row__visual', `project-row__visual--${project.id}`]}
   >
