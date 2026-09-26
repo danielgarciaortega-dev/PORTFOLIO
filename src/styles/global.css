@@ -1130,8 +1130,8 @@ a {
     transform 160ms ease;
 }
 
-.project-dialog__live-link:hover .project-dialog__live-link::after,
-.project-dialog__live-link:focus-visible .project-dialog__live-link::after {
+.project-dialog__live-link:hover::after,
+.project-dialog__live-link:focus-visible::after {
   color: var(--color-accent);
   transform: translate(2px, -2px);
 }
@@ -1851,8 +1851,8 @@ a {
 
   .project-dialog__live-link:hover,
   .project-dialog__live-link:focus-visible,
-  .project-dialog__live-link:hover .project-dialog__live-link::after,
-  .project-dialog__live-link:focus-visible .project-dialog__live-link::after {
+  .project-dialog__live-link:hover::after,
+  .project-dialog__live-link:focus-visible::after {
     transform: none;
   }
 
