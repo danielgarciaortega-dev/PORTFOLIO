@@ -20,18 +20,17 @@ test('inicio, navegación y Sobre mí funcionan con ruta base', async ({
       .getByRole('link', { name: 'Tecnologías' }),
   ).toHaveCount(0);
 
-  const aboutTrigger = page
-    .getByRole('button', { name: 'Sobre mí', exact: true })
-    .first();
-  await aboutTrigger.click();
-  const aboutDialog = page.getByRole('dialog', {
-    name: 'Daniel García Ortega',
-  });
-  await expect(aboutDialog).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(aboutDialog).toBeHidden();
-  await expect(aboutTrigger).toBeFocused();
+  const aboutLink = page
+    .getByRole('navigation', { name: 'Navegación principal' })
+    .getByRole('link', { name: 'Sobre mí', exact: true });
+  await expect(aboutLink).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
+  await aboutLink.focus();
+  await expect(aboutLink).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/PORTFOLIO\/sobre-mi\/$/);
+  await expect(page.locator('#about-dialog')).toHaveCount(0);
 
+  await page.goto('./');
   await page.getByRole('link', { name: 'Ver todos los proyectos' }).click();
   await expect(page).toHaveURL(/\/PORTFOLIO\/proyectos\/$/);
 });

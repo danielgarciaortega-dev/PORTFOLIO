@@ -13,6 +13,7 @@ interface Props {
 const { currentPage, locale } = Astro.props;
 const copy = shellCopy[locale];
 const homeUrl = withBase(getLocalizedRoutePath(locale, 'home'));
+const aboutUrl = withBase(getLocalizedRoutePath(locale, 'about'));
 const projectsUrl = withBase(getLocalizedRoutePath(locale, 'projects'));
 const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
 ---
@@ -60,8 +61,12 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
         aria-current={currentPage === 'home' ? 'page' : undefined}
         >{copy.home}</a
       >
-      <button type="button" data-dialog-open="about-dialog">{copy.about}</button
+      <a
+        href={aboutUrl}
+        aria-current={currentPage === 'about' ? 'page' : undefined}
       >
+        {copy.about}
+      </a>
       <a
         href={projectsUrl}
         aria-current={currentPage === 'projects' ? 'page' : undefined}
@@ -115,9 +120,13 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
 
     <nav aria-label={copy.mobileNavigation}>
       <a href={homeUrl} data-menu-link>{copy.home}</a>
-      <button type="button" data-dialog-open="about-dialog" data-menu-action>
+      <a
+        href={aboutUrl}
+        aria-current={currentPage === 'about' ? 'page' : undefined}
+        data-menu-link
+      >
         {copy.about}
-      </button>
+      </a>
       <a href={projectsUrl} data-menu-link>{copy.projects}</a>
     </nav>
 
@@ -220,6 +229,11 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
 
   .mobile-menu__utilities {
     display: none;
+  }
+
+  .mobile-menu nav a[aria-current='page'] {
+    color: var(--color-accent-ink);
+    font-weight: 800;
   }
 
   @media (max-width: 1100px) and (min-width: 901px) {

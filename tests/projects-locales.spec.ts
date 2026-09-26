@@ -18,7 +18,7 @@ const routeCases = [
     cvHref: '/PORTFOLIO/cv/opciones/',
     viewFeedback: 'Ver proyecto Feedback2Action',
     about: 'Sobre mí',
-    aboutCopy: 'Formación y proyectos',
+    aboutHref: '/PORTFOLIO/sobre-mi/',
     localizedDescription: 'centraliza tareas',
   },
   {
@@ -36,7 +36,7 @@ const routeCases = [
     cvHref: '/PORTFOLIO/en/cv/options/',
     viewFeedback: 'View project Feedback2Action',
     about: 'About',
-    aboutCopy: 'Education and projects',
+    aboutHref: '/PORTFOLIO/en/about/',
     localizedDescription: 'brings tasks',
   },
 ] as const;
@@ -165,15 +165,10 @@ test('Spanish and English projects indexes preserve structure with localized cop
     ).toBeVisible();
     await page.keyboard.press('Escape');
 
-    const aboutTrigger = navigation.getByRole('button', {
+    const aboutLink = navigation.getByRole('link', {
       name: routeCase.about,
     });
-    await aboutTrigger.click();
-    const aboutDialog = page.getByRole('dialog', {
-      name: 'Daniel García Ortega',
-    });
-    await expect(aboutDialog).toContainText(routeCase.aboutCopy);
-    await page.keyboard.press('Escape');
+    await expect(aboutLink).toHaveAttribute('href', routeCase.aboutHref);
 
     expect(failedLocalResources).toEqual([]);
     page.off('response', onResponse);

@@ -5,10 +5,7 @@ test('About and Contact dialogs recover the original Spanish copy', async ({
 }) => {
   await page.goto('./');
 
-  await page
-    .getByRole('button', { name: 'Sobre mí', exact: true })
-    .first()
-    .click();
+  await page.getByRole('button', { name: 'Conocer mi perfil' }).click();
   const aboutDialog = page.getByRole('dialog', {
     name: 'Daniel García Ortega',
   });

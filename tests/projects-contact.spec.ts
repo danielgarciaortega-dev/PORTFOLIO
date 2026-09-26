@@ -17,11 +17,11 @@ test('projects route removes footer-only Contact infrastructure while preserving
   await expect(header.locator('.header-cv-link')).toHaveCount(1);
   await expect(header.locator('[data-language-switcher]')).toHaveCount(1);
 
-  await page
-    .getByRole('button', { name: 'Sobre mí', exact: true })
-    .first()
-    .click();
-  await expect(
-    page.getByRole('dialog', { name: 'Daniel García Ortega' }),
-  ).toBeVisible();
+  const aboutLink = page
+    .getByRole('navigation', { name: 'Navegación principal' })
+    .getByRole('link', { name: 'Sobre mí', exact: true });
+  await expect(aboutLink).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
+  await aboutLink.click();
+  await expect(page).toHaveURL(/\/PORTFOLIO\/sobre-mi\/$/);
+  await expect(page.locator('#about-dialog')).toHaveCount(0);
 });

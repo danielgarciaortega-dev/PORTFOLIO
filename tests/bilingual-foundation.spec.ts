@@ -11,10 +11,7 @@ test('bilingual foundation stays coherent across switching, reload and dialogs',
   await expect(spanishOverview).toContainText('Desarrollador web en prácticas');
   await expect(spanishOverview).toContainText('APIs REST');
 
-  await page
-    .getByRole('button', { name: 'Sobre mí', exact: true })
-    .first()
-    .click();
+  await page.getByRole('button', { name: 'Conocer mi perfil' }).click();
   const spanishAbout = page.getByRole('dialog', {
     name: 'Daniel García Ortega',
   });
@@ -58,10 +55,7 @@ test('bilingual foundation stays coherent across switching, reload and dialogs',
     )
     .toBe('en');
 
-  await page
-    .getByRole('button', { name: 'About', exact: true })
-    .first()
-    .click();
+  await page.getByRole('button', { name: 'View profile' }).click();
   const englishAbout = page.getByRole('dialog', {
     name: 'Daniel García Ortega',
   });
