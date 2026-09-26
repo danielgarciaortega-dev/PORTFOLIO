@@ -2223,6 +2223,46 @@ a {
   pointer-events: none;
 }
 
+.projects-page__moments,
+.projects-page__contexts {
+  position: absolute;
+  inset: 0;
+}
+
+.projects-page__moments {
+  opacity: 1;
+  transition: opacity 260ms ease;
+}
+
+.projects-page__contexts {
+  z-index: 0;
+}
+
+.projects-page__context-image {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: min(58vw, 760px);
+  height: min(58vh, 620px);
+  object-fit: contain;
+  opacity: 0;
+  filter: blur(8px) saturate(0.92);
+  transform: translate(-50%, -50%) scale(0.94);
+  transition:
+    opacity 240ms ease,
+    filter 320ms ease,
+    transform 320ms ease;
+}
+
+.projects-page__context-image[data-active] {
+  opacity: 0.72;
+  filter: blur(2px) saturate(0.96);
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.projects-page__backdrop[data-active-project] .projects-page__moments {
+  opacity: 0;
+}
+
 .projects-page-list--solo {
   position: relative;
   z-index: 1;
@@ -2250,7 +2290,7 @@ a {
   background: color-mix(in srgb, var(--color-text) 66%, transparent);
 }
 
-.projects-page__backdrop img {
+.projects-page__moment {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -2298,21 +2338,36 @@ a {
 }
 
 @media (max-width: 900px) and (orientation: portrait) {
-  .projects-page__backdrop img {
+  .projects-page__moment {
     object-position: var(--moment-position-mobile);
+  }
+
+  .projects-page__context-image {
+    width: min(82vw, 520px);
+    height: min(46vh, 440px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .projects-page__backdrop img {
+  .projects-page__moments,
+  .projects-page__context-image {
+    transition: none;
+  }
+
+  .projects-page__moment {
     animation: none;
     opacity: 0;
     filter: none;
     transform: none;
   }
 
-  .projects-page__backdrop img:first-child {
+  .projects-page__moment:first-child {
     opacity: 1;
+  }
+
+  .projects-page__context-image,
+  .projects-page__context-image[data-active] {
+    filter: none;
   }
 }
 
