@@ -1,19 +1,18 @@
 ---
 import ProjectDialog from '../../components/projects/ProjectDialog.astro';
 import ProjectGrid from '../../components/projects/ProjectGrid.astro';
+import {
+  PROJECT_BACKDROP_DURATION_SECONDS,
+  PROJECT_BACKDROP_INITIAL_OFFSET_SECONDS,
+  PROJECT_BACKDROP_STEP_SECONDS,
+  projectMoments,
+} from '../../data/project-moments';
 import { getProjects } from '../../data/projects-localized';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { withBase } from '../../utils/paths';
 
 const locale = 'es';
 const projects = getProjects(locale);
-const momentNumbers = ['01', '02', '03', '04', '05', '06'];
-// La 06 es un retrato alto (edificio UGR AI de fondo); el encuadre por
-// defecto dejaba solo las cabezas visibles, así que baja el foco para
-// aprovechar la mitad inferior, donde está el grupo.
-const momentObjectPosition: Record<string, string> = {
-  '06': 'center 55%',
-};
 ---
 
 <BaseLayout
@@ -25,12 +24,17 @@ const momentObjectPosition: Record<string, string> = {
   <main id="contenido" class="projects-page">
     <div class="projects-page__backdrop" aria-hidden="true">
       {
-        momentNumbers.map((n, index) => (
+        projectMoments.map((moment, index) => (
           <img
-            src={withBase(`images/moments/moment-${n}.webp`)}
+            src={withBase(`images/moments/moment-${moment.number}.webp`)}
             alt=""
-            style={`animation-delay: ${index * 7}s;${momentObjectPosition[n] ? ` object-position: ${momentObjectPosition[n]};` : ''}`}
-            loading={index === 0 ? 'eager' : 'lazy'}
+            style={`--moment-delay: ${
+              PROJECT_BACKDROP_INITIAL_OFFSET_SECONDS +
+              index * PROJECT_BACKDROP_STEP_SECONDS
+            }s; --moment-duration: ${PROJECT_BACKDROP_DURATION_SECONDS}s; --moment-position-desktop: ${moment.desktopPosition}; --moment-position-mobile: ${moment.mobilePosition};`}
+            loading={moment.loading}
+            fetchpriority={moment.fetchPriority}
+            decoding="async"
           />
         ))
       }
