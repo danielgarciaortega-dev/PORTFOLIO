@@ -1115,7 +1115,7 @@ a {
   transform: translateY(-2px);
 }
 
-.project-dialog__live-arrow {
+.project-live-arrow {
   flex: 0 0 auto;
   color: var(--color-text-muted);
   font-size: 0.92rem;
@@ -1125,8 +1125,8 @@ a {
     transform 160ms ease;
 }
 
-.project-dialog__live-link:hover .project-dialog__live-arrow,
-.project-dialog__live-link:focus-visible .project-dialog__live-arrow {
+.project-dialog__live-link:hover .project-live-arrow,
+.project-dialog__live-link:focus-visible .project-live-arrow {
   color: var(--color-accent);
   transform: translate(2px, -2px);
 }
@@ -1840,14 +1840,14 @@ a {
 
 @media (prefers-reduced-motion: reduce) {
   .project-dialog__live-link,
-  .project-dialog__live-arrow {
+  .project-live-arrow {
     transition: none;
   }
 
   .project-dialog__live-link:hover,
   .project-dialog__live-link:focus-visible,
-  .project-dialog__live-link:hover .project-dialog__live-arrow,
-  .project-dialog__live-link:focus-visible .project-dialog__live-arrow {
+  .project-dialog__live-link:hover .project-live-arrow,
+  .project-dialog__live-link:focus-visible .project-live-arrow {
     transform: none;
   }
 
