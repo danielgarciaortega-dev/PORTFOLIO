@@ -2256,40 +2256,50 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 32%;
+  object-position: var(--moment-position-desktop, center 38%);
   opacity: 0;
-  filter: blur(24px) saturate(1.05);
-  transform: scale(1.12);
-  animation: projects-backdrop-reveal 42s infinite;
+  filter: blur(10px) saturate(1.03);
+  transform: scale(1.04);
+  animation: projects-backdrop-reveal 48s linear infinite;
+  animation-delay: var(--moment-delay, 0s);
 }
 
-/* Cada foto entra desenfocada y como alejada, y se aclara hasta verse
-   nítida antes de dar paso a la siguiente. */
+/* Each moment overlaps the next for two seconds. The reduced blur and scale
+   keep the background atmospheric without making the copy feel unstable. */
 @keyframes projects-backdrop-reveal {
   0% {
     opacity: 0;
-    filter: blur(24px) saturate(1.05);
-    transform: scale(1.12);
+    filter: blur(10px) saturate(1.03);
+    transform: scale(1.04);
   }
-  2% {
+  4% {
     opacity: 1;
-  }
-  11% {
-    filter: blur(0) saturate(1.05);
+    filter: blur(0) saturate(1.03);
     transform: scale(1);
   }
-  14.5% {
+  16.667% {
     opacity: 1;
-    filter: blur(0) saturate(1.05);
+    filter: blur(0) saturate(1.03);
     transform: scale(1);
   }
-  16.5% {
+  20.833% {
     opacity: 0;
+    filter: blur(4px) saturate(1.03);
+    transform: scale(1.01);
   }
   100% {
     opacity: 0;
-    filter: blur(24px) saturate(1.05);
-    transform: scale(1.12);
+    filter: blur(4px) saturate(1.03);
+    transform: scale(1.01);
+  }
+}
+
+@media (max-width: 900px) and (orientation: portrait) {
+  .projects-page__backdrop img {
+    object-position: var(
+      --moment-position-mobile,
+      var(--moment-position-desktop, center)
+    );
   }
 }
 
