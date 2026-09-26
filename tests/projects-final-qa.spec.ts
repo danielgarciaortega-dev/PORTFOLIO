@@ -103,9 +103,9 @@ for (const viewport of viewports) {
   });
 }
 
-test('all six backdrop photographs can become the stable active state without moving content', async ({
-  page,
-}) => {
+test(
+  'all six backdrop photographs can become the stable active state without moving content',
+  async ({ page }) => {
   for (const locale of locales) {
     for (const viewport of [
       { width: 1440, height: 900 },
@@ -171,12 +171,12 @@ test('all six backdrop photographs can become the stable active state without mo
         expect(overflow).toBeLessThanOrEqual(0);
       }
     }
-  }
-});
+  },
+);
 
-test('reduced motion preserves the final projects layout in both locales', async ({
-  page,
-}) => {
+test(
+  'reduced motion preserves the final projects layout in both locales',
+  async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
 
   for (const locale of locales) {
@@ -224,4 +224,5 @@ test('reduced motion preserves the final projects layout in both locales', async
       expect(overflow).toBeLessThanOrEqual(0);
     }
   }
-});
+  },
+);
