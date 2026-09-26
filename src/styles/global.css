@@ -1315,7 +1315,6 @@ a {
   font-size: 0.9rem;
 }
 
-
 .metric-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

@@ -17,7 +17,7 @@
     "preview:e2e": "node scripts/serve-e2e.mjs",
     "check": "astro check",
     "format": "prettier . --write",
-    "format:check": "prettier src/styles/global.css tests/about-dialog-removal.spec.ts --write && echo ---GLOBAL--- && sed -n '1308,1322p;1758,1766p;2542,2550p' src/styles/global.css && echo ---TEST--- && cat tests/about-dialog-removal.spec.ts && exit 1",
+    "format:check": "prettier . --check",
     "test:locale": "node --experimental-strip-types --test tests/locale-primitives.test.mjs tests/locale-namespace.test.mjs tests/not-found-source.test.mjs tests/projects-data-locales.test.mjs tests/technology-icons.test.mjs",
     "test:config": "node --test tests/astro-hosting-config.test.mjs tests/github-pages-policy.test.mjs tests/cv-export-contract.test.mjs tests/cv-final-audit.test.mjs",
     "test:pages": "node --test tests/astro-hosting-config.test.mjs tests/github-pages-policy.test.mjs",

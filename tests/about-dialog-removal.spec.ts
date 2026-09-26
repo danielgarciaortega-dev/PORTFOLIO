@@ -17,9 +17,9 @@ test('legacy About dialog infrastructure is absent from localized routes', async
 
     await expect(page.locator('#about-dialog')).toHaveCount(0);
     await expect(page.locator('[data-about-dialog]')).toHaveCount(0);
-    await expect(
-      page.locator('[data-dialog-open="about-dialog"]'),
-    ).toHaveCount(0);
+    await expect(page.locator('[data-dialog-open="about-dialog"]')).toHaveCount(
+      0,
+    );
   }
 });
 
@@ -28,7 +28,9 @@ test('Contact and Project dialogs keep Escape and focus restoration', async ({
 }) => {
   await page.goto('./');
 
-  const contactTrigger = page.getByRole('button', { name: 'Contactar' }).first();
+  const contactTrigger = page
+    .getByRole('button', { name: 'Contactar' })
+    .first();
   await contactTrigger.focus();
   await contactTrigger.click();
 
