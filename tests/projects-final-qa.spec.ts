@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 const viewports = [
   { name: 'desktop', width: 1440, height: 900 },
@@ -8,15 +8,40 @@ const viewports = [
 ] as const;
 
 const locales = [
-  {
-    route: './proyectos/',
-    actionPrefix: 'Ver proyecto',
-  },
-  {
-    route: './en/projects/',
-    actionPrefix: 'View project',
-  },
+  { route: './proyectos/', actionPrefix: 'Ver proyecto' },
+  { route: './en/projects/', actionPrefix: 'View project' },
 ] as const;
+
+async function expectNoHorizontalOverflow(page: Page) {
+  const overflow = await page.evaluate(
+    () =>
+      document.documentElement.scrollWidth -
+      document.documentElement.clientWidth,
+  );
+
+  expect(overflow).toBeLessThanOrEqual(0);
+}
+
+async function expectProjectMarksLoaded(page: Page) {
+  const images = page.locator('.project-row__visual img');
+  await expect(images).toHaveCount(3);
+
+  for (let index = 0; index < 3; index += 1) {
+    const image = images.nth(index);
+    await image.scrollIntoViewIfNeeded();
+
+    await expect
+      .poll(() =>
+        image.evaluate(
+          (element) =>
+            element instanceof HTMLImageElement &&
+            element.complete &&
+            element.naturalWidth > 0,
+        ),
+      )
+      .toBe(true);
+  }
+}
 
 for (const viewport of viewports) {
   test(`projects QA at ${viewport.name}`, async ({ page }) => {
@@ -30,18 +55,13 @@ for (const viewport of viewports) {
 
       await expect(rows).toHaveCount(3);
       await expect(moments).toHaveCount(6);
-      await expect(page.locator('.project-row__visual img')).toHaveCount(3);
+      await expectProjectMarksLoaded(page);
+      await expectNoHorizontalOverflow(page);
 
-      const overflow = await page.evaluate(
-        () =>
-          document.documentElement.scrollWidth -
-          document.documentElement.clientWidth,
-      );
-      expect(overflow).toBeLessThanOrEqual(0);
-
-      const rowGeometry = await rows.evaluateAll((elements) =>
+      const geometry = await rows.evaluateAll((elements) =>
         elements.map((element) => {
           const box = element.getBoundingClientRect();
+
           return {
             left: box.left,
             right: box.right,
@@ -50,36 +70,22 @@ for (const viewport of viewports) {
         }),
       );
 
-      for (const box of rowGeometry) {
+      for (const box of geometry) {
         expect(box.left).toBeGreaterThanOrEqual(-1);
         expect(box.right).toBeLessThanOrEqual(viewport.width + 1);
         expect(box.width).toBeGreaterThan(0);
       }
 
-      const projectImages = page.locator('.project-row__visual img');
-      for (let index = 0; index < 3; index += 1) {
-        const image = projectImages.nth(index);
-        await image.scrollIntoViewIfNeeded();
-        await expect
-          .poll(() =>
-            image.evaluate(
-              (element) =>
-                element instanceof HTMLImageElement &&
-                element.complete &&
-                element.naturalWidth > 0,
-            ),
-          )
-          .toBe(true);
-      }
-
       const firstAction = page.getByRole('button', {
         name: `${locale.actionPrefix} AL-LÍO`,
       });
+
       await firstAction.focus();
       await expect(firstAction).toBeFocused();
       await expect(firstAction).toHaveCSS('outline-style', 'solid');
 
       await page.keyboard.press('Enter');
+
       const dialog = page.getByRole('dialog', { name: 'AL-LÍO' });
       await expect(dialog).toBeVisible();
 
@@ -90,6 +96,7 @@ for (const viewport of viewports) {
       const secondAction = page.getByRole('button', {
         name: `${locale.actionPrefix} SIDN Cost Control`,
       });
+
       await secondAction.hover();
       await expect(secondAction).toHaveCSS(
         'border-bottom-color',
@@ -109,6 +116,8 @@ test('backdrop states keep project layout stable', async ({ page }) => {
       await page.goto(locale.route);
 
       const moments = page.locator('.projects-page__backdrop img');
+      const content = page.locator('.projects-page-list--solo');
+
       await expect(moments).toHaveCount(6);
 
       await moments.evaluateAll(async (images) => {
@@ -118,15 +127,15 @@ test('backdrop states keep project layout stable', async ({ page }) => {
               await image.decode();
             }
 
-            (image as HTMLElement).style.animation = 'none';
-            (image as HTMLElement).style.opacity = '0';
-            (image as HTMLElement).style.filter = 'none';
-            (image as HTMLElement).style.transform = 'none';
+            const element = image as HTMLElement;
+            element.style.animation = 'none';
+            element.style.opacity = '0';
+            element.style.filter = 'none';
+            element.style.transform = 'none';
           }),
         );
       });
 
-      const content = page.locator('.projects-page-list--solo');
       const baseline = await content.boundingBox();
       expect(baseline).not.toBeNull();
 
@@ -138,16 +147,7 @@ test('backdrop states keep project layout stable', async ({ page }) => {
           });
         }, index);
 
-        const active = moments.nth(index);
-        await expect(active).toBeVisible();
-
-        const loaded = await active.evaluate(
-          (image) =>
-            image instanceof HTMLImageElement &&
-            image.complete &&
-            image.naturalWidth > 0,
-        );
-        expect(loaded).toBe(true);
+        await expect(moments.nth(index)).toBeVisible();
 
         const current = await content.boundingBox();
         expect(current).not.toBeNull();
@@ -159,12 +159,7 @@ test('backdrop states keep project layout stable', async ({ page }) => {
           expect(current.height).toBeCloseTo(baseline.height, 3);
         }
 
-        const overflow = await page.evaluate(
-          () =>
-            document.documentElement.scrollWidth -
-            document.documentElement.clientWidth,
-        );
-        expect(overflow).toBeLessThanOrEqual(0);
+        await expectNoHorizontalOverflow(page);
       }
     }
   }
@@ -185,6 +180,7 @@ test('reduced motion keeps project layout stable', async ({ page }) => {
       const states = await moments.evaluateAll((images) =>
         images.map((image) => {
           const style = getComputedStyle(image);
+
           return {
             animation: style.animationName,
             opacity: style.opacity,
@@ -200,6 +196,7 @@ test('reduced motion keeps project layout stable', async ({ page }) => {
         filter: 'none',
         transform: 'none',
       });
+
       expect(
         states.slice(1).every(
           (state) =>
@@ -210,12 +207,7 @@ test('reduced motion keeps project layout stable', async ({ page }) => {
         ),
       ).toBe(true);
 
-      const overflow = await page.evaluate(
-        () =>
-          document.documentElement.scrollWidth -
-          document.documentElement.clientWidth,
-      );
-      expect(overflow).toBeLessThanOrEqual(0);
+      await expectNoHorizontalOverflow(page);
     }
   }
 });
