@@ -91,9 +91,9 @@ test('los proyectos abren el diálogo correcto y derivan sus CTAs de los datos',
         'rel',
         /(?:^|\s)noreferrer(?:\s|$)/,
       );
-      await expect(
-        liveAppLink.locator('.project-live-arrow'),
-      ).toHaveText('↗');
+      await expect(liveAppLink.locator('.project-live-arrow')).toHaveText(
+        '↗',
+      );
       await expect(
         dialog.locator('.project-dialog__title-row').getByRole('link', {
           name: 'Abrir aplicación AL-LÍO',
