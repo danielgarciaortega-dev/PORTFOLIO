@@ -1082,38 +1082,58 @@ a {
 
 .project-dialog__live-link {
   min-height: 44px;
+  max-width: 100%;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.65rem 0.9rem;
-  border: 1px solid var(--color-accent);
-  border-radius: 999px;
-  background: var(--color-accent-soft);
-  color: var(--color-brand-hover);
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.68rem 0.82rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.85rem;
+  background: var(--color-bg);
+  color: var(--color-text);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 780;
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;
   transition:
+    border-color 160ms ease,
     background 160ms ease,
-    color 160ms ease,
     transform 160ms ease;
 }
 
 .project-dialog__live-link:hover,
 .project-dialog__live-link:focus-visible {
-  background: var(--color-text);
-  color: white;
-  transform: translateY(-1px);
+  border-color: color-mix(
+    in srgb,
+    var(--color-accent) 62%,
+    var(--color-border)
+  );
+  background: var(--color-surface-soft);
+  transform: translateY(-2px);
 }
 
 .project-dialog__live-link svg {
-  width: 17px;
-  height: 17px;
+  display: none;
+}
+
+.project-dialog__live-link::after {
+  content: '↗';
   flex: 0 0 auto;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  line-height: 1;
+  transition:
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.project-dialog__live-link:hover::after,
+.project-dialog__live-link:focus-visible::after {
+  color: var(--color-accent);
+  transform: translate(2px, -2px);
 }
 
 .content-dialog.contact-dialog {
@@ -1824,6 +1844,18 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .project-dialog__live-link,
+  .project-dialog__live-link::after {
+    transition: none;
+  }
+
+  .project-dialog__live-link:hover,
+  .project-dialog__live-link:focus-visible,
+  .project-dialog__live-link:hover::after,
+  .project-dialog__live-link:focus-visible::after {
+    transform: none;
+  }
+
   html {
     scroll-behavior: auto;
   }

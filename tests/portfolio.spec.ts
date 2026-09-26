@@ -78,6 +78,7 @@ test('los proyectos abren el diálogo correcto y derivan sus CTAs de los datos',
         name: 'Abrir aplicación AL-LÍO',
       });
       await expect(liveAppLink).toBeVisible();
+      await expect(liveAppLink).toHaveCSS('border-radius', '13.6px');
       await expect(liveAppLink).toHaveAttribute(
         'href',
         'https://al-lio.danielcode.dev',
