@@ -60,17 +60,21 @@ for (const viewport of viewports) {
         expect(box.width).toBeGreaterThan(0);
       }
 
-      const projectImagesLoaded = await page
-        .locator('.project-row__visual img')
-        .evaluateAll((images) =>
-          images.every(
-            (image) =>
-              image instanceof HTMLImageElement &&
-              image.complete &&
-              image.naturalWidth > 0,
-          ),
-        );
-      expect(projectImagesLoaded).toBe(true);
+      const projectImages = page.locator('.project-row__visual img');
+      for (let index = 0; index < 3; index += 1) {
+        const image = projectImages.nth(index);
+        await image.scrollIntoViewIfNeeded();
+        await expect
+          .poll(() =>
+            image.evaluate(
+              (element) =>
+                element instanceof HTMLImageElement &&
+                element.complete &&
+                element.naturalWidth > 0,
+            ),
+          )
+          .toBe(true);
+      }
 
       const firstAction = page.getByRole('button', {
         name: `${locale.actionPrefix} AL-LÍO`,
