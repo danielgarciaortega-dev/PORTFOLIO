@@ -12,8 +12,8 @@ test('inicio, navegación y Sobre mí funcionan con ruta base', async ({
     page.getByRole('link', { name: 'Ver todos los proyectos' }),
   ).toHaveAttribute('href', '/PORTFOLIO/proyectos/');
   await expect(
-    page.getByRole('button', { name: 'Conocer mi perfil' }),
-  ).toBeVisible();
+    page.getByRole('link', { name: 'Conocer mi perfil' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
   await expect(
     page
       .getByRole('navigation', { name: 'Navegación principal' })
