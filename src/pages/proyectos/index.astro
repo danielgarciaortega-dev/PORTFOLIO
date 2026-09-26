@@ -23,9 +23,11 @@ const projects = getProjects(locale);
 >
   <main id="contenido" class="projects-page">
     <div class="projects-page__backdrop" aria-hidden="true">
-      {
+      <div class="projects-page__moments">
+        {
         projectMoments.map((moment, index) => (
           <img
+            class="projects-page__moment"
             src={withBase(`images/moments/moment-${moment.number}.webp`)}
             alt=""
             style={`--moment-delay: ${
@@ -38,6 +40,22 @@ const projects = getProjects(locale);
           />
         ))
       }
+      </div>
+      <div class="projects-page__contexts">
+        {
+          projects.map((project) => (
+            <img
+              class="projects-page__context-image"
+              src={withBase(project.image)}
+              alt=""
+              data-project-context-image={project.id}
+              loading="eager"
+              fetchpriority="low"
+              decoding="async"
+            />
+          ))
+        }
+      </div>
     </div>
     <section
       class="section-shell projects-page-list projects-page-list--solo"
@@ -57,3 +75,7 @@ const projects = getProjects(locale);
     ))
   }
 </BaseLayout>
+
+<script>
+  import '../../scripts/project-context-backdrop';
+</script>
