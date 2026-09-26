@@ -2260,7 +2260,8 @@ a {
   opacity: 0;
   filter: blur(10px) saturate(1.03);
   transform: scale(1.04);
-  animation: projects-backdrop-reveal var(--moment-duration, 48s) linear infinite;
+  animation:
+    projects-backdrop-reveal var(--moment-duration, 48s) linear infinite;
   animation-delay: var(--moment-delay, 0s);
 }
 
