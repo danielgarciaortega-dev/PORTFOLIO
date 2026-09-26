@@ -319,6 +319,67 @@ test('el CV carga sus recursos, vuelve al selector y conserva la exportación', 
   expect(failedLocalResources).toEqual([]);
 });
 
+test('el visor ATS comparte navegación con el CV visual sin overflow', async ({
+  page,
+}) => {
+  const variants = [
+    {
+      route: './cv/ats/',
+      backName: 'Volver al selector de currículums de Daniel García Ortega',
+      backHref: '../opciones/',
+      downloadName: 'Descargar currículum ATS de Daniel García Ortega en PDF',
+      downloadHref: 'CV-Daniel-Garcia-Ortega-ATS.pdf',
+    },
+    {
+      route: './en/cv/ats/',
+      backName: 'Back to Daniel García Ortega CV options',
+      backHref: '../options/',
+      downloadName: 'Download Daniel García Ortega ATS CV as PDF',
+      downloadHref: 'CV-Daniel-Garcia-Ortega-ATS-EN.pdf',
+    },
+  ];
+
+  for (const viewport of [
+    { width: 360, height: 800 },
+    { width: 390, height: 844 },
+    { width: 430, height: 932 },
+    { width: 768, height: 1024 },
+    { width: 1440, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+
+    for (const variant of variants) {
+      await page.goto(variant.route);
+
+      const backLink = page.getByRole('link', { name: variant.backName });
+      const downloadLink = page.getByRole('link', {
+        name: variant.downloadName,
+      });
+
+      await expect(backLink).toBeVisible();
+      await expect(backLink).toHaveAttribute('href', variant.backHref);
+      await expect(downloadLink).toBeVisible();
+      await expect(downloadLink).toHaveAttribute('href', variant.downloadHref);
+      await expect(downloadLink).toHaveAttribute('download', '');
+
+      const overflow = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+      );
+      expect(
+        overflow,
+        `${variant.route} ${viewport.width}x${viewport.height}`,
+      ).toBeLessThanOrEqual(0);
+
+      await expect(backLink).toHaveCSS(
+        'position',
+        viewport.width <= 900 ? 'static' : 'fixed',
+      );
+    }
+  }
+});
+
 test('no hay desbordamiento horizontal en los breakpoints definidos', async ({
   page,
 }) => {
