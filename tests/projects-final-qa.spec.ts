@@ -21,9 +21,7 @@ const locales = [
 ] as const;
 
 for (const viewport of viewports) {
-  test(`final projects QA stays usable at ${viewport.name}`, async ({
-    page,
-  }) => {
+  test(`projects QA at ${viewport.name}`, async ({ page }) => {
     await page.setViewportSize(viewport);
 
     for (const locale of locales) {
@@ -103,9 +101,7 @@ for (const viewport of viewports) {
   });
 }
 
-test(
-  'all six backdrop photographs can become the stable active state without moving content',
-  async ({ page }) => {
+test('backdrop states keep project layout stable', async ({ page }) => {
     for (const locale of locales) {
       for (const viewport of [
         { width: 1440, height: 900 },
@@ -172,12 +168,9 @@ test(
         }
       }
     }
-  },
-);
+});
 
-test(
-  'reduced motion preserves the final projects layout in both locales',
-  async ({ page }) => {
+test('reduced motion keeps project layout stable', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
 
     for (const locale of locales) {
@@ -225,5 +218,4 @@ test(
         expect(overflow).toBeLessThanOrEqual(0);
       }
     }
-  },
-);
+});
