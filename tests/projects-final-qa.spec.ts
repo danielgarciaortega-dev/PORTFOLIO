@@ -198,13 +198,15 @@ test('reduced motion keeps project layout stable', async ({ page }) => {
       });
 
       expect(
-        states.slice(1).every(
-          (state) =>
-            state.animation === 'none' &&
-            state.opacity === '0' &&
-            state.filter === 'none' &&
-            state.transform === 'none',
-        ),
+        states
+          .slice(1)
+          .every(
+            (state) =>
+              state.animation === 'none' &&
+              state.opacity === '0' &&
+              state.filter === 'none' &&
+              state.transform === 'none',
+          ),
       ).toBe(true);
 
       await expectNoHorizontalOverflow(page);
