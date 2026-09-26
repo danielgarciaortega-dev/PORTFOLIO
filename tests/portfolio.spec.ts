@@ -92,7 +92,7 @@ test('los proyectos abren el diálogo correcto y derivan sus CTAs de los datos',
         /(?:^|\s)noreferrer(?:\s|$)/,
       );
       await expect(
-        liveAppLink.locator('.project-dialog__live-arrow'),
+        liveAppLink.locator('.project-live-arrow'),
       ).toHaveText('↗');
       await expect(
         dialog.locator('.project-dialog__title-row').getByRole('link', {
