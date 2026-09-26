@@ -82,6 +82,18 @@ test('los proyectos abren el diálogo correcto y derivan sus CTAs de los datos',
         'href',
         'https://al-lio.danielcode.dev',
       );
+      await expect(liveAppLink).toHaveAttribute('target', '_blank');
+      await expect(liveAppLink).toHaveAttribute(
+        'rel',
+        /(?:^|\s)noopener(?:\s|$)/,
+      );
+      await expect(liveAppLink).toHaveAttribute(
+        'rel',
+        /(?:^|\s)noreferrer(?:\s|$)/,
+      );
+      await expect(
+        liveAppLink.locator('.project-dialog__live-arrow'),
+      ).toHaveText('↗');
       await expect(
         dialog.locator('.project-dialog__title-row').getByRole('link', {
           name: 'Abrir aplicación AL-LÍO',
@@ -101,6 +113,54 @@ test('los proyectos abren el diálogo correcto y derivan sus CTAs de los datos',
     }
 
     await dialog.getByRole('button', { name: `Cerrar ${title}` }).click();
+    await expect(dialog).toBeHidden();
+  }
+});
+
+test('el CTA de la app de AL-LÍO mantiene el patrón compacto sin overflow', async ({
+  page,
+}) => {
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 390, height: 844 },
+    { width: 360, height: 800 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('./proyectos/');
+    await page.getByRole('button', { name: 'Ver proyecto AL-LÍO' }).click();
+
+    const dialog = page.getByRole('dialog', { name: 'AL-LÍO' });
+    const liveAppLink = dialog.getByRole('link', {
+      name: 'Abrir aplicación AL-LÍO',
+    });
+
+    await expect(liveAppLink).toBeVisible();
+    await expect(liveAppLink).toHaveCSS('border-top-left-radius', '13.6px');
+
+    const geometry = await liveAppLink.evaluate((element) => {
+      const link = element.getBoundingClientRect();
+      const owner = element.closest('.dialog-panel')?.getBoundingClientRect();
+
+      return owner
+        ? {
+            linkLeft: link.left,
+            linkRight: link.right,
+            ownerLeft: owner.left,
+            ownerRight: owner.right,
+          }
+        : null;
+    });
+
+    expect(geometry).not.toBeNull();
+    if (geometry) {
+      expect(geometry.linkLeft).toBeGreaterThanOrEqual(geometry.ownerLeft - 1);
+      expect(geometry.linkRight).toBeLessThanOrEqual(geometry.ownerRight + 1);
+    }
+
+    await liveAppLink.focus();
+    await expect(liveAppLink).toBeFocused();
+
+    await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
   }
 });
