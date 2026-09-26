@@ -104,19 +104,7 @@ const copy = projectCopy[locale];
                 aria-label={copy.openAppAria(project.title)}
               >
                 <span>{copy.openAppLabel}</span>
-                <svg
-                  viewBox="0 0 20 20"
-                  aria-hidden="true"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M11 4h5v5" />
-                  <path d="m9 11 7-7" />
-                  <path d="M15 11v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4" />
-                </svg>
+                <span class="project-dialog__live-arrow" aria-hidden="true">↗</span>
               </a>
             )
           }
