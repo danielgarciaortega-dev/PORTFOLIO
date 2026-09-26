@@ -2,6 +2,7 @@
 import ProjectDialog from '../../../components/projects/ProjectDialog.astro';
 import ProjectGrid from '../../../components/projects/ProjectGrid.astro';
 import {
+  PROJECT_BACKDROP_DURATION_SECONDS,
   PROJECT_BACKDROP_INITIAL_OFFSET_SECONDS,
   PROJECT_BACKDROP_STEP_SECONDS,
   projectMoments,
@@ -30,7 +31,7 @@ const projects = getProjects(locale);
             style={`--moment-delay: ${
               PROJECT_BACKDROP_INITIAL_OFFSET_SECONDS +
               index * PROJECT_BACKDROP_STEP_SECONDS
-            }s; --moment-position-desktop: ${moment.desktopPosition}; --moment-position-mobile: ${moment.mobilePosition};`}
+            }s; --moment-duration: ${PROJECT_BACKDROP_DURATION_SECONDS}s; --moment-position-desktop: ${moment.desktopPosition}; --moment-position-mobile: ${moment.mobilePosition};`}
             loading={moment.loading}
             fetchpriority={moment.fetchPriority}
             decoding="async"
