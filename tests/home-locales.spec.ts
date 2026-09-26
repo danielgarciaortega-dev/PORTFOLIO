@@ -24,8 +24,8 @@ test('Spanish root renders the restored shell, hero and professional overview', 
   );
 
   await expect(
-    page.getByRole('button', { name: 'Conocer mi perfil' }),
-  ).toBeVisible();
+    page.getByRole('link', { name: 'Conocer mi perfil' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
   await expect(
     page.getByRole('button', { name: 'Contactar' }).first(),
   ).toBeVisible();

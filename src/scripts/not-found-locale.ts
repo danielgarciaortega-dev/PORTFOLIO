@@ -16,15 +16,6 @@ interface ShellPayload {
   languageSwitcher: string;
 }
 
-interface DialogPayload {
-  aboutEyebrow: string;
-  viewGitHub: string;
-  viewLinkedIn: string;
-  closeAbout: string;
-  educationAndProjects: string;
-  seeking: string;
-}
-
 interface NotFoundPayload {
   title: string;
   description: string;
@@ -35,19 +26,9 @@ interface NotFoundPayload {
   projectsAction: string;
 }
 
-interface ProfilePayload {
-  aboutImageAlt: string;
-  location: string;
-  aboutIntro: string;
-  milestones: Array<{ label: string; text: string }>;
-  seeking: string;
-}
-
 interface LocalePayload {
   shell: ShellPayload;
-  dialog: DialogPayload;
   notFound: NotFoundPayload;
-  profile: ProfilePayload;
   routes: {
     home: string;
     about: string;
@@ -157,39 +138,6 @@ function localizeHeader(data: LocalePayload) {
     });
 }
 
-function localizeAboutDialog(data: LocalePayload) {
-  const { dialog, profile } = data;
-
-  setText('[data-about-eyebrow]', dialog.aboutEyebrow);
-  setAttribute('[data-about-github-link]', 'aria-label', dialog.viewGitHub);
-  setAttribute('[data-about-github-link]', 'title', dialog.viewGitHub);
-  setAttribute('[data-about-linkedin-link]', 'aria-label', dialog.viewLinkedIn);
-  setAttribute('[data-about-linkedin-link]', 'title', dialog.viewLinkedIn);
-  setAttribute('[data-about-close]', 'aria-label', dialog.closeAbout);
-  setAttribute('[data-about-image]', 'alt', profile.aboutImageAlt);
-  setText('[data-about-location]', profile.location);
-  setText('[data-about-intro]', profile.aboutIntro);
-  setText('[data-about-education-title]', dialog.educationAndProjects);
-  setText('[data-about-seeking-title]', dialog.seeking);
-  setText('[data-about-seeking]', profile.seeking);
-
-  const milestones = document.querySelector<HTMLUListElement>(
-    '[data-about-milestones]',
-  );
-  if (milestones) {
-    const items = profile.milestones.map((milestone) => {
-      const item = document.createElement('li');
-      const label = document.createElement('span');
-      const text = document.createElement('p');
-      label.textContent = milestone.label;
-      text.textContent = milestone.text;
-      item.append(label, text);
-      return item;
-    });
-    milestones.replaceChildren(...items);
-  }
-}
-
 function localizeNotFoundPage(data: LocalePayload, locale: Locale) {
   const { notFound, routes } = data;
 
@@ -239,7 +187,6 @@ function initializeNotFoundLocale() {
 
   localizeNotFoundPage(data, locale);
   localizeHeader(data);
-  localizeAboutDialog(data);
 }
 
 initializeNotFoundLocale();

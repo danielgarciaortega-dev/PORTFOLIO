@@ -1,35 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-test('About and Contact dialogs use the approved English copy', async ({
-  page,
-}) => {
+test('Contact dialog uses the approved English copy', async ({ page }) => {
   await page.goto('./en/');
-
-  await page.getByRole('button', { name: 'View profile' }).click();
-  const aboutDialog = page.getByRole('dialog', {
-    name: 'Daniel García Ortega',
-  });
-  await expect(aboutDialog).toBeVisible();
-  await expect(aboutDialog).toContainText('ABOUT');
-  await expect(aboutDialog).toContainText(
-    'After nearly ten years in customer service and sales at Alcampo and Konecta, I switched to software development a year ago and started studying Web Application Development.',
-  );
-  await expect(
-    aboutDialog.getByRole('heading', { name: 'Education and projects' }),
-  ).toBeVisible();
-  await expect(
-    aboutDialog.getByRole('heading', { name: "What I'm looking for" }),
-  ).toBeVisible();
-  await expect(
-    aboutDialog.getByRole('button', { name: 'Close About' }),
-  ).toBeVisible();
-  await expect(
-    aboutDialog.getByRole('link', { name: 'View GitHub' }),
-  ).toBeVisible();
-  await expect(
-    aboutDialog.getByRole('link', { name: 'View LinkedIn' }),
-  ).toBeVisible();
-  await page.keyboard.press('Escape');
 
   await page.getByRole('button', { name: 'Contact' }).first().click();
   const contactDialog = page.getByRole('dialog', { name: 'Get in touch.' });

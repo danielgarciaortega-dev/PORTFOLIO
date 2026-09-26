@@ -20,11 +20,12 @@ test('proyectos sin violaciones automatizadas de axe', async ({ page }) => {
   await expectNoAxeViolations(page);
 });
 
-test('perfil abierto desde la Home sin violaciones automatizadas de axe', async ({
+test('Sobre mí desde la Home sin violaciones automatizadas de axe', async ({
   page,
 }) => {
   await page.goto('./');
-  await page.getByRole('button', { name: 'Conocer mi perfil' }).click();
+  await page.getByRole('link', { name: 'Conocer mi perfil' }).click();
+  await expect(page).toHaveURL(/\/PORTFOLIO\/sobre-mi\/$/);
   await expectNoAxeViolations(page);
 });
 

@@ -24,8 +24,8 @@ test('English homepage shell and hero use the approved copy', async ({
     page.getByRole('link', { name: 'View CV' }).first(),
   ).toBeVisible();
   await expect(
-    page.getByRole('button', { name: 'View profile' }),
-  ).toBeVisible();
+    page.getByRole('link', { name: 'View profile' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/en/about/');
   await expect(
     page.getByRole('button', { name: 'Contact' }).first(),
   ).toBeVisible();

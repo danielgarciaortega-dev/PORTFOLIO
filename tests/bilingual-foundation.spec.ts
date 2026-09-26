@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('bilingual foundation stays coherent across switching, reload and dialogs', async ({
+test('bilingual foundation stays coherent across switching, reload and remaining dialogs', async ({
   page,
 }) => {
   await page.goto('./');
@@ -11,16 +11,12 @@ test('bilingual foundation stays coherent across switching, reload and dialogs',
   await expect(spanishOverview).toContainText('Desarrollador web en prácticas');
   await expect(spanishOverview).toContainText('APIs REST');
 
-  await page.getByRole('button', { name: 'Conocer mi perfil' }).click();
-  const spanishAbout = page.getByRole('dialog', {
-    name: 'Daniel García Ortega',
-  });
-  await expect(spanishAbout).toContainText('Formación y proyectos');
-  await expect(
-    spanishAbout.getByRole('button', { name: 'Cerrar Sobre mí' }),
-  ).toBeVisible();
-  await page.keyboard.press('Escape');
+  await page.getByRole('link', { name: 'Conocer mi perfil' }).click();
+  await expect(page).toHaveURL(/\/PORTFOLIO\/sobre-mi\/$/);
+  await expect(page.locator('[data-about-page]')).toBeVisible();
+  await expect(page.locator('#about-dialog')).toHaveCount(0);
 
+  await page.goto('./');
   await page.getByRole('button', { name: 'Contactar' }).first().click();
   const spanishContact = page.getByRole('dialog', { name: 'Hablemos.' });
   await expect(
@@ -55,16 +51,12 @@ test('bilingual foundation stays coherent across switching, reload and dialogs',
     )
     .toBe('en');
 
-  await page.getByRole('button', { name: 'View profile' }).click();
-  const englishAbout = page.getByRole('dialog', {
-    name: 'Daniel García Ortega',
-  });
-  await expect(englishAbout).toContainText('Education and projects');
-  await expect(
-    englishAbout.getByRole('button', { name: 'Close About' }),
-  ).toBeVisible();
-  await page.keyboard.press('Escape');
+  await page.getByRole('link', { name: 'View profile' }).click();
+  await expect(page).toHaveURL(/\/PORTFOLIO\/en\/about\/$/);
+  await expect(page.locator('[data-about-page]')).toBeVisible();
+  await expect(page.locator('#about-dialog')).toHaveCount(0);
 
+  await page.goto('./en/');
   await page.getByRole('button', { name: 'Contact' }).first().click();
   const englishContact = page.getByRole('dialog', {
     name: 'Get in touch.',
