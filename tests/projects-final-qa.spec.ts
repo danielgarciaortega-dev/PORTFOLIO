@@ -11,12 +11,10 @@ const locales = [
   {
     route: './proyectos/',
     actionPrefix: 'Ver proyecto',
-    dialogClose: 'Cerrar AL-LÍO',
   },
   {
     route: './en/projects/',
     actionPrefix: 'View project',
-    dialogClose: 'Close AL-LÍO',
   },
 ] as const;
 
@@ -119,55 +117,57 @@ test('backdrop states keep project layout stable', async ({ page }) => {
             if (image instanceof HTMLImageElement && !image.complete) {
               await image.decode();
             }
+
             (image as HTMLElement).style.animation = 'none';
             (image as HTMLElement).style.opacity = '0';
             (image as HTMLElement).style.filter = 'none';
             (image as HTMLElement).style.transform = 'none';
           }),
         );
-        });
+      });
 
-        const content = page.locator('.projects-page-list--solo');
-        const baseline = await content.boundingBox();
-        expect(baseline).not.toBeNull();
+      const content = page.locator('.projects-page-list--solo');
+      const baseline = await content.boundingBox();
+      expect(baseline).not.toBeNull();
 
-        for (let index = 0; index < 6; index += 1) {
-          await moments.evaluateAll((images, activeIndex) => {
-            images.forEach((image, imageIndex) => {
-              (image as HTMLElement).style.opacity =
-                imageIndex === activeIndex ? '1' : '0';
-            });
-          }, index);
+      for (let index = 0; index < 6; index += 1) {
+        await moments.evaluateAll((images, activeIndex) => {
+          images.forEach((image, imageIndex) => {
+            (image as HTMLElement).style.opacity =
+              imageIndex === activeIndex ? '1' : '0';
+          });
+        }, index);
 
-          const active = moments.nth(index);
-          await expect(active).toBeVisible();
+        const active = moments.nth(index);
+        await expect(active).toBeVisible();
 
-          const loaded = await active.evaluate(
-            (image) =>
-              image instanceof HTMLImageElement &&
-              image.complete &&
-              image.naturalWidth > 0,
-          );
-          expect(loaded).toBe(true);
+        const loaded = await active.evaluate(
+          (image) =>
+            image instanceof HTMLImageElement &&
+            image.complete &&
+            image.naturalWidth > 0,
+        );
+        expect(loaded).toBe(true);
 
-          const current = await content.boundingBox();
-          expect(current).not.toBeNull();
-          if (baseline && current) {
-            expect(current.x).toBeCloseTo(baseline.x, 3);
-            expect(current.y).toBeCloseTo(baseline.y, 3);
-            expect(current.width).toBeCloseTo(baseline.width, 3);
-            expect(current.height).toBeCloseTo(baseline.height, 3);
-          }
+        const current = await content.boundingBox();
+        expect(current).not.toBeNull();
 
-          const overflow = await page.evaluate(
-            () =>
-              document.documentElement.scrollWidth -
-              document.documentElement.clientWidth,
-          );
-          expect(overflow).toBeLessThanOrEqual(0);
+        if (baseline && current) {
+          expect(current.x).toBeCloseTo(baseline.x, 3);
+          expect(current.y).toBeCloseTo(baseline.y, 3);
+          expect(current.width).toBeCloseTo(baseline.width, 3);
+          expect(current.height).toBeCloseTo(baseline.height, 3);
         }
+
+        const overflow = await page.evaluate(
+          () =>
+            document.documentElement.scrollWidth -
+            document.documentElement.clientWidth,
+        );
+        expect(overflow).toBeLessThanOrEqual(0);
       }
     }
+  }
 });
 
 test('reduced motion keeps project layout stable', async ({ page }) => {
@@ -199,23 +199,23 @@ test('reduced motion keeps project layout stable', async ({ page }) => {
         opacity: '1',
         filter: 'none',
         transform: 'none',
-        });
-        expect(
-          states.slice(1).every(
-            (state) =>
-              state.animation === 'none' &&
-              state.opacity === '0' &&
-              state.filter === 'none' &&
-              state.transform === 'none',
-          ),
-        ).toBe(true);
+      });
+      expect(
+        states.slice(1).every(
+          (state) =>
+            state.animation === 'none' &&
+            state.opacity === '0' &&
+            state.filter === 'none' &&
+            state.transform === 'none',
+        ),
+      ).toBe(true);
 
-        const overflow = await page.evaluate(
-          () =>
-            document.documentElement.scrollWidth -
-            document.documentElement.clientWidth,
-        );
-        expect(overflow).toBeLessThanOrEqual(0);
-      }
+      const overflow = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+      );
+      expect(overflow).toBeLessThanOrEqual(0);
     }
+  }
 });
