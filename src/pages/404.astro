@@ -1,8 +1,6 @@
 ---
-import AboutDialog from '../components/dialogs/AboutDialog.astro';
 import ButtonLink from '../components/ui/ButtonLink.astro';
-import { getProfessionalData } from '../data/localized';
-import { dialogCopy, notFoundCopy, shellCopy } from '../i18n/copy';
+import { notFoundCopy, shellCopy } from '../i18n/copy';
 import {
   SUPPORTED_LOCALES,
   getLocaleCounterpartPath,
@@ -15,7 +13,6 @@ const fallbackLocale = 'es';
 const fallbackCopy = notFoundCopy[fallbackLocale];
 const localePayload = Object.fromEntries(
   SUPPORTED_LOCALES.map((locale) => {
-    const { profile } = getProfessionalData(locale);
     const { targetLocale, path: targetPath } = getLocaleCounterpartPath(
       locale,
       'home',
@@ -26,15 +23,7 @@ const localePayload = Object.fromEntries(
       locale,
       {
         shell: copy,
-        dialog: dialogCopy[locale],
         notFound: notFoundCopy[locale],
-        profile: {
-          aboutImageAlt: profile.aboutImageAlt,
-          location: profile.location,
-          aboutIntro: profile.aboutIntro,
-          milestones: profile.milestones,
-          seeking: profile.seeking,
-        },
         routes: {
           home: withBase(getLocalizedRoutePath(locale, 'home')),
           about: withBase(getLocalizedRoutePath(locale, 'about')),
@@ -82,7 +71,6 @@ const serializedLocalePayload = JSON.stringify(localePayload).replace(
       </ButtonLink>
     </div>
   </main>
-  <AboutDialog />
   <script
     is:inline
     id="not-found-locale-data"

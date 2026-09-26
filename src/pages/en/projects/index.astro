@@ -1,5 +1,4 @@
 ---
-import AboutDialog from '../../../components/dialogs/AboutDialog.astro';
 import ProjectDialog from '../../../components/projects/ProjectDialog.astro';
 import ProjectGrid from '../../../components/projects/ProjectGrid.astro';
 import { getProjects } from '../../../data/projects-localized';
@@ -43,7 +42,6 @@ const momentObjectPosition: Record<string, string> = {
       <ProjectGrid {projects} {locale} />
     </section>
   </main>
-  <AboutDialog />
   {
     projects.map((project, index) => (
       <ProjectDialog

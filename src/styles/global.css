@@ -1315,64 +1315,6 @@ a {
   font-size: 0.9rem;
 }
 
-#about-dialog {
-  width: min(960px, calc(100% - 2rem));
-}
-
-.about-dialog__details {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: 2.5rem;
-  margin-top: 2.4rem;
-  padding-top: 2.2rem;
-  border-top: 1px solid var(--color-border);
-}
-
-.about-dialog__details h3 {
-  margin: 0 0 1rem;
-  color: var(--color-brand-hover);
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-
-.about-dialog__details > div:last-child p {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 1.02rem;
-  line-height: 1.65;
-}
-
-.about-dialog__milestones {
-  display: grid;
-  gap: 1.1rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.about-dialog__milestones li {
-  padding-left: 1rem;
-  border-left: 2px solid var(--color-border);
-}
-
-.about-dialog__milestones span {
-  display: block;
-  margin-bottom: 0.25rem;
-  color: var(--color-text-muted);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.about-dialog__milestones p {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 1.02rem;
-  line-height: 1.5;
-}
 
 .metric-list {
   display: grid;
@@ -1817,8 +1759,7 @@ a {
   }
 
   .project-dialog__hero,
-  .project-dialog__details,
-  .about-dialog__details {
+  .project-dialog__details {
     grid-template-columns: 1fr;
   }
 
@@ -2602,8 +2543,7 @@ a {
   }
 
   .project-dialog__hero,
-  .project-dialog__details,
-  .about-dialog__details {
+  .project-dialog__details {
     grid-template-columns: 1fr;
   }
 
