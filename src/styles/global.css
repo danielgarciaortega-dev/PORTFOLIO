@@ -1115,7 +1115,12 @@ a {
   transform: translateY(-2px);
 }
 
-.project-live-arrow {
+.project-dialog__live-link svg {
+  display: none;
+}
+
+.project-dialog__live-link::after {
+  content: '↗';
   flex: 0 0 auto;
   color: var(--color-text-muted);
   font-size: 0.92rem;
@@ -1125,8 +1130,8 @@ a {
     transform 160ms ease;
 }
 
-.project-dialog__live-link:hover .project-live-arrow,
-.project-dialog__live-link:focus-visible .project-live-arrow {
+.project-dialog__live-link:hover .project-dialog__live-link::after,
+.project-dialog__live-link:focus-visible .project-dialog__live-link::after {
   color: var(--color-accent);
   transform: translate(2px, -2px);
 }
@@ -1840,14 +1845,14 @@ a {
 
 @media (prefers-reduced-motion: reduce) {
   .project-dialog__live-link,
-  .project-live-arrow {
+  .project-dialog__live-link::after {
     transition: none;
   }
 
   .project-dialog__live-link:hover,
   .project-dialog__live-link:focus-visible,
-  .project-dialog__live-link:hover .project-live-arrow,
-  .project-dialog__live-link:focus-visible .project-live-arrow {
+  .project-dialog__live-link:hover .project-dialog__live-link::after,
+  .project-dialog__live-link:focus-visible .project-dialog__live-link::after {
     transform: none;
   }
 
