@@ -20,6 +20,11 @@ test('proyectos sin violaciones automatizadas de axe', async ({ page }) => {
   await expectNoAxeViolations(page);
 });
 
+test('English projects pass automated axe checks', async ({ page }) => {
+  await page.goto('./en/projects/');
+  await expectNoAxeViolations(page);
+});
+
 test('Sobre mí desde la Home sin violaciones automatizadas de axe', async ({
   page,
 }) => {
