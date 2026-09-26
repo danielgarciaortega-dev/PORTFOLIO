@@ -106,62 +106,116 @@ for (const viewport of viewports) {
 test(
   'all six backdrop photographs can become the stable active state without moving content',
   async ({ page }) => {
-  for (const locale of locales) {
-    for (const viewport of [
-      { width: 1440, height: 900 },
-      { width: 390, height: 844 },
-    ]) {
-      await page.setViewportSize(viewport);
-      await page.goto(locale.route);
+    for (const locale of locales) {
+      for (const viewport of [
+        { width: 1440, height: 900 },
+        { width: 390, height: 844 },
+      ]) {
+        await page.setViewportSize(viewport);
+        await page.goto(locale.route);
 
-      const moments = page.locator('.projects-page__backdrop img');
-      await expect(moments).toHaveCount(6);
+        const moments = page.locator('.projects-page__backdrop img');
+        await expect(moments).toHaveCount(6);
 
-      await moments.evaluateAll(async (images) => {
-        await Promise.all(
-          images.map(async (image) => {
-            if (image instanceof HTMLImageElement && !image.complete) {
-              await image.decode();
-            }
-            (image as HTMLElement).style.animation = 'none';
-            (image as HTMLElement).style.opacity = '0';
-            (image as HTMLElement).style.filter = 'none';
-            (image as HTMLElement).style.transform = 'none';
+        await moments.evaluateAll(async (images) => {
+          await Promise.all(
+            images.map(async (image) => {
+              if (image instanceof HTMLImageElement && !image.complete) {
+                await image.decode();
+              }
+              (image as HTMLElement).style.animation = 'none';
+              (image as HTMLElement).style.opacity = '0';
+              (image as HTMLElement).style.filter = 'none';
+              (image as HTMLElement).style.transform = 'none';
+            }),
+          );
+        });
+
+        const content = page.locator('.projects-page-list--solo');
+        const baseline = await content.boundingBox();
+        expect(baseline).not.toBeNull();
+
+        for (let index = 0; index < 6; index += 1) {
+          await moments.evaluateAll((images, activeIndex) => {
+            images.forEach((image, imageIndex) => {
+              (image as HTMLElement).style.opacity =
+                imageIndex === activeIndex ? '1' : '0';
+            });
+          }, index);
+
+          const active = moments.nth(index);
+          await expect(active).toBeVisible();
+
+          const loaded = await active.evaluate(
+            (image) =>
+              image instanceof HTMLImageElement &&
+              image.complete &&
+              image.naturalWidth > 0,
+          );
+          expect(loaded).toBe(true);
+
+          const current = await content.boundingBox();
+          expect(current).not.toBeNull();
+          if (baseline && current) {
+            expect(current.x).toBeCloseTo(baseline.x, 3);
+            expect(current.y).toBeCloseTo(baseline.y, 3);
+            expect(current.width).toBeCloseTo(baseline.width, 3);
+            expect(current.height).toBeCloseTo(baseline.height, 3);
+          }
+
+          const overflow = await page.evaluate(
+            () =>
+              document.documentElement.scrollWidth -
+              document.documentElement.clientWidth,
+          );
+          expect(overflow).toBeLessThanOrEqual(0);
+        }
+      }
+    }
+  },
+);
+
+test(
+  'reduced motion preserves the final projects layout in both locales',
+  async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+
+    for (const locale of locales) {
+      for (const viewport of [
+        { width: 1440, height: 900 },
+        { width: 390, height: 844 },
+      ]) {
+        await page.setViewportSize(viewport);
+        await page.goto(locale.route);
+
+        const moments = page.locator('.projects-page__backdrop img');
+        const states = await moments.evaluateAll((images) =>
+          images.map((image) => {
+            const style = getComputedStyle(image);
+            return {
+              animation: style.animationName,
+              opacity: style.opacity,
+              filter: style.filter,
+              transform: style.transform,
+            };
           }),
         );
-      });
 
-      const content = page.locator('.projects-page-list--solo');
-      const baseline = await content.boundingBox();
-      expect(baseline).not.toBeNull();
-
-      for (let index = 0; index < 6; index += 1) {
-        await moments.evaluateAll((images, activeIndex) => {
-          images.forEach((image, imageIndex) => {
-            (image as HTMLElement).style.opacity =
-              imageIndex === activeIndex ? '1' : '0';
-          });
-        }, index);
-
-        const active = moments.nth(index);
-        await expect(active).toBeVisible();
-
-        const loaded = await active.evaluate(
-          (image) =>
-            image instanceof HTMLImageElement &&
-            image.complete &&
-            image.naturalWidth > 0,
-        );
-        expect(loaded).toBe(true);
-
-        const current = await content.boundingBox();
-        expect(current).not.toBeNull();
-        if (baseline && current) {
-          expect(current.x).toBeCloseTo(baseline.x, 3);
-          expect(current.y).toBeCloseTo(baseline.y, 3);
-          expect(current.width).toBeCloseTo(baseline.width, 3);
-          expect(current.height).toBeCloseTo(baseline.height, 3);
-        }
+        expect(states[0]).toEqual({
+          animation: 'none',
+          opacity: '1',
+          filter: 'none',
+          transform: 'none',
+        });
+        expect(
+          states.slice(1).every(
+            (state) =>
+              state.animation === 'none' &&
+              state.opacity === '0' &&
+              state.filter === 'none' &&
+              state.transform === 'none',
+          ),
+        ).toBe(true);
 
         const overflow = await page.evaluate(
           () =>
@@ -171,58 +225,5 @@ test(
         expect(overflow).toBeLessThanOrEqual(0);
       }
     }
-  },
-);
-
-test(
-  'reduced motion preserves the final projects layout in both locales',
-  async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-
-  for (const locale of locales) {
-    for (const viewport of [
-      { width: 1440, height: 900 },
-      { width: 390, height: 844 },
-    ]) {
-      await page.setViewportSize(viewport);
-      await page.goto(locale.route);
-
-      const moments = page.locator('.projects-page__backdrop img');
-      const states = await moments.evaluateAll((images) =>
-        images.map((image) => {
-          const style = getComputedStyle(image);
-          return {
-            animation: style.animationName,
-            opacity: style.opacity,
-            filter: style.filter,
-            transform: style.transform,
-          };
-        }),
-      );
-
-      expect(states[0]).toEqual({
-        animation: 'none',
-        opacity: '1',
-        filter: 'none',
-        transform: 'none',
-      });
-      expect(
-        states.slice(1).every(
-          (state) =>
-            state.animation === 'none' &&
-            state.opacity === '0' &&
-            state.filter === 'none' &&
-            state.transform === 'none',
-        ),
-      ).toBe(true);
-
-      const overflow = await page.evaluate(
-        () =>
-          document.documentElement.scrollWidth -
-          document.documentElement.clientWidth,
-      );
-      expect(overflow).toBeLessThanOrEqual(0);
-    }
-  }
   },
 );
