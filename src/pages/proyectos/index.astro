@@ -43,17 +43,20 @@ const projects = getProjects(locale);
       </div>
       <div class="projects-page__contexts">
         {
-          projects.map((project) => (
-            <img
-              class="projects-page__context-image"
-              src={withBase(project.image)}
-              alt=""
-              data-project-context-image={project.id}
-              loading="eager"
-              fetchpriority="low"
-              decoding="async"
-            />
-          ))
+          projects.map(
+            (project) =>
+              project.image && (
+                <img
+                  class="projects-page__context-image"
+                  src={withBase(project.image)}
+                  alt=""
+                  data-project-context-image={project.id}
+                  loading="eager"
+                  fetchpriority="low"
+                  decoding="async"
+                />
+              ),
+          )
         }
       </div>
     </div>
