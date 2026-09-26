@@ -2218,7 +2218,7 @@ a {
 .projects-page__backdrop {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   overflow: hidden;
   pointer-events: none;
 }
@@ -2235,6 +2235,9 @@ a {
   --projects-tag-bg: rgb(255 255 255 / 12%);
   --projects-tag-border: rgb(255 255 255 / 28%);
   --projects-tag-text: rgb(255 255 255 / 90%);
+  position: relative;
+  isolation: isolate;
+  background: var(--color-text);
 }
 
 /* A stable dark scrim keeps the photograph visible while making the project
