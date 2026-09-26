@@ -87,15 +87,12 @@ test('project backdrop uses one shared six-moment timing and crop contract', asy
         .filter((offset): offset is number => offset !== null);
     });
 
-    expect(keyframeOffsets).toEqual(
-      expect.arrayContaining([
-        expect.closeTo(0, 5),
-        expect.closeTo(0.04, 5),
-        expect.closeTo(0.16667, 4),
-        expect.closeTo(0.20833, 4),
-        expect.closeTo(1, 5),
-      ]),
-    );
+    expect(keyframeOffsets).toHaveLength(5);
+    expect(keyframeOffsets[0]).toBeCloseTo(0, 5);
+    expect(keyframeOffsets[1]).toBeCloseTo(0.04, 5);
+    expect(keyframeOffsets[2]).toBeCloseTo(0.16667, 4);
+    expect(keyframeOffsets[3]).toBeCloseTo(0.20833, 4);
+    expect(keyframeOffsets[4]).toBeCloseTo(1, 5);
   }
 });
 
@@ -170,7 +167,14 @@ test('reduced motion keeps one stable backdrop with no blur, transform or layout
     .evaluate((backdrop) => ((backdrop as HTMLElement).style.display = 'none'));
   const after = await content.boundingBox();
 
-  expect(after).toEqual(before);
+  expect(before).not.toBeNull();
+  expect(after).not.toBeNull();
+  if (before && after) {
+    expect(after.x).toBeCloseTo(before.x, 3);
+    expect(after.y).toBeCloseTo(before.y, 3);
+    expect(after.width).toBeCloseTo(before.width, 3);
+    expect(after.height).toBeCloseTo(before.height, 3);
+  }
 
   const overflow = await page.evaluate(
     () =>
