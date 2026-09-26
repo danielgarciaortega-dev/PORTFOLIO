@@ -12,6 +12,7 @@ test('project pages use the shared dark-scrim contrast system', async ({
     await page.goto(route);
 
     const styles = await page.locator('.projects-page').evaluate((root) => {
+      const pageStyle = getComputedStyle(root);
       const styleFor = (selector: string) => {
         const element = root.querySelector<HTMLElement>(selector);
         if (!element) {
@@ -21,6 +22,7 @@ test('project pages use the shared dark-scrim contrast system', async ({
         return getComputedStyle(element);
       };
 
+      const backdrop = styleFor('.projects-page__backdrop');
       const meta = styleFor('.project-row__meta p');
       const title = styleFor('.project-row__content h2');
       const description = styleFor('.project-row__description');
@@ -30,6 +32,8 @@ test('project pages use the shared dark-scrim contrast system', async ({
       const row = styleFor('.project-row');
 
       return {
+        pageBackground: pageStyle.backgroundColor,
+        backdropZIndex: backdrop.zIndex,
         metaColor: meta.color,
         metaShadow: meta.textShadow,
         titleColor: title.color,
@@ -46,6 +50,8 @@ test('project pages use the shared dark-scrim contrast system', async ({
       };
     });
 
+    expect(styles.pageBackground).toBe('rgb(14, 23, 42)');
+    expect(styles.backdropZIndex).toBe('0');
     expect(styles.metaColor).toBe('rgba(255, 255, 255, 0.82)');
     expect(styles.metaShadow).toBe('none');
     expect(styles.titleColor).toBe('rgba(255, 255, 255, 0.96)');
