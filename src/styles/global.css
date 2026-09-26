@@ -2218,7 +2218,7 @@ a {
 .projects-page__backdrop {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   overflow: hidden;
   pointer-events: none;
 }
@@ -2228,14 +2228,26 @@ a {
   z-index: 1;
 }
 
-/* Velo translúcido del color base para que el texto siga siendo legible
-   sobre la foto, sin depender de que la propia foto esté desenfocada. */
+.projects-page {
+  --projects-text: rgb(255 255 255 / 96%);
+  --projects-text-muted: rgb(255 255 255 / 82%);
+  --projects-line: rgb(255 255 255 / 26%);
+  --projects-tag-bg: rgb(255 255 255 / 12%);
+  --projects-tag-border: rgb(255 255 255 / 28%);
+  --projects-tag-text: rgb(255 255 255 / 90%);
+  position: relative;
+  isolation: isolate;
+  background: var(--color-text);
+}
+
+/* A stable dark scrim keeps the photograph visible while making the project
+   hierarchy independent from the active image. */
 .projects-page__backdrop::after {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: color-mix(in srgb, var(--color-bg) 56%, transparent);
+  background: color-mix(in srgb, var(--color-text) 66%, transparent);
 }
 
 .projects-page__backdrop img {
@@ -2294,15 +2306,47 @@ a {
   }
 }
 
-/* Halo detrás del texto que se apoya directamente sobre el fondo con fotos,
-   para que la legibilidad no dependa del tono de la foto que esté activa. */
+.projects-page .project-list {
+  border-top-color: var(--projects-line);
+}
+
+.projects-page .project-row {
+  border-bottom-color: var(--projects-line);
+}
+
+.projects-page .project-row + .project-row {
+  border-left-color: var(--projects-line);
+}
+
 .projects-page .project-row__meta p,
-.projects-page .project-row__description,
+.projects-page .project-row__description {
+  color: var(--projects-text-muted);
+  text-shadow: none;
+}
+
+.projects-page .project-row__content h2,
 .projects-page .text-action {
-  text-shadow:
-    0 0 10px var(--color-bg),
-    0 0 10px var(--color-bg),
-    0 0 6px var(--color-bg);
+  color: var(--projects-text);
+}
+
+.projects-page .text-action {
+  border-bottom-color: rgb(255 255 255 / 58%);
+  text-shadow: none;
+}
+
+.projects-page .text-action:hover,
+.projects-page .text-action:focus-visible {
+  border-bottom-color: var(--color-accent);
+}
+
+.projects-page .text-action:focus-visible {
+  outline-color: var(--color-accent);
+}
+
+.projects-page .tag-list li {
+  border-color: var(--projects-tag-border);
+  background: var(--projects-tag-bg);
+  color: var(--projects-tag-text);
 }
 
 .project-list {
