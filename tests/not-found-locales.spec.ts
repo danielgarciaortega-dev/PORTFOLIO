@@ -47,8 +47,8 @@ test('Spanish missing route keeps HTTP 404 and the default localized shell', asy
     navigation.getByRole('link', { name: 'Inicio' }),
   ).toHaveAttribute('href', '/PORTFOLIO/');
   await expect(
-    navigation.getByRole('button', { name: 'Sobre mí' }),
-  ).toBeVisible();
+    navigation.getByRole('link', { name: 'Sobre mí' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
   await expect(
     navigation.getByRole('link', { name: 'Proyectos' }),
   ).toHaveAttribute('href', '/PORTFOLIO/proyectos/');
@@ -104,8 +104,8 @@ test('English-prefixed missing route keeps HTTP 404 and localizes the one shell'
     'href',
     '/PORTFOLIO/en/',
   );
-  const aboutTrigger = navigation.getByRole('button', { name: 'About' });
-  await expect(aboutTrigger).toBeVisible();
+  const aboutLink = navigation.getByRole('link', { name: 'About' });
+  await expect(aboutLink).toHaveAttribute('href', '/PORTFOLIO/en/about/');
   await expect(
     navigation.getByRole('link', { name: 'Projects' }),
   ).toHaveAttribute('href', '/PORTFOLIO/en/projects/');
@@ -115,25 +115,6 @@ test('English-prefixed missing route keeps HTTP 404 and localizes the one shell'
     .getByRole('link', { name: 'Switch to Spanish' });
   await expect(visibleLocaleAction).toHaveText('ES');
   await expect(visibleLocaleAction).toHaveAttribute('href', '/PORTFOLIO/');
-
-  await aboutTrigger.click();
-  const aboutDialog = page.getByRole('dialog', {
-    name: 'Daniel García Ortega',
-  });
-  await expect(aboutDialog).toBeVisible();
-  await expect(aboutDialog.locator('[data-about-eyebrow]')).toHaveText('ABOUT');
-  await expect(aboutDialog.locator('[data-about-education-title]')).toHaveText(
-    'Education and projects',
-  );
-  await expect(aboutDialog.locator('[data-about-seeking-title]')).toHaveText(
-    "What I'm looking for",
-  );
-  await expect(
-    aboutDialog.getByRole('button', { name: 'Close About' }),
-  ).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(aboutDialog).toBeHidden();
-  await expect(aboutTrigger).toBeFocused();
 });
 
 test('English 404 mobile menu stays localized, usable and overflow-free', async ({
@@ -157,7 +138,10 @@ test('English 404 mobile menu stays localized, usable and overflow-free', async 
     'href',
     '/PORTFOLIO/en/',
   );
-  await expect(navigation.getByRole('button', { name: /About/ })).toBeVisible();
+  await expect(navigation.getByRole('link', { name: /About/ })).toHaveAttribute(
+    'href',
+    '/PORTFOLIO/en/about/',
+  );
   await expect(
     navigation.getByRole('link', { name: /Projects/ }),
   ).toHaveAttribute('href', '/PORTFOLIO/en/projects/');

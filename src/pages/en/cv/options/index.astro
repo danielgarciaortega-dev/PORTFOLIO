@@ -1,0 +1,15 @@
+---
+import CvCenter from '../../../../components/cv/CvCenter.astro';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+
+const locale = 'en';
+---
+
+<BaseLayout
+  title="CV · Daniel García Ortega"
+  description="Choose Daniel García Ortega's designed or ATS CV in Spanish or English."
+  currentPage="cvCenter"
+  localizedRoute="cvCenter"
+>
+  <CvCenter {locale} />
+</BaseLayout>

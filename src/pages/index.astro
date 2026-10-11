@@ -1,5 +1,4 @@
 ---
-import AboutDialog from '../components/dialogs/AboutDialog.astro';
 import ContactDialog from '../components/dialogs/ContactDialog.astro';
 import Hero from '../components/home/Hero.astro';
 import OverviewStrip from '../components/home/OverviewStrip.astro';
@@ -21,7 +20,6 @@ const projects = getProjects(locale);
     <Hero projects={projects.filter((project) => project.featured)} {locale} />
     <OverviewStrip {locale} />
   </main>
-  <AboutDialog />
   <ContactDialog />
   {
     projects.map((project, index) => (

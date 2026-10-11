@@ -6,15 +6,16 @@ import { withBase } from '../../utils/paths';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 
 interface Props {
-  currentPage: 'home' | 'projects' | '404';
+  currentPage: 'home' | 'about' | 'projects' | 'cvCenter' | '404';
   locale: Locale;
 }
 
 const { currentPage, locale } = Astro.props;
 const copy = shellCopy[locale];
 const homeUrl = withBase(getLocalizedRoutePath(locale, 'home'));
+const aboutUrl = withBase(getLocalizedRoutePath(locale, 'about'));
 const projectsUrl = withBase(getLocalizedRoutePath(locale, 'projects'));
-const cvUrl = withBase(locale === 'en' ? 'en/cv/' : 'cv/');
+const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
 ---
 
 <header class="site-header" data-site-header>
@@ -60,8 +61,12 @@ const cvUrl = withBase(locale === 'en' ? 'en/cv/' : 'cv/');
         aria-current={currentPage === 'home' ? 'page' : undefined}
         >{copy.home}</a
       >
-      <button type="button" data-dialog-open="about-dialog">{copy.about}</button
+      <a
+        href={aboutUrl}
+        aria-current={currentPage === 'about' ? 'page' : undefined}
       >
+        {copy.about}
+      </a>
       <a
         href={projectsUrl}
         aria-current={currentPage === 'projects' ? 'page' : undefined}
@@ -114,12 +119,15 @@ const cvUrl = withBase(locale === 'en' ? 'en/cv/' : 'cv/');
     </div>
 
     <nav aria-label={copy.mobileNavigation}>
-      <a href={homeUrl} data-menu-link>{copy.home} <span>01</span></a>
-      <button type="button" data-dialog-open="about-dialog" data-menu-action>
+      <a href={homeUrl} data-menu-link>{copy.home}</a>
+      <a
+        href={aboutUrl}
+        aria-current={currentPage === 'about' ? 'page' : undefined}
+        data-menu-link
+      >
         {copy.about}
-        <span>02</span>
-      </button>
-      <a href={projectsUrl} data-menu-link>{copy.projects} <span>03</span></a>
+      </a>
+      <a href={projectsUrl} data-menu-link>{copy.projects}</a>
     </nav>
 
     <div class="mobile-menu__utilities" data-mobile-utilities>
@@ -221,6 +229,11 @@ const cvUrl = withBase(locale === 'en' ? 'en/cv/' : 'cv/');
 
   .mobile-menu__utilities {
     display: none;
+  }
+
+  .mobile-menu nav a[aria-current='page'] {
+    color: var(--color-accent-ink);
+    font-weight: 800;
   }
 
   @media (max-width: 1100px) and (min-width: 901px) {

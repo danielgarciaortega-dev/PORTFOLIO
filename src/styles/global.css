@@ -413,13 +413,6 @@ a {
   text-align: left;
 }
 
-.mobile-menu nav span {
-  color: var(--color-brand-hover);
-  font-size: 0.7rem;
-  font-weight: 750;
-  letter-spacing: 0.1em;
-}
-
 .mobile-menu__cv {
   min-height: 52px;
   display: flex;
@@ -1089,38 +1082,58 @@ a {
 
 .project-dialog__live-link {
   min-height: 44px;
+  max-width: 100%;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.65rem 0.9rem;
-  border: 1px solid var(--color-accent);
-  border-radius: 999px;
-  background: var(--color-accent-soft);
-  color: var(--color-brand-hover);
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.68rem 0.82rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.85rem;
+  background: var(--color-bg);
+  color: var(--color-text);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 780;
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;
   transition:
+    border-color 160ms ease,
     background 160ms ease,
-    color 160ms ease,
     transform 160ms ease;
 }
 
 .project-dialog__live-link:hover,
 .project-dialog__live-link:focus-visible {
-  background: var(--color-text);
-  color: white;
-  transform: translateY(-1px);
+  border-color: color-mix(
+    in srgb,
+    var(--color-accent) 62%,
+    var(--color-border)
+  );
+  background: var(--color-surface-soft);
+  transform: translateY(-2px);
 }
 
 .project-dialog__live-link svg {
-  width: 17px;
-  height: 17px;
+  display: none;
+}
+
+.project-dialog__live-link::after {
+  content: '↗';
   flex: 0 0 auto;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  line-height: 1;
+  transition:
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.project-dialog__live-link:hover::after,
+.project-dialog__live-link:focus-visible::after {
+  color: var(--color-accent);
+  transform: translate(2px, -2px);
 }
 
 .content-dialog.contact-dialog {
@@ -1324,65 +1337,6 @@ a {
   margin: 0;
   color: var(--color-text-muted);
   font-size: 0.9rem;
-}
-
-#about-dialog {
-  width: min(960px, calc(100% - 2rem));
-}
-
-.about-dialog__details {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: 2.5rem;
-  margin-top: 2.4rem;
-  padding-top: 2.2rem;
-  border-top: 1px solid var(--color-border);
-}
-
-.about-dialog__details h3 {
-  margin: 0 0 1rem;
-  color: var(--color-brand-hover);
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-
-.about-dialog__details > div:last-child p {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 1.02rem;
-  line-height: 1.65;
-}
-
-.about-dialog__milestones {
-  display: grid;
-  gap: 1.1rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.about-dialog__milestones li {
-  padding-left: 1rem;
-  border-left: 2px solid var(--color-border);
-}
-
-.about-dialog__milestones span {
-  display: block;
-  margin-bottom: 0.25rem;
-  color: var(--color-text-muted);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.about-dialog__milestones p {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 1.02rem;
-  line-height: 1.5;
 }
 
 .metric-list {
@@ -1828,8 +1782,7 @@ a {
   }
 
   .project-dialog__hero,
-  .project-dialog__details,
-  .about-dialog__details {
+  .project-dialog__details {
     grid-template-columns: 1fr;
   }
 
@@ -1895,6 +1848,18 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .project-dialog__live-link,
+  .project-dialog__live-link::after {
+    transition: none;
+  }
+
+  .project-dialog__live-link:hover,
+  .project-dialog__live-link:focus-visible,
+  .project-dialog__live-link:hover::after,
+  .project-dialog__live-link:focus-visible::after {
+    transform: none;
+  }
+
   html {
     scroll-behavior: auto;
   }
@@ -2289,9 +2254,49 @@ a {
 .projects-page__backdrop {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   overflow: hidden;
   pointer-events: none;
+}
+
+.projects-page__moments,
+.projects-page__contexts {
+  position: absolute;
+  inset: 0;
+}
+
+.projects-page__moments {
+  opacity: 1;
+  transition: opacity 260ms ease;
+}
+
+.projects-page__contexts {
+  z-index: 0;
+}
+
+.projects-page__context-image {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: min(58vw, 760px);
+  height: min(58vh, 620px);
+  object-fit: contain;
+  opacity: 0;
+  filter: blur(8px) saturate(0.92);
+  transform: translate(-50%, -50%) scale(0.94);
+  transition:
+    opacity 240ms ease,
+    filter 320ms ease,
+    transform 320ms ease;
+}
+
+.projects-page__context-image[data-active] {
+  opacity: 0.72;
+  filter: blur(2px) saturate(0.96);
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.projects-page__backdrop[data-active-project] .projects-page__moments {
+  opacity: 0;
 }
 
 .projects-page-list--solo {
@@ -2299,81 +2304,150 @@ a {
   z-index: 1;
 }
 
-/* Velo translúcido del color base para que el texto siga siendo legible
-   sobre la foto, sin depender de que la propia foto esté desenfocada. */
+.projects-page {
+  --projects-text: rgb(255 255 255 / 96%);
+  --projects-text-muted: rgb(255 255 255 / 82%);
+  --projects-line: rgb(255 255 255 / 26%);
+  --projects-tag-bg: rgb(255 255 255 / 12%);
+  --projects-tag-border: rgb(255 255 255 / 28%);
+  --projects-tag-text: rgb(255 255 255 / 90%);
+  position: relative;
+  isolation: isolate;
+  background: var(--color-text);
+}
+
+/* A stable dark scrim keeps the photograph visible while making the project
+   hierarchy independent from the active image. */
 .projects-page__backdrop::after {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: color-mix(in srgb, var(--color-bg) 56%, transparent);
+  background: color-mix(in srgb, var(--color-text) 66%, transparent);
 }
 
-.projects-page__backdrop img {
+.projects-page__moment {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 32%;
+  object-position: var(--moment-position-desktop);
   opacity: 0;
-  filter: blur(24px) saturate(1.05);
-  transform: scale(1.12);
-  animation: projects-backdrop-reveal 42s infinite;
+  filter: blur(10px) saturate(1.03);
+  transform: scale(1.04);
+  animation-name: projects-backdrop-reveal;
+  animation-duration: var(--moment-duration);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-delay: var(--moment-delay);
 }
 
-/* Cada foto entra desenfocada y como alejada, y se aclara hasta verse
-   nítida antes de dar paso a la siguiente. */
+/* Each moment overlaps the next for two seconds. The reduced blur and scale
+   keep the background atmospheric without making the copy feel unstable. */
 @keyframes projects-backdrop-reveal {
   0% {
     opacity: 0;
-    filter: blur(24px) saturate(1.05);
-    transform: scale(1.12);
+    filter: blur(10px) saturate(1.03);
+    transform: scale(1.04);
   }
-  2% {
+  4% {
     opacity: 1;
-  }
-  11% {
-    filter: blur(0) saturate(1.05);
+    filter: blur(0) saturate(1.03);
     transform: scale(1);
   }
-  14.5% {
+  16.667% {
     opacity: 1;
-    filter: blur(0) saturate(1.05);
+    filter: blur(0) saturate(1.03);
     transform: scale(1);
   }
-  16.5% {
+  20.833% {
     opacity: 0;
+    filter: blur(4px) saturate(1.03);
+    transform: scale(1.01);
   }
   100% {
     opacity: 0;
-    filter: blur(24px) saturate(1.05);
-    transform: scale(1.12);
+    filter: blur(4px) saturate(1.03);
+    transform: scale(1.01);
+  }
+}
+
+@media (max-width: 900px) and (orientation: portrait) {
+  .projects-page__moment {
+    object-position: var(--moment-position-mobile);
+  }
+
+  .projects-page__context-image {
+    width: min(82vw, 520px);
+    height: min(46vh, 440px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .projects-page__backdrop img {
+  .projects-page__moments,
+  .projects-page__context-image {
+    transition: none;
+  }
+
+  .projects-page__moment {
     animation: none;
     opacity: 0;
     filter: none;
     transform: none;
   }
 
-  .projects-page__backdrop img:first-child {
+  .projects-page__moment:first-child {
     opacity: 1;
+  }
+
+  .projects-page__context-image,
+  .projects-page__context-image[data-active] {
+    filter: none;
   }
 }
 
-/* Halo detrás del texto que se apoya directamente sobre el fondo con fotos,
-   para que la legibilidad no dependa del tono de la foto que esté activa. */
+.projects-page .project-list {
+  border-top-color: var(--projects-line);
+}
+
+.projects-page .project-row {
+  border-bottom-color: var(--projects-line);
+}
+
+.projects-page .project-row + .project-row {
+  border-left-color: var(--projects-line);
+}
+
 .projects-page .project-row__meta p,
-.projects-page .project-row__description,
+.projects-page .project-row__description {
+  color: var(--projects-text-muted);
+  text-shadow: none;
+}
+
+.projects-page .project-row__content h2,
 .projects-page .text-action {
-  text-shadow:
-    0 0 10px var(--color-bg),
-    0 0 10px var(--color-bg),
-    0 0 6px var(--color-bg);
+  color: var(--projects-text);
+}
+
+.projects-page .text-action {
+  border-bottom-color: rgb(255 255 255 / 58%);
+  text-shadow: none;
+}
+
+.projects-page .text-action:hover,
+.projects-page .text-action:focus-visible {
+  border-bottom-color: var(--color-accent);
+}
+
+.projects-page .text-action:focus-visible {
+  outline-color: var(--color-accent);
+}
+
+.projects-page .tag-list li {
+  border-color: var(--projects-tag-border);
+  background: var(--projects-tag-bg);
+  color: var(--projects-tag-text);
 }
 
 .project-list {
@@ -2613,8 +2687,7 @@ a {
   }
 
   .project-dialog__hero,
-  .project-dialog__details,
-  .about-dialog__details {
+  .project-dialog__details {
     grid-template-columns: 1fr;
   }
 

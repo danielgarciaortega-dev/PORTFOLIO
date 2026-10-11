@@ -76,25 +76,28 @@ function assertFinalCvContract({
   es,
   en,
   styles,
-  localeControls,
+  spanishDirectoryEntries,
   englishDirectoryEntries,
 }) {
-  assert.equal(count(es, /data-locale-link=/g), 1);
-  assert.equal(count(en, /data-locale-link=/g), 1);
-  assert.match(es, /href="\.\.\/en\/cv\/"[^>]*hreflang="en"/);
-  assert.match(en, /href="\.\.\/\.\.\/cv\/"[^>]*hreflang="es"/);
-  assert.equal(backHref(es), '../');
-  assert.equal(backHref(en), '../');
+  assert.equal(count(es, /data-locale-link=/g), 0);
+  assert.equal(count(en, /data-locale-link=/g), 0);
+  assert.doesNotMatch(es, /cv-locale-link/);
+  assert.doesNotMatch(en, /cv-locale-link/);
+  assert.equal(backHref(es), 'opciones/');
+  assert.equal(backHref(en), 'options/');
 
   assert.match(es, /href="CV-Daniel-Garcia-Ortega\.pdf"/);
   assert.match(en, /href="CV-Daniel-Garcia-Ortega-EN\.pdf"/);
   assert.doesNotMatch(en, /href="CV-Daniel-Garcia-Ortega\.pdf"/);
 
   assert.match(en, /href="\.\.\/\.\.\/cv\/styles\.css"/);
-  assert.match(en, /href="\.\.\/\.\.\/cv\/locale-controls\.css"/);
-  assert.match(en, /src="\.\.\/\.\.\/cv\/locale\.js"/);
+  assert.doesNotMatch(es, /locale-controls\.css|locale\.js/);
+  assert.doesNotMatch(en, /locale-controls\.css|locale\.js/);
+  assert.equal(spanishDirectoryEntries.includes('locale-controls.css'), false);
+  assert.equal(spanishDirectoryEntries.includes('locale.js'), false);
   assert.deepEqual([...englishDirectoryEntries].sort(), [
     'CV-Daniel-Garcia-Ortega-EN.pdf',
+    'ats',
     'index.html',
   ]);
 
@@ -126,12 +129,14 @@ function assertFinalCvContract({
     assert.match(source, /34%/);
   }
 
-  assert.match(es, /Volver al portfolio/);
+  assert.match(es, /Volver a CVs/);
+  assert.match(es, /href="opciones\/"/);
   assert.match(es, /Descargar CV de Daniel García Ortega en PDF/);
   assert.doesNotMatch(es, />\s*Download PDF\s*</);
-  assert.match(en, /Back to portfolio/);
+  assert.match(en, /Back to CVs/);
+  assert.match(en, /href="options\/"/);
   assert.match(en, />\s*Download PDF\s*</);
-  assert.doesNotMatch(en, /Volver al portfolio/);
+  assert.doesNotMatch(en, /Volver a CVs/);
 
   assert.match(
     styles,
@@ -154,22 +159,56 @@ function assertFinalCvContract({
     styles,
     /@media print[\s\S]*?\.download-btn,[\s\S]*?\.portfolio-back-link\s*\{[\s\S]*?display:\s*none\s*!important;/,
   );
-  assert.match(
-    localeControls,
-    /@media print[\s\S]*?\.cv-locale-link\s*\{[\s\S]*?display:\s*none\s*!important;/,
-  );
 }
 
 const current = {
   es: await readRepositoryFile('public/cv/index.html'),
   en: await readRepositoryFile('public/en/cv/index.html'),
   styles: await readRepositoryFile('public/cv/styles.css'),
-  localeControls: await readRepositoryFile('public/cv/locale-controls.css'),
+  spanishDirectoryEntries: await readdir(new URL('public/cv/', root)),
   englishDirectoryEntries: await readdir(new URL('public/en/cv/', root)),
+};
+
+const atsShell = {
+  es: await readRepositoryFile('public/cv/ats/index.html'),
+  en: await readRepositoryFile('public/en/cv/ats/index.html'),
+  styles: await readRepositoryFile('public/cv/ats/styles.css'),
 };
 
 test('final bilingual CV contract preserves facts, shared assets, navigation and A4 geometry', () => {
   assertFinalCvContract(current);
+});
+
+test('ATS viewer reuses the designed CV navigation shell without changing document layout', () => {
+  for (const source of [atsShell.es, atsShell.en]) {
+    assert.doesNotMatch(source, /ats-toolbar/);
+    assert.match(source, /class="cv-page-landmark"/);
+    assert.match(source, /class="portfolio-back-link"/);
+    assert.match(source, /class="cv-page-actions"/);
+    assert.match(source, /class="download-btn"/);
+  }
+
+  assert.equal(backHref(atsShell.es), '../opciones/');
+  assert.equal(backHref(atsShell.en), '../options/');
+  assert.match(atsShell.es, /href="CV-Daniel-Garcia-Ortega-ATS\.pdf"/);
+  assert.match(atsShell.en, /href="CV-Daniel-Garcia-Ortega-ATS-EN\.pdf"/);
+
+  assert.match(
+    atsShell.styles,
+    /\.portfolio-back-link\s*\{[\s\S]*?position:\s*fixed;[\s\S]*?left:\s*24px;/,
+  );
+  assert.match(
+    atsShell.styles,
+    /\.cv-page-actions\s*\{[\s\S]*?position:\s*fixed;[\s\S]*?right:\s*24px;/,
+  );
+  assert.match(
+    atsShell.styles,
+    /@media screen and \(max-width:\s*900px\)[\s\S]*?\.portfolio-back-link\s*\{[\s\S]*?position:\s*static;/,
+  );
+  assert.match(
+    atsShell.styles,
+    /@media print[\s\S]*?\.download-btn,[\s\S]*?\.portfolio-back-link\s*\{[\s\S]*?display:\s*none\s*!important;/,
+  );
 });
 
 const adversarialCases = [
@@ -243,10 +282,20 @@ const adversarialCases = [
     }),
   },
   {
-    name: 'duplicated counterpart action',
+    name: 'reintroduced locale switch',
     mutate: (contract) => ({
       ...contract,
       en: `${contract.en}<a data-locale-link="es" href="../../cv/">ES</a>`,
+    }),
+  },
+  {
+    name: 'reintroduced retired locale-control asset',
+    mutate: (contract) => ({
+      ...contract,
+      spanishDirectoryEntries: [
+        ...contract.spanishDirectoryEntries,
+        'locale.js',
+      ],
     }),
   },
   {
@@ -260,11 +309,7 @@ const adversarialCases = [
     name: 'wrong English back destination',
     mutate: (contract) => ({
       ...contract,
-      en: mutateRequired(
-        contract.en,
-        /class="portfolio-back-link"([\s\S]*?)href="\.\.\/"/,
-        'class="portfolio-back-link"$1href="../../"',
-      ),
+      en: mutateRequired(contract.en, 'href="options/"', 'href="../"'),
     }),
   },
 ];

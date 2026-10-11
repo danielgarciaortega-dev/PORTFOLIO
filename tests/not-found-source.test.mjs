@@ -12,8 +12,9 @@ const runtimeSource = await readFile(
 );
 
 test('404 localization stays single-source and pathname-driven', () => {
-  assert.match(pageSource, /dialogCopy, notFoundCopy, shellCopy/);
-  assert.match(pageSource, /getProfessionalData/);
+  assert.match(pageSource, /notFoundCopy, shellCopy/);
+  assert.doesNotMatch(pageSource, /dialogCopy/);
+  assert.doesNotMatch(pageSource, /getProfessionalData/);
   assert.match(pageSource, /id="not-found-locale-data"/);
   assert.doesNotMatch(pageSource, /This route is not part of the project/);
   assert.match(runtimeSource, /window\.location\.pathname/);
@@ -27,8 +28,8 @@ test('404 localization does not introduce redirect or SPA fallback behavior', ()
   assert.doesNotMatch(pageSource, /\/en\/404\//);
 });
 
-test('404 renders one interactive shell and one action set', () => {
-  assert.equal((pageSource.match(/<AboutDialog\s*\/>/g) ?? []).length, 1);
+test('404 renders one interactive shell and one action set without the legacy About dialog', () => {
+  assert.doesNotMatch(pageSource, /AboutDialog|about-dialog/);
   assert.equal((pageSource.match(/data-not-found-actions/g) ?? []).length, 1);
   assert.equal((pageSource.match(/<h1\b/g) ?? []).length, 1);
 });

@@ -14,8 +14,8 @@ test('Spanish root renders the restored shell, hero and professional overview', 
     mainNavigation.getByRole('link', { name: 'Inicio' }),
   ).toBeVisible();
   await expect(
-    mainNavigation.getByRole('button', { name: 'Sobre mí' }),
-  ).toBeVisible();
+    mainNavigation.getByRole('link', { name: 'Sobre mí' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
   await expect(
     mainNavigation.getByRole('link', { name: 'Proyectos' }),
   ).toBeVisible();
@@ -24,8 +24,8 @@ test('Spanish root renders the restored shell, hero and professional overview', 
   );
 
   await expect(
-    page.getByRole('button', { name: 'Conocer mi perfil' }),
-  ).toBeVisible();
+    page.getByRole('link', { name: 'Conocer mi perfil' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
   await expect(
     page.getByRole('button', { name: 'Contactar' }).first(),
   ).toBeVisible();
@@ -204,7 +204,7 @@ test('desktop shell keeps socials left, navigation clean and locale plus CV righ
   await expect(actions.getByRole('link', { name: 'LinkedIn' })).toHaveCount(0);
 });
 
-test('mobile shell separates numbered navigation from social and locale/CV utilities', async ({
+test('mobile shell separates navigation from social and locale/CV utilities', async ({
   page,
 }) => {
   for (const width of [360, 390, 430]) {
@@ -229,7 +229,7 @@ test('mobile shell separates numbered navigation from social and locale/CV utili
     const utilities = menu.locator('[data-mobile-utilities]');
 
     await expect(menu).toBeVisible();
-    await expect(navigation.locator('span')).toHaveText(['01', '02', '03']);
+    await expect(navigation.locator('span')).toHaveCount(0);
     await expect(navigation.locator('[data-language-switcher]')).toHaveCount(0);
     await expect(navigation.getByRole('link', { name: 'GitHub' })).toHaveCount(
       0,

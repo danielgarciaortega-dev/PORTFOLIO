@@ -26,6 +26,8 @@ export const profile = {
       text: 'AL-LÍO, con el que conseguí la beca Aircury Summer of Code 2026.',
     },
   ],
+  contribution:
+    'Ganas de aprender y capacidad de resolver problemas desde el primer día.',
   seeking:
     'Una empresa donde hacer las prácticas de 2º curso y aportar desde el primer día: ganas de aprender y capacidad de resolver problemas.',
   profileImage: 'images/profile/profile-main.webp',

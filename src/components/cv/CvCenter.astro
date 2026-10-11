@@ -1,0 +1,351 @@
+---
+import { cvCenterCopy } from '../../i18n/cv-center-copy';
+import { getCvDocumentPath, type Locale } from '../../i18n/locale';
+import { withBase } from '../../utils/paths';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = cvCenterCopy[locale];
+
+const designedEs = withBase(getCvDocumentPath('es', 'designed'));
+const designedEn = withBase(getCvDocumentPath('en', 'designed'));
+const atsEs = withBase(getCvDocumentPath('es', 'ats'));
+const atsEn = withBase(getCvDocumentPath('en', 'ats'));
+---
+
+<main id="contenido" class="cv-center" data-cv-center>
+  <div class="cv-center__inner">
+    <header class="cv-center__intro">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1>{copy.title}</h1>
+    </header>
+
+    <div class="cv-center__formats">
+      <section
+        class="cv-center__format"
+        aria-labelledby="cv-center-designed"
+        data-cv-format="designed"
+      >
+        <div class="cv-center__format-head">
+          <div>
+            <p>{copy.designedMeta}</p>
+            <h2 id="cv-center-designed">{copy.designedGroup}</h2>
+          </div>
+        </div>
+
+        <div class="cv-center__language-actions">
+          <a
+            class="cv-center__language-option"
+            href={designedEs}
+            hreflang="es"
+            aria-label={copy.optionAria(
+              copy.designedGroup,
+              copy.designedEs.label,
+            )}
+            data-cv-option
+            data-cv-variant="designed"
+            data-cv-locale="es"
+          >
+            <span class="cv-center__language-code">ES</span>
+            <span class="cv-center__language-copy">
+              <strong>{copy.designedEs.label}</strong>
+              <small>{copy.designedEs.description}</small>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+
+          <a
+            class="cv-center__language-option"
+            href={designedEn}
+            hreflang="en"
+            aria-label={copy.optionAria(
+              copy.designedGroup,
+              copy.designedEn.label,
+            )}
+            data-cv-option
+            data-cv-variant="designed"
+            data-cv-locale="en"
+          >
+            <span class="cv-center__language-code">EN</span>
+            <span class="cv-center__language-copy">
+              <strong>{copy.designedEn.label}</strong>
+              <small>{copy.designedEn.description}</small>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <section
+        class="cv-center__format"
+        aria-labelledby="cv-center-ats"
+        data-cv-format="ats"
+      >
+        <div class="cv-center__format-head">
+          <div>
+            <p>{copy.atsMeta}</p>
+            <h2 id="cv-center-ats">{copy.atsGroup}</h2>
+          </div>
+        </div>
+
+        <div class="cv-center__language-actions">
+          <a
+            class="cv-center__language-option"
+            href={atsEs}
+            hreflang="es"
+            aria-label={copy.optionAria(copy.atsGroup, copy.atsEs.label)}
+            data-cv-option
+            data-cv-variant="ats"
+            data-cv-locale="es"
+          >
+            <span class="cv-center__language-code">ES</span>
+            <span class="cv-center__language-copy">
+              <strong>{copy.atsEs.label}</strong>
+              <small>{copy.atsEs.description}</small>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+
+          <a
+            class="cv-center__language-option"
+            href={atsEn}
+            hreflang="en"
+            aria-label={copy.optionAria(copy.atsGroup, copy.atsEn.label)}
+            data-cv-option
+            data-cv-variant="ats"
+            data-cv-locale="en"
+          >
+            <span class="cv-center__language-code">EN</span>
+            <span class="cv-center__language-copy">
+              <strong>{copy.atsEn.label}</strong>
+              <small>{copy.atsEn.description}</small>
+            </span>
+            <span class="cv-center__arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<style>
+  .cv-center {
+    min-height: calc(100vh - var(--header-height));
+  }
+
+  .cv-center__inner {
+    width: min(100%, 980px);
+    margin-inline: auto;
+    padding: clamp(3.5rem, 6vw, 6rem) var(--page-padding)
+      clamp(4.5rem, 7vw, 7rem);
+  }
+
+  .cv-center__intro {
+    max-width: 880px;
+    padding-bottom: clamp(1.5rem, 2.5vw, 2rem);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .cv-center__intro .eyebrow {
+    margin-bottom: 0.65rem;
+    font-size: 0.72rem;
+    font-weight: 760;
+    letter-spacing: 0.16em;
+  }
+
+  .cv-center__intro h1 {
+    max-width: none;
+    margin-bottom: 0;
+    font-size: clamp(2rem, 3.95vw, 3.45rem);
+    font-weight: 780;
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+    white-space: nowrap;
+  }
+
+  .cv-center__formats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.9rem, 2vw, 1.3rem);
+    padding-top: clamp(1.5rem, 2.5vw, 2rem);
+  }
+
+  .cv-center__format {
+    min-width: 0;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.25rem, 2.4vw, 1.65rem);
+    border: 1px solid var(--color-border);
+    border-radius: 1.15rem;
+    background: color-mix(
+      in srgb,
+      var(--color-surface) 76%,
+      var(--color-background)
+    );
+  }
+
+  .cv-center__format-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .cv-center__format-head p {
+    margin: 0 0 0.5rem;
+    color: var(--color-accent-ink);
+    font-size: 0.66rem;
+    font-weight: 780;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .cv-center__format-head h2 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+    font-weight: 780;
+    letter-spacing: -0.03em;
+  }
+
+  .cv-center__language-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin-top: auto;
+  }
+
+  .cv-center__language-option {
+    min-width: 0;
+    min-height: 92px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'code arrow'
+      'copy arrow';
+    gap: 0.25rem 0.6rem;
+    align-items: center;
+    padding: 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.85rem;
+    background: var(--color-background);
+    transition:
+      border-color 160ms ease,
+      background 160ms ease,
+      transform 160ms ease;
+  }
+
+  .cv-center__language-option:hover {
+    border-color: color-mix(
+      in srgb,
+      var(--color-accent) 62%,
+      var(--color-border)
+    );
+    background: var(--color-surface);
+    transform: translateY(-2px);
+  }
+
+  .cv-center__language-code {
+    grid-area: code;
+    color: var(--color-accent-ink);
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+  }
+
+  .cv-center__language-copy {
+    grid-area: copy;
+    min-width: 0;
+    display: grid;
+    gap: 0.12rem;
+  }
+
+  .cv-center__language-copy strong {
+    color: var(--color-text);
+    font-size: 0.94rem;
+    font-weight: 760;
+    line-height: 1.25;
+  }
+
+  .cv-center__language-copy small {
+    overflow: hidden;
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cv-center__arrow {
+    grid-area: arrow;
+    align-self: center;
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    transition:
+      color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .cv-center__language-option:hover .cv-center__arrow,
+  .cv-center__language-option:focus-visible .cv-center__arrow {
+    color: var(--color-accent-ink);
+    transform: translate(2px, -2px);
+  }
+
+  @media (max-width: 760px) {
+    .cv-center__inner {
+      padding-top: 3.1rem;
+    }
+
+    .cv-center__formats {
+      grid-template-columns: 1fr;
+    }
+
+    .cv-center__format {
+      min-height: 0;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .cv-center__intro h1 {
+      font-size: clamp(1.35rem, 5.8vw, 1.9rem);
+      letter-spacing: -0.05em;
+    }
+
+    .cv-center__format {
+      padding: 1.1rem;
+    }
+
+    .cv-center__language-option {
+      min-height: 84px;
+      padding: 0.75rem;
+    }
+
+    .cv-center__language-copy small {
+      font-size: 0.68rem;
+    }
+  }
+
+  @media (max-width: 370px) {
+    .cv-center__language-actions {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cv-center__language-option,
+    .cv-center__arrow {
+      transition: none;
+    }
+
+    .cv-center__language-option:hover,
+    .cv-center__language-option:hover .cv-center__arrow,
+    .cv-center__language-option:focus-visible .cv-center__arrow {
+      transform: none;
+    }
+  }
+</style>

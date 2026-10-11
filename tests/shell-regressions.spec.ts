@@ -11,6 +11,7 @@ interface LocaleCase {
   localeHref: string;
   cv: string;
   mobileCv: string;
+  cvHref: string;
 }
 
 const localeCases: LocaleCase[] = [
@@ -25,6 +26,7 @@ const localeCases: LocaleCase[] = [
     localeHref: '/PORTFOLIO/en/',
     cv: 'Ver CV',
     mobileCv: 'Consultar CV',
+    cvHref: '/PORTFOLIO/cv/opciones/',
   },
   {
     locale: 'en',
@@ -37,6 +39,7 @@ const localeCases: LocaleCase[] = [
     localeHref: '/PORTFOLIO/',
     cv: 'View CV',
     mobileCv: 'View CV',
+    cvHref: '/PORTFOLIO/en/cv/options/',
   },
 ];
 
@@ -91,9 +94,9 @@ test('final desktop shell contract stays deterministic across supported widths a
       });
       await expect(localeLink).toHaveCount(1);
       await expect(localeLink).toHaveAttribute('href', localeCase.localeHref);
-      await expect(
-        actions.getByRole('link', { name: localeCase.cv }),
-      ).toHaveCount(1);
+      const cvLink = actions.getByRole('link', { name: localeCase.cv });
+      await expect(cvLink).toHaveCount(1);
+      await expect(cvLink).toHaveAttribute('href', localeCase.cvHref);
       await expect(
         page.locator('[data-language-switcher]:visible'),
       ).toHaveCount(1);
@@ -155,9 +158,11 @@ test('final mobile shell keeps navigation and utilities separate without overflo
       });
       await expect(localeLink).toHaveCount(1);
       await expect(localeLink).toHaveAttribute('href', localeCase.localeHref);
-      await expect(
-        utilities.getByRole('link', { name: localeCase.mobileCv }),
-      ).toHaveCount(1);
+      const mobileCvLink = utilities.getByRole('link', {
+        name: localeCase.mobileCv,
+      });
+      await expect(mobileCvLink).toHaveCount(1);
+      await expect(mobileCvLink).toHaveAttribute('href', localeCase.cvHref);
       await expect(
         page.locator('[data-language-switcher]:visible'),
       ).toHaveCount(1);
@@ -204,23 +209,20 @@ test('locale round trip remains base-path safe and persists the explicit choice'
     .toBe('es');
 });
 
-test('remaining About and Contact triggers match mounted dialogs after footer removal', async ({
+test('About uses real navigation while Contact keeps its dialog behavior', async ({
   page,
 }) => {
   await page.goto('./');
 
-  const aboutTrigger = page
+  const aboutLink = page
     .getByRole('navigation', { name: 'Navegación principal' })
-    .getByRole('button', { name: 'Sobre mí' });
-  await aboutTrigger.click();
-  const aboutDialog = page.getByRole('dialog', {
-    name: 'Daniel García Ortega',
-  });
-  await expect(aboutDialog).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(aboutDialog).toBeHidden();
-  await expect(aboutTrigger).toBeFocused();
+    .getByRole('link', { name: 'Sobre mí' });
+  await expect(aboutLink).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
+  await aboutLink.click();
+  await expect(page).toHaveURL(/\/PORTFOLIO\/sobre-mi\/$/);
+  await expect(page.locator('#about-dialog')).toHaveCount(0);
 
+  await page.goto('./');
   const contactTrigger = page
     .getByRole('button', { name: 'Contactar' })
     .first();
@@ -237,6 +239,6 @@ test('remaining About and Contact triggers match mounted dialogs after footer re
   await expect(
     page
       .getByRole('navigation', { name: 'Navegación principal' })
-      .getByRole('button', { name: 'Sobre mí' }),
-  ).toBeVisible();
+      .getByRole('link', { name: 'Sobre mí' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
 });

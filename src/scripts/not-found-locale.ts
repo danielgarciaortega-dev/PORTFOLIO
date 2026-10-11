@@ -16,15 +16,6 @@ interface ShellPayload {
   languageSwitcher: string;
 }
 
-interface DialogPayload {
-  aboutEyebrow: string;
-  viewGitHub: string;
-  viewLinkedIn: string;
-  closeAbout: string;
-  educationAndProjects: string;
-  seeking: string;
-}
-
 interface NotFoundPayload {
   title: string;
   description: string;
@@ -35,21 +26,12 @@ interface NotFoundPayload {
   projectsAction: string;
 }
 
-interface ProfilePayload {
-  aboutImageAlt: string;
-  location: string;
-  aboutIntro: string;
-  milestones: Array<{ label: string; text: string }>;
-  seeking: string;
-}
-
 interface LocalePayload {
   shell: ShellPayload;
-  dialog: DialogPayload;
   notFound: NotFoundPayload;
-  profile: ProfilePayload;
   routes: {
     home: string;
+    about: string;
     projects: string;
     cv: string;
     localeTarget: {
@@ -104,14 +86,10 @@ function localizeHeader(data: LocalePayload) {
     desktopNavigation?.querySelectorAll<HTMLAnchorElement>('a');
   setDirectText(desktopLinks?.[0], shell.home);
   desktopLinks?.[0]?.setAttribute('href', routes.home);
-  setDirectText(
-    desktopNavigation?.querySelector<HTMLButtonElement>(
-      '[data-dialog-open="about-dialog"]',
-    ),
-    shell.about,
-  );
-  setDirectText(desktopLinks?.[1], shell.projects);
-  desktopLinks?.[1]?.setAttribute('href', routes.projects);
+  setDirectText(desktopLinks?.[1], shell.about);
+  desktopLinks?.[1]?.setAttribute('href', routes.about);
+  setDirectText(desktopLinks?.[2], shell.projects);
+  desktopLinks?.[2]?.setAttribute('href', routes.projects);
 
   setText('.header-cv-link', shell.viewCv);
   setAttribute('.header-cv-link', 'href', routes.cv);
@@ -135,12 +113,10 @@ function localizeHeader(data: LocalePayload) {
     mobileNavigation?.querySelectorAll<HTMLAnchorElement>('a[data-menu-link]');
   setDirectText(mobileLinks?.[0], shell.home);
   mobileLinks?.[0]?.setAttribute('href', routes.home);
-  setDirectText(
-    mobileNavigation?.querySelector<HTMLButtonElement>('[data-menu-action]'),
-    shell.about,
-  );
-  setDirectText(mobileLinks?.[1], shell.projects);
-  mobileLinks?.[1]?.setAttribute('href', routes.projects);
+  setDirectText(mobileLinks?.[1], shell.about);
+  mobileLinks?.[1]?.setAttribute('href', routes.about);
+  setDirectText(mobileLinks?.[2], shell.projects);
+  mobileLinks?.[2]?.setAttribute('href', routes.projects);
 
   setText('.mobile-menu__cv', shell.mobileViewCv);
   setAttribute('.mobile-menu__cv', 'href', routes.cv);
@@ -160,39 +136,6 @@ function localizeHeader(data: LocalePayload) {
       link.dataset.localeLink = routes.localeTarget.locale;
       link.textContent = routes.localeTarget.locale.toUpperCase();
     });
-}
-
-function localizeAboutDialog(data: LocalePayload) {
-  const { dialog, profile } = data;
-
-  setText('[data-about-eyebrow]', dialog.aboutEyebrow);
-  setAttribute('[data-about-github-link]', 'aria-label', dialog.viewGitHub);
-  setAttribute('[data-about-github-link]', 'title', dialog.viewGitHub);
-  setAttribute('[data-about-linkedin-link]', 'aria-label', dialog.viewLinkedIn);
-  setAttribute('[data-about-linkedin-link]', 'title', dialog.viewLinkedIn);
-  setAttribute('[data-about-close]', 'aria-label', dialog.closeAbout);
-  setAttribute('[data-about-image]', 'alt', profile.aboutImageAlt);
-  setText('[data-about-location]', profile.location);
-  setText('[data-about-intro]', profile.aboutIntro);
-  setText('[data-about-education-title]', dialog.educationAndProjects);
-  setText('[data-about-seeking-title]', dialog.seeking);
-  setText('[data-about-seeking]', profile.seeking);
-
-  const milestones = document.querySelector<HTMLUListElement>(
-    '[data-about-milestones]',
-  );
-  if (milestones) {
-    const items = profile.milestones.map((milestone) => {
-      const item = document.createElement('li');
-      const label = document.createElement('span');
-      const text = document.createElement('p');
-      label.textContent = milestone.label;
-      text.textContent = milestone.text;
-      item.append(label, text);
-      return item;
-    });
-    milestones.replaceChildren(...items);
-  }
 }
 
 function localizeNotFoundPage(data: LocalePayload, locale: Locale) {
@@ -244,7 +187,6 @@ function initializeNotFoundLocale() {
 
   localizeNotFoundPage(data, locale);
   localizeHeader(data);
-  localizeAboutDialog(data);
 }
 
 initializeNotFoundLocale();

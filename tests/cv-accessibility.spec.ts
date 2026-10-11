@@ -8,14 +8,14 @@ test('CV standalone browser controls remain accessible landmark content', async 
   expect(response?.ok()).toBe(true);
 
   const backLink = page.getByRole('link', {
-    name: 'Volver al portfolio de Daniel García Ortega',
+    name: 'Volver al selector de currículums de Daniel García Ortega',
   });
   const downloadLink = page.getByRole('link', {
     name: 'Descargar CV de Daniel García Ortega en PDF',
   });
 
   await expect(backLink).toBeVisible();
-  await expect(backLink).toHaveAttribute('href', '../');
+  await expect(backLink).toHaveAttribute('href', 'opciones/');
   await expect(downloadLink).toBeVisible();
   await expect(downloadLink).toHaveAttribute(
     'href',

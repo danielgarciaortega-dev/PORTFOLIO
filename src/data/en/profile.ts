@@ -26,6 +26,8 @@ export const profile = {
       text: 'AL-LÍO, the project that earned me the Aircury Summer of Code 2026 scholarship.',
     },
   ],
+  contribution:
+    'A willingness to keep learning and solve real problems from day one.',
   seeking:
     'A company where I can complete my second-year internship, keep learning and contribute by solving real problems from day one.',
   profileImage: 'images/profile/profile-main.webp',
