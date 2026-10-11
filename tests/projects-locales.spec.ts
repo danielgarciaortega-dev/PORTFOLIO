@@ -68,6 +68,37 @@ test('Spanish project cards keep unique accessible CTAs and Spanish dialog copy'
   ).toBeVisible();
 });
 
+test('SIDN award uses editorial metadata styling in both locales', async ({
+  page,
+}) => {
+  for (const routeCase of [
+    {
+      route: './proyectos/',
+      open: 'Ver proyecto SIDN Cost Control',
+      award: 'Ganador de la I Edición GEN AI ARENA',
+    },
+    {
+      route: './en/projects/',
+      open: 'View project SIDN Cost Control',
+      award: 'Winner of I Edición GEN AI ARENA',
+    },
+  ]) {
+    await page.goto(routeCase.route);
+    await page.getByRole('button', { name: routeCase.open }).click();
+
+    const dialog = page.getByRole('dialog', { name: 'SIDN Cost Control' });
+    const award = dialog.locator('.award-label');
+
+    await expect(award).toHaveText(routeCase.award);
+    await expect(award).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(award).toHaveCSS('border-radius', '0px');
+    await expect(award).toHaveCSS('border-left-style', 'solid');
+    await expect(award).toHaveCSS('border-left-width', '2px');
+
+    await page.keyboard.press('Escape');
+  }
+});
+
 test('English home uses approved project copy and unique accessible CTAs', async ({
   page,
 }) => {
