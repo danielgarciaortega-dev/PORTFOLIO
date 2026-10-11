@@ -51,7 +51,7 @@ for (const viewport of viewports) {
       await page.goto(locale.route);
 
       const rows = page.locator('.project-row');
-      const moments = page.locator('.projects-page__backdrop img');
+      const moments = page.locator('.projects-page__moment');
 
       await expect(rows).toHaveCount(3);
       await expect(moments).toHaveCount(6);
@@ -115,7 +115,7 @@ test('backdrop states keep project layout stable', async ({ page }) => {
       await page.setViewportSize(viewport);
       await page.goto(locale.route);
 
-      const moments = page.locator('.projects-page__backdrop img');
+      const moments = page.locator('.projects-page__moment');
       const content = page.locator('.projects-page-list--solo');
 
       await expect(moments).toHaveCount(6);
@@ -176,7 +176,7 @@ test('reduced motion keeps project layout stable', async ({ page }) => {
       await page.setViewportSize(viewport);
       await page.goto(locale.route);
 
-      const moments = page.locator('.projects-page__backdrop img');
+      const moments = page.locator('.projects-page__moment');
       const states = await moments.evaluateAll((images) =>
         images.map((image) => {
           const style = getComputedStyle(image);

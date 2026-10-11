@@ -23,21 +23,42 @@ const projects = getProjects(locale);
 >
   <main id="contenido" class="projects-page">
     <div class="projects-page__backdrop" aria-hidden="true">
-      {
-        projectMoments.map((moment, index) => (
-          <img
-            src={withBase(`images/moments/moment-${moment.number}.webp`)}
-            alt=""
-            style={`--moment-delay: ${
-              PROJECT_BACKDROP_INITIAL_OFFSET_SECONDS +
-              index * PROJECT_BACKDROP_STEP_SECONDS
-            }s; --moment-duration: ${PROJECT_BACKDROP_DURATION_SECONDS}s; --moment-position-desktop: ${moment.desktopPosition}; --moment-position-mobile: ${moment.mobilePosition};`}
-            loading={moment.loading}
-            fetchpriority={moment.fetchPriority}
-            decoding="async"
-          />
-        ))
-      }
+      <div class="projects-page__moments">
+        {
+          projectMoments.map((moment, index) => (
+            <img
+              class="projects-page__moment"
+              src={withBase(`images/moments/moment-${moment.number}.webp`)}
+              alt=""
+              style={`--moment-delay: ${
+                PROJECT_BACKDROP_INITIAL_OFFSET_SECONDS +
+                index * PROJECT_BACKDROP_STEP_SECONDS
+              }s; --moment-duration: ${PROJECT_BACKDROP_DURATION_SECONDS}s; --moment-position-desktop: ${moment.desktopPosition}; --moment-position-mobile: ${moment.mobilePosition};`}
+              loading={moment.loading}
+              fetchpriority={moment.fetchPriority}
+              decoding="async"
+            />
+          ))
+        }
+      </div>
+      <div class="projects-page__contexts">
+        {
+          projects.map(
+            (project) =>
+              project.image && (
+                <img
+                  class="projects-page__context-image"
+                  src={withBase(project.image)}
+                  alt=""
+                  data-project-context-image={project.id}
+                  loading="eager"
+                  fetchpriority="low"
+                  decoding="async"
+                />
+              ),
+          )
+        }
+      </div>
     </div>
     <section
       class="section-shell projects-page-list projects-page-list--solo"
@@ -57,3 +78,7 @@ const projects = getProjects(locale);
     ))
   }
 </BaseLayout>
+
+<script>
+  import '../../scripts/project-context-backdrop';
+</script>
