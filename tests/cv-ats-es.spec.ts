@@ -45,7 +45,9 @@ test('Spanish ATS CV is semantic, complete and text-first', async ({
   await expect(page.locator('.ats-document')).toContainText('Prisma');
   await expect(page.locator('.ats-document')).toContainText('Docker');
   await expect(page.locator('.ats-document')).not.toContainText('Vercel');
-  const spanishDownload = page.getByRole('link', { name: 'Descargar PDF' });
+  const spanishDownload = page.getByRole('link', {
+    name: 'Descargar currículum ATS de Daniel García Ortega en PDF',
+  });
   await expect(spanishDownload).toHaveAttribute(
     'href',
     'CV-Daniel-Garcia-Ortega-ATS.pdf',
@@ -55,28 +57,28 @@ test('Spanish ATS CV is semantic, complete and text-first', async ({
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
 
-test('ATS toolbars keep only selector navigation and the correct download', async ({
+test('ATS viewer controls keep only selector navigation and the correct download', async ({
   page,
 }) => {
   for (const viewer of [
     {
       route: './cv/ats/',
-      backName: '← Volver a CVs',
+      backName: 'Volver al selector de currículums de Daniel García Ortega',
       backHref: '../opciones/',
-      downloadName: 'Descargar PDF',
+      downloadName: 'Descargar currículum ATS de Daniel García Ortega en PDF',
       downloadHref: 'CV-Daniel-Garcia-Ortega-ATS.pdf',
     },
     {
       route: './en/cv/ats/',
-      backName: '← Back to CVs',
+      backName: 'Back to Daniel García Ortega CV options',
       backHref: '../options/',
-      downloadName: 'Download PDF',
+      downloadName: 'Download Daniel García Ortega ATS CV as PDF',
       downloadHref: 'CV-Daniel-Garcia-Ortega-ATS-EN.pdf',
     },
   ]) {
     await page.goto(viewer.route);
 
-    const toolbar = page.locator('.ats-toolbar');
+    const toolbar = page.locator('.cv-page-landmark');
     await expect(toolbar.getByRole('link')).toHaveCount(2);
     await expect(
       toolbar.getByRole('link', { name: viewer.backName }),
@@ -114,7 +116,11 @@ test('Spanish ATS print view hides browser navigation and keeps readable flow', 
   await page.goto('./cv/ats/');
   await page.emulateMedia({ media: 'print' });
 
-  await expect(page.locator('.ats-toolbar')).toHaveCSS('display', 'none');
+  await expect(page.locator('.portfolio-back-link')).toHaveCSS(
+    'display',
+    'none',
+  );
+  await expect(page.locator('.download-btn')).toHaveCSS('display', 'none');
   await expect(page.locator('.ats-document')).toBeVisible();
 
   const geometry = await page.locator('.ats-document').evaluate((element) => {
@@ -162,7 +168,9 @@ test('English ATS CV preserves the approved ATS structure and facts', async ({
   await expect(page.locator('table')).toHaveCount(0);
   await expect(page.locator('img')).toHaveCount(0);
   await expect(page.locator('.ats-document')).not.toContainText('Vercel');
-  const englishDownload = page.getByRole('link', { name: 'Download PDF' });
+  const englishDownload = page.getByRole('link', {
+    name: 'Download Daniel García Ortega ATS CV as PDF',
+  });
   await expect(englishDownload).toHaveAttribute(
     'href',
     'CV-Daniel-Garcia-Ortega-ATS-EN.pdf',

@@ -169,8 +169,46 @@ const current = {
   englishDirectoryEntries: await readdir(new URL('public/en/cv/', root)),
 };
 
+const atsShell = {
+  es: await readRepositoryFile('public/cv/ats/index.html'),
+  en: await readRepositoryFile('public/en/cv/ats/index.html'),
+  styles: await readRepositoryFile('public/cv/ats/styles.css'),
+};
+
 test('final bilingual CV contract preserves facts, shared assets, navigation and A4 geometry', () => {
   assertFinalCvContract(current);
+});
+
+test('ATS viewer reuses the designed CV navigation shell without changing document layout', () => {
+  for (const source of [atsShell.es, atsShell.en]) {
+    assert.doesNotMatch(source, /ats-toolbar/);
+    assert.match(source, /class="cv-page-landmark"/);
+    assert.match(source, /class="portfolio-back-link"/);
+    assert.match(source, /class="cv-page-actions"/);
+    assert.match(source, /class="download-btn"/);
+  }
+
+  assert.equal(backHref(atsShell.es), '../opciones/');
+  assert.equal(backHref(atsShell.en), '../options/');
+  assert.match(atsShell.es, /href="CV-Daniel-Garcia-Ortega-ATS\.pdf"/);
+  assert.match(atsShell.en, /href="CV-Daniel-Garcia-Ortega-ATS-EN\.pdf"/);
+
+  assert.match(
+    atsShell.styles,
+    /\.portfolio-back-link\s*\{[\s\S]*?position:\s*fixed;[\s\S]*?left:\s*24px;/,
+  );
+  assert.match(
+    atsShell.styles,
+    /\.cv-page-actions\s*\{[\s\S]*?position:\s*fixed;[\s\S]*?right:\s*24px;/,
+  );
+  assert.match(
+    atsShell.styles,
+    /@media screen and \(max-width:\s*900px\)[\s\S]*?\.portfolio-back-link\s*\{[\s\S]*?position:\s*static;/,
+  );
+  assert.match(
+    atsShell.styles,
+    /@media print[\s\S]*?\.download-btn,[\s\S]*?\.portfolio-back-link\s*\{[\s\S]*?display:\s*none\s*!important;/,
+  );
 });
 
 const adversarialCases = [

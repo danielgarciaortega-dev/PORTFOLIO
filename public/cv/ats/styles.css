@@ -34,34 +34,68 @@ a {
   overflow-wrap: anywhere;
 }
 
-.ats-toolbar {
-  width: min(860px, calc(100% - 32px));
-  margin: 20px auto 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 12px;
+.cv-page-landmark {
+  display: contents;
 }
 
-.ats-toolbar a {
+.cv-page-actions {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.download-btn,
+.portfolio-back-link {
   min-height: 44px;
   display: inline-flex;
   align-items: center;
-  padding: 8px 12px;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
   border: 1px solid var(--ats-line);
   border-radius: 999px;
-  background: var(--ats-surface);
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 10px 28px rgb(24 24 27 / 10%);
   color: var(--ats-ink);
-  font-weight: 700;
+  font: 700 12px var(--ats-font);
   text-decoration: none;
+  white-space: nowrap;
 }
 
-.ats-toolbar a:hover {
+.download-btn {
   border-color: var(--ats-accent);
   color: #5f451f;
 }
 
-.ats-toolbar a:focus-visible,
+.download-btn__icon {
+  flex: 0 0 auto;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.portfolio-back-link {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  z-index: 20;
+}
+
+.portfolio-back-link:hover {
+  border-color: var(--ats-accent);
+  color: #5f451f;
+}
+
+.download-btn:hover {
+  background: #5f451f;
+  color: #fff;
+}
+
+.portfolio-back-link:focus-visible,
+.download-btn:focus-visible,
 .ats-document a:focus-visible {
   outline: 2px solid var(--ats-accent);
   outline-offset: 2px;
@@ -168,7 +202,8 @@ li + li {
     font-size: 10.5pt;
   }
 
-  .ats-toolbar {
+  .download-btn,
+  .portfolio-back-link {
     display: none !important;
   }
 
@@ -191,26 +226,50 @@ li + li {
   }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 900px) {
   body {
     background: #fff;
   }
 
-  .ats-toolbar,
+  .cv-page-landmark {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 12px 0;
+  }
+
+  .cv-page-actions {
+    position: static;
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .download-btn {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    padding: 0;
+    border-color: var(--ats-line);
+    background: #fff;
+  }
+
+  .download-btn__label {
+    display: none;
+  }
+
+  .portfolio-back-link {
+    position: static;
+    min-width: 0;
+    margin: 0;
+    white-space: nowrap;
+  }
+
   .ats-document {
     width: min(100%, calc(100% - 24px));
-  }
-
-  .ats-toolbar {
-    margin-top: 12px;
-  }
-
-  .ats-toolbar a {
-    flex: 1 1 auto;
-    justify-content: center;
-  }
-
-  .ats-document {
     margin-top: 12px;
     padding: 28px 20px 36px;
     box-shadow: none;

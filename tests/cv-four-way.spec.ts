@@ -24,7 +24,7 @@ const viewerCases = [
     locale: 'es',
     variant: 'ats',
     root: '.ats-document',
-    toolbar: '.ats-toolbar',
+    toolbar: '.cv-page-landmark',
     backHref: '../opciones/',
     download: 'CV-Daniel-Garcia-Ortega-ATS.pdf',
   },
@@ -33,7 +33,7 @@ const viewerCases = [
     locale: 'en',
     variant: 'ats',
     root: '.ats-document',
-    toolbar: '.ats-toolbar',
+    toolbar: '.cv-page-landmark',
     backHref: '../options/',
     download: 'CV-Daniel-Garcia-Ortega-ATS-EN.pdf',
   },
@@ -130,10 +130,7 @@ test('each CV viewer downloads only its own PDF', async ({ page }) => {
   for (const viewer of viewerCases) {
     await page.goto(viewer.route);
 
-    const candidates =
-      viewer.variant === 'designed'
-        ? page.locator('.download-btn[download]')
-        : page.locator('.ats-toolbar a[download]');
+    const candidates = page.locator('.download-btn[download]');
 
     await expect(candidates).toHaveCount(1);
     await expect(candidates).toHaveAttribute('href', viewer.download);
