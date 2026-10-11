@@ -25,21 +25,21 @@ const projects = getProjects(locale);
     <div class="projects-page__backdrop" aria-hidden="true">
       <div class="projects-page__moments">
         {
-        projectMoments.map((moment, index) => (
-          <img
-            class="projects-page__moment"
-            src={withBase(`images/moments/moment-${moment.number}.webp`)}
-            alt=""
-            style={`--moment-delay: ${
-              PROJECT_BACKDROP_INITIAL_OFFSET_SECONDS +
-              index * PROJECT_BACKDROP_STEP_SECONDS
-            }s; --moment-duration: ${PROJECT_BACKDROP_DURATION_SECONDS}s; --moment-position-desktop: ${moment.desktopPosition}; --moment-position-mobile: ${moment.mobilePosition};`}
-            loading={moment.loading}
-            fetchpriority={moment.fetchPriority}
-            decoding="async"
-          />
-        ))
-      }
+          projectMoments.map((moment, index) => (
+            <img
+              class="projects-page__moment"
+              src={withBase(`images/moments/moment-${moment.number}.webp`)}
+              alt=""
+              style={`--moment-delay: ${
+                PROJECT_BACKDROP_INITIAL_OFFSET_SECONDS +
+                index * PROJECT_BACKDROP_STEP_SECONDS
+              }s; --moment-duration: ${PROJECT_BACKDROP_DURATION_SECONDS}s; --moment-position-desktop: ${moment.desktopPosition}; --moment-position-mobile: ${moment.mobilePosition};`}
+              loading={moment.loading}
+              fetchpriority={moment.fetchPriority}
+              decoding="async"
+            />
+          ))
+        }
       </div>
       <div class="projects-page__contexts">
         {

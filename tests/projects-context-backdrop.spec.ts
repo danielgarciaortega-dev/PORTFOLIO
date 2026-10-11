@@ -50,9 +50,7 @@ test('project hover and focus select canonical contextual artwork', async ({
     await expect(backdrop).not.toHaveAttribute('data-active-project');
 
     for (const project of locale.projects) {
-      const row = page.locator(
-        `[data-project-context="${project.id}"]`,
-      );
+      const row = page.locator(`[data-project-context="${project.id}"]`);
       const context = page.locator(
         `[data-project-context-image="${project.id}"]`,
       );
@@ -63,10 +61,7 @@ test('project hover and focus select canonical contextual artwork', async ({
       );
 
       await row.hover();
-      await expect(backdrop).toHaveAttribute(
-        'data-active-project',
-        project.id,
-      );
+      await expect(backdrop).toHaveAttribute('data-active-project', project.id);
       await expect(context).toHaveAttribute('data-active', '');
       await expect(page.locator('.projects-page__moments')).toHaveCSS(
         'opacity',
@@ -79,10 +74,7 @@ test('project hover and focus select canonical contextual artwork', async ({
       const action = page.getByRole('button', { name: project.action });
       await action.focus();
       await expect(action).toBeFocused();
-      await expect(backdrop).toHaveAttribute(
-        'data-active-project',
-        project.id,
-      );
+      await expect(backdrop).toHaveAttribute('data-active-project', project.id);
       await expect(context).toHaveAttribute('data-active', '');
 
       await action.evaluate((element) => (element as HTMLElement).blur());
@@ -91,7 +83,9 @@ test('project hover and focus select canonical contextual artwork', async ({
   }
 });
 
-test('keyboard context wins over incidental pointer hover', async ({ page }) => {
+test('keyboard context wins over incidental pointer hover', async ({
+  page,
+}) => {
   await page.goto('./proyectos/');
 
   const backdrop = page.locator('.projects-page__backdrop');
