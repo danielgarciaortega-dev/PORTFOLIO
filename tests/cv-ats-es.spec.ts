@@ -57,6 +57,37 @@ test('Spanish ATS CV is semantic, complete and text-first', async ({
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
 
+test('ATS editorial hierarchy stays linear and matches the designed CV palette', async ({
+  page,
+}) => {
+  for (const route of ['./cv/ats/', './en/cv/ats/']) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(route);
+
+    const document = page.locator('.ats-document');
+    await expect(document).toHaveCSS('display', 'block');
+    await expect(document).toHaveCSS('column-count', 'auto');
+    await expect(document.locator('h1')).toHaveCSS('font-weight', '800');
+    await expect(document.locator('.ats-role')).toHaveCSS(
+      'color',
+      'rgb(95, 69, 31)',
+    );
+    await expect(document.locator('.ats-section')).toHaveCount(7);
+    await expect(document.locator('.ats-section h2')).toHaveCount(7);
+    await expect(document.locator('.ats-section h2').first()).toHaveCSS(
+      'border-left-width',
+      '3px',
+    );
+    await expect(document.locator('img, table')).toHaveCount(0);
+
+    await page.emulateMedia({ media: 'print' });
+    await expect(document).toHaveCSS('border-top-width', '0px');
+    await expect(document).toHaveCSS('box-shadow', 'none');
+    await expect(page.locator('.download-btn')).toHaveCSS('display', 'none');
+    await page.emulateMedia({ media: 'screen' });
+  }
+});
+
 test('ATS viewer controls keep only selector navigation and the correct download', async ({
   page,
 }) => {
