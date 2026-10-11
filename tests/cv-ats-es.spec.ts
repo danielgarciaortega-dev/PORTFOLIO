@@ -88,6 +88,33 @@ test('ATS editorial hierarchy stays linear and matches the designed CV palette',
   }
 });
 
+test('ATS metadata separators and list markers are stable in both locales', async ({
+  page,
+}) => {
+  for (const locale of [
+    { route: './cv/ats/', mode: 'Teletrabajo' },
+    { route: './en/cv/ats/', mode: 'Remote' },
+  ]) {
+    await page.goto(locale.route);
+
+    const document = page.locator('.ats-document');
+    const text = await document.innerText();
+    expect(text).not.toContain('·');
+    expect(text).not.toContain('\uFFFD');
+    expect(text).toContain(`2023 – 2026, ${locale.mode}`);
+
+    const bulletList = document.locator('ul').first();
+    await expect(bulletList).toHaveCSS('list-style-type', 'disc');
+    await expect(bulletList).toHaveCSS('list-style-position', 'outside');
+    await expect(document.locator('ul > li').first()).toBeVisible();
+
+    await page.emulateMedia({ media: 'print' });
+    await expect(bulletList).toHaveCSS('list-style-type', 'disc');
+    await expect(document).toHaveCSS('column-count', 'auto');
+    await page.emulateMedia({ media: 'screen' });
+  }
+});
+
 test('ATS viewer controls keep only selector navigation and the correct download', async ({
   page,
 }) => {
