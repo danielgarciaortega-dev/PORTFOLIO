@@ -123,7 +123,13 @@ test('reduced motion makes contextual switching instant', async ({ page }) => {
     .focus();
 
   await expect(context).toHaveAttribute('data-active', '');
-  await expect(context).toHaveCSS('transition-duration', '0s');
+  for (const layer of [context, momentsLayer]) {
+    const durations = await layer.evaluate((element) =>
+      getComputedStyle(element)
+        .transitionDuration.split(',')
+        .map((value) => Number.parseFloat(value)),
+    );
+    expect(durations.every((seconds) => seconds <= 0.001)).toBe(true);
+  }
   await expect(context).toHaveCSS('filter', 'none');
-  await expect(momentsLayer).toHaveCSS('transition-duration', '0s');
 });

@@ -26,7 +26,7 @@ test('project backdrop uses one shared six-moment timing and crop contract', asy
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(route);
 
-    const moments = page.locator('.projects-page__backdrop img');
+    const moments = page.locator('.projects-page__moment');
     await expect(moments).toHaveCount(6);
 
     const contract = await moments.evaluateAll((images) =>
@@ -103,7 +103,7 @@ test('portrait mobile crops de-emphasize dominant subjects without changing land
   await page.goto('./proyectos/');
 
   const positions = await page
-    .locator('.projects-page__backdrop img')
+    .locator('.projects-page__moment')
     .evaluateAll((images) =>
       images.map((image) => getComputedStyle(image).objectPosition),
     );
@@ -121,7 +121,7 @@ test('portrait mobile crops de-emphasize dominant subjects without changing land
   await page.reload();
 
   const landscapeMomentSix = await page
-    .locator('.projects-page__backdrop img')
+    .locator('.projects-page__moment')
     .nth(5)
     .evaluate((image) => getComputedStyle(image).objectPosition);
 
@@ -135,7 +135,7 @@ test('reduced motion keeps one stable backdrop with no blur, transform or layout
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('./proyectos/');
 
-  const moments = page.locator('.projects-page__backdrop img');
+  const moments = page.locator('.projects-page__moment');
   const styles = await moments.evaluateAll((images) =>
     images.map((image) => {
       const style = getComputedStyle(image);
