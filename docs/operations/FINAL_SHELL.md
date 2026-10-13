@@ -59,19 +59,17 @@ The top bar contains only:
 - `DGO.`;
 - the menu trigger.
 
-Inside the mobile dialog/panel:
+The mobile dialog contains only the numbered primary navigation (`01` Home, `02` About, `03` Projects). It contains no social, locale or CV utilities.
 
-1. the numbered primary navigation remains a separate navigation block (`01` Home, `02` About, `03` Projects);
-2. GitHub and LinkedIn live together in one unnumbered social utility row;
-3. the target-locale action and locale-correct CV action live together in a separate unnumbered utility group.
+Below the public page content, the shared shell mounts one dedicated mobile-only utility footer. Its first row contains GitHub and LinkedIn as outlined boxed actions. Its second row contains exactly one target-locale action and the locale-correct CV-center action. The footer uses the shared route helpers and stays base-safe under `/PORTFOLIO/`.
 
-The mobile utility area must not recreate the deleted footer: do not add duplicated brand, role/location copy, Contact, or a full-width footer composition.
+At widths above 900 px the footer is hidden; the desktop header preserves all utility placement. The mobile footer does not repeat brand, role/location copy, Contact or unrelated full-footer sections.
 
 ## Footer and dialog topology
 
-The public site shell has no full `.site-footer` surface.
+The public shell has no full redundant `.site-footer` surface. Above 900 px there is no visible site footer. At 900 px and below, the single `.mobile-utility-footer` is the exclusive place for GitHub, LinkedIn, the target-locale action and the CV-center link.
 
-The footer removed by #87 must not be reintroduced to recover actions that already exist elsewhere. GitHub and LinkedIn survive through the header/mobile utility placement; CV survives through the right/mobile utility placement.
+The full site footer removed by #87 remains retired. Desktop utilities stay in the existing header zones. Do not reintroduce duplicated brand, role/location, Contact or unrelated footer content.
 
 Dialog mounts must follow actual visible triggers:
 
@@ -130,7 +128,7 @@ The final shell is protected primarily by semantic and geometry assertions rathe
 
 Relevant maintained coverage includes:
 
-- `tests/shell-regressions.spec.ts` — desktop/mobile utility placement, one locale action, no site footer, route-safe switching, dialog topology and supported-width overflow checks;
+- `tests/shell-regressions.spec.ts` — desktop/mobile utility placement, one target-locale action, no desktop footer, mobile-only utility footer, route-safe switching, dialog topology and supported-width overflow checks;
 - `tests/home-locales.spec.ts` and `tests/home-english.spec.ts` — bilingual home shell behavior;
 - `tests/projects-locales.spec.ts` — bilingual project routes, localized navigation, project counterpart switching, persistence, mobile overflow and the absent `/projects/` alias;
 - `tests/metadata-locales.spec.ts` and `tests/not-found-locales.spec.ts` — locale-aware metadata and real-404 behavior;
@@ -159,7 +157,7 @@ Future contributors must not reintroduce any of the following without a separate
 - locale controls inside primary navigation;
 - duplicated GitHub/LinkedIn controls in multiple desktop zones;
 - duplicated CV actions across desktop zones;
-- a full website footer that repeats brand/profile/actions;
+- a full website footer that repeats brand/profile/actions or utility controls inside the mobile dialog;
 - Contact as a footer replacement merely to restore the removed topology;
 - a second mobile navigation block for utilities;
 - another route/localization mechanism that bypasses the shared home/projects counterpart contract;

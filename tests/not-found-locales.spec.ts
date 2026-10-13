@@ -58,6 +58,10 @@ test('Spanish missing route keeps HTTP 404 and the default localized shell', asy
     .getByRole('link', { name: 'Cambiar a inglés' });
   await expect(visibleLocaleAction).toHaveText('EN');
   await expect(visibleLocaleAction).toHaveAttribute('href', '/PORTFOLIO/en/');
+  await expect(page.locator('.header-cv-link')).toHaveAttribute(
+    'href',
+    '/PORTFOLIO/cv/opciones/',
+  );
   await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(0);
 });
 
@@ -115,6 +119,10 @@ test('English-prefixed missing route keeps HTTP 404 and localizes the one shell'
     .getByRole('link', { name: 'Switch to Spanish' });
   await expect(visibleLocaleAction).toHaveText('ES');
   await expect(visibleLocaleAction).toHaveAttribute('href', '/PORTFOLIO/');
+  await expect(page.locator('.header-cv-link')).toHaveAttribute(
+    'href',
+    '/PORTFOLIO/en/cv/options/',
+  );
 });
 
 test('English 404 mobile menu stays localized, usable and overflow-free', async ({
@@ -145,13 +153,8 @@ test('English 404 mobile menu stays localized, usable and overflow-free', async 
   await expect(
     navigation.getByRole('link', { name: /Projects/ }),
   ).toHaveAttribute('href', '/PORTFOLIO/en/projects/');
-  await expect(
-    menu.getByRole('link', { name: 'Switch to Spanish' }),
-  ).toHaveAttribute('href', '/PORTFOLIO/');
-  await expect(menu.getByRole('link', { name: 'View CV' })).toHaveAttribute(
-    'href',
-    '/PORTFOLIO/cv/',
-  );
+  await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
+  await expect(menu.getByRole('link', { name: 'View CV' })).toHaveCount(0);
 
   const viewport = await page.evaluate(() => ({
     clientWidth: document.documentElement.clientWidth,
@@ -163,6 +166,17 @@ test('English 404 mobile menu stays localized, usable and overflow-free', async 
   await expect(menu).toBeHidden();
   await expect(trigger).toHaveAttribute('aria-label', 'Open menu');
   await expect(trigger).toBeFocused();
+
+  const footer = page.locator('[data-mobile-utility-footer]');
+  await expect(footer).toBeVisible();
+  await expect(
+    footer.getByRole('link', { name: 'Switch to Spanish' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/');
+  await expect(footer).toHaveAttribute('aria-label', 'Links and options');
+  await expect(footer.getByRole('link', { name: 'View CV' })).toHaveAttribute(
+    'href',
+    '/PORTFOLIO/en/cv/options/',
+  );
 });
 
 test('representative Spanish and English 404 states pass axe', async ({

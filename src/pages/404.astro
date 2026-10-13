@@ -28,7 +28,7 @@ const localePayload = Object.fromEntries(
           home: withBase(getLocalizedRoutePath(locale, 'home')),
           about: withBase(getLocalizedRoutePath(locale, 'about')),
           projects: withBase(getLocalizedRoutePath(locale, 'projects')),
-          cv: withBase('cv/'),
+          cv: withBase(getLocalizedRoutePath(locale, 'cvCenter')),
           localeTarget: {
             locale: targetLocale,
             href: withBase(targetPath),

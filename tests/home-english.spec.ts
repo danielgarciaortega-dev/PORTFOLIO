@@ -43,7 +43,7 @@ test('English homepage shell and hero use the approved copy', async ({
   await expect(page.locator('.site-footer')).toHaveCount(0);
 });
 
-test('English mobile navigation exposes accessible names and locale control', async ({
+test('English mobile navigation exposes accessible names; the footer owns locale control', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -56,5 +56,18 @@ test('English mobile navigation exposes accessible names and locale control', as
     menu.getByRole('navigation', { name: 'Mobile navigation' }),
   ).toContainText('Home');
   await expect(menu.getByRole('button', { name: 'Close menu' })).toBeVisible();
-  await expect(menu.locator('[data-language-switcher]')).toBeVisible();
+  await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
+  await expect(menu.getByRole('link')).toHaveCount(3);
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeHidden();
+
+  const footer = page.locator('[data-mobile-utility-footer]');
+  await expect(footer).toBeVisible();
+  await expect(
+    footer.getByRole('link', { name: 'Switch to Spanish' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/');
+  await expect(footer.getByRole('link', { name: 'View CV' })).toHaveAttribute(
+    'href',
+    '/PORTFOLIO/en/cv/options/',
+  );
 });

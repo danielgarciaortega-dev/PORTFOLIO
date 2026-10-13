@@ -72,6 +72,7 @@ test('final desktop shell contract stays deterministic across supported widths a
 
       await expect(header).toBeVisible();
       await expect(page.locator('.site-footer')).toHaveCount(0);
+      await expect(page.locator('[data-mobile-utility-footer]')).toBeHidden();
       await expect(socials).toBeVisible();
       await expect(socials.getByRole('link')).toHaveCount(2);
       await expect(socials.getByRole('link', { name: 'GitHub' })).toBeVisible();
@@ -109,7 +110,7 @@ test('final desktop shell contract stays deterministic across supported widths a
   }
 });
 
-test('final mobile shell keeps navigation and utilities separate without overflow', async ({
+test('mobile footer owns utilities and menu has navigation only', async ({
   page,
 }) => {
   for (const localeCase of localeCases) {
@@ -118,6 +119,7 @@ test('final mobile shell keeps navigation and utilities separate without overflo
       await page.goto(localeCase.route);
 
       const header = page.locator('[data-site-header]');
+      const footer = page.locator('[data-mobile-utility-footer]');
       const trigger = header.getByRole('button', {
         name: localeCase.openMenu,
       });
@@ -126,50 +128,47 @@ test('final mobile shell keeps navigation and utilities separate without overflo
       await expect(header.locator('[data-header-socials]')).toBeHidden();
       await expect(header.locator('.site-header__actions')).toBeHidden();
       await expect(trigger).toBeVisible();
-
-      await trigger.focus();
-      await page.keyboard.press('Enter');
-
-      const menu = page.getByRole('dialog', { name: localeCase.menu });
-      const navigation = menu.getByRole('navigation', {
-        name: localeCase.mobileNavigation,
-      });
-      const socials = menu.locator('[data-mobile-socials]');
-      const utilities = menu.locator('[data-mobile-utilities]');
-
-      await expect(menu).toBeVisible();
-      await expect(navigation.locator('[data-language-switcher]')).toHaveCount(
-        0,
-      );
+      await expect(footer).toBeVisible();
+      await expect(footer.locator('[data-footer-socials] a')).toHaveCount(2);
+      await expect(footer.getByRole('link', { name: 'GitHub' })).toBeVisible();
       await expect(
-        navigation.getByRole('link', { name: 'GitHub' }),
-      ).toHaveCount(0);
-      await expect(
-        navigation.getByRole('link', { name: 'LinkedIn' }),
-      ).toHaveCount(0);
-      await expect(socials.getByRole('link')).toHaveCount(2);
-      await expect(socials.getByRole('link', { name: 'GitHub' })).toBeVisible();
-      await expect(
-        socials.getByRole('link', { name: 'LinkedIn' }),
+        footer.getByRole('link', { name: 'LinkedIn' }),
       ).toBeVisible();
 
-      const localeLink = utilities.getByRole('link', {
+      const localeLink = footer.getByRole('link', {
         name: localeCase.localeAction,
       });
       await expect(localeLink).toHaveCount(1);
       await expect(localeLink).toHaveAttribute('href', localeCase.localeHref);
-      const mobileCvLink = utilities.getByRole('link', {
+      const cvLink = footer.getByRole('link', {
         name: localeCase.mobileCv,
       });
-      await expect(mobileCvLink).toHaveCount(1);
-      await expect(mobileCvLink).toHaveAttribute('href', localeCase.cvHref);
+      await expect(cvLink).toHaveCount(1);
+      await expect(cvLink).toHaveAttribute('href', localeCase.cvHref);
       await expect(
         page.locator('[data-language-switcher]:visible'),
       ).toHaveCount(1);
-
       await expectNoHorizontalOverflow(
         page,
-        `${localeCase.locale} mobile ${width}px with menu open`,
+        `${localeCase.locale} mobile footer ${width}px`,
+      );
+
+      await trigger.focus();
+      await page.keyboard.press('Enter');
+      const menu = page.getByRole('dialog', { name: localeCase.menu });
+      const navigation = menu.getByRole('navigation', {
+        name: localeCase.mobileNavigation,
+      });
+
+      await expect(menu).toBeVisible();
+      await expect(navigation.getByRole('link')).toHaveCount(3);
+      await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
+      await expect(menu.locator('[data-mobile-utilities]')).toHaveCount(0);
+      await expect(menu.getByRole('link', { name: 'GitHub' })).toHaveCount(0);
+      await expect(menu.getByRole('link', { name: 'LinkedIn' })).toHaveCount(0);
+      await expectNoHorizontalOverflow(
+        page,
+        `${localeCase.locale} mobile menu ${width}px`,
       );
 
       await page.keyboard.press('Escape');
