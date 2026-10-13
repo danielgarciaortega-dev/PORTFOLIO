@@ -150,18 +150,13 @@ test('desktop header utility cluster does not overflow compact desktop', async (
   expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.clientWidth);
 });
 
-test('Spanish mobile menu keeps the single locale action outside primary navigation', async ({
-  page,
-}) => {
+test('Spanish mobile footer has the sole locale action', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('./');
 
-  await page.getByRole('button', { name: 'Abrir menú' }).click();
-  const menu = page.getByRole('dialog', { name: 'Navegación' });
-  const switcher = menu.locator('[data-language-switcher]');
-
-  await expect(menu).toBeVisible();
-  await expect(menu.locator('nav [data-language-switcher]')).toHaveCount(0);
+  const footer = page.locator('[data-mobile-utility-footer]');
+  const switcher = footer.locator('[data-language-switcher]');
+  await expect(footer).toBeVisible();
   await expect(switcher).toBeVisible();
   await expect(switcher.getByRole('link')).toHaveCount(1);
 
@@ -170,6 +165,11 @@ test('Spanish mobile menu keeps the single locale action outside primary navigat
   });
   await expect(englishLink).toHaveText('EN');
   await expect(englishLink).toHaveAttribute('href', '/PORTFOLIO/en/');
+
+  await page.getByRole('button', { name: 'Abrir menú' }).click();
+  const menu = page.getByRole('dialog', { name: 'Navegación' });
+  await expect(menu).toBeVisible();
+  await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
 });
 
 test('desktop shell keeps socials left, navigation clean and locale plus CV right', async ({
@@ -204,7 +204,7 @@ test('desktop shell keeps socials left, navigation clean and locale plus CV righ
   await expect(actions.getByRole('link', { name: 'LinkedIn' })).toHaveCount(0);
 });
 
-test('mobile shell separates navigation from social and locale/CV utilities', async ({
+test('mobile shell puts social and CV actions in the footer', async ({
   page,
 }) => {
   for (const width of [360, 390, 430]) {
@@ -212,40 +212,37 @@ test('mobile shell separates navigation from social and locale/CV utilities', as
     await page.goto('./');
 
     const header = page.locator('[data-site-header]');
+    const footer = page.locator('[data-mobile-utility-footer]');
     const trigger = header.getByRole('button', { name: 'Abrir menú' });
 
     await expect(header.locator('[data-header-socials]')).toBeHidden();
     await expect(header.locator('.site-header__actions')).toBeHidden();
     await expect(trigger).toBeVisible();
+    await expect(footer).toBeVisible();
+
+    const socials = footer.locator('[data-footer-socials]');
+    const actions = footer.locator('[data-footer-actions]');
+    await expect(socials.getByRole('link')).toHaveCount(2);
+    await expect(socials.getByRole('link', { name: 'GitHub' })).toBeVisible();
+    await expect(socials.getByRole('link', { name: 'LinkedIn' })).toBeVisible();
+    await expect(
+      actions.getByRole('link', { name: 'Cambiar a inglés' }),
+    ).toHaveAttribute('href', '/PORTFOLIO/en/');
+    await expect(
+      actions.getByRole('link', { name: 'Consultar CV' }),
+    ).toHaveAttribute('href', '/PORTFOLIO/cv/opciones/');
 
     await trigger.focus();
     await page.keyboard.press('Enter');
-
     const menu = page.getByRole('dialog', { name: 'Navegación' });
     const navigation = menu.getByRole('navigation', {
       name: 'Navegación móvil',
     });
-    const socials = menu.locator('[data-mobile-socials]');
-    const utilities = menu.locator('[data-mobile-utilities]');
 
     await expect(menu).toBeVisible();
-    await expect(navigation.locator('span')).toHaveCount(0);
-    await expect(navigation.locator('[data-language-switcher]')).toHaveCount(0);
-    await expect(navigation.getByRole('link', { name: 'GitHub' })).toHaveCount(
-      0,
-    );
-    await expect(
-      navigation.getByRole('link', { name: 'LinkedIn' }),
-    ).toHaveCount(0);
-
-    await expect(socials.getByRole('link')).toHaveCount(2);
-    await expect(socials.getByRole('link', { name: 'GitHub' })).toBeVisible();
-    await expect(socials.getByRole('link', { name: 'LinkedIn' })).toBeVisible();
-
-    await expect(
-      utilities.getByRole('link', { name: 'Cambiar a inglés' }),
-    ).toHaveCount(1);
-    await expect(utilities.locator('.mobile-menu__cv')).toHaveCount(1);
+    await expect(navigation.getByRole('link')).toHaveCount(3);
+    await expect(menu.locator('[data-mobile-utilities]')).toHaveCount(0);
+    await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
 
     const viewport = await page.evaluate(() => ({
       clientWidth: document.documentElement.clientWidth,

@@ -256,12 +256,8 @@ test('mobile projects navigation keeps locale-aware destinations without overflo
     await expect(
       navigation.getByRole('link', { name: routeCase.projects }),
     ).toHaveAttribute('href', routeCase.projectsHref);
-    await expect(
-      menu.getByRole('link', { name: routeCase.switchLabel }),
-    ).toHaveAttribute('href', routeCase.switchHref);
-    await expect(page.locator('[data-language-switcher]:visible')).toHaveCount(
-      1,
-    );
+    await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
+    await expect(menu.locator('[data-mobile-utilities]')).toHaveCount(0);
 
     const overflow = await page.evaluate(
       () =>
@@ -272,6 +268,15 @@ test('mobile projects navigation keeps locale-aware destinations without overflo
 
     await page.keyboard.press('Escape');
     await expect(menu).not.toBeVisible();
+
+    const footer = page.locator('[data-mobile-utility-footer]');
+    await expect(footer).toBeVisible();
+    await expect(
+      footer.getByRole('link', { name: routeCase.switchLabel }),
+    ).toHaveAttribute('href', routeCase.switchHref);
+    await expect(page.locator('[data-language-switcher]:visible')).toHaveCount(
+      1,
+    );
   }
 });
 

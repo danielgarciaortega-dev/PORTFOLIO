@@ -79,5 +79,19 @@ for (const viewport of viewports) {
       await page.getByRole('button', { name: 'Abrir menú' }).click();
       await page.screenshot({ path: path.join(output, 'menu-movil.png') });
     }
+
+    if ([360, 390, 430].includes(viewport.width)) {
+      await page.goto('./en/');
+      await page.screenshot({
+        path: path.join(output, 'home-en-mobile-footer.png'),
+        fullPage: true,
+      });
+
+      await page.goto('./en/projects/');
+      await page.screenshot({
+        path: path.join(output, 'projects-en-mobile-footer.png'),
+        fullPage: true,
+      });
+    }
   });
 }
