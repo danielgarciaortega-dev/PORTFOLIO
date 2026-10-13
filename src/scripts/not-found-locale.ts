@@ -119,7 +119,11 @@ function localizeHeader(data: LocalePayload) {
   setDirectText(mobileLinks?.[2], shell.projects);
   mobileLinks?.[2]?.setAttribute('href', routes.projects);
 
-  setAttribute('[data-mobile-utility-footer]', 'aria-label', shell.mobileFooter);
+  setAttribute(
+    '[data-mobile-utility-footer]',
+    'aria-label',
+    shell.mobileFooter,
+  );
   setText('.mobile-utility-footer__cv', shell.mobileViewCv);
   setAttribute('.mobile-utility-footer__cv', 'href', routes.cv);
 
