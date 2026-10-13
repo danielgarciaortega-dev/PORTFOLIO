@@ -169,8 +169,12 @@ test('English 404 mobile menu stays localized, usable and overflow-free', async 
 
   const footer = page.locator('[data-mobile-utility-footer]');
   await expect(footer).toBeVisible();
+  await expect(footer.locator('[data-language-switcher]')).toHaveCount(0);
+  await expect(footer.getByRole('link')).toHaveCount(3);
   await expect(
-    footer.getByRole('link', { name: 'Switch to Spanish' }),
+    page.locator('[data-mobile-header-tools]').getByRole('link', {
+      name: 'Switch to Spanish',
+    }),
   ).toHaveAttribute('href', '/PORTFOLIO/');
   await expect(footer).toHaveAttribute('aria-label', 'Links and options');
   await expect(footer.getByRole('link', { name: 'View CV' })).toHaveAttribute(

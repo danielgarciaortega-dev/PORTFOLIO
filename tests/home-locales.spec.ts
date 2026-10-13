@@ -150,13 +150,15 @@ test('desktop header utility cluster does not overflow compact desktop', async (
   expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.clientWidth);
 });
 
-test('Spanish mobile footer has the sole locale action', async ({ page }) => {
+test('Spanish mobile header has the sole visible locale action', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('./');
 
+  const headerTools = page.locator('[data-mobile-header-tools]');
+  const switcher = headerTools.locator('[data-language-switcher]');
+  await expect(headerTools).toBeVisible();
   const footer = page.locator('[data-mobile-utility-footer]');
-  const switcher = footer.locator('[data-language-switcher]');
-  await expect(footer).toBeVisible();
+  await expect(footer.locator('[data-language-switcher]')).toHaveCount(0);
   await expect(switcher).toBeVisible();
   await expect(switcher.getByRole('link')).toHaveCount(1);
 
@@ -219,17 +221,20 @@ test('mobile shell puts social and CV actions in the footer', async ({
     await expect(header.locator('.site-header__actions')).toBeHidden();
     await expect(trigger).toBeVisible();
     await expect(footer).toBeVisible();
+    const headerLanguage = header.locator('[data-mobile-header-tools]');
+    await expect(headerLanguage.getByRole('link', { name: 'Cambiar a inglés' })).toHaveAttribute(
+      'href',
+      '/PORTFOLIO/en/',
+    );
 
     const socials = footer.locator('[data-footer-socials]');
-    const actions = footer.locator('[data-footer-actions]');
     await expect(socials.getByRole('link')).toHaveCount(2);
     await expect(socials.getByRole('link', { name: 'GitHub' })).toBeVisible();
     await expect(socials.getByRole('link', { name: 'LinkedIn' })).toBeVisible();
+    await expect(footer.locator('[data-language-switcher]')).toHaveCount(0);
+    await expect(footer.getByRole('link')).toHaveCount(3);
     await expect(
-      actions.getByRole('link', { name: 'Cambiar a inglés' }),
-    ).toHaveAttribute('href', '/PORTFOLIO/en/');
-    await expect(
-      actions.getByRole('link', { name: 'Consultar CV' }),
+      footer.getByRole('link', { name: 'Consultar CV' }),
     ).toHaveAttribute('href', '/PORTFOLIO/cv/opciones/');
 
     await trigger.focus();

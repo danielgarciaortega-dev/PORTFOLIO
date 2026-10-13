@@ -44,7 +44,7 @@ const localeCases: LocaleCase[] = [
 ];
 
 const desktopWidths = [1024, 1280, 1440, 1920];
-const mobileWidths = [360, 390, 430];
+const mobileWidths = [320, 360, 390, 430, 768, 900];
 
 async function expectNoHorizontalOverflow(page: Page, context: string) {
   const overflow = await page.evaluate(
@@ -110,7 +110,7 @@ test('final desktop shell contract stays deterministic across supported widths a
   }
 });
 
-test('mobile footer owns utilities and menu has navigation only', async ({
+test('mobile/tablet header owns locale, editorial footer owns three links', async ({
   page,
 }) => {
   for (const localeCase of localeCases) {
@@ -128,18 +128,28 @@ test('mobile footer owns utilities and menu has navigation only', async ({
       await expect(header.locator('[data-header-socials]')).toBeHidden();
       await expect(header.locator('.site-header__actions')).toBeHidden();
       await expect(trigger).toBeVisible();
+
+      const headerTools = header.locator('[data-mobile-header-tools]');
+      await expect(headerTools).toBeVisible();
+      const localeLink = headerTools.getByRole('link', {
+        name: localeCase.localeAction,
+      });
+      await expect(localeLink).toHaveCount(1);
+      await expect(localeLink).toHaveAttribute('href', localeCase.localeHref);
+      const localeSize = await localeLink.boundingBox();
+      expect(localeSize?.width ?? 0).toBeGreaterThanOrEqual(44);
+      expect(localeSize?.height ?? 0).toBeGreaterThanOrEqual(44);
+
       await expect(footer).toBeVisible();
+      await expect(footer.locator('[data-language-switcher]')).toHaveCount(0);
+      await expect(footer.getByRole('link')).toHaveCount(3);
+      await expect(footer.locator('.mobile-utility-footer__heading')).toBeVisible();
       await expect(footer.locator('[data-footer-socials] a')).toHaveCount(2);
       await expect(footer.getByRole('link', { name: 'GitHub' })).toBeVisible();
       await expect(
         footer.getByRole('link', { name: 'LinkedIn' }),
       ).toBeVisible();
 
-      const localeLink = footer.getByRole('link', {
-        name: localeCase.localeAction,
-      });
-      await expect(localeLink).toHaveCount(1);
-      await expect(localeLink).toHaveAttribute('href', localeCase.localeHref);
       const cvLink = footer.getByRole('link', {
         name: localeCase.mobileCv,
       });
@@ -164,6 +174,7 @@ test('mobile footer owns utilities and menu has navigation only', async ({
       await expect(navigation.getByRole('link')).toHaveCount(3);
       await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
       await expect(menu.locator('[data-mobile-utilities]')).toHaveCount(0);
+      await expect(menu.getByRole('link', { name: localeCase.localeAction })).toHaveCount(0);
       await expect(menu.getByRole('link', { name: 'GitHub' })).toHaveCount(0);
       await expect(menu.getByRole('link', { name: 'LinkedIn' })).toHaveCount(0);
       await expectNoHorizontalOverflow(
@@ -240,4 +251,35 @@ test('About uses real navigation while Contact keeps its dialog behavior', async
       .getByRole('navigation', { name: 'Navegación principal' })
       .getByRole('link', { name: 'Sobre mí' }),
   ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
+});
+
+test('mobile locale switch remains route-safe and persists preference', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('./proyectos/');
+
+  const englishLink = page
+    .locator('[data-mobile-header-tools]')
+    .getByRole('link', { name: 'Cambiar a inglés' });
+  await expect(englishLink).toHaveAttribute('href', '/PORTFOLIO/en/projects/');
+  await englishLink.click();
+  await expect(page).toHaveURL(/\/PORTFOLIO\/en\/projects\/$/);
+  await expect
+    .poll(() =>
+      page.evaluate(() => window.localStorage.getItem('portfolio.locale')),
+    )
+    .toBe('en');
+
+  const spanishLink = page
+    .locator('[data-mobile-header-tools]')
+    .getByRole('link', { name: 'Switch to Spanish' });
+  await expect(spanishLink).toHaveAttribute('href', '/PORTFOLIO/proyectos/');
+  await spanishLink.click();
+  await expect(page).toHaveURL(/\/PORTFOLIO\/proyectos\/$/);
+  await expect
+    .poll(() =>
+      page.evaluate(() => window.localStorage.getItem('portfolio.locale')),
+    )
+    .toBe('es');
 });

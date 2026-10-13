@@ -271,8 +271,12 @@ test('mobile projects navigation keeps locale-aware destinations without overflo
 
     const footer = page.locator('[data-mobile-utility-footer]');
     await expect(footer).toBeVisible();
+    await expect(footer.locator('[data-language-switcher]')).toHaveCount(0);
+    await expect(footer.getByRole('link')).toHaveCount(3);
     await expect(
-      footer.getByRole('link', { name: routeCase.switchLabel }),
+      page.locator('[data-mobile-header-tools]').getByRole('link', {
+        name: routeCase.switchLabel,
+      }),
     ).toHaveAttribute('href', routeCase.switchHref);
     await expect(page.locator('[data-language-switcher]:visible')).toHaveCount(
       1,

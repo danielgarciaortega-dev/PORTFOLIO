@@ -7,6 +7,8 @@ const localeCases = [
     navigation: 'Navegación móvil',
     open: 'Abrir menú',
     close: 'Cerrar menú',
+    locale: 'Cambiar a inglés',
+    localeHref: '/PORTFOLIO/en/',
     cv: 'Consultar CV',
     cvHref: '/PORTFOLIO/cv/opciones/',
   },
@@ -16,6 +18,8 @@ const localeCases = [
     navigation: 'Mobile navigation',
     open: 'Open menu',
     close: 'Close menu',
+    locale: 'Switch to Spanish',
+    localeHref: '/PORTFOLIO/',
     cv: 'View CV',
     cvHref: '/PORTFOLIO/en/cv/options/',
   },
@@ -128,6 +132,13 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
 
       await expect(footer).toBeVisible();
       await expect(footer.locator('[data-footer-socials] a')).toHaveCount(2);
+      await expect(footer.getByRole('link')).toHaveCount(3);
+      await expect(footer.locator('[data-language-switcher]')).toHaveCount(0);
+      await expect(
+        page.locator('[data-mobile-header-tools]').getByRole('link', {
+          name: localeCase.locale,
+        }),
+      ).toHaveAttribute('href', localeCase.localeHref);
       const cvLink = footer.getByRole('link', { name: localeCase.cv });
       await expect(cvLink).toHaveAttribute('href', localeCase.cvHref);
       await cvLink.scrollIntoViewIfNeeded();
