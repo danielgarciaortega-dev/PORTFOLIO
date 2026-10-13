@@ -87,7 +87,9 @@ for (const viewport of viewports) {
       await page.screenshot({ path: path.join(output, 'menu-movil.png') });
 
       await page.goto('./en/');
-      await page.locator('[data-mobile-utility-footer]').scrollIntoViewIfNeeded();
+      await page
+        .locator('[data-mobile-utility-footer]')
+        .scrollIntoViewIfNeeded();
       await page.screenshot({
         path: path.join(output, 'footer-en.png'),
       });

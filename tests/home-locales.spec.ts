@@ -150,7 +150,9 @@ test('desktop header utility cluster does not overflow compact desktop', async (
   expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.clientWidth);
 });
 
-test('Spanish mobile header has the sole visible locale action', async ({ page }) => {
+test('Spanish mobile header has the sole visible locale action', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('./');
 
@@ -222,10 +224,9 @@ test('mobile shell puts social and CV actions in the footer', async ({
     await expect(trigger).toBeVisible();
     await expect(footer).toBeVisible();
     const headerLanguage = header.locator('[data-mobile-header-tools]');
-    await expect(headerLanguage.getByRole('link', { name: 'Cambiar a inglés' })).toHaveAttribute(
-      'href',
-      '/PORTFOLIO/en/',
-    );
+    await expect(
+      headerLanguage.getByRole('link', { name: 'Cambiar a inglés' }),
+    ).toHaveAttribute('href', '/PORTFOLIO/en/');
 
     const socials = footer.locator('[data-footer-socials]');
     await expect(socials.getByRole('link')).toHaveCount(2);

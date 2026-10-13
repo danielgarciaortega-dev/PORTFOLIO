@@ -143,7 +143,9 @@ test('mobile/tablet header owns locale, editorial footer owns three links', asyn
       await expect(footer).toBeVisible();
       await expect(footer.locator('[data-language-switcher]')).toHaveCount(0);
       await expect(footer.getByRole('link')).toHaveCount(3);
-      await expect(footer.locator('.mobile-utility-footer__heading')).toBeVisible();
+      await expect(
+        footer.locator('.mobile-utility-footer__heading'),
+      ).toBeVisible();
       await expect(footer.locator('[data-footer-socials] a')).toHaveCount(2);
       await expect(footer.getByRole('link', { name: 'GitHub' })).toBeVisible();
       await expect(
@@ -174,7 +176,9 @@ test('mobile/tablet header owns locale, editorial footer owns three links', asyn
       await expect(navigation.getByRole('link')).toHaveCount(3);
       await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
       await expect(menu.locator('[data-mobile-utilities]')).toHaveCount(0);
-      await expect(menu.getByRole('link', { name: localeCase.localeAction })).toHaveCount(0);
+      await expect(
+        menu.getByRole('link', { name: localeCase.localeAction }),
+      ).toHaveCount(0);
       await expect(menu.getByRole('link', { name: 'GitHub' })).toHaveCount(0);
       await expect(menu.getByRole('link', { name: 'LinkedIn' })).toHaveCount(0);
       await expectNoHorizontalOverflow(
