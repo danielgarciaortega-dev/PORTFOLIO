@@ -71,8 +71,8 @@ Do not use historical prompts, old PR descriptions, stale branches or duplicated
 - The shell's CV action opens the locale-correct CV center, not a PDF or a direct designed-CV viewer. Every CV viewer returns to that center and exposes its own download without an internal language switch.
 - CV export is a single four-definition Playwright pipeline: designed ES/EN plus ATS ES/EN, each with its own stable PDF output.
 - Desktop shell: DGO + GitHub/LinkedIn left, primary navigation center, locale + locale-correct CV-center action right.
-- Mobile shell: DGO + menu trigger in the top bar; numbered navigation, socials and locale/CV utilities remain separate inside the menu.
-- The public website has no full site footer. Do not confuse that removal with the standalone CV's internal `.professional-footer`.
+- Mobile shell: DGO + menu trigger in the top bar; numbered navigation only inside the mobile dialog.
+- The public website has no desktop site footer. One mobile-only utility footer owns GitHub, LinkedIn, target-locale switching and the locale-correct CV-center link. Do not confuse it with the standalone CV's internal `.professional-footer`.
 - Locale-aware canonical/hreflang/Open Graph metadata and the static locale-aware real-404 behavior are delivered and regression-tested.
 - GitHub Pages is canonical production and is published from `main` through GitHub Actions.
 - Pull requests are validated only through repository-controlled GitHub Actions and tests.
