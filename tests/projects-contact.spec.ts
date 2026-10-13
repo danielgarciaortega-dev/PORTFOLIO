@@ -15,7 +15,13 @@ test('projects route removes footer-only Contact infrastructure while preserving
   await expect(socials.getByRole('link', { name: 'GitHub' })).toBeVisible();
   await expect(socials.getByRole('link', { name: 'LinkedIn' })).toBeVisible();
   await expect(header.locator('.header-cv-link')).toHaveCount(1);
-  await expect(header.locator('[data-language-switcher]')).toHaveCount(1);
+  await expect(
+    header.locator('.site-header__actions [data-language-switcher]'),
+  ).toHaveCount(1);
+  await expect(header.locator('[data-language-switcher]:visible')).toHaveCount(
+    1,
+  );
+  await expect(header.locator('[data-mobile-header-tools]')).toBeHidden();
 
   const aboutLink = page
     .getByRole('navigation', { name: 'Navegación principal' })
