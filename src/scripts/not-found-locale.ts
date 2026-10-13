@@ -13,6 +13,7 @@ interface ShellPayload {
   closeMenu: string;
   mobileNavigation: string;
   mobileViewCv: string;
+  mobileFooter: string;
   languageSwitcher: string;
 }
 
@@ -118,8 +119,9 @@ function localizeHeader(data: LocalePayload) {
   setDirectText(mobileLinks?.[2], shell.projects);
   mobileLinks?.[2]?.setAttribute('href', routes.projects);
 
-  setText('.mobile-menu__cv', shell.mobileViewCv);
-  setAttribute('.mobile-menu__cv', 'href', routes.cv);
+  setAttribute('[data-mobile-utility-footer]', 'aria-label', shell.mobileFooter);
+  setText('.mobile-utility-footer__cv', shell.mobileViewCv);
+  setAttribute('.mobile-utility-footer__cv', 'href', routes.cv);
 
   document
     .querySelectorAll<HTMLElement>('[data-language-switcher]')

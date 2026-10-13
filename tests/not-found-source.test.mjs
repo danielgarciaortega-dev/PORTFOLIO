@@ -19,6 +19,9 @@ test('404 localization stays single-source and pathname-driven', () => {
   assert.doesNotMatch(pageSource, /This route is not part of the project/);
   assert.match(runtimeSource, /window\.location\.pathname/);
   assert.match(runtimeSource, /resolveLocaleFromPathname/);
+  assert.match(pageSource, /getLocalizedRoutePath\(locale, 'cvCenter'\)/);
+  assert.match(runtimeSource, /\.mobile-utility-footer__cv/);
+  assert.doesNotMatch(runtimeSource, /\.mobile-menu__cv/);
 });
 
 test('404 localization does not introduce redirect or SPA fallback behavior', () => {
