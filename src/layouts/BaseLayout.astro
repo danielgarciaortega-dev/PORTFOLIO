@@ -104,7 +104,7 @@ const alternateLocale: Locale = locale === 'es' ? 'en' : 'es';
     <a class="skip-link" href="#contenido">{copy.skipLink}</a>
     <Header currentPage={currentPage} {locale} />
     <slot />
-    <MobileUtilityFooter currentPage={currentPage} {locale} />
+    <MobileUtilityFooter {locale} />
     <script>
       import '../scripts/mobile-menu';
       import '../scripts/dialogs';
