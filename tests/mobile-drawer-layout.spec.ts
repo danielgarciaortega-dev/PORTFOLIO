@@ -7,6 +7,8 @@ const localeCases = [
     navigation: 'Navegación móvil',
     open: 'Abrir menú',
     close: 'Cerrar menú',
+    cv: 'Consultar CV',
+    cvHref: '/PORTFOLIO/cv/opciones/',
   },
   {
     route: './en/',
@@ -14,6 +16,8 @@ const localeCases = [
     navigation: 'Mobile navigation',
     open: 'Open menu',
     close: 'Close menu',
+    cv: 'View CV',
+    cvHref: '/PORTFOLIO/en/cv/options/',
   },
 ] as const;
 
@@ -61,7 +65,7 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
       const navigation = menu.getByRole('navigation', {
         name: localeCase.navigation,
       });
-      const utilities = menu.locator('[data-mobile-utilities]');
+      const footer = page.locator('[data-mobile-utility-footer]');
 
       await expect(menu).toBeVisible();
       await expect(trigger).toHaveAttribute('aria-expanded', 'true');
@@ -70,18 +74,20 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
       await expect(panel).toHaveCSS('overflow-y', 'auto');
       await waitForDrawerMotion(menu);
 
+      await expect(menu.locator('[data-mobile-utilities]')).toHaveCount(0);
+      await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
+      await expect(navigation.getByRole('link')).toHaveCount(3);
+
       const boxes = await Promise.all([
         menu.boundingBox(),
         head.boundingBox(),
         navigation.boundingBox(),
-        utilities.boundingBox(),
       ]);
-      const [menuBox, headBox, navigationBox, utilitiesBox] = boxes;
+      const [menuBox, headBox, navigationBox] = boxes;
 
       expect(menuBox).not.toBeNull();
       expect(headBox).not.toBeNull();
       expect(navigationBox).not.toBeNull();
-      expect(utilitiesBox).not.toBeNull();
 
       const menuRight = (menuBox?.x ?? 0) + (menuBox?.width ?? 0);
       expect(menuBox?.x ?? 0).toBeGreaterThanOrEqual(-1);
@@ -89,15 +95,9 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
       expect(menuBox?.height ?? 0).toBeLessThanOrEqual(viewport.height + 1);
 
       const headBottom = (headBox?.y ?? 0) + (headBox?.height ?? 0);
-      const navigationBottom =
-        (navigationBox?.y ?? 0) + (navigationBox?.height ?? 0);
-      const headingGap = (navigationBox?.y ?? 0) - headBottom;
-      const utilitiesGap = (utilitiesBox?.y ?? 0) - navigationBottom;
+      const navigationTop = navigationBox?.y ?? 0;
 
-      expect(headingGap).toBeGreaterThanOrEqual(8);
-      expect(headingGap).toBeLessThanOrEqual(32);
-      expect(utilitiesGap).toBeGreaterThanOrEqual(8);
-      expect(utilitiesGap).toBeLessThanOrEqual(32);
+      expect(navigationTop - headBottom).toBeGreaterThanOrEqual(8);
 
       const targets = menu.locator('a, button');
       const targetCount = await targets.count();
@@ -107,21 +107,14 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
         expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
       }
 
-      const cvLink = menu.locator('.mobile-menu__cv');
-      await cvLink.scrollIntoViewIfNeeded();
-      const cvBox = await cvLink.boundingBox();
-      const cvBottom = (cvBox?.y ?? 0) + (cvBox?.height ?? 0);
-      expect(cvBox).not.toBeNull();
-      expect(cvBox?.y ?? -1).toBeGreaterThanOrEqual(-1);
-      expect(cvBottom).toBeLessThanOrEqual(viewport.height + 1);
-
       if (viewport.width === 844 && viewport.height === 390) {
         const scrollGeometry = await panel.evaluate((element) => ({
           clientHeight: element.clientHeight,
           scrollHeight: element.scrollHeight,
         }));
-        const { clientHeight, scrollHeight } = scrollGeometry;
-        expect(scrollHeight).toBeGreaterThan(clientHeight);
+        expect(scrollGeometry.scrollHeight).toBeGreaterThanOrEqual(
+          scrollGeometry.clientHeight,
+        );
       }
 
       const context = `${localeCase.route} ${viewport.width}x${viewport.height}`;
@@ -132,6 +125,19 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
       await expect(trigger).toHaveAttribute('aria-expanded', 'false');
       await expect(trigger).toHaveAttribute('aria-label', localeCase.open);
       await expect(trigger).toBeFocused();
+
+      await expect(footer).toBeVisible();
+      await expect(footer.locator('[data-footer-socials] a')).toHaveCount(2);
+      const cvLink = footer.getByRole('link', { name: localeCase.cv });
+      await expect(cvLink).toHaveAttribute('href', localeCase.cvHref);
+      await cvLink.scrollIntoViewIfNeeded();
+      const cvBox = await cvLink.boundingBox();
+      expect(cvBox).not.toBeNull();
+      expect(cvBox?.height ?? 0).toBeGreaterThanOrEqual(44);
+      expect(cvBox?.y ?? -1).toBeGreaterThanOrEqual(-1);
+      expect((cvBox?.y ?? 0) + (cvBox?.height ?? 0)).toBeLessThanOrEqual(
+        viewport.height + 1,
+      );
     }
   }
 });

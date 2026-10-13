@@ -145,13 +145,8 @@ test('English 404 mobile menu stays localized, usable and overflow-free', async 
   await expect(
     navigation.getByRole('link', { name: /Projects/ }),
   ).toHaveAttribute('href', '/PORTFOLIO/en/projects/');
-  await expect(
-    menu.getByRole('link', { name: 'Switch to Spanish' }),
-  ).toHaveAttribute('href', '/PORTFOLIO/');
-  await expect(menu.getByRole('link', { name: 'View CV' })).toHaveAttribute(
-    'href',
-    '/PORTFOLIO/cv/',
-  );
+  await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
+  await expect(menu.getByRole('link', { name: 'View CV' })).toHaveCount(0);
 
   const viewport = await page.evaluate(() => ({
     clientWidth: document.documentElement.clientWidth,
@@ -163,6 +158,16 @@ test('English 404 mobile menu stays localized, usable and overflow-free', async 
   await expect(menu).toBeHidden();
   await expect(trigger).toHaveAttribute('aria-label', 'Open menu');
   await expect(trigger).toBeFocused();
+
+  const footer = page.locator('[data-mobile-utility-footer]');
+  await expect(footer).toBeVisible();
+  await expect(
+    footer.getByRole('link', { name: 'Switch to Spanish' }),
+  ).toHaveAttribute('href', '/PORTFOLIO/');
+  await expect(footer.getByRole('link', { name: 'View CV' })).toHaveAttribute(
+    'href',
+    '/PORTFOLIO/en/cv/options/',
+  );
 });
 
 test('representative Spanish and English 404 states pass axe', async ({
