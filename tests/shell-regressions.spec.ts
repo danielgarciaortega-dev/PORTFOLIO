@@ -131,7 +131,9 @@ test('mobile footer owns utilities and menu has navigation only', async ({
       await expect(footer).toBeVisible();
       await expect(footer.locator('[data-footer-socials] a')).toHaveCount(2);
       await expect(footer.getByRole('link', { name: 'GitHub' })).toBeVisible();
-      await expect(footer.getByRole('link', { name: 'LinkedIn' })).toBeVisible();
+      await expect(
+        footer.getByRole('link', { name: 'LinkedIn' }),
+      ).toBeVisible();
 
       const localeLink = footer.getByRole('link', {
         name: localeCase.localeAction,
@@ -143,9 +145,9 @@ test('mobile footer owns utilities and menu has navigation only', async ({
       });
       await expect(cvLink).toHaveCount(1);
       await expect(cvLink).toHaveAttribute('href', localeCase.cvHref);
-      await expect(page.locator('[data-language-switcher]:visible')).toHaveCount(
-        1,
-      );
+      await expect(
+        page.locator('[data-language-switcher]:visible'),
+      ).toHaveCount(1);
       await expectNoHorizontalOverflow(
         page,
         `${localeCase.locale} mobile footer ${width}px`,
