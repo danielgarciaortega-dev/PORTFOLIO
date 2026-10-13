@@ -10,6 +10,8 @@ const viewports = [
   { name: '390x844', width: 390, height: 844 },
   { name: '430x932', width: 430, height: 932 },
   { name: '768x1024', width: 768, height: 1024 },
+  { name: '900x900', width: 900, height: 900 },
+  { name: '901x900', width: 901, height: 900 },
   { name: '844x390', width: 844, height: 390 },
   { name: '1024x900', width: 1024, height: 900 },
   { name: '1280x900', width: 1280, height: 900 },
@@ -76,8 +78,21 @@ for (const viewport of viewports) {
 
     if (viewport.width <= 900) {
       await page.goto('./');
+      const footer = page.locator('[data-mobile-utility-footer]');
+      await footer.scrollIntoViewIfNeeded();
+      await page.screenshot({
+        path: path.join(output, 'footer-es.png'),
+      });
       await page.getByRole('button', { name: 'Abrir menú' }).click();
       await page.screenshot({ path: path.join(output, 'menu-movil.png') });
+
+      await page.goto('./en/');
+      await page
+        .locator('[data-mobile-utility-footer]')
+        .scrollIntoViewIfNeeded();
+      await page.screenshot({
+        path: path.join(output, 'footer-en.png'),
+      });
     }
 
     if ([360, 390, 430].includes(viewport.width)) {
