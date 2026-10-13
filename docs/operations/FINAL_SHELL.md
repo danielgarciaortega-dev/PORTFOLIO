@@ -54,20 +54,17 @@ GitHub and LinkedIn must not be duplicated on the right.
 
 At 900 px and below, the desktop three-zone distribution is intentionally not compressed into the top bar.
 
-The top bar contains only:
-
-- `DGO.`;
-- the menu trigger.
+The mobile and tablet top bar contains `DGO.` at the left; the single target-locale action (`EN`/`ES`) sits immediately beside the menu trigger at the right. The target-locale control stays visually restrained, meets the 44 px tap-target requirement, and uses the existing route/persistence contract.
 
 The mobile dialog contains only the numbered primary navigation (`01` Home, `02` About, `03` Projects). It contains no social, locale or CV utilities.
 
-Below the public page content, the shared shell mounts one dedicated mobile-only utility footer. Its first row contains GitHub and LinkedIn as outlined boxed actions. Its second row contains exactly one target-locale action and the locale-correct CV-center action. The footer uses the shared route helpers and stays base-safe under `/PORTFOLIO/`.
+Below the public page content, the shared shell mounts one editorial mobile/tablet-only footer. A short localized heading identifies the section; GitHub and LinkedIn appear as low-emphasis text/icon links and the locale-correct CV-center link is the sole strong call to action. The footer has **three links only** and no language control, duplicate brand, Contact action or redundant full-site sections. All links remain base-safe under `/PORTFOLIO/`.
 
-At widths above 900 px the footer is hidden; the desktop header preserves all utility placement. The mobile footer does not repeat brand, role/location copy, Contact or unrelated full-footer sections.
+At widths above 900 px the entire footer stays hidden and the existing three-zone desktop header is unchanged.
 
 ## Footer and dialog topology
 
-The public shell has no full redundant `.site-footer` surface. Above 900 px there is no visible site footer. At 900 px and below, the single `.mobile-utility-footer` is the exclusive place for GitHub, LinkedIn, the target-locale action and the CV-center link.
+The public shell has no full redundant `.site-footer` surface. Above 900 px there is no visible site footer. At 900 px and below, the `.mobile-utility-footer` is the exclusive home of GitHub, LinkedIn and the CV-center link; the single target-locale action belongs beside the menu trigger in `Header.astro`.
 
 The full site footer removed by #87 remains retired. Desktop utilities stay in the existing header zones. Do not reintroduce duplicated brand, role/location, Contact or unrelated footer content.
 
@@ -128,7 +125,7 @@ The final shell is protected primarily by semantic and geometry assertions rathe
 
 Relevant maintained coverage includes:
 
-- `tests/shell-regressions.spec.ts` — desktop/mobile utility placement, one target-locale action, no desktop footer, mobile-only utility footer, route-safe switching, dialog topology and supported-width overflow checks;
+- `tests/shell-regressions.spec.ts` — desktop/mobile header locale ownership, one target-locale action, no desktop footer, three-link mobile/tablet footer, route-safe switching, dialog topology and supported-width overflow checks;
 - `tests/home-locales.spec.ts` and `tests/home-english.spec.ts` — bilingual home shell behavior;
 - `tests/projects-locales.spec.ts` — bilingual project routes, localized navigation, project counterpart switching, persistence, mobile overflow and the absent `/projects/` alias;
 - `tests/metadata-locales.spec.ts` and `tests/not-found-locales.spec.ts` — locale-aware metadata and real-404 behavior;
@@ -157,6 +154,7 @@ Future contributors must not reintroduce any of the following without a separate
 - locale controls inside primary navigation;
 - duplicated GitHub/LinkedIn controls in multiple desktop zones;
 - duplicated CV actions across desktop zones;
+- mobile/tablet locale controls in the footer or mobile dialog;
 - a full website footer that repeats brand/profile/actions or utility controls inside the mobile dialog;
 - Contact as a footer replacement merely to restore the removed topology;
 - a second mobile navigation block for utilities;

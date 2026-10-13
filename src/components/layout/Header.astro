@@ -80,6 +80,8 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
       <a class="header-cv-link" href={cvUrl}>{copy.viewCv}</a>
     </div>
 
+    <div class="site-header__mobile-tools" data-mobile-header-tools>
+      <LanguageSwitcher {locale} {currentPage} variant="mobile" />
     <button
       class="menu-trigger"
       type="button"
@@ -94,6 +96,7 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
       <span></span>
       <span></span>
     </button>
+    </div>
   </div>
 </header>
 
@@ -133,6 +136,10 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
 </dialog>
 
 <style>
+  .site-header__mobile-tools {
+    display: none;
+  }
+
   .site-header__left,
   .site-header__socials {
     display: flex;
@@ -205,6 +212,13 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
   }
 
   @media (max-width: 900px) {
+    .site-header__mobile-tools {
+      display: flex;
+      align-items: center;
+      justify-self: end;
+      gap: clamp(0.25rem, 1.5vw, 0.65rem);
+    }
+
     .site-header__inner {
       grid-template-columns: 1fr auto;
     }

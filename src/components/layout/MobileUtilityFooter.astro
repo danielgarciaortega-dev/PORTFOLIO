@@ -3,14 +3,12 @@ import { links } from '../../data/links';
 import { shellCopy } from '../../i18n/copy';
 import { getLocalizedRoutePath, type Locale } from '../../i18n/locale';
 import { withBase } from '../../utils/paths';
-import LanguageSwitcher from './LanguageSwitcher.astro';
 
 interface Props {
-  currentPage: 'home' | 'about' | 'projects' | 'cvCenter' | '404';
   locale: Locale;
 }
 
-const { currentPage, locale } = Astro.props;
+const { locale } = Astro.props;
 const copy = shellCopy[locale];
 const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
 ---
@@ -21,42 +19,48 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
   aria-label={copy.mobileFooter}
 >
   <div class="mobile-utility-footer__inner">
-    <div class="mobile-utility-footer__socials" data-footer-socials>
-      <a
-        href={links.githubProfile}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="GitHub"
-      >
-        <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"
-          ><path
-            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
-          ></path></svg
-        >
-        <span>GitHub</span>
-      </a>
-      {
-        links.linkedin && (
-          <a
-            href={links.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-          >
-            <svg viewBox="0 0 448 512" aria-hidden="true" fill="currentColor">
-              <path d="M100.3 448l-92.9 0 0-299.1 92.9 0 0 299.1zM53.8 108.1C24.1 108.1 0 83.5 0 53.8 0 39.5 5.7 25.9 15.8 15.8s23.8-15.8 38-15.8 27.9 5.7 38 15.8 15.8 23.8 15.8 38c0 29.7-24.1 54.3-53.8 54.3zM447.9 448l-92.7 0 0-145.6c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7l0 148.1-92.8 0 0-299.1 89.1 0 0 40.8 1.3 0c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3l0 164.3-.1 0z" />
-            </svg>
-            <span>LinkedIn</span>
-          </a>
-        )
-      }
+    <div class="mobile-utility-footer__intro">
+      <p class="mobile-utility-footer__eyebrow">{copy.mobileFooterEyebrow}</p>
+      <p class="mobile-utility-footer__heading">{copy.mobileFooterHeading}</p>
     </div>
 
-    <div class="mobile-utility-footer__actions" data-footer-actions>
-      <div class="mobile-utility-footer__locale">
-        <LanguageSwitcher {locale} {currentPage} variant="mobile" />
+    <div class="mobile-utility-footer__bottom">
+      <div class="mobile-utility-footer__socials" data-footer-socials>
+        <a
+          href={links.githubProfile}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"
+            ><path
+              d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+            ></path></svg
+          >
+          <span>GitHub</span>
+        </a>
+        {
+          links.linkedin && (
+            <a
+              href={links.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+            >
+              <svg viewBox="0 0 448 512" aria-hidden="true" fill="currentColor">
+                <path d="M100.3 448l-92.9 0 0-299.1 92.9 0 0 299.1zM53.8 108.1C24.1 108.1 0 83.5 0 53.8 0 39.5 5.7 25.9 15.8 15.8s23.8-15.8 38-15.8 27.9 5.7 38 15.8 15.8 23.8 15.8 38c0 29.7-24.1 54.3-53.8 54.3zM447.9 448l-92.7 0 0-145.6c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7l0 148.1-92.8 0 0-299.1 89.1 0 0 40.8 1.3 0c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3l0 164.3-.1 0z" />
+              </svg>
+              <span>LinkedIn</span>
+            </a>
+          )
+        }
       </div>
-      <a class="mobile-utility-footer__cv" href={cvUrl}>{copy.mobileViewCv}</a>
+      <a class="mobile-utility-footer__cv" href={cvUrl}>
+        <span>{copy.mobileViewCv}</span>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 12h16m-6-6 6 6-6 6" />
+        </svg>
+      </a>
     </div>
   </div>
 </footer>
@@ -69,60 +73,78 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
   @media (max-width: 900px) {
     .mobile-utility-footer {
       display: block;
-      border-top: 1px solid var(--color-border);
-      background: var(--color-bg);
+      border-top: 1px solid var(--color-text);
+      background: var(--color-text);
+      color: var(--color-bg);
     }
 
     .mobile-utility-footer__inner {
-      width: min(100%, var(--max-width));
+      position: relative;
+      width: min(100%, var(--layout-shell-width));
       display: grid;
-      gap: 0.8rem;
+      gap: clamp(1.5rem, 3vw, 2.1rem);
       margin-inline: auto;
-      padding: 1.4rem var(--page-padding)
-        calc(1.4rem + env(safe-area-inset-bottom));
+      padding: clamp(1.8rem, 4vw, 2.8rem) var(--page-padding)
+        calc(clamp(1.8rem, 4vw, 2.8rem) + env(safe-area-inset-bottom));
     }
 
-    .mobile-utility-footer__socials,
-    .mobile-utility-footer__actions {
+    .mobile-utility-footer__inner::before {
+      position: absolute;
+      top: 0;
+      left: var(--page-padding);
+      width: 3.5rem;
+      height: 3px;
+      background: var(--color-accent);
+      content: '';
+    }
+
+    .mobile-utility-footer__eyebrow {
+      margin: 0 0 0.45rem;
+      color: #f3b28e;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      line-height: 1.4;
+    }
+
+    .mobile-utility-footer__heading {
+      margin: 0;
+      color: var(--color-bg);
+      font-size: clamp(1.35rem, 2.9vw, 1.9rem);
+      font-weight: 690;
+      letter-spacing: -0.035em;
+      line-height: 1.2;
+    }
+
+    .mobile-utility-footer__bottom {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.8rem;
-    }
-
-    .mobile-utility-footer__socials a,
-    .mobile-utility-footer__locale,
-    .mobile-utility-footer__cv {
-      min-width: 0;
-      min-height: 48px;
-      display: flex;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      padding: 0.6rem 0.65rem;
-      border: 1px solid var(--color-border);
-      border-radius: 0.75rem;
-      background: var(--color-surface);
-      color: var(--color-text-muted);
-      font-size: 0.85rem;
-      font-weight: 700;
-      line-height: 1.25;
-      transition:
-        border-color 180ms ease,
-        background 180ms ease,
-        color 180ms ease,
-        transform 180ms ease;
+      gap: 1rem 1.5rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid rgb(255 255 255 / 20%);
     }
 
-    .mobile-utility-footer__socials a:hover,
-    .mobile-utility-footer__cv:hover,
-    .mobile-utility-footer__locale:focus-within {
-      border-color: var(--color-text);
-      color: var(--color-text);
+    .mobile-utility-footer__socials {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem clamp(1.4rem, 4vw, 2.6rem);
     }
 
-    .mobile-utility-footer__socials a:hover,
-    .mobile-utility-footer__cv:hover {
-      transform: translateY(-1px);
+    .mobile-utility-footer__socials a {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: #e4e7ed;
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: color 180ms ease;
+    }
+
+    .mobile-utility-footer__socials a:hover {
+      color: #fff;
     }
 
     .mobile-utility-footer__socials svg {
@@ -131,22 +153,63 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
       flex: 0 0 auto;
     }
 
-    .mobile-utility-footer__locale :global(.language-switcher--mobile) {
-      width: 100%;
-      justify-content: center;
-      margin-top: 0;
+    .mobile-utility-footer__cv {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(1.1rem, 3vw, 2.5rem);
+      padding: 0.7rem 1rem;
+      border: 1px solid rgb(255 255 255 / 55%);
+      border-radius: 0.7rem;
+      background: rgb(255 255 255 / 5%);
+      color: #fff;
+      font-size: 0.84rem;
+      font-weight: 750;
+      line-height: 1.25;
+      transition:
+        border-color 180ms ease,
+        background 180ms ease;
     }
 
-    .mobile-utility-footer__locale :global(.language-switcher--mobile a) {
-      min-height: 44px;
-      padding: 0.4rem 0.65rem;
-      color: var(--color-text);
+    .mobile-utility-footer__cv:hover {
+      border-color: #fff;
+      background: rgb(255 255 255 / 12%);
+    }
+
+    .mobile-utility-footer__cv svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .mobile-utility-footer a:focus-visible {
+      outline-color: #fff;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .mobile-utility-footer__bottom {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+    }
+
+    .mobile-utility-footer__socials {
+      gap: 0.35rem 1.9rem;
     }
 
     .mobile-utility-footer__cv {
-      border-color: var(--color-text);
-      color: var(--color-text);
-      font-weight: 750;
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-utility-footer a {
+      transition: none;
     }
   }
 </style>
