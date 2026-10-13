@@ -413,18 +413,6 @@ a {
   text-align: left;
 }
 
-.mobile-menu__cv {
-  min-height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 2rem;
-  border-radius: 0.85rem;
-  background: var(--color-accent-hover);
-  color: white;
-  font-weight: 750;
-}
-
 .hero {
   width: 100%;
   min-height: calc(100svh - var(--header-height));

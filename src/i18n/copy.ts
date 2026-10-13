@@ -13,6 +13,7 @@ interface ShellCopy {
   closeMenu: string;
   mobileNavigation: string;
   mobileViewCv: string;
+  mobileFooter: string;
   languageSwitcher: string;
   spanish: string;
   english: string;
@@ -73,6 +74,7 @@ export const shellCopy: Record<Locale, ShellCopy> = {
     closeMenu: 'Cerrar menú',
     mobileNavigation: 'Navegación móvil',
     mobileViewCv: 'Consultar CV',
+    mobileFooter: 'Enlaces y opciones',
     languageSwitcher: 'Idioma',
     spanish: 'Español',
     english: 'English',
@@ -93,6 +95,7 @@ export const shellCopy: Record<Locale, ShellCopy> = {
     closeMenu: 'Close menu',
     mobileNavigation: 'Mobile navigation',
     mobileViewCv: 'View CV',
+    mobileFooter: 'Links and options',
     languageSwitcher: 'Language',
     spanish: 'Spanish',
     english: 'English',
