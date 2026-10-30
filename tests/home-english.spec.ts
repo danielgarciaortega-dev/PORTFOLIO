@@ -13,9 +13,9 @@ test('English homepage shell and hero use the approved copy', async ({
   await expect(
     mainNavigation.getByRole('link', { name: 'Home' }),
   ).toBeVisible();
-  await expect(
-    mainNavigation.getByRole('link', { name: 'About' }),
-  ).toHaveCount(0);
+  await expect(mainNavigation.getByRole('link', { name: 'About' })).toHaveCount(
+    0,
+  );
   await expect(
     mainNavigation.getByRole('link', { name: 'Projects' }),
   ).toBeVisible();

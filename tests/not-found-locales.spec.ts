@@ -46,9 +46,9 @@ test('Spanish missing route keeps HTTP 404 and the default localized shell', asy
   await expect(
     navigation.getByRole('link', { name: 'Inicio' }),
   ).toHaveAttribute('href', '/PORTFOLIO/');
-  await expect(
-    navigation.getByRole('link', { name: 'Sobre mí' }),
-  ).toHaveCount(0);
+  await expect(navigation.getByRole('link', { name: 'Sobre mí' })).toHaveCount(
+    0,
+  );
   await expect(
     navigation.getByRole('link', { name: 'Proyectos' }),
   ).toHaveAttribute('href', '/PORTFOLIO/proyectos/');

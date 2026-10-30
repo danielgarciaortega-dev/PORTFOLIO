@@ -110,9 +110,9 @@ test('curated public UI landmarks do not mix Spanish and English shell copy', as
       name: 'Navegación principal',
     });
     await expect(navigation.getByText('Inicio', { exact: true })).toBeVisible();
-    await expect(
-      navigation.getByText('Sobre mí', { exact: true }),
-    ).toHaveCount(0);
+    await expect(navigation.getByText('Sobre mí', { exact: true })).toHaveCount(
+      0,
+    );
     await expect(
       navigation.getByText('Proyectos', { exact: true }),
     ).toBeVisible();
