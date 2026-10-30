@@ -54,7 +54,7 @@ for (const viewport of viewports) {
       const moments = page.locator('.projects-page__moment');
 
       await expect(rows).toHaveCount(3);
-      await expect(moments).toHaveCount(6);
+      await expect(moments).toHaveCount(7);
       await expectProjectMarksLoaded(page);
       await expectNoHorizontalOverflow(page);
 
@@ -118,7 +118,7 @@ test('backdrop states keep project layout stable', async ({ page }) => {
       const moments = page.locator('.projects-page__moment');
       const content = page.locator('.projects-page-list--solo');
 
-      await expect(moments).toHaveCount(6);
+      await expect(moments).toHaveCount(7);
 
       await moments.evaluateAll(async (images) => {
         await Promise.all(
@@ -139,7 +139,7 @@ test('backdrop states keep project layout stable', async ({ page }) => {
       const baseline = await content.boundingBox();
       expect(baseline).not.toBeNull();
 
-      for (let index = 0; index < 6; index += 1) {
+      for (let index = 0; index < 7; index += 1) {
         await moments.evaluateAll((images, activeIndex) => {
           images.forEach((image, imageIndex) => {
             (image as HTMLElement).style.opacity =

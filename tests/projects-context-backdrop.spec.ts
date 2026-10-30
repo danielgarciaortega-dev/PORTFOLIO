@@ -45,7 +45,7 @@ test('project hover and focus preserve photo carousel and highlight project card
     const moments = page.locator('.projects-page__moment');
     const contexts = page.locator('.projects-page__context-image');
 
-    await expect(moments).toHaveCount(6);
+    await expect(moments).toHaveCount(7);
     await expect(contexts).toHaveCount(3);
     await expect(backdrop).not.toHaveAttribute('data-active-project');
 
