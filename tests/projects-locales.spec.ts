@@ -271,6 +271,7 @@ test('mobile projects navigation keeps locale-aware destinations without overflo
 
     const footer = page.locator('[data-mobile-utility-footer]');
     await expect(footer).toBeVisible();
+    await expect(footer).toHaveClass(/mobile-utility-footer--projects/);
     await expect(
       footer.getByRole('link', { name: routeCase.switchLabel }),
     ).toHaveAttribute('href', routeCase.switchHref);
