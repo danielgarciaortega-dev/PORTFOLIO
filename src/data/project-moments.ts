@@ -1,4 +1,4 @@
-export const PROJECT_BACKDROP_DURATION_SECONDS = 48;
+export const PROJECT_BACKDROP_DURATION_SECONDS = 56;
 export const PROJECT_BACKDROP_STEP_SECONDS = 8;
 export const PROJECT_BACKDROP_INITIAL_OFFSET_SECONDS = -2;
 
@@ -41,6 +41,13 @@ export const projectMoments = [
   {
     number: '06',
     desktopPosition: 'center 55%',
+    mobilePosition: '50% center',
+    loading: 'lazy',
+    fetchPriority: 'auto',
+  },
+  {
+    number: '07',
+    desktopPosition: 'center 45%',
     mobilePosition: '50% center',
     loading: 'lazy',
     fetchPriority: 'auto',

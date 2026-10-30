@@ -25,7 +25,7 @@ const profileSource = path.join(input, 'profile', 'profile-main.jpg');
 // Event photos used as a soft, blurred backdrop on /proyectos/.
 // Moment 03 intentionally reuses the profile source because both files were
 // byte-identical before the source-asset cleanup.
-const momentNumbers = ['01', '02', '03', '04', '05', '06'];
+const momentNumbers = ['01', '02', '03', '04', '05', '06', '07'];
 const momentSource = (n) =>
   n === '03' ? profileSource : path.join(input, 'moments', `moment-${n}.jpg`);
 

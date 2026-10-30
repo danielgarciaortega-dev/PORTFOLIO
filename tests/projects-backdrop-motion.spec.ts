@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 const routes = ['./proyectos/', './en/projects/'];
-const expectedDelays = ['-2s', '6s', '14s', '22s', '30s', '38s'];
+const expectedDelays = ['-2s', '6s', '14s', '22s', '30s', '38s', '46s'];
 const expectedDesktopPositions = [
   'center 38%',
   'center 42%',
@@ -9,6 +9,7 @@ const expectedDesktopPositions = [
   'center 42%',
   'center 40%',
   'center 55%',
+  'center 45%',
 ];
 const expectedMobilePositions = [
   '50% center',
@@ -16,6 +17,7 @@ const expectedMobilePositions = [
   '44% center',
   '34% center',
   '38% center',
+  '50% center',
   '50% center',
 ];
 
@@ -27,7 +29,7 @@ test('project backdrop uses one shared six-moment timing and crop contract', asy
     await page.goto(route);
 
     const moments = page.locator('.projects-page__moment');
-    await expect(moments).toHaveCount(6);
+    await expect(moments).toHaveCount(7);
 
     const contract = await moments.evaluateAll((images) =>
       images.map((image) => {
@@ -50,11 +52,11 @@ test('project backdrop uses one shared six-moment timing and crop contract', asy
     );
 
     expect(contract.map(({ duration }) => duration)).toEqual(
-      Array(6).fill('48s'),
+      Array(7).fill('56s'),
     );
     expect(contract.map(({ delay }) => delay)).toEqual(expectedDelays);
     expect(contract.map(({ timing }) => timing)).toEqual(
-      Array(6).fill('linear'),
+      Array(7).fill('linear'),
     );
     expect(contract.map(({ loading }) => loading)).toEqual([
       'eager',
@@ -63,10 +65,11 @@ test('project backdrop uses one shared six-moment timing and crop contract', asy
       'lazy',
       'lazy',
       'lazy',
+      'lazy',
     ]);
     expect(contract[0]?.fetchPriority).toBe('high');
     expect(contract.map(({ decoding }) => decoding)).toEqual(
-      Array(6).fill('async'),
+      Array(7).fill('async'),
     );
     expect(contract.map(({ desktopPosition }) => desktopPosition)).toEqual(
       expectedDesktopPositions,
@@ -89,9 +92,9 @@ test('project backdrop uses one shared six-moment timing and crop contract', asy
 
     expect(keyframeOffsets).toHaveLength(5);
     expect(keyframeOffsets[0]).toBeCloseTo(0, 5);
-    expect(keyframeOffsets[1]).toBeCloseTo(0.04, 5);
-    expect(keyframeOffsets[2]).toBeCloseTo(0.16667, 4);
-    expect(keyframeOffsets[3]).toBeCloseTo(0.20833, 4);
+    expect(keyframeOffsets[1]).toBeCloseTo(0.03571, 4);
+    expect(keyframeOffsets[2]).toBeCloseTo(0.14286, 4);
+    expect(keyframeOffsets[3]).toBeCloseTo(0.17857, 4);
     expect(keyframeOffsets[4]).toBeCloseTo(1, 5);
   }
 });
@@ -114,6 +117,7 @@ test('portrait mobile crops de-emphasize dominant subjects without changing land
     '44% 50%',
     '34% 50%',
     '38% 50%',
+    '50% 50%',
     '50% 50%',
   ]);
 
@@ -149,15 +153,15 @@ test('reduced motion keeps one stable backdrop with no blur, transform or layout
   );
 
   expect(styles.map(({ animationName }) => animationName)).toEqual(
-    Array(6).fill('none'),
+    Array(7).fill('none'),
   );
   expect(styles[0]?.opacity).toBe('1');
   expect(styles.slice(1).map(({ opacity }) => opacity)).toEqual(
-    Array(5).fill('0'),
+    Array(6).fill('0'),
   );
-  expect(styles.map(({ filter }) => filter)).toEqual(Array(6).fill('none'));
+  expect(styles.map(({ filter }) => filter)).toEqual(Array(7).fill('none'));
   expect(styles.map(({ transform }) => transform)).toEqual(
-    Array(6).fill('none'),
+    Array(7).fill('none'),
   );
 
   const content = page.locator('.projects-page-list--solo');

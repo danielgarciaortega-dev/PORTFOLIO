@@ -2314,17 +2314,17 @@ a {
     filter: blur(10px) saturate(1.03);
     transform: scale(1.04);
   }
-  4% {
+  3.571% {
     opacity: 1;
     filter: blur(0) saturate(1.03);
     transform: scale(1);
   }
-  16.667% {
+  14.286% {
     opacity: 1;
     filter: blur(0) saturate(1.03);
     transform: scale(1);
   }
-  20.833% {
+  17.857% {
     opacity: 0;
     filter: blur(4px) saturate(1.03);
     transform: scale(1.01);
