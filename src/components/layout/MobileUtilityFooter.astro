@@ -13,10 +13,14 @@ interface Props {
 const { currentPage, locale } = Astro.props;
 const copy = shellCopy[locale];
 const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
+const isProjects = currentPage === 'projects';
 ---
 
 <footer
-  class="mobile-utility-footer"
+  class:list={[
+    'mobile-utility-footer',
+    { 'mobile-utility-footer--projects': isProjects },
+  ]}
   data-mobile-utility-footer
   aria-label={copy.mobileFooter}
 >
@@ -68,9 +72,18 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
 
   @media (max-width: 900px) {
     .mobile-utility-footer {
+      position: relative;
+      z-index: 2;
       display: block;
       border-top: 1px solid var(--color-border);
       background: var(--color-bg);
+    }
+
+    .mobile-utility-footer--projects {
+      border-top: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(14, 23, 42, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
 
     .mobile-utility-footer__inner {
@@ -147,6 +160,35 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
       border-color: var(--color-text);
       color: var(--color-text);
       font-weight: 750;
+    }
+
+    .mobile-utility-footer--projects .mobile-utility-footer__socials a,
+    .mobile-utility-footer--projects .mobile-utility-footer__locale,
+    .mobile-utility-footer--projects .mobile-utility-footer__cv {
+      border-color: rgba(255, 255, 255, 0.24);
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .mobile-utility-footer--projects .mobile-utility-footer__socials a:hover,
+    .mobile-utility-footer--projects .mobile-utility-footer__cv:hover,
+    .mobile-utility-footer--projects
+      .mobile-utility-footer__locale:focus-within {
+      border-color: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+    }
+
+    .mobile-utility-footer--projects
+      .mobile-utility-footer__locale
+      :global(.language-switcher--mobile a) {
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .mobile-utility-footer--projects .mobile-utility-footer__cv {
+      border-color: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
     }
   }
 </style>
