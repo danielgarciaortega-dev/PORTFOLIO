@@ -12,8 +12,8 @@ test('inicio, navegación y Sobre mí funcionan con ruta base', async ({
     page.getByRole('link', { name: 'Ver todos los proyectos' }),
   ).toHaveAttribute('href', '/PORTFOLIO/proyectos/');
   await expect(
-    page.getByRole('link', { name: 'Conocer mi perfil' }),
-  ).toHaveAttribute('href', '/PORTFOLIO/cv/opciones/');
+    page.getByRole('button', { name: 'Conocer mi perfil' }),
+  ).toBeVisible();
   await expect(
     page
       .getByRole('navigation', { name: 'Navegación principal' })
@@ -164,6 +164,30 @@ test('el modal de contacto permite copiar el correo y enlaza a LinkedIn y GitHub
   await page.keyboard.press('Escape');
   await expect(contactDialog).toBeHidden();
   await expect(contactTrigger).toBeFocused();
+});
+
+test('el modal de recorrido profesional abre desde el hero y muestra la información requerida', async ({
+  page,
+}) => {
+  await page.goto('./');
+
+  const profileTrigger = page.getByRole('button', {
+    name: 'Conocer mi perfil',
+  });
+  await expect(profileTrigger).toBeVisible();
+  await profileTrigger.click();
+
+  const dialog = page.getByRole('dialog', { name: 'Recorrido.' });
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText('Formación y proyectos');
+  await expect(dialog).toContainText('Instituto FOC');
+  await expect(dialog).toContainText('Salunox');
+  await expect(dialog).toContainText('GEN AI ARENA');
+  await expect(dialog).toContainText('AL-LÍO');
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  await expect(profileTrigger).toBeFocused();
 });
 
 test('copiar correo en el modal de contacto muestra confirmación visible', async ({

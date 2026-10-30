@@ -14,7 +14,6 @@ interface Props {
 const { projects, locale } = Astro.props;
 const { profile } = getProfessionalData(locale);
 const copy = homeCopy[locale];
-const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
 const projectsUrl = withBase(getLocalizedRoutePath(locale, 'projects'));
 const [firstName, ...lastNames] = profile.fullName.split(' ');
 ---
@@ -52,12 +51,16 @@ const [firstName, ...lastNames] = profile.fullName.split(' ');
         )
       }
       <div class="hero__actions" data-hero-enter>
-        <a class="button-link button-link--primary" href={cvUrl}>
+        <button
+          type="button"
+          class="button-link button-link--primary"
+          data-dialog-open="profile-journey-dialog"
+        >
           {copy.viewProfile}
           <svg viewBox="0 0 20 20" aria-hidden="true"
             ><path d="M4 10h11m-4-4 4 4-4 4"></path></svg
           >
-        </a>
+        </button>
         <button
           type="button"
           class="button-link button-link--secondary"
