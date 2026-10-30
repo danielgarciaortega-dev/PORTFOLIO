@@ -11,8 +11,9 @@ test('bilingual foundation stays coherent across switching, reload and remaining
   await expect(spanishOverview).toContainText('Desarrollador web en prácticas');
   await expect(spanishOverview).toContainText('APIs REST');
 
-  await page.getByRole('link', { name: 'Conocer mi perfil' }).click();
-  await expect(page).toHaveURL(/\/PORTFOLIO\/cv\/opciones\/$/);
+  await page.getByRole('button', { name: 'Conocer mi perfil' }).click();
+  await expect(page.getByRole('dialog', { name: 'Recorrido.' })).toBeVisible();
+  await page.keyboard.press('Escape');
   await page.goto('./sobre-mi/');
   await expect(page.locator('[data-about-page]')).toBeVisible();
   await expect(page.locator('#about-dialog')).toHaveCount(0);
@@ -52,8 +53,9 @@ test('bilingual foundation stays coherent across switching, reload and remaining
     )
     .toBe('en');
 
-  await page.getByRole('link', { name: 'View profile' }).click();
-  await expect(page).toHaveURL(/\/PORTFOLIO\/en\/cv\/options\/$/);
+  await page.getByRole('button', { name: 'View profile' }).click();
+  await expect(page.getByRole('dialog', { name: 'My journey.' })).toBeVisible();
+  await page.keyboard.press('Escape');
   await page.goto('./en/about/');
   await expect(page.locator('[data-about-page]')).toBeVisible();
   await expect(page.locator('#about-dialog')).toHaveCount(0);

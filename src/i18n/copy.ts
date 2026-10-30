@@ -48,6 +48,18 @@ interface DialogCopy {
   copyEmail: string;
   copySuccess: string;
   copyFallback: string;
+  profileEyebrow: string;
+  closeProfile: string;
+  profileTitle: string;
+  profileJourneyHeading: string;
+  profileJourneyEducationLabel: string;
+  profileJourneyEducationText: string;
+  profileJourneyInternshipLabel: string;
+  profileJourneyInternshipText: string;
+  profileJourneyHackathonLabel: string;
+  profileJourneyHackathonText: string;
+  profileJourneyProjectLabel: string;
+  profileJourneyProjectText: string;
 }
 
 interface NotFoundCopy {
@@ -146,6 +158,22 @@ export const dialogCopy: Record<Locale, DialogCopy> = {
     copySuccess: 'Correo copiado',
     copyFallback:
       'Correo seleccionado. Pulsa Ctrl+C o Comando+C para copiarlo.',
+    profileEyebrow: 'MI RECORRIDO',
+    closeProfile: 'Cerrar Recorrido',
+    profileTitle: 'Recorrido.',
+    profileJourneyHeading: 'Formación y proyectos',
+    profileJourneyEducationLabel: 'Formación',
+    profileJourneyEducationText:
+      'Grado Superior en Desarrollo de Aplicaciones Web, Instituto FOC — actualmente en 2º curso.',
+    profileJourneyInternshipLabel: 'Prácticas',
+    profileJourneyInternshipText:
+      'Salunox, plataforma SaaS del sector sanitario.',
+    profileJourneyHackathonLabel: 'Hackathon',
+    profileJourneyHackathonText:
+      'I Edición de GEN AI ARENA: gané con SIDN Cost Control y desarrollé Feedback2Action.',
+    profileJourneyProjectLabel: 'Proyecto propio',
+    profileJourneyProjectText:
+      'AL-LÍO, con el que conseguí la beca Aircury Summer of Code 2026.',
   },
   en: {
     aboutEyebrow: 'ABOUT',
@@ -161,6 +189,22 @@ export const dialogCopy: Record<Locale, DialogCopy> = {
     copyEmail: 'Copy email',
     copySuccess: 'Email copied',
     copyFallback: 'Email selected. Press Ctrl+C or Command+C to copy it.',
+    profileEyebrow: 'MY JOURNEY',
+    closeProfile: 'Close Journey',
+    profileTitle: 'My journey.',
+    profileJourneyHeading: 'Education and projects',
+    profileJourneyEducationLabel: 'Education',
+    profileJourneyEducationText:
+      'Higher Degree in Web Application Development, Instituto FOC — currently in 2nd year.',
+    profileJourneyInternshipLabel: 'Internship',
+    profileJourneyInternshipText:
+      'Salunox, a SaaS platform in the healthcare sector.',
+    profileJourneyHackathonLabel: 'Hackathon',
+    profileJourneyHackathonText:
+      '1st Edition of GEN AI ARENA: won with SIDN Cost Control and developed Feedback2Action.',
+    profileJourneyProjectLabel: 'Personal project',
+    profileJourneyProjectText:
+      'AL-LÍO, which earned me the Aircury Summer of Code 2026 grant.',
   },
 };
 
