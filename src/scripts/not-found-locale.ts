@@ -87,10 +87,8 @@ function localizeHeader(data: LocalePayload) {
     desktopNavigation?.querySelectorAll<HTMLAnchorElement>('a');
   setDirectText(desktopLinks?.[0], shell.home);
   desktopLinks?.[0]?.setAttribute('href', routes.home);
-  setDirectText(desktopLinks?.[1], shell.about);
-  desktopLinks?.[1]?.setAttribute('href', routes.about);
-  setDirectText(desktopLinks?.[2], shell.projects);
-  desktopLinks?.[2]?.setAttribute('href', routes.projects);
+  setDirectText(desktopLinks?.[1], shell.projects);
+  desktopLinks?.[1]?.setAttribute('href', routes.projects);
 
   setText('.header-cv-link', shell.viewCv);
   setAttribute('.header-cv-link', 'href', routes.cv);
@@ -114,10 +112,8 @@ function localizeHeader(data: LocalePayload) {
     mobileNavigation?.querySelectorAll<HTMLAnchorElement>('a[data-menu-link]');
   setDirectText(mobileLinks?.[0], shell.home);
   mobileLinks?.[0]?.setAttribute('href', routes.home);
-  setDirectText(mobileLinks?.[1], shell.about);
-  mobileLinks?.[1]?.setAttribute('href', routes.about);
-  setDirectText(mobileLinks?.[2], shell.projects);
-  mobileLinks?.[2]?.setAttribute('href', routes.projects);
+  setDirectText(mobileLinks?.[1], shell.projects);
+  mobileLinks?.[1]?.setAttribute('href', routes.projects);
 
   setAttribute(
     '[data-mobile-utility-footer]',

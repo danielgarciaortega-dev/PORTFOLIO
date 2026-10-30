@@ -28,7 +28,7 @@ const cases = [
 ] as const;
 
 for (const routeCase of cases) {
-  test(`desktop About navigation is a keyboard-accessible link in ${routeCase.locale}`, async ({
+  test(`desktop About navigation is absent from main navigation in ${routeCase.locale}`, async ({
     page,
   }) => {
     await page.goto(routeCase.homeRoute);
@@ -37,29 +37,10 @@ for (const routeCase of cases) {
       .getByRole('navigation', { name: routeCase.desktopNavigation })
       .getByRole('link', { name: routeCase.aboutLabel });
 
-    await expect(aboutLink).toHaveAttribute('href', routeCase.aboutPath);
-    await expect(aboutLink).not.toHaveAttribute('aria-current', 'page');
-
-    await aboutLink.focus();
-    await expect(aboutLink).toBeFocused();
-    await page.keyboard.press('Enter');
-
-    await expect(page).toHaveURL(new RegExp(`${routeCase.aboutPath}$`));
-    await expect(page.locator('#about-dialog')).toHaveCount(0);
-
-    const activeAboutLink = page
-      .getByRole('navigation', { name: routeCase.desktopNavigation })
-      .getByRole('link', { name: routeCase.aboutLabel });
-    await expect(activeAboutLink).toHaveAttribute('aria-current', 'page');
-
-    await expect(
-      page
-        .locator('.site-header__actions')
-        .getByRole('link', { name: routeCase.counterpartName }),
-    ).toHaveAttribute('href', routeCase.counterpartHref);
+    await expect(aboutLink).toHaveCount(0);
   });
 
-  test(`mobile About navigation is direct and active in ${routeCase.locale}`, async ({
+  test(`mobile About navigation is absent from mobile navigation in ${routeCase.locale}`, async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -73,27 +54,6 @@ for (const routeCase of cases) {
       .getByRole('navigation', { name: routeCase.mobileNavigation })
       .getByRole('link', { name: routeCase.aboutLabel });
 
-    await expect(aboutLink).toHaveAttribute('href', routeCase.aboutPath);
-    await aboutLink.focus();
-    await expect(aboutLink).toBeFocused();
-    await page.keyboard.press('Enter');
-
-    await expect(page).toHaveURL(new RegExp(`${routeCase.aboutPath}$`));
-    await expect(page.locator('#about-dialog')).toHaveCount(0);
-
-    await page.getByRole('button', { name: routeCase.openMenu }).click();
-    const activeMenu = page.getByRole('dialog', { name: routeCase.menu });
-    const activeAboutLink = activeMenu
-      .getByRole('navigation', { name: routeCase.mobileNavigation })
-      .getByRole('link', { name: routeCase.aboutLabel });
-
-    await expect(activeAboutLink).toHaveAttribute('aria-current', 'page');
-    await expect
-      .poll(() =>
-        activeAboutLink.evaluate(
-          (element) => getComputedStyle(element).fontWeight,
-        ),
-      )
-      .toBe('800');
+    await expect(aboutLink).toHaveCount(0);
   });
 }

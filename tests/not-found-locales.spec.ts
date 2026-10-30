@@ -48,7 +48,7 @@ test('Spanish missing route keeps HTTP 404 and the default localized shell', asy
   ).toHaveAttribute('href', '/PORTFOLIO/');
   await expect(
     navigation.getByRole('link', { name: 'Sobre mí' }),
-  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
+  ).toHaveCount(0);
   await expect(
     navigation.getByRole('link', { name: 'Proyectos' }),
   ).toHaveAttribute('href', '/PORTFOLIO/proyectos/');
@@ -109,7 +109,7 @@ test('English-prefixed missing route keeps HTTP 404 and localizes the one shell'
     '/PORTFOLIO/en/',
   );
   const aboutLink = navigation.getByRole('link', { name: 'About' });
-  await expect(aboutLink).toHaveAttribute('href', '/PORTFOLIO/en/about/');
+  await expect(aboutLink).toHaveCount(0);
   await expect(
     navigation.getByRole('link', { name: 'Projects' }),
   ).toHaveAttribute('href', '/PORTFOLIO/en/projects/');
@@ -146,10 +146,7 @@ test('English 404 mobile menu stays localized, usable and overflow-free', async 
     'href',
     '/PORTFOLIO/en/',
   );
-  await expect(navigation.getByRole('link', { name: /About/ })).toHaveAttribute(
-    'href',
-    '/PORTFOLIO/en/about/',
-  );
+  await expect(navigation.getByRole('link', { name: /About/ })).toHaveCount(0);
   await expect(
     navigation.getByRole('link', { name: /Projects/ }),
   ).toHaveAttribute('href', '/PORTFOLIO/en/projects/');

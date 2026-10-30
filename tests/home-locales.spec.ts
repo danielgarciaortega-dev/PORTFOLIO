@@ -15,7 +15,7 @@ test('Spanish root renders the restored shell, hero and professional overview', 
   ).toBeVisible();
   await expect(
     mainNavigation.getByRole('link', { name: 'Sobre mí' }),
-  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
+  ).toHaveCount(0);
   await expect(
     mainNavigation.getByRole('link', { name: 'Proyectos' }),
   ).toBeVisible();
@@ -25,7 +25,7 @@ test('Spanish root renders the restored shell, hero and professional overview', 
 
   await expect(
     page.getByRole('link', { name: 'Conocer mi perfil' }),
-  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
+  ).toHaveAttribute('href', '/PORTFOLIO/cv/opciones/');
   await expect(
     page.getByRole('button', { name: 'Contactar' }).first(),
   ).toBeVisible();
@@ -240,7 +240,7 @@ test('mobile shell puts social and CV actions in the footer', async ({
     });
 
     await expect(menu).toBeVisible();
-    await expect(navigation.getByRole('link')).toHaveCount(3);
+    await expect(navigation.getByRole('link')).toHaveCount(2);
     await expect(menu.locator('[data-mobile-utilities]')).toHaveCount(0);
     await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
 

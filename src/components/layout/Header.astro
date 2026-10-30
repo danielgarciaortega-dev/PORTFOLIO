@@ -13,7 +13,6 @@ interface Props {
 const { currentPage, locale } = Astro.props;
 const copy = shellCopy[locale];
 const homeUrl = withBase(getLocalizedRoutePath(locale, 'home'));
-const aboutUrl = withBase(getLocalizedRoutePath(locale, 'about'));
 const projectsUrl = withBase(getLocalizedRoutePath(locale, 'projects'));
 const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
 ---
@@ -61,12 +60,6 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
         aria-current={currentPage === 'home' ? 'page' : undefined}
         >{copy.home}</a
       >
-      <a
-        href={aboutUrl}
-        aria-current={currentPage === 'about' ? 'page' : undefined}
-      >
-        {copy.about}
-      </a>
       <a
         href={projectsUrl}
         aria-current={currentPage === 'projects' ? 'page' : undefined}
@@ -120,13 +113,6 @@ const cvUrl = withBase(getLocalizedRoutePath(locale, 'cvCenter'));
 
     <nav aria-label={copy.mobileNavigation}>
       <a href={homeUrl} data-menu-link>{copy.home}</a>
-      <a
-        href={aboutUrl}
-        aria-current={currentPage === 'about' ? 'page' : undefined}
-        data-menu-link
-      >
-        {copy.about}
-      </a>
       <a href={projectsUrl} data-menu-link>{copy.projects}</a>
     </nav>
   </div>

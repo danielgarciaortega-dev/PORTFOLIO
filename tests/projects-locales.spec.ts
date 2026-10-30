@@ -199,7 +199,7 @@ test('Spanish and English projects indexes preserve structure with localized cop
     const aboutLink = navigation.getByRole('link', {
       name: routeCase.about,
     });
-    await expect(aboutLink).toHaveAttribute('href', routeCase.aboutHref);
+    await expect(aboutLink).toHaveCount(0);
 
     expect(failedLocalResources).toEqual([]);
     page.off('response', onResponse);
