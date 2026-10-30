@@ -35,7 +35,7 @@ const localeCases = [
   },
 ] as const;
 
-test('project hover and focus select canonical contextual artwork', async ({
+test('project hover and focus preserve photo carousel and highlight project card', async ({
   page,
 }) => {
   for (const locale of localeCases) {
@@ -62,10 +62,14 @@ test('project hover and focus select canonical contextual artwork', async ({
 
       await row.hover();
       await expect(backdrop).toHaveAttribute('data-active-project', project.id);
-      await expect(context).toHaveAttribute('data-active', '');
+      await expect(context).toBeHidden();
       await expect(page.locator('.projects-page__moments')).toHaveCSS(
         'opacity',
-        '0',
+        '1',
+      );
+      await expect(row).toHaveCSS(
+        'background-color',
+        'rgba(255, 255, 255, 0.07)',
       );
 
       await page.mouse.move(0, 0);
@@ -75,7 +79,15 @@ test('project hover and focus select canonical contextual artwork', async ({
       await action.focus();
       await expect(action).toBeFocused();
       await expect(backdrop).toHaveAttribute('data-active-project', project.id);
-      await expect(context).toHaveAttribute('data-active', '');
+      await expect(context).toBeHidden();
+      await expect(page.locator('.projects-page__moments')).toHaveCSS(
+        'opacity',
+        '1',
+      );
+      await expect(row).toHaveCSS(
+        'background-color',
+        'rgba(255, 255, 255, 0.07)',
+      );
 
       await action.evaluate((element) => (element as HTMLElement).blur());
       await expect(backdrop).not.toHaveAttribute('data-active-project');
