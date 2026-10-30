@@ -13,9 +13,9 @@ test('English homepage shell and hero use the approved copy', async ({
   await expect(
     mainNavigation.getByRole('link', { name: 'Home' }),
   ).toBeVisible();
-  await expect(
-    mainNavigation.getByRole('link', { name: 'About' }),
-  ).toHaveAttribute('href', '/PORTFOLIO/en/about/');
+  await expect(mainNavigation.getByRole('link', { name: 'About' })).toHaveCount(
+    0,
+  );
   await expect(
     mainNavigation.getByRole('link', { name: 'Projects' }),
   ).toBeVisible();
@@ -25,7 +25,7 @@ test('English homepage shell and hero use the approved copy', async ({
   ).toBeVisible();
   await expect(
     page.getByRole('link', { name: 'View profile' }),
-  ).toHaveAttribute('href', '/PORTFOLIO/en/about/');
+  ).toHaveAttribute('href', '/PORTFOLIO/en/cv/options/');
   await expect(
     page.getByRole('button', { name: 'Contact' }).first(),
   ).toBeVisible();
@@ -57,7 +57,7 @@ test('English mobile navigation exposes accessible names; the footer owns locale
   ).toContainText('Home');
   await expect(menu.getByRole('button', { name: 'Close menu' })).toBeVisible();
   await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
-  await expect(menu.getByRole('link')).toHaveCount(3);
+  await expect(menu.getByRole('link')).toHaveCount(2);
   await page.keyboard.press('Escape');
   await expect(menu).toBeHidden();
 

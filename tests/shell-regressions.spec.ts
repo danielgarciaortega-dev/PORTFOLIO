@@ -161,7 +161,7 @@ test('mobile footer owns utilities and menu has navigation only', async ({
       });
 
       await expect(menu).toBeVisible();
-      await expect(navigation.getByRole('link')).toHaveCount(3);
+      await expect(navigation.getByRole('link')).toHaveCount(2);
       await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
       await expect(menu.locator('[data-mobile-utilities]')).toHaveCount(0);
       await expect(menu.getByRole('link', { name: 'GitHub' })).toHaveCount(0);
@@ -216,10 +216,7 @@ test('About uses real navigation while Contact keeps its dialog behavior', async
   const aboutLink = page
     .getByRole('navigation', { name: 'Navegación principal' })
     .getByRole('link', { name: 'Sobre mí' });
-  await expect(aboutLink).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
-  await aboutLink.click();
-  await expect(page).toHaveURL(/\/PORTFOLIO\/sobre-mi\/$/);
-  await expect(page.locator('#about-dialog')).toHaveCount(0);
+  await expect(aboutLink).toHaveCount(0);
 
   await page.goto('./');
   const contactTrigger = page
@@ -239,5 +236,5 @@ test('About uses real navigation while Contact keeps its dialog behavior', async
     page
       .getByRole('navigation', { name: 'Navegación principal' })
       .getByRole('link', { name: 'Sobre mí' }),
-  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
+  ).toHaveCount(0);
 });

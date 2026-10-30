@@ -13,7 +13,7 @@ test('inicio, navegación y Sobre mí funcionan con ruta base', async ({
   ).toHaveAttribute('href', '/PORTFOLIO/proyectos/');
   await expect(
     page.getByRole('link', { name: 'Conocer mi perfil' }),
-  ).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
+  ).toHaveAttribute('href', '/PORTFOLIO/cv/opciones/');
   await expect(
     page
       .getByRole('navigation', { name: 'Navegación principal' })
@@ -23,12 +23,7 @@ test('inicio, navegación y Sobre mí funcionan con ruta base', async ({
   const aboutLink = page
     .getByRole('navigation', { name: 'Navegación principal' })
     .getByRole('link', { name: 'Sobre mí', exact: true });
-  await expect(aboutLink).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
-  await aboutLink.focus();
-  await expect(aboutLink).toBeFocused();
-  await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/\/PORTFOLIO\/sobre-mi\/$/);
-  await expect(page.locator('#about-dialog')).toHaveCount(0);
+  await expect(aboutLink).toHaveCount(0);
 
   await page.goto('./');
   await page.getByRole('link', { name: 'Ver todos los proyectos' }).click();

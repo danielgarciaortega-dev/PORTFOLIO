@@ -20,8 +20,5 @@ test('projects route removes footer-only Contact infrastructure while preserving
   const aboutLink = page
     .getByRole('navigation', { name: 'Navegación principal' })
     .getByRole('link', { name: 'Sobre mí', exact: true });
-  await expect(aboutLink).toHaveAttribute('href', '/PORTFOLIO/sobre-mi/');
-  await aboutLink.click();
-  await expect(page).toHaveURL(/\/PORTFOLIO\/sobre-mi\/$/);
-  await expect(page.locator('#about-dialog')).toHaveCount(0);
+  await expect(aboutLink).toHaveCount(0);
 });

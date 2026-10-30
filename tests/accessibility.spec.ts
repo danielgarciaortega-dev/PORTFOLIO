@@ -25,12 +25,17 @@ test('English projects pass automated axe checks', async ({ page }) => {
   await expectNoAxeViolations(page);
 });
 
-test('Sobre mí desde la Home sin violaciones automatizadas de axe', async ({
+test('CV opciones desde la Home sin violaciones automatizadas de axe', async ({
   page,
 }) => {
   await page.goto('./');
   await page.getByRole('link', { name: 'Conocer mi perfil' }).click();
-  await expect(page).toHaveURL(/\/PORTFOLIO\/sobre-mi\/$/);
+  await expect(page).toHaveURL(/\/PORTFOLIO\/cv\/opciones\/$/);
+  await expectNoAxeViolations(page);
+});
+
+test('Sobre mí sin violaciones automatizadas de axe', async ({ page }) => {
+  await page.goto('./sobre-mi/');
   await expectNoAxeViolations(page);
 });
 

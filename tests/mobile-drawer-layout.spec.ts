@@ -76,7 +76,7 @@ test('mobile drawer keeps deliberate rhythm and reachable controls', async ({
 
       await expect(menu.locator('[data-mobile-utilities]')).toHaveCount(0);
       await expect(menu.locator('[data-language-switcher]')).toHaveCount(0);
-      await expect(navigation.getByRole('link')).toHaveCount(3);
+      await expect(navigation.getByRole('link')).toHaveCount(2);
 
       const boxes = await Promise.all([
         menu.boundingBox(),
